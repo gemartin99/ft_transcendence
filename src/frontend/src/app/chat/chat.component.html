@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
   <div class="card">
     <div style="display: flex; flex-direction: row;">
       <div>
@@ -24,64 +24,34 @@
       {{(selectedRoom | json)}}
     </div>
   </div>
-</div>
+</div> -->
 
-
-<!-- <div class="container">
+<div class="container">
   <div class="card">
     <div style="display: flex; flex-direction: row;">
       <div>
         <h1>My Chatrooms</h1>
-        <button class="button is-primary" routerLink="../create-room">Create new Room</button>
-        <div class="rows-select">
-          <select>
-            <option *ngFor="let room of (rooms$ | async)?.items" [value]="room">
+        <button class="button is-primary" routerLink="create-room">Create new Room</button>
+         <mat-selection-list [multiple]="false" (selectionChange)="onSelectRoom($event)">
+            <mat-list-option *ngFor="let room of (rooms$ | async)?.items" [value]="room">
               Name: {{room.name}} Id: {{room.id}}
-            </option>
-          </select>
-        </div>
+              <mat-divider></mat-divider>
+            </mat-list-option>
+          </mat-selection-list>
       </div>
-      <div style="margin-left: 40px;">
-        <h1>My Room</h1>
-      </div>
+    </div>
+    <div style="height: 400px; position: relative;">
+      <mat-paginator
+        [length]="(rooms$ | async)?.meta?.totalItems"
+        [pageIndex]="(rooms$ | async)?.meta?.currentPage"
+        [pageSize]="(rooms$ | async)?.meta?.itemCount"
+        (page)="onPaginateRooms($event)"
+        [pageSizeOptions]="[10,25,50]"
+      ></mat-paginator>
+    </div>
+    <div style="margin-left: 40px;">
+      <h1>My Room</h1>
+      {{(selectedRoom | json)}}
     </div>
   </div>
 </div>
- -->
-
-<!-- <header class="header">
-  <nav class="navbar is-light">
-    <div class="navbar-brand">
-      <span class="navbar-item is-size-5">Live Chat</span>
-    </div>
-  </nav>
-</header>
-<section class="section">
-  <div class="card">
-    <div class="card-content">
-      There are currently <strong>{{users}}</strong> users online. Start
-      chatting!
-    </div>
-  </div>
-  <ul>
-    <li *ngFor="let message of messages"> {{message}} </li>
-  </ul>
-</section>
-<footer class="footer">
-  <div class="field has-addons">
-    <div class="control">
-      <textarea
-        class="textarea"
-        [(ngModel)]="message"
-        placeholder="type message..."
-        (keyup.enter)="addChat()"
-      ></textarea>
-    </div>
-    <div class="control">
-      <button class="button is-primary" (click)="addChat()">
-        Send
-      </button>
-    </div>
-  </div>
-</footer>
- -->

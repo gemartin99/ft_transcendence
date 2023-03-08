@@ -18,6 +18,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ChatComponent } from './chat/chat.component';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -43,6 +44,7 @@ const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} 
   imports: [
     MatListModule,
     MatPaginatorModule,
+    MatAutocompleteModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

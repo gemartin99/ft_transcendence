@@ -1,1 +1,81 @@
-<p>create-room works!</p>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Create Chat Room</h1>
+      <div class="card">
+<!--         <div *ngIf="usernameControl" class="card-content"> -->
+          <form [formGroup]="form" (ngSubmit)="create()">
+            <div class="field">
+              <label class="label">Chat-Room Name</label>
+              <div class="control">
+                <input type="text" formControlName="name" placeholder="Enter your username" class="form-control input" required>
+                  <div *ngIf="name.invalid && name.touched">
+                </div>
+              </div>
+              <div class="field">
+                <div>
+                    <p *ngIf="name.errors?.['required']" class="help is-danger">Chat-room name is required</p>
+                    <p *ngIf="name.errors?.['pattern']" class="help is-danger">Invalid characters</p>
+                    <p *ngIf="name.errors?.['maxlength']" class="help is-danger">Max length exceeded</p>
+                </div>
+              </div>
+              <label class="label">Password (optional)</label>
+              <div class="control">
+                <input type="text" formControlName="password" placeholder="Channel Password (optional)" class="form-control input">
+                  <div *ngIf="password.invalid && password.touched">
+                </div>
+              </div>
+              <div class="field">
+                <div>
+                     <p *ngIf="password.errors?.['pattern']" class="help is-danger">Invalid characters</p>
+                    <p *ngIf="password.errors?.['maxlength']" class="help is-danger">Max length exceeded</p>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <button class="button is-link"  [disabled]="!form.valid" type="submit">Create Chat Room</button>
+              </div>
+            </div>
+          </form>
+<!--         </div> -->
+      </div>
+    </div>
+  </section>
+<!-- <div class="container">
+
+  <div>
+    <div class="dashboard">
+      <a [routerLink]="['../dashboard']">Go to Dashboard</a>
+    </div>
+
+    <div>
+      <mat-card>
+        <mat-card-title>Create Chatroom</mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="form" (ngSubmit)="create()">
+
+            <mat-form-field>
+              <input type="text" matInput placeholder="Name" formControlName="name">
+              <mat-error *ngIf="name.touched && name.hasError('required')">Name is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input type="text" matInput placeholder="Description" formControlName="description">
+            </mat-form-field>
+
+            <app-select-users [users]="users.value" (addUser)="addUser(initUser($event))"
+              (removeuser)="removeUser($event.id)"></app-select-users>
+
+            <mat-hint *ngIf="!form.valid"><small>Please fill out all needed information</small></mat-hint>
+
+            <div class="button">
+              <button mat-button type="submit" [disabled]="!form.valid">Create Chatroom</button>
+            </div>
+
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+ -->

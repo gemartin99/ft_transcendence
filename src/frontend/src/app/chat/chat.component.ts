@@ -2,6 +2,8 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ChatService } from './chat.service';
 import { MatSelectionListChange } from '@angular/material/list';
 import { PageEvent } from '@angular/material/paginator';
+import { Observable } from 'rxjs';
+import { RoomI, RoomPaginateI } from "./rooms/room.interface";
 
 @Component({
   selector: 'app-chat',
@@ -10,7 +12,7 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class ChatComponent implements OnInit, AfterViewInit{
 
-  rooms$ = this.chatService.getMyRooms();
+  rooms$: Observable<RoomPaginateI> = this.chatService.getMyRooms();
   selectedRoom = null;
 
   constructor(private chatService: ChatService){
@@ -19,7 +21,8 @@ export class ChatComponent implements OnInit, AfterViewInit{
   ngOnInit()
   {
     // this.chatService.createRoom();
-    this.rooms$.subscribe(rooms => console.log(rooms));
+    //this.rooms$.subscribe(rooms => console.log(rooms));
+    this.chatService.emitPaginateRooms(10, 0);
   }
 
   ngAfterViewInit() {

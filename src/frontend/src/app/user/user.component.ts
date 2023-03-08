@@ -46,13 +46,11 @@ export class UserComponent implements OnInit {
   }
 
   createUser(f:any){
-
     console.log("form value: ", f);
 
     this.apiService.createUser(f).subscribe((result)=>{
       console.log(result);
     });
-    
   }
 
   deleteUser(id){
