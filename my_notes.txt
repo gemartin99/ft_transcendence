@@ -1,0 +1,106 @@
+FROM node:lts
+
+RUN apt-get update && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+RUN npm install -g @nestjs/cli
+
+RUN nest new app --package-manager npm
+
+RUN npm install --save @nestjs/typeorm typeorm pg
+
+EXPOSE 3000
+
+ENTRYPOINT [ "/bin/sh", "-c", "entrypoint.sh" ]
+
+CMD ["cd app && npm run start:dev"]
+
+
+Web en NestJS
+Frontend con Angular
+Usar ultima version de cada libreria
+BD en Postresql
+a single-page application
+Compatible con Chrome y otro anvegador a eleccion
+no errores o warnings en el navegador
+Todo tiene que ser lanzado con docker-compose up --build
+
+
+SECURITY
+Any password stored in your database must be hashed.
+Your website must be protected against SQL injections
+You must implement some kind of server-side validation for forms and any user
+input.
+
+any credentials, API keys, env
+variables etc... must be saved locally in a .env file and ignored by
+git. Publicly stored credentials will lead you directly to a failure
+of the project.
+
+
+USER ACCOUNT
+ The user must login using the OAuth system of 42 intranet.
+ The user should be able to choose a unique name that will be displayed on the
+website.
+The user should be able to upload an avatar. If the user doesn’t upload an avatar,
+a default one must be set.
+• The user should be able to enable two-factor authentication. For instance,
+Google Authenticator or sending a text message to their phone.
+The user should be able to upload an avatar. If the user doesn’t upload an avatar,
+a default one must be set.
+• The user should be able to enable two-factor authentication. For instance,
+Google Authenticator or sending a text message to their phone.
+
+
+- id (unique)
+- id_42 (unique)
+- name (unique)
+- avatar
+- played_games
+- wins
+- loses
+
+
+Chat
+You also have to create a chat for your users:
+• The user should be able to create channels (chat rooms) that can be either public,
+or private, or protected by a password.
+• The user should be able to send direct messages to other users.
+• The user should be able to block other users. This way, they will see no more
+messages from the account they blocked.
+• The user who has created a new channel is automatically set as the channel owner
+until they leave it.
+◦ The channel owner can set a password required to access the channel, change
+it, and also remove it.
+◦ The channel owner is a channel administrator. They can set other users as
+administrators.
+◦ The administrators of a channel can ban or mute users for a limited time.
+• The user should be able to invite other users to play a Pong game through the chat
+interface.
+• The user should be able to access other players profiles through the chat interface.
+
+II.5 Game
+The main purpose of this website is to play Pong versus other players and show everyone
+how good you are!
+• Therefore, users should be able to play a live Pong game versus another player
+directly on the website.
+• There must be a matchmaking system: the user can join a queue until they get
+automatically matched with someone else.
+• It can be a canvas game, or it can be a game rendered in 3D, it can also be ugly,
+but in any case, it must be faithful to the original Pong (1972).
+• You must offer some customization options (for example, power-ups or different
+maps). However, the user should be able to select a default version of the game
+without any extra features if they want to.
+• The game must be responsive!
+• The user should be able to watch a live play between other users without interfering
+with it.
+5
+ft_transcendence
+Soon, you will realize that you already know things
+that you thought you didn’t
+Think about network issues, like unexpected disconnection or lag.
+You have to offer the best user experience possible.

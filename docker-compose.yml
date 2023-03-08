@@ -1,0 +1,51 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:latest
+    env_file:
+      - ./a.env
+    restart: unless-stopped
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+
+  backend:
+    build: ./src/backend
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+    volumes:
+      - backend:/home/transcendence/backend
+    env_file:
+      - ./a.env
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  # frontend:
+  #   build:
+  #     dockerfile: ./src/frontend/Dockerfile
+  #   ports:
+  #     - 4200:4200
+  #   networks:
+  #     - backend
+  #   volumes:
+  #     - ./frontend:/app
+  #   env_file:
+  #     - ./a.env
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - backend
+
+volumes:
+  backend:
+
+  data:
+
+networks:
+  backend:
