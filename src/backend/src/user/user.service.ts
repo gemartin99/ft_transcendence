@@ -32,6 +32,30 @@ export class UserService {
 	    return await this.userRepository.update(user.id,user);
 	}
 
+	async setUserOffline(user: User)
+	{
+		user.is_online = false;
+		return await this.update(user);
+	}
+
+	async setUserOnline(user: User)
+	{
+		user.is_online = true;
+		return await this.update(user);
+	}
+
+	async setUserInPlay(user: User, matchId: number)
+	{
+		user.is_playing = matchId;
+		return await this.update(user);
+	}
+
+	async setUserOffPlay(user: User)
+	{
+		user.is_playing = 0;
+		return await this.update(user);
+	}
+
 	async delete(id): Promise<DeleteResult> {		
 	    return await this.userRepository.delete(id);
 	}
@@ -81,7 +105,6 @@ export class UserService {
 	  	});
 	}
 
-
 	async findUserFriends(userId: number): Promise<User[]> {
 	  console.log('finding users for id ' + userId);
 	  // const user = await this.userRepository.findOne(userId, { relations: ["friends"]});
@@ -90,5 +113,20 @@ export class UserService {
 	    relations: ['friends'],
 	  })
 	  return user.friends;
+	}
+
+	async getUserRanking(userId: number): Promise<number> {
+	  const user = await this.userRepository.findOne({
+	    where: {
+	      id: userId,
+	    }
+	  })
+	  const userScore = user.score;
+	  const ranking = await this.userRepository
+	    .createQueryBuilder('user')
+	    .orderBy('user.score', 'DESC')
+	    .getMany();
+	  const userRank = ranking.findIndex(u => u.id === user.id) + 1;
+	  return userRank;
 	}
 }

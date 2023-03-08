@@ -28,6 +28,53 @@ export class MatchService {
     return await this.matchRepository.save(newMatch);
   }
 
+  async saveMatchResult(game: MatchData)
+  {
+    // Retrieve the match entity from the database
+    const match = await this.matchRepository.findOne({
+      where: { id: game.idMatch }
+    });
+
+    if (match) {
+      // Update the match entity with the new scores and winner
+      match.player1Score = game.score1;
+      match.player2Score = game.score2;
+      if(match.player1Score > match.player2Score)
+         match.winner = parseInt(game.player1.id);
+      else if(match.player2Score > match.player1Score)
+         match.winner = parseInt(game.player2.id);
+      else
+        match.winner = 0;
+      match.status = 1;
+      // Save the updated match entity back to the database
+      await this.matchRepository.save(match);
+    }
+  }
+
+  async joinClientToMatch(client: Socket, matchId: number) {
+    // Check if the match exists in the games map
+    if (this.games.has(matchId)) {
+      const game = this.games.get(matchId);
+
+      // Check if the client is one of the players
+      if (game.player1.id === client.id || game.player2.id === client.id) {
+        // If the client is a player, update the corresponding player socket in the games_users map
+        const matchUsers = this.games_users.get(matchId);
+        if (game.player1.id === client.id) {
+          matchUsers.player1 = client;
+        } else {
+          matchUsers.player2 = client;
+        }
+        this.games_users.set(matchId, matchUsers);
+      } else {
+        // If the client is not a player, add the socket to the spectators array in the games_users map
+        const matchUsers = this.games_users.get(matchId);
+        matchUsers.spectators.push(client);
+        this.games_users.set(matchId, matchUsers);
+      }
+    }
+  }
+
   async initMatch(idMatch: number, player1: Socket, player2: Socket) {
     console.log('inside initMatch: ' + idMatch)
     const matchData: MatchData = {
@@ -48,26 +95,27 @@ export class MatchService {
         y: 0,
         vx: 0,
         vy: 0,
-        radius: 10,
+        radius: 6,
       },
       paddle1: {
-        x: 0,
+        x: 10,
         y: 0,
-        width: 100,
-        height: 10,
+        width: 10,
+        height: 100,
         vy: 0,
       },
       paddle2: {
-        x: 0,
+        x: 1180,
         y: 0,
-        width: 100,
-        height: 10,
+        width: 10,
+        height: 100,
         vy: 0,
       },
       score1: 0,
       score2: 0,
       isPaused: true,
       isGameOver: false,
+      winner: 0,
     };
 
     const matchUsers: MatchUsers = {
@@ -93,23 +141,22 @@ export class MatchService {
     }
 
     game.isPaused = false;
-
+    this.resetBall(game);
     while (!game.isGameOver) {
       if (!game.isPaused) {
         game = this.games.get(idMatch);
         users = this.games_users.get(idMatch);
         // Update game state
         this.updateGameState(game);
+        this.updateBallPosition(game);
         
         // Send game state to players
         // const gameState = this.getGameState(game);
-        // if()
-
         users.player1.emit('gameState', game);
         users.player2.emit('gameState', game);
-        // for (const spectator of users.spectators) {
-        //   spectator.emit('gameState', gameState);
-        // }
+        for (const spectator of users.spectators) {
+          spectator.emit('gameState', game);
+        }
         // console.log('inside game loop of match: ' + game.idMatch)
       }
 
@@ -117,9 +164,10 @@ export class MatchService {
       await new Promise(resolve => setTimeout(resolve, FRAME_RATE));
     }
 
-    // // Game is over, clean up
-    // this.games.delete(matchId);
-    // this.games-users.delete(matchId);
+    //Game is over, clean up
+    this.saveMatchResult(game);
+    this.games.delete(idMatch);
+    this.games_users.delete(idMatch);
     // users.player1.leave(matchId);
     // users.player2.leave(matchId);
     // for (const spectator of users.spectators) {
@@ -133,26 +181,185 @@ export class MatchService {
     console.log('Entering to updatePlayerInput');
     const matchData = this.games.get(matchId);
     if (matchData) {
-      const playerData = player === 1 ? matchData.player1 : matchData.player2;
-      playerData.input = input;
-      console.log('The input has been modified in game ' + matchId + ' for player ' + player + ' whit value  ' + input);
+      if(player == parseInt(matchData.player1.id))
+      {
+        const playerData = matchData.player1;
+        playerData.input = input;
+      }
+      else
+      {
+        if(player == parseInt(matchData.player2.id))
+        {
+          const playerData = matchData.player2;
+          playerData.input = input;
+        }
+      }
     }
   }
 
-  updateGameState(game: MatchData)
-  {
-    if (game.player1.input == 1) {
-      game.paddle1.y += 1;
+  // updatePlayerInput(matchId: number, input: number, player: number)
+  // {
+  //   console.log('Entering to updatePlayerInput');
+  //   const matchData = this.games.get(matchId);
+  //   if (matchData) {
+  //     const playerData = player === 1 ? matchData.player1 : matchData.player2;
+  //     playerData.input = input;
+  //     console.log('The input has been modified in game ' + matchId + ' for player ' + player + ' whit value  ' + input);
+  //   }
+  // }
+
+  updateGameState(game: MatchData) {
+    // Move paddle1 up
+    if (game.player1.input == 1 && game.paddle1.y - 3 >= 0) {
+      game.paddle1.y -= 3;
     }
-    if (game.player2.input == 1) {
-      game.paddle2.y += 1;
+
+    // Move paddle2 up
+    if (game.player2.input == 1 && game.paddle2.y - 3 >= 0) {
+      game.paddle2.y -= 3;
     }
-    if (game.player1.input == -1) {
-      game.paddle1.y -= 1;
+
+    // Move paddle1 down
+    if (game.player1.input == -1 && game.paddle1.y + game.paddle1.height + 3 <= 750) {
+      game.paddle1.y += 3;
     }
-    if (game.player2.input == -1) {
-      game.paddle2.y -= 1;
+
+    // Move paddle2 down
+    if (game.player2.input == -1 && game.paddle2.y + game.paddle2.height + 3 <= 750) {
+      game.paddle2.y += 3;
     }
+  }
+
+  // updateBallPosition(matchData: MatchData): MatchData {
+  //   const ball = matchData.ball;
+
+  //   // Update ball position based on velocity
+  //   ball.x += ball.vx;
+  //   ball.y += ball.vy;
+
+  //   // Check if ball hits top or bottom wall
+  //   if (ball.y - ball.radius < 0 || ball.y + ball.radius > 750) {
+  //     ball.vy = -ball.vy;
+  //   }
+
+  //   // Check if ball hits left or right wall
+  //   if (ball.x - ball.radius < 0 || ball.x + ball.radius > 1200) {
+  //     ball.vx = -ball.vx;
+  //   }
+
+  //   // Check if ball hits paddle1
+  //   if (
+  //     ball.y + ball.radius > matchData.paddle1.y &&
+  //     ball.y - ball.radius < matchData.paddle1.y + matchData.paddle1.height &&
+  //     ball.x - ball.radius <= matchData.paddle1.x + matchData.paddle1.width &&
+  //     ball.vx < 0
+  //   ) {
+  //     ball.vx = Math.abs(ball.vx);
+  //   }
+
+  //   // Check if ball hits paddle2
+  //   if (
+  //     ball.y + ball.radius > matchData.paddle2.y &&
+  //     ball.y - ball.radius < matchData.paddle2.y + matchData.paddle2.height &&
+  //     ball.x + ball.radius >= matchData.paddle2.x &&
+  //     ball.vx > 0
+  //   ) {
+  //     ball.vx = -Math.abs(ball.vx);
+  //   }
+
+  //   return matchData;
+  // }
+
+updateBallPosition(matchData: MatchData): MatchData {
+    const ball = matchData.ball;
+
+    // ball.vx *= 1.1;
+    // ball.vy *= 1.1;
+
+    // Update ball position based on velocity
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    // Check if ball hits top or bottom wall
+    if (ball.y - ball.radius < 0) {
+      ball.y = ball.radius;
+      ball.vy = -ball.vy;
+    } else if (ball.y + ball.radius > 750) {
+      ball.y = 750 - ball.radius;
+      ball.vy = -ball.vy;
+    }
+
+    // Check if ball hits left or right wall
+    if (ball.x - ball.radius < 0) {
+      // ball.x = ball.radius;
+      // ball.vx = -ball.vx;
+      matchData.score2 += 1;
+      if(matchData.score2 == 12)
+      {
+        matchData.isGameOver = true;
+        return matchData;
+      } 
+      else
+      {
+        this.resetBall(matchData);
+        return matchData;
+      } 
+    } else if (ball.x + ball.radius > 1200) {
+      // ball.x = 1200 - ball.radius;
+      // ball.vx = -ball.vx;
+      matchData.score1 += 1;
+      if(matchData.score1 == 12)
+      {
+        matchData.isGameOver = true;
+        return matchData;
+      } 
+      else
+      {
+        this.resetBall(matchData);
+        return matchData;
+      } 
+    }
+
+    // Check if ball hits paddle1
+    if (
+      ball.x - ball.radius <= matchData.paddle1.x + matchData.paddle1.width &&
+      ball.y + ball.radius >= matchData.paddle1.y &&
+      ball.y - ball.radius <= matchData.paddle1.y + matchData.paddle1.height &&
+      ball.vx < 0
+    ) {
+      const relativeIntersectY = (matchData.paddle1.y + matchData.paddle1.height / 2) - ball.y;
+      const normalizedRelativeIntersectionY = relativeIntersectY / (matchData.paddle1.height / 2);
+      const bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
+      ball.vx = (Math.abs(ball.vx) * Math.cos(bounceAngle));
+      ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
+      ball.x = matchData.paddle1.x + matchData.paddle1.width + ball.radius;
+    }
+
+    // Check if ball hits paddle2
+    if (
+      ball.x + ball.radius >= matchData.paddle2.x &&
+      ball.y + ball.radius >= matchData.paddle2.y &&
+      ball.y - ball.radius <= matchData.paddle2.y + matchData.paddle2.height &&
+      ball.vx > 0
+    ) {
+      const relativeIntersectY = (matchData.paddle2.y + matchData.paddle2.height / 2) - ball.y;
+      const normalizedRelativeIntersectionY = relativeIntersectY / (matchData.paddle2.height / 2);
+      const bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
+      ball.vx = (-Math.abs(ball.vx) * Math.cos(bounceAngle));
+      ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
+      ball.x = matchData.paddle2.x - ball.radius;
+    }
+
+    return matchData;
+  }
+
+
+  resetBall(matchData: MatchData): void {
+    const ball = matchData.ball;
+    ball.x = 600;
+    ball.y = 375;
+    ball.vx = Math.random() < 0.5 ? -5 : 5;
+    ball.vy = Math.random() < 0.5 ? -3 : 3;
   }
 }
 

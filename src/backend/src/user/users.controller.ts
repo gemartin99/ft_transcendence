@@ -74,9 +74,11 @@ export class UsersController {
       return null;
     }
 
-
-
-
+    @Get('rank/:userId')
+    @UseGuards(AuthGuard('jwt'))
+    async getUserRanking(@Param('userId') userId: number): Promise<number> {
+      return this.userService.getUserRanking(userId);
+    }
 
     //EDIT PROFILE TWO FACTOR
     @Put('twofactor')
@@ -113,7 +115,7 @@ export class UsersController {
             await this.userService.save(user);
             console.log('Returning of post friends');
             console.log(user.friends);
-            return user.friends;
+            return res.status(200).json({ message: 'Friend added successfully' });
           }
       }
       return res.status(200).json({ message: 'Friend was not added' });
@@ -136,20 +138,7 @@ export class UsersController {
       console.log(user);
       if (user) {
         user.friends = await this.userService.findUserFriends(user.id);
-        // user.friends = user.friends.filter(friend => friend.id !== (friendId as number));
-        // console.log('Ahora user friends es:');
-        // console.log(user.friends);
         user.friends = user.friends.filter(friend => friend.id != friendId);
-        // console.log('Ahora user friends es:');
-        // console.log(user.friends);
-        // const num: number = (friendId as number);
-        // console.log(num);
-        // const friends = user.friends.filter(friend => friend.id !== num);
-        // console.log('Ahora despues de const num var friends es:');
-        // console.log(friends);
-        // const friends2 = user.friends.filter(friend => friend.id != num);
-        // console.log('Ahora despues de const num var friends es:');
-        // console.log(friends2);
         await this.userService.save(user);
         return res.status(200).json({ message: 'Friend removed successfully' });
       }

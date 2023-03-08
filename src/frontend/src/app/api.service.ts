@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from  './user';
 import { Observable } from 'rxjs';
 import { UserI } from  './user/user.interface';
+import { Match } from  './game/match/match.entity';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +59,7 @@ export class ApiService {
     return this.httpClient.post<any>(`${this.API_SERVER}/users/friends`, { friendId: userId }, { withCredentials: true });
   }
 
-  public getFriends(){
+  public getFriends(): Observable<User[]>{
     return this.httpClient.get<User[]>(`${this.API_SERVER}/users/friends`, { withCredentials: true });
   }
 
@@ -74,5 +75,13 @@ export class ApiService {
 
   public updateTwofactor(twofactor: boolean) {
     return this.httpClient.put<User>(`${this.API_SERVER}/users/twofactor`, { twofactor }, { withCredentials: true });
+  }
+
+  public getUserMatches(userId: number): Observable<Match[]> {
+    return this.httpClient.get<Match[]>(`${this.API_SERVER}/match/user-matches/${userId}`, { withCredentials: true });
+  }
+
+  public getUserRank(userId: number): Observable<number> {
+    return this.httpClient.get<number>(`${this.API_SERVER}/users/rank/${userId}`, { withCredentials: true });
   }
 }

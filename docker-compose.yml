@@ -33,6 +33,7 @@ services:
       - backend
     volumes:
       - backend:/home/transcendence/backend
+      - ./src/backend:/home/transcendence/src/backend/src
       - ./avatars:/app/src/uploads/avatar/
     env_file:
       - ./a.env
@@ -41,13 +42,15 @@ services:
       - postgres
 
   frontend:
-    build: ./src/frontend
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile
     ports:
       - 80:4200
     networks:
       - backend
     volumes:
-      - ./frontend:/app
+      - ./src/frontend:/home/transcendance/src/frontend
     env_file:
       - ./a.env
     restart: unless-stopped

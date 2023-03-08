@@ -38,4 +38,5 @@ export interface MatchData {
   score2: number;
   isPaused: boolean;
   isGameOver: boolean;
+  winner: number;
 }

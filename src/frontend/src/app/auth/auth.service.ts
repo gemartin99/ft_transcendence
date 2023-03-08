@@ -39,13 +39,13 @@ export class AuthService {
       return this.user;
   }
 
-  async logout(): Promise<void>{
+  async logout(): Promise<number>{
     document.cookie = "crazy-pong=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     console.log('auth service the frontend logout()');
     const response = await this.httpClient.get<any>(`${this.API_SERVER}/auth/logout`, { withCredentials: true }).toPromise();
     this.user = null;
     console.log('response logout' + response);
     this.logout$.next();
-    return Promise.resolve();
+    return 1;
   }
 }

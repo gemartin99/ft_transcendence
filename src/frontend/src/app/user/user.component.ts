@@ -87,6 +87,7 @@ export class UserComponent implements OnInit {
     this.searchTerm = '';
     if (user) {
       this.apiService.addFriend(user.id).subscribe((result)=>{   
+        console.log('inside subscribe de addFriend');
         console.log(result);
         this.getFriends();
       });
@@ -96,8 +97,9 @@ export class UserComponent implements OnInit {
   getFriends() {
       // this.apiService.getFriends().subscribe((result)=>{   
       //   console.log(result); 
+       console.log('Call to get  friends');
         this.dataSource  =  this.apiService.getFriends();
-        console.log('Now is data source =');
+        console.log('Now is data source =' + this.dataSource);
       // })
   }
 

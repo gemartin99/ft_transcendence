@@ -44,4 +44,9 @@ export class GameService implements AfterViewInit{
     console.log('Emiting player input to server');
     this.socket.emit("playerInput", input);
   }
+
+  joinClientToMatch(matchId: number)
+  {
+    this.socket.emit("joinClientToMatch", matchId);
+  }
 }

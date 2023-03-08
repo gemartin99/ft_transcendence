@@ -3,8 +3,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
 import * as cookieParser from 'cookie-parser';
-import * as jwt from 'jsonwebtoken';
-import { Request} from '@nestjs/common';
+import * as jsonwebtoken from 'jsonwebtoken';
+// import { Request} from '@nestjs/common';
 import { Response } from 'express';
 
 @Controller('auth')
@@ -99,7 +99,7 @@ export class AuthController {
             return res.send({ message: 'Unauthorized', user: undefined });
         }
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
             return res.send({ message: 'Authorized', user: decoded });
         } catch (err) {
             return res.send({ message: 'Unauthorized', user: undefined });
@@ -117,7 +117,7 @@ export class AuthController {
         }
         try {
             console.log('SI hay token en getLoggedUser');
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
             let user: User = await this.userService.getBy42Id(decoded.thirdPartyId);
             console.log('Auth user devuelve' + user);
             return res.send( user );
@@ -127,9 +127,11 @@ export class AuthController {
     }
 
     @Get('/logout')
-    logoutEndpoint(@Req() req: Request, @Res() res: Response) {
+    async logoutEndpoint(@Req() req, @Res() res) {
         console.log('Api dentro de logout');
         res.clearCookie('crazy-pong', {domain:'crazy-pong.com', path:'/'});
+        // let user: User = await this.userService.getBy42Id(req.user.id42);
+        this.userService.setUserOffline(req.user);
         return res.json({ message: 'Logged out successfully' });
     }
 }

@@ -6,6 +6,8 @@ export interface UserI {
   twofactor?: boolean;
   twofactor_valid?: boolean;
   is_online?: boolean;
+  is_playing?: number;
+  game_options?: number;
   score?: number;
   played?: number;
   wins?: number;

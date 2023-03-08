@@ -63,12 +63,28 @@ export class GameGateway {
     }
   }
 
+  @SubscribeMessage('joinClientToMatch')
+  async joinClientToMatch(client: Socket, matchId: number) {
+    console.log('In Game Gateway!!!! joinClientToMatch');
+    console.log('matchID joinClientToMatch ' + matchId);
+    this.matchService.joinClientToMatch(client, matchId);
+  }
+
   @SubscribeMessage('playerInput')
   async playerInput(client: Socket, input: { input: number[] }) { 
     console.log('Game Gateway!!!! PlayerInput');
     //console.log(client.data);
     console.log('Data array:', input.input);
-    this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
+    //this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
+    this.matchService.updatePlayerInput(input.input[0],  input.input[1], client.data.user.id);
   }
+
+  // @SubscribeMessage('witchPlayerIam')
+  // async playerInput(client: Socket, input: { input: number[] }) { 
+  //   console.log('Game Gateway!!!! PlayerInput');
+  //   //console.log(client.data);
+  //   console.log('Data array:', input.input);
+  //   this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
+  // }
 }
 
