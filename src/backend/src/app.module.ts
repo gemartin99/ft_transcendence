@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { UsersModule } from './user/users.module';
 import { ChatModule } from './chat/chat.module';
+import { GameModule } from './game/game.module';
 import { OnlineUserService } from './onlineuser/onlineuser.service';
 import { OnlineUserEntity } from './onlineuser/onlineuser.entity';
 import { AvatarController } from './user/avatar/avatar.controller';
@@ -30,6 +31,7 @@ import { AvatarController } from './user/avatar/avatar.controller';
     AuthModule,
     UsersModule,
     ChatModule,
+    GameModule,
   ],
   controllers: [AppController, UsersController, AvatarController],
   providers: [AppService, UserService, AuthService, OnlineUserService],

@@ -35,6 +35,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatDialogModule } from '@angular/material/dialog';
 import { JoinRoomComponent } from './chat/rooms/join-room/join-room.component';
 import { ProfilesComponent } from './profiles/profiles.component';
+import { MatchComponent } from './game/match/match.component';
 const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} };
 
 @NgModule({
@@ -56,7 +57,8 @@ const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} 
     LogoutComponent,
     EditProfileComponent,
     JoinRoomComponent,
-    ProfilesComponent
+    ProfilesComponent,
+    MatchComponent
   ],
   imports: [
     MatListModule,

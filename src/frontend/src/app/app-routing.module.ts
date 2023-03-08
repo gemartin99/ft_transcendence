@@ -13,6 +13,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { CreateRoomComponent } from './chat/rooms/create-room/create-room.component';
 import { LogoutComponent } from './logout/logout.component';
 import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
+import { MatchComponent } from './game/match/match.component';
 
 
 const routes: Routes = [
@@ -27,7 +28,8 @@ const routes: Routes = [
   { path: 'chat/create-room', component: CreateRoomComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'profile/edit', component: EditProfileComponent },
-  { path: 'profiles/:id', component: ProfilesComponent }
+  { path: 'profiles/:id', component: ProfilesComponent },
+  { path: 'game/match/:id', component: MatchComponent }
 
 ];
 

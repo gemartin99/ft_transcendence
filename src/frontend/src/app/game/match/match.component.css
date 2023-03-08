@@ -1,0 +1,10 @@
+.aspect-ratio-1200-750 {
+  position: relative;
+  padding-top: 62.5%;
+}
+
+#gameCanvas
+{
+  position: absolute;
+  top: 0;
+}

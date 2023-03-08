@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { GameService } from './game.service';
 
 @Component({
   selector: 'app-game',
@@ -8,14 +9,18 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  constructor() {
+  // title = '';
+
+  constructor(private gameService: GameService) {
   }
 
   ngOnInit() {
+
   }
 
   matchMaking() {
     console.log('matchmaking pressed');
+    this.gameService.joinMatchMaking();
   }
 
 }
