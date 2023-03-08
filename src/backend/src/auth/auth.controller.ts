@@ -2,36 +2,67 @@ import { Controller, Get, UseGuards, Res, Req} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
+import * as cookieParser from 'cookie-parser';
+import * as jwt from 'jsonwebtoken';
+import { Request} from '@nestjs/common';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
 
-    // constructor(private userService: UserService){
-    // }
+    constructor(private userService: UserService){
+    }
 
 
     @Get('school42')
     @UseGuards(AuthGuard('school42'))
     school42Login()
     {
-        // initiates the Google OAuth2 login flow
+        // initiates the School OAuth2 login flow
     }
 
     @Get('school42/callback')
     @UseGuards(AuthGuard('school42'))
-    school42Callback(@Req() req, @Res() res)
+    async school42Callback(@Req() req, @Res() res)
     {
         console.log('call to school42/callback');
         console.log(req.user);
         console.log(req.query);
         if(!req.err)
         {
-            console.log('User not exist, redirect him to register');
-            res.header('Authorization', 'Bearer ' + req.user.jwt);
-            res.cookie('access_token', req.user.jwt);
-            return res.redirect('http://crazy-pong.com/register');
+            //Set the jwt token cookie
+            res.cookie('crazy-pong', req.user.jwt);
+
+            console.log('user id 42 es: ' + req.user.id42);
+            let user: User = await this.userService.getBy42Id(req.user.id42);
+            //User was totaly registered
+            if(user)
+            {
+                console.log('Usuario encontrado, ye preregistradi');
+                //User was found but register is not yet completed
+                if(!user.reg_completed)
+                    return res.redirect('http://crazy-pong.com/register');
+                else
+                {
+                    
+                    if(!user.twofactor)
+                        return res.redirect('http://crazy-pong.com'); //User is totaly registered and not have two-factor auth
+                    else
+                        return res.redirect('http://crazy-pong.com/two-factor'); //User is totaly registered but have two-factor auth
+                }
+            }
+            else
+            {
+                console.log('Usuario NO encontrado');
+                //User is not yet pregistered
+                let user: User = await this.userService.register(req.user.id42);
+                if(user)
+                    return res.redirect('http://crazy-pong.com/register');
+                else
+                    return res.redirect('http://crazy-pong.com/login_error');
+            }
         }
-        res.redirect('http://crazy-pong.com');
+        return res.redirect('http://crazy-pong.com/login_error');
     }
 
     @Get('google')
@@ -58,5 +89,40 @@ export class AuthController {
     protectedResource()
     {
         return 'JWT is working!';
+    }
+
+    @Get('')
+    userIsAuth(@Req() req: any, @Res() res: Response) {
+    console.log(req.cookies);
+        const token = req.cookies['crazy-pong'];
+        if (!token) {
+            return res.send({ message: 'Unauthorized', user: undefined });
+        }
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            return res.send({ message: 'Authorized', user: decoded });
+        } catch (err) {
+            return res.send({ message: 'Unauthorized', user: undefined });
+        }
+    }
+
+    @Get('user')
+    async getLoggedUser(@Req() req: any, @Res() res: Response) {
+        console.log('inside getLoggedUser');
+        // console.log(req.cookies);
+        const token = req.cookies['crazy-pong'];
+        if (!token) {
+            console.log('No hay token en getLoggedUser');
+            return undefined;
+        }
+        try {
+            console.log('SI hay token en getLoggedUser');
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            let user: User = await this.userService.getBy42Id(decoded.thirdPartyId);
+            console.log('Auth user devuelve' + user);
+            return res.send( user );
+        } catch (err) {
+            return undefined;
+        }
     }
 }

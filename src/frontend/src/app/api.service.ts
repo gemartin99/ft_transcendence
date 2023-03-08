@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from  './user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+
+  private user: any;
 
   constructor(private httpClient: HttpClient) { }  
 
@@ -25,5 +27,19 @@ export class ApiService {
 
   public deleteUser(id: number){
     return this.httpClient.delete(`${this.API_SERVER}/users/${id}/delete`);
+  }
+
+  public registerUser(name: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      withCredentials: true,
+    };
+
+    console.log("api registerUSer whit name: " + name);
+    const body = JSON.stringify({ name });
+    console.log("bpdy antes de mandar:" + body);
+    return this.httpClient.post<any>(`${this.API_SERVER}/users/register`, body, httpOptions);
   }
 }

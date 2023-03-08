@@ -3,15 +3,15 @@
     <div class="columns">
       <div class="column is-one-third">
         <div class="card">
-          <div class="card-content">
+          <div class="card-content" *ngIf="user">
             <figure class="image is-128x128 is-centered">
-              <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+              <img class="is-rounded" src="assets/avatar.jpg">
             </figure>
-            <p class="title is-4 has-text-centered">User Name</p>
+            <p class="title is-4 has-text-centered">{{user.name}}</p>
             <div class="content">
-              <p>Played Games: 0</p>
-              <p>Total Wins: 0</p>
-              <p>Total Losses: 0</p>
+              <p>Played Games: {{user.played}}</p>
+              <p>Total Wins: {{user.wins}}</p>
+              <p>Total Losses: {{user.losses}}</p>
             </div>
           </div>
         </div>

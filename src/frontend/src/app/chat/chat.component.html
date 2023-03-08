@@ -1,1 +1,36 @@
-<p>chat works!</p>
+<header class="header">
+  <nav class="navbar is-light">
+    <div class="navbar-brand">
+      <span class="navbar-item is-size-5">Live Chat</span>
+    </div>
+  </nav>
+</header>
+<section class="section">
+  <div class="card">
+    <div class="card-content">
+      {{title | async}}
+      There are currently <strong>{{users}}</strong> users online. Start
+      chatting!
+    </div>
+  </div>
+  <ul>
+    <li *ngFor="let message of messages"> {{message}} </li>
+  </ul>
+</section>
+<footer class="footer">
+  <div class="field has-addons">
+    <div class="control">
+      <textarea
+        class="textarea"
+        [(ngModel)]="message"
+        placeholder="type message..."
+        (keyup.enter)="addChat()"
+      ></textarea>
+    </div>
+    <div class="control">
+      <button class="button is-primary" (click)="addChat()">
+        Send
+      </button>
+    </div>
+  </div>
+</footer>

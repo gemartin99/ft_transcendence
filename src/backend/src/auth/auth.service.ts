@@ -1,9 +1,11 @@
-import { Injectable, InternalServerErrorException, Inject, forwardRef } from '@nestjs/common';
-import { sign } from 'jsonwebtoken';
+import { Injectable, InternalServerErrorException, UnauthorizedException, Inject, forwardRef } from '@nestjs/common';
+import { sign, verify } from 'jsonwebtoken';
 import { User } from  '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult, DeleteResult } from  'typeorm';
+// import { jwt } from 'jsonwebtoken';
+
 
 export enum Provider
 {
@@ -14,7 +16,7 @@ export enum Provider
 @Injectable()
 export class AuthService {
     
-    private readonly JWT_SECRET_KEY = 'vwts1k+tsUuMYh1ZIGQ5eeWu/DjlHy2xlNXsBC6dzyFXRhVrC/d2R4SbhLhsbiWlJHqTEHPUA9N7l+UfGziEYixc0xqif5PHY+d7DojbebbFws/mik07eJf6MkE+SAC1jbQm2EY6C6vhIdcXbIDLwnjL3ePzyW4Itu68N4nbugPRkQO/5T0N27TDCBNQG8vDkh0609iZFU3bw5609Egu7H2XwiR6sqPv7xj1j1Qw8TipLoQ/XSuzmArgsWABQu6u6X/KKh6dTSTDWroCQNwx1Y1870uwNBZKWiBYAFhCWFdqEX6uWZyp4XZZ0lgYWXK67/4qkfgSDal7wbHihJ4lNw=='; // <- replace this with your secret key
+    private readonly JWT_SECRET_KEY = process.env.JWT_SECRET; // <- replace this with your secret key
 
     constructor(
         @InjectRepository(User)
@@ -34,7 +36,7 @@ export class AuthService {
             // if (!user)
                 // user = await this.usersService.registerOAuthUser(thirdPartyId, provider);
             
-            let user: User = await this.userService.getBy42Id(thirdPartyId);
+            //let user: User = await this.userService.getBy42Id(thirdPartyId);
             // if (!user)
             //     user = await this.usersService.register(thirdPartyId);
 
@@ -44,14 +46,40 @@ export class AuthService {
             }
 
             console.log('Entro a auth.AuthService intento firmar el JWT...');
-            const jwt: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 3600 });
+            const signed_token: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 3600 });
             console.log('JWT Firmado...');
-            return jwt;
+            return signed_token;
         }
         catch (err)
         {
             console.log('JWT Error Firmando...');
             throw new InternalServerErrorException('validateOAuthLogin', err.message);
         }
+    }
+
+    //Posat recentment
+    async verifyJwt(authorizationHeader: string): Promise<any> {
+      if (!authorizationHeader) {
+        console.log('no authorizationHeader:' + authorizationHeader);
+        throw new UnauthorizedException();
+      }
+
+      const [bearer, jwtToken] = authorizationHeader.split(' ');
+      if (bearer !== 'Bearer') {
+        console.log('no Bearer');
+        throw new UnauthorizedException();
+      }
+
+      console.log('jwt.verify :' + jwtToken);
+      // jwt.verify(jwtToken, process.env.JWT_SECRET)
+      // console.log('resultado verify: ' + jwt.verify(jwtToken, process.env.JWT_SECRET));
+      // return(1);
+      try {
+        console.log('jwt.verify :' + jwtToken);
+        return verify(jwtToken, this.JWT_SECRET_KEY);
+      } catch (err) {
+        console.log('jwt.verify FAILS: ' + err);
+        throw new UnauthorizedException();
+      }
     }
 }

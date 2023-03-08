@@ -34,7 +34,7 @@ export class UserService {
 	async getBy42Id(id42: number): Promise<User> {
 		const user = await this.userRepository.findOne({
 		where: {
-			id: id42,
+			id42: id42,
 		},
 		});
 		return user;

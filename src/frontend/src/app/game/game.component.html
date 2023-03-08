@@ -1,69 +1,11 @@
-// component.html
-<div id=gameContainer>
-	<canvas #canvas width="500" height="500"></canvas>
-</div>
-
-<!-- <section class="section">
-  <div class="container">
-    <h1 class="title">Crazy Pong</h1>
-    <div class="card">
-      <div class="card-content">
-        <div id="gameContainer"></div>
-      </div>
-    </div>
-  </div>
+<!-- </div> -->
+<section>
+		<div class="container">
+			<div style="text-align: center;"><h1> Let's Fight</h1></div>
+			<div class="card">
+				<div id="gameContainer">
+					<canvas #canvas width="500" height="500" style="background-color: black;"></canvas>
+				</div>
+			</div>
+		</div>
 </section>
-
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.50.0/dist/phaser.min.js"></script>
-<script>
-	var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
-	var ball;
-	var paddles = [];
-	var score = 0;
-	var scoreText;
-
-	function preload() {
-	  game.load.image('ball', 'assets/ball.png');
-	  game.load.image('paddle', 'assets/paddle.png');
-	}
-
-	function create() {
-	  game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-	  game.scale.setShowAll();
-	  game.scale.refresh();
-	  game.scale.setScreenSize(true);
-
-	  game.physics.startSystem(Phaser.Physics.ARCADE);
-
-	  ball = game.add.sprite(game.world.centerX, game.world.centerY, 'ball');
-	  game.physics.enable(ball, Phaser.Physics.ARCADE);
-	  ball.body.velocity.setTo(150, 150);
-	  ball.body.collideWorldBounds = true;
-	  ball.body.bounce.set(1);
-
-	  paddles[0] = game.add.sprite(20, game.world.centerY, 'paddle');
-	  paddles[1] = game.add.sprite(780, game.world.centerY, 'paddle');
-	  game.physics.enable(paddles, Phaser.Physics.ARCADE);
-	  paddles[0].body.immovable = true;
-	  paddles[1].body.immovable = true;
-
-	  scoreText = game.add.text(game.world.centerX, 20, '0', { fontSize: '32px', fill: '#000' });
-	}
-
-	function update() {
-	  game.physics.arcade.collide(ball, paddles, hitPaddle);
-	  paddles[0].y = game.input.y;
-	  paddles[1].y = game.input.y;
-	}
-
-	function hitPaddle(ball, paddle) {
-	  score += 1;
-	  scoreText.text = score;
-	}
-
-	window.addEventListener('resize', function () {
-	  game.scale.refresh();
-	});
-</script>
- -->
