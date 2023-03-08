@@ -1,3 +1,10 @@
+sequalize.js para evitar el injection
+
+
+
+
+
+
 FROM node:lts
 
 RUN apt-get update && \

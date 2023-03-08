@@ -27,20 +27,19 @@ services:
     depends_on:
       - postgres
 
-  # frontend:
-  #   build:
-  #     dockerfile: ./src/frontend/Dockerfile
-  #   ports:
-  #     - 4200:4200
-  #   networks:
-  #     - backend
-  #   volumes:
-  #     - ./frontend:/app
-  #   env_file:
-  #     - ./a.env
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: ./src/frontend
+    ports:
+      - 4200:4200
+    networks:
+      - backend
+    volumes:
+      - ./frontend:/app
+    env_file:
+      - ./a.env
+    restart: unless-stopped
+    depends_on:
+      - backend
 
 volumes:
   backend:
