@@ -31,6 +31,7 @@ import { ChatRoomComponent } from './chat/chat-room/chat-room.component';
 import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
 import { LogoutComponent } from './logout/logout.component';
 import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} };
 
 @NgModule({
@@ -66,6 +67,7 @@ const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} 
     FormsModule,
     ReactiveFormsModule,
     SocketIoModule.forRoot(config),
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

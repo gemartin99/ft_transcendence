@@ -139,6 +139,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
    @SubscribeMessage('addMessage')
    async onAddMessage(socket: Socket, message: MessageI) {
      const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
+     if(!createdMessage)
+        return null;
      const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
      const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
      // TODO: Send new Message to all joined Users of the room (currently online)

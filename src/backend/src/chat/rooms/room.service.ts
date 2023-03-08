@@ -20,6 +20,7 @@ export class RoomService {
     console.log('createRoom:');
     console.log(room);
     room.users = [{ id: creator.id }];
+    room.type = 1;
     return this.roomRepository.save(room);
   }
 

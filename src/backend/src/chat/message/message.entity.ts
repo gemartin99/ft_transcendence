@@ -24,5 +24,4 @@ export class MessageEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
-
 }

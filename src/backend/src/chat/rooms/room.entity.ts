@@ -33,5 +33,4 @@ export class RoomEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
-
 }

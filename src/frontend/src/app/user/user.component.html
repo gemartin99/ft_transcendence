@@ -35,14 +35,12 @@
           <p class="card-header-title">My Friends List</p>
         </header>
         <div class="card-content">
-          <table class="table is-striped is-hoverable">
+          <table class="table is-striped is-hoverable friends-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Password</th>
+                <th>On</th>
                 <th>Avatar</th>
-                <th>Twofactor</th>
+                <th>Name</th>
                 <th>Score</th>
                 <th>Played</th>
                 <th>Wins</th>
@@ -51,17 +49,15 @@
             </thead>
             <tbody>
               <tr *ngFor="let user of dataSource">
-                <td>{{user.id}}</td>
+                <td><span class="icon has-text-success"><i class="fa-solid fa-circle"></i></span></td>
+                <td><img class="is-rounded" src="assets/avatar.jpg" class="avatar-table">{{user.avatar}}</td>
                 <td>{{user.name}}</td>
-                <td>{{user.password}}</td>
-                <td>{{user.avatar}}</td>
-                <td>{{user.twofactor}}</td>
                 <td>{{user.score}}</td>
                 <td>{{user.played}}</td>
                 <td>{{user.wins}}</td>
                 <td>{{user.losses}}</td>
                 <td>
-                  <button class="button is-danger" (click)="removeFriend(user.id)">Remove Friend</button>
+                  <button class="button is-danger" (click)="removeFriend(user.id)"><span class="icon is-small"><i class="fas fa-times"></i></span></button>
                   <!-- <button class="button is-info" (click)="selectUser(user)">Select User</button> -->
                 </td>
               </tr>
@@ -69,48 +65,5 @@
           </table>
         </div>
       </div>
-
-<!--       <div class="card">
-        <header class="card-header">
-          <p class="card-header-title">Create a User</p>
-        </header>
-        <div class="card-content">
-          <form [formGroup]="checkoutForm" (ngSubmit)="createUser(checkoutForm.value)" class="form" style="width: 100%; padding: 5px;">
-
-            <div class="field">
-              <input class="input" formControlName="name" type="text" placeholder="Name" name="name" required>
-            </div>
-            <div class="field">
-              <input class="input" formControlName="password" type="text" placeholder="Password" name="password" required>
-            </div> 
-            <div class="field">
-              <input class="input" formControlName="avatar" type="text" placeholder="Avatar" name="avatar" required>
-            </div>   
-            <div class="field">
-              <input class="input" formControlName="score" type="number" placeholder="Score" name="score" required>
-            </div>   
-            <div class="field">
-              <input class="input" formControlName="played" type="number" placeholder="Played" name="played" required>
-            </div>
-            <div class="field">
-              <input class="input" formControlName="wins" type="number" placeholder="Wins" name="wins" required>
-            </div>
-            <div class="field">
-              <input class="input" formControlName="losses" type="number" placeholder="Losses" name="losses" required>
-            </div>
-            <div class="field">
-              <label class="checkbox">
-                <input formControlName="twofactor" type="checkbox" name="twofactor">
-                TwoFactor Auth
-              </label>
-            </div>
-            <div class="card-footer">
-                <button class="button is-primary" type="submit">New..</button>
-            </div>   
-          </form>
-
-        </div>
-
-      </div> -->
   </div>
 </section>
