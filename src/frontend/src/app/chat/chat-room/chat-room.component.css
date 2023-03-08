@@ -1,24 +1,15 @@
-.container {
-  display: flex;
-  justify-content: center;
+h3 {
+  padding: 0px;
+  padding-top: -10px;
+  margin: 0px;
 }
 
-.container mat-card {
-  position: fixed;
-  margin: 20px;
-}
-
-.container mat-card .rooms {
-  height: 500px;
-  width: 250px;
+.message {
+  background-color: rgb(236, 236, 236); 
+  height: 400px; 
   overflow-y: scroll;
   scrollbar-color: lightgrey darkgrey;
   scrollbar-width: thin;
-}
-
-.container mat-card .chatroom {
-  margin-left: 40px;
-  width: 600px;
 }
 
 ::-webkit-scrollbar-track {

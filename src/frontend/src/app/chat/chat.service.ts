@@ -4,6 +4,7 @@ import { CustomSocket } from '../sockets/custom-socket';
 import { UserI } from "../user/user.interface";
 import { RoomI, RoomPaginateI } from "./rooms/room.interface";
 import { Observable } from 'rxjs';
+import { MessageI, MessagePaginateI } from './message/message.interface';
 //import { MatSnackBar } from '@angular/material/snack-bar';
 
 
@@ -21,12 +22,20 @@ export class ChatService {
   //   this.socket.emit('chat', message);
   // }
 
-  sendMessage() {
-
+  sendMessage(message: MessageI) {
+    this.socket.emit('addMessage', message);
   }
 
-  getMessage() {
-    return this.socket.fromEvent('message');
+  joinRoom(room: RoomI) {
+    this.socket.emit('joinRoom', room);
+  }
+
+  leaveRoom(room: RoomI) {
+    this.socket.emit('leaveRoom', room);
+  }
+
+  getMessages(): Observable<MessagePaginateI> {
+    return this.socket.fromEvent<MessagePaginateI>('messages');
   }
 
   getMyRooms(): Observable<RoomPaginateI> {
