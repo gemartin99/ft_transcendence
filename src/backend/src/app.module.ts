@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { UsersModule } from './user/users.module';
 import { ChatModule } from './chat/chat.module';
+import { OnlineUserService } from './onlineuser/onlineuser.service';
+import { OnlineUserEntity } from './onlineuser/onlineuser.entity';
 
 
 @Module({
@@ -24,13 +26,13 @@ import { ChatModule } from './chat/chat.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, OnlineUserEntity]),
     AuthModule,
     UsersModule,
     ChatModule,
   ],
   controllers: [AppController, UsersController],
-  providers: [AppService, UserService, AuthService],
+  providers: [AppService, UserService, AuthService, OnlineUserService],
 })
 export class AppModule { }
 
