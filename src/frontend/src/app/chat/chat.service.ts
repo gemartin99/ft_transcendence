@@ -21,7 +21,10 @@ export class ChatService {
   // sendChat(message){
   //   this.socket.emit('chat', message);
   // }
-
+  getAddedMessage(): Observable<MessageI> {
+    return this.socket.fromEvent<MessageI>('messageAdded');
+  }
+  
   sendMessage(message: MessageI) {
     this.socket.emit('addMessage', message);
   }

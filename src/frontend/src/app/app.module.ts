@@ -29,6 +29,7 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { CreateRoomComponent } from './chat/rooms/create-room/create-room.component';
 import { ChatRoomComponent } from './chat/chat-room/chat-room.component';
 import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
+import { LogoutComponent } from './logout/logout.component';
 const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} };
 
 @NgModule({
@@ -46,7 +47,8 @@ const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} 
     ChatComponent,
     CreateRoomComponent,
     ChatRoomComponent,
-    ChatMessageComponent
+    ChatMessageComponent,
+    LogoutComponent
   ],
   imports: [
     MatListModule,

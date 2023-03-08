@@ -10,6 +10,8 @@ import { ChatComponent } from './chat/chat.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from './auth/auth.guard';
 import { CreateRoomComponent } from './chat/rooms/create-room/create-room.component';
+import { LogoutComponent } from './logout/logout.component';
+
 
 const routes: Routes = [
   {path: "", component: HomeComponent},
@@ -20,7 +22,9 @@ const routes: Routes = [
   {path: 'game', component: GameComponent },
   {path: 'chat', component: ChatComponent },
   {path: 'profile', component: ProfileComponent },
-  {path: 'chat/create-room', component: CreateRoomComponent }
+  {path: 'chat/create-room', component: CreateRoomComponent },
+  {path: 'logout', component: LogoutComponent },
+
 ];
 
 @NgModule({

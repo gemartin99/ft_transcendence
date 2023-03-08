@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 //import { ApiService } from '../api.service';
 import { AuthService } from '../auth/auth.service';
 import { User } from  '../user';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   public user: any;
+  private ngUnsubscribe = new Subject();
 
   constructor(private authService: AuthService) { }
 
@@ -21,5 +24,17 @@ export class HeaderComponent implements OnInit {
     this.authService.loadLoggedUser().then(() => {
       this.user = this.authService.getLoggedUser();
     });
+
+    // this.authService.logout.subscribe(() => {
+    //   this.user = null;
+    // });
+    this.authService.logout$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      this.user = null;
+    });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next(true);
+    this.ngUnsubscribe.complete();
   }
 }

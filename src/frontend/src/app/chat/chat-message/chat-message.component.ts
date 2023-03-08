@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MessageI } from '../message/message.interface';
 import { UserI } from '../../user/user.interface';
 import { User } from '../../user';
-import { AuthService } from '../..//auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-chat-message',

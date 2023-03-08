@@ -24,6 +24,7 @@
             <div class="navbar-end ml-0">
                <div class="navbar-item py-0">
                   <a *ngIf="user" routerLink="/profile" class="btn btn-sm btn-outline-primary ml-4">Profile</a>
+                  <a *ngIf="user" routerLink="/logout" class="btn btn-sm btn-outline-primary ml-4">Logout</a>
                   <a *ngIf="!user" routerLink="/login" class="btn btn-sm btn-primary ml-4">Login</a>
                </div>
             </div>

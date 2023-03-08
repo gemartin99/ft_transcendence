@@ -5,7 +5,8 @@ import { UserI } from "../../user/user.interface";
 export interface RoomI {
   id?: number;
   name?: string;
-  description?: string;
+  password?: string;
+  type?: number;
   users?: UserI[];
   created_at?: Date;
   updated_at?: Date;

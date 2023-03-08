@@ -13,7 +13,10 @@ export class RoomEntity {
   name: string;
 
   @Column({nullable: true})
-  description: string;
+  password: string;
+
+  @Column()
+  type: number;
 
   @ManyToMany(() => User)
   @JoinTable()

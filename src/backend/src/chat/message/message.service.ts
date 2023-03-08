@@ -16,6 +16,10 @@ export class MessageService {
   ) {}
 
   async create(message: MessageI): Promise<MessageI> {
+    if (message.text.startsWith('/')) {
+      console.log('The message is a CMD');
+      return null;
+    }
     return this.messageRepository.save(this.messageRepository.create(message));
   }
 

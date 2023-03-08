@@ -125,4 +125,11 @@ export class AuthController {
             return undefined;
         }
     }
+
+    @Get('/logout')
+    logoutEndpoint(@Req() req: Request, @Res() res: Response) {
+        console.log('Api dentro de logout');
+        res.clearCookie('crazy-pong', {domain:'crazy-pong.com', path:'/'});
+        return res.json({ message: 'Logged out successfully' });
+    }
 }
