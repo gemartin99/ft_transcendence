@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { CustomSocket } from '../sockets/custom-socket';
+import { UserI } from "../user/user.interface";
+import { RoomI, RoomPaginateI } from "./rooms/room.interface";
 
 
 @Injectable({
@@ -18,22 +20,27 @@ export class ChatService {
   // }
 
   sendMessage() {
+
   }
 
   getMessage() {
     return this.socket.fromEvent('message');
   }
 
-  // getCookieValue(cookieName: string): string {
-  //   const cookieString = document.cookie;
-  //   const cookieArray = cookieString.split(';');
-  //   for (const cookie of cookieArray) {
-  //     const cookieParts = cookie.split('=');
-  //     const name = cookieParts[0].trim();
-  //     if (name === cookieName) {
-  //       return cookieParts[1];
-  //     }
-  //   }
-  //   return '';
-  // }
+  getMyRooms() {
+     return this.socket.fromEvent<RoomPaginateI>('rooms');
+  }
+
+  createRoom() {
+    const user2: UserI = {
+      id: 1
+    }
+
+    const room: RoomI = {
+      name: 'testroom2',
+      users: [user2]
+    }
+
+    this.socket.emit('createRoom', room);
+  }
 }

@@ -6,26 +6,16 @@ import { ChatService } from './chat.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit{
 
-  public users: number = 0;
-  public message: string = '';
-  public messages: string[] = [];
+  rooms$ = this.chatService.getMyRooms();
 
   constructor(private chatService: ChatService){
   }
-  ngOnInit(){
-    this.chatService.receiveChat().subscribe((message: string) => {
-      this.messages.push(message);
-    });
-    this.chatService.getUsers().subscribe((users: number) => {
-      this.users = users;
-    });
-  }
-  addChat(){
-    this.messages.push(this.message);
-    this.chatService.sendChat(this.message);
-    this.message = '';
-  }
 
+  ngOnInit()
+  {
+    this.chatService.createRoom();
+    this.rooms$.subscribe(rooms => console.log(rooms));
+  }
 }

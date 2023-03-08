@@ -1,4 +1,12 @@
-<header class="header">
+<div class="select">
+  <select>
+    <option *ngFor="let room of (rooms$ | async)?.items" [value]="room">
+      Name: {{room.name}} Id: {{room.id}}
+    </option>
+  </select>
+</div>
+
+<!-- <header class="header">
   <nav class="navbar is-light">
     <div class="navbar-brand">
       <span class="navbar-item is-size-5">Live Chat</span>
@@ -8,7 +16,6 @@
 <section class="section">
   <div class="card">
     <div class="card-content">
-      {{title | async}}
       There are currently <strong>{{users}}</strong> users online. Start
       chatting!
     </div>
@@ -34,3 +41,4 @@
     </div>
   </div>
 </footer>
+ -->
