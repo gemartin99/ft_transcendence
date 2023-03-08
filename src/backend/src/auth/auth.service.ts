@@ -3,8 +3,7 @@ import { sign } from 'jsonwebtoken';
 
 export enum Provider
 {
-    GOOGLE = 'google',
-    SCHOOL42 = 'school42'
+    GOOGLE = 'google'
 }
 
 @Injectable()
@@ -17,7 +16,6 @@ export class AuthService {
 
     async validateOAuthLogin(thirdPartyId: string, provider: Provider): Promise<string>
     {
-        console.log('Entro a auth.AuthService validateOAuthLogin...');
         try 
         {
             // You can add some registration logic here, 
@@ -32,14 +30,11 @@ export class AuthService {
                 provider
             }
 
-            console.log('Entro a auth.AuthService intento firmar el JWT...');
             const jwt: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 3600 });
-            console.log('JWT Firmado...');
             return jwt;
         }
         catch (err)
         {
-            console.log('JWT Error Firmando...');
             throw new InternalServerErrorException('validateOAuthLogin', err.message);
         }
     }
