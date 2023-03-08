@@ -5,6 +5,7 @@ import { MessagePaginateI } from '../message/message.interface';
 import { RoomI } from '../rooms/room.interface';
 import { ChatService } from '../chat.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat-room',
@@ -15,7 +16,13 @@ export class ChatRoomComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() chatRoom: RoomI;
 
-  messages$: Observable<MessagePaginateI> = this.chatService.getMessages();
+  messages$: Observable<MessagePaginateI> = this.chatService.getMessages().pipe(
+    map((messagePaginate: MessagePaginateI) => {
+      const items = messagePaginate.items.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      messagePaginate.items = items;
+      return messagePaginate;
+    })
+  );
 
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
 
@@ -25,6 +32,7 @@ export class ChatRoomComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.chatService.leaveRoom(changes['chatRoom'].previousValue);
     if(this.chatRoom) {
       this.chatService.joinRoom(this.chatRoom);
     }

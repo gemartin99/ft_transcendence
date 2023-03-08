@@ -4,6 +4,8 @@ import { MatSelectionListChange } from '@angular/material/list';
 import { PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { RoomI, RoomPaginateI } from "./rooms/room.interface";
+import { UserI } from '../user/user.interface';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-chat',
@@ -14,14 +16,16 @@ export class ChatComponent implements OnInit, AfterViewInit{
 
   rooms$: Observable<RoomPaginateI> = this.chatService.getMyRooms();
   selectedRoom = null;
+  public user: any;
 
-  constructor(private chatService: ChatService){
+  constructor(private chatService: ChatService, private authService: AuthService){
   }
 
-  ngOnInit()
+  async ngOnInit()
   {
-    // this.chatService.createRoom();
-    //this.rooms$.subscribe(rooms => console.log(rooms));
+    // this.authService.loadLoggedUser().then(() => {
+      this.user = await this.authService.getLoggedUser();
+    // });
     this.chatService.emitPaginateRooms(10, 0);
   }
 

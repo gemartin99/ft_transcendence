@@ -3,7 +3,10 @@
     <div style="display: flex; flex-direction: row;">
       <div>
         <div>
-          <h2>My Chatrooms</h2>
+           <span style="display: flex; flex-direction: row; align-items: baseline;">
+            <h2>My Chatrooms</h2>
+            <small style="margin-left:10px;">Logged in as {{user.name}}</small>
+          </span>
           <button mat-button [routerLink]="['create-room']">Create new Room</button>
         </div>
         <div *ngIf="(rooms$|async)?.items?.length > 0;" class="rooms">
