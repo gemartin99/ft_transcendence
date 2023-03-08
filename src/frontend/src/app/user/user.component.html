@@ -1,0 +1,76 @@
+<div style="text-align:center">
+  <h1>
+    User Management
+  </h1>
+</div>
+<router-outlet></router-outlet>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">Users</p>
+  </header>
+  <div class="card-content">
+    <table class="table is-striped is-hoverable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Title</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of dataSource">
+          <td>{{user.id}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.title}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.phone}}</td>
+          <td>{{user.address}}</td>
+          <td>{{user.city}}</td>
+          <td>
+            <button class="button is-danger" (click)="deleteUser(user.id)">Delete User</button>
+            <button class="button is-info" (click)="selectUser(user)">Select User</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">Create a User</p>
+  </header>
+  <div class="card-content">
+    <form [formGroup]="checkoutForm" (ngSubmit)="createUser(checkoutForm.value)" class="form" style="width: 100%; padding: 5px;">
+
+      <div class="field">
+        <input class="input" formControlName="name" type="text" placeholder="Name" name="name" required>
+      </div> 
+      <div class="field">
+        <input class="input" formControlName="title" type="text" placeholder="Title" name="title" required>
+      </div>   
+      <div class="field">
+        <input class="input" formControlName="email" type="text" placeholder="Email" name="email" required>
+      </div>   
+      <div class="field">
+        <input class="input" formControlName="phone" type="text" placeholder="Phone" name="phone" required>
+      </div>   
+      <div class="field">
+        <input class="input" formControlName="address" type="text" placeholder="Address" name="address" required>
+      </div>
+      <div class="field">
+        <input class="input" formControlName="city" type="text" placeholder="City" name="city" required>
+      </div>
+      <div class="card-footer">
+          <button class="button is-primary" type="submit">New..</button>
+      </div>   
+    </form>
+
+  </div>
+
+</div>
