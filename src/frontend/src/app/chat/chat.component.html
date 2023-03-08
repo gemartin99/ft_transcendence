@@ -9,8 +9,8 @@
                 <h2>My Chatrooms</h2>
                 <small style="margin-left:10px;">Logged in as {{user?.name}}</small>
               </span>
-              <button (click)="openModalJoinRoom()">Join Room</button>
-              <button (click)="openModalCreateRoom()">Create Room</button>
+              <button (click)="openModalJoinRoom()" class="button is-primary">Join Room</button>
+              <button (click)="openModalCreateRoom()" class="button is-link">Create Room</button>
             </div>
             <div *ngIf="(rooms$|async)?.items?.length > 0;" class="rooms">
                  <mat-selection-list [multiple]="false" (selectionChange)="onSelectRoom($event)">

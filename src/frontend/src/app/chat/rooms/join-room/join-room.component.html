@@ -7,18 +7,12 @@
           <form [formGroup]="form" (ngSubmit)="join()">
             <div class="field">
               <label class="label">Chat-Room Name</label>
-              <div class="control">
-                <input type="text" formControlName="name" placeholder="Enter your username" class="form-control input" required>
-                  <div *ngIf="name.invalid && name.touched">
-                </div>
-              </div>
-              <div class="field">
-                <div>
-                    <p *ngIf="name.errors?.['required']" class="help is-danger">Chat-room name is required</p>
-                    <p *ngIf="name.errors?.['pattern']" class="help is-danger">Invalid characters</p>
-                    <p *ngIf="name.errors?.['maxlength']" class="help is-danger">Max length exceeded</p>
-                </div>
-              </div>
+              <ng-container *ngIf="pub_rooms">
+                <select formControlName="id" class="form-control input" required>
+                  <option [value]="pub_rooms[0]?.id" selected>{{ pub_rooms[0]?.name }}</option>
+                  <option *ngFor="let room of pub_rooms.slice(1)" [value]="room.id">{{ room.name }}</option>
+                </select>
+              </ng-container>
               <label class="label">Password (optional)</label>
               <div class="control">
                 <input type="text" formControlName="password" placeholder="Channel Password (optional)" class="form-control input">
@@ -31,17 +25,10 @@
                     <p *ngIf="password.errors?.['maxlength']" class="help is-danger">Max length exceeded</p>
                 </div>
               </div>
-              <div class="field">
-                <label class="checkbox">
-                  <!-- <input formControlName="private" type="checkbox" name="twofactor"> -->
-                  <input type="checkbox" name="private">
-                  Make it private
-                </label>
-              </div>
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-link"  [disabled]="!form.valid" type="submit">Create Chat Room</button>
+                <button class="button is-link"  [disabled]="!form.valid" type="submit">Join Chat Room</button>
               </div>
             </div>
           </form>

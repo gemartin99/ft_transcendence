@@ -23,6 +23,8 @@ export class OperatorService {
 
 	async isOperator(user_id: number, room_id: number): Promise<boolean> {
 	  const operator = await this.operatorRepository.findOne({ where: { user: { id: user_id }, room: { id: room_id } } });
+	  console.log('is oeprator true or false:');
+	  console.log(!!operator);
 	  return !!operator; // Returns true if an operator record was found, false otherwise.
 	}
 

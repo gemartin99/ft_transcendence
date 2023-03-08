@@ -135,6 +135,30 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      await this.server.to(socket.id).emit('messages', messages);
    }
 
+   @SubscribeMessage('joinRoomById')
+   async onJoinRoomById(socket: Socket, room: RoomI) {
+     console.log('chat gateway i enter to joinRoom');
+     console.log('room is:');
+     console.log(room);
+     console.log('user id es:');
+     console.log(socket.data.user)
+     room = await this.roomService.joinRoomById(room, socket.data.user);
+     const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+     console.log('I take room messajes');
+     console.log(messages);
+     messages.meta.currentPage = messages.meta.currentPage - 1;
+     // Save Connection to Room
+     console.log('Before this.joinedRoomService.create');
+     await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+     console.log('After this.joinedRoomService.create');
+
+     const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+     // console.log('room for user: ' + rooms);    
+     await this.server.to(socket.id).emit('rooms', rooms);
+     // Send last messages from Room to User
+     await this.server.to(socket.id).emit('messages', messages);
+   }
+
    @SubscribeMessage('leaveRoom')
    async onLeaveRoom(socket: Socket) {
      // remove connection from JoinedRooms
@@ -162,5 +186,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      // add page +1 to match angular material paginator
      page.page = page.page + 1;
      return page;
+   }
+
+   @SubscribeMessage('getPublicRooms')
+   async onGetPublicRooms(socket: Socket) {
+      console.log('getPublicRooms');
+      const rooms = await this.roomService.getPublicRooms();
+      console.log(rooms);
+      await this.server.to(socket.id).emit('pub_rooms', rooms);
    }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserI } from '../../../user/user.interface';
 import { ChatService } from '../../chat.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { RoomI } from '../room.interface';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class CreateRoomComponent {
     password: new FormControl(null, [
       Validators.pattern(/^[a-zA-Z0-9]+$/),
       Validators.maxLength(30)
-    ])
+    ]),
+    type: new FormControl(false)
     // users: new FormArray([], [Validators.required])
   });
 
@@ -35,7 +37,15 @@ export class CreateRoomComponent {
   create() {
     if (this.form.valid) {
       console.log("El formulario create room es valido");
-      this.chatService.createRoom(this.form.getRawValue());
+      const room: RoomI = this.form.getRawValue();
+      if (this.form.get('type').value === true) {
+        console.log("type es TRUE");
+        room.type = 2;
+      } else {
+        console.log("type es FALSE");
+        room.type = 1;
+      }
+      this.chatService.createRoom(room);
       this.close();
       //this.router.navigate(['../../chat'], { relativeTo: this.activatedRoute });
     }

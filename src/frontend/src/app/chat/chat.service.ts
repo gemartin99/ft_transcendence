@@ -5,6 +5,7 @@ import { UserI } from "../user/user.interface";
 import { RoomI, RoomPaginateI } from "./rooms/room.interface";
 import { Observable } from 'rxjs';
 import { MessageI, MessagePaginateI } from './message/message.interface';
+import { tap } from 'rxjs/operators';
 //import { MatSnackBar } from '@angular/material/snack-bar';
 
 
@@ -12,6 +13,9 @@ import { MessageI, MessagePaginateI } from './message/message.interface';
   providedIn: 'root'
 })
 export class ChatService {
+  
+  // public pub_rooms: RoomI[] = [];
+
   constructor(private socket: CustomSocket) {
     // const jwtToken = this.getCookieValue('crazy-pong');
     // console.log('The cookie valie in angular chat-service is:' + jwtToken);
@@ -31,8 +35,14 @@ export class ChatService {
 
   joinRoom(room: RoomI) {
     console.log('From chat service JoinRoom room is:');
-    console.log(room);
+    console.log(room.id);
     this.socket.emit('joinRoom', room);
+  }
+
+  joinRoomById(room: RoomI) {
+    console.log('From chat service JoinRoom room is:');
+    console.log(room);
+    this.socket.emit('joinRoomById', room);
   }
 
   leaveRoom(room: RoomI) {
@@ -47,6 +57,10 @@ export class ChatService {
      return this.socket.fromEvent<RoomPaginateI>('rooms');
   }
 
+  getPublicRooms(): Observable<RoomI[]> {
+    return this.socket.fromEvent<RoomI[]>('pub_rooms');
+  }
+
   emitPaginateRooms(limit: number, page: number) {
     this.socket.emit('paginateRooms', {limit, page});
   }
@@ -54,4 +68,9 @@ export class ChatService {
   createRoom(room: RoomI) {
     this.socket.emit('createRoom', room);
   }
+
+  publicRooms(){
+    this.socket.emit('getPublicRooms');
+  }
+
 }

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserI } from '../../../user/user.interface';
 import { ChatService } from '../../chat.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { RoomI } from '../room.interface';
 
 
 @Component({
@@ -13,11 +14,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class JoinRoomComponent {
 
+  public pub_rooms: any;
+
   form: FormGroup = new FormGroup({
-    name: new FormControl(null, [
+    id: new FormControl(null, [
       Validators.required,
-      Validators.pattern(/^[a-zA-Z0-9]+$/),
-      Validators.maxLength(30)
+      Validators.pattern(/^[0-9]+$/)
     ]),
     password: new FormControl(null, [
       Validators.pattern(/^[a-zA-Z0-9]+$/),
@@ -32,10 +34,29 @@ export class JoinRoomComponent {
     private activatedRoute: ActivatedRoute,
     private dialogRef: MatDialogRef<JoinRoomComponent>) { }
 
+  async ngOnInit() {
+    this.pub_rooms = await this.chatService.publicRooms();
+
+    // Subscribe to publicRoomsUpdate event to update pub_rooms variable
+    this.chatService.getPublicRooms().subscribe((rooms: RoomI[]) => {
+      this.pub_rooms = rooms;
+      console.log(this.pub_rooms);
+    });
+  }
+
+  // join() {
+  //   if (this.form.valid) {
+  //     console.log("El formulario join room es valido");
+  //     this.chatService.joinRoom(this.form.getRawValue());
+  //     this.close();
+  //     //this.router.navigate(['../../chat'], { relativeTo: this.activatedRoute });
+  //   }
+  // }
+
   join() {
     if (this.form.valid) {
       console.log("El formulario join room es valido");
-      this.chatService.joinRoom(this.form.getRawValue());
+      this.chatService.joinRoomById(this.form.getRawValue());
       this.close();
       //this.router.navigate(['../../chat'], { relativeTo: this.activatedRoute });
     }
@@ -50,8 +71,8 @@ export class JoinRoomComponent {
   }
 
 
-  get name(): FormControl {
-    return this.form.get('name') as FormControl;
+  get id(): FormControl {
+    return this.form.get('id') as FormControl;
   }
 
   get password(): FormControl {

@@ -45,7 +45,7 @@ export class MessageService {
           break;
         case '/ban':
           if (args.length == 1) {
-            await this.roomService.opBanUserFromRoom(message.room, args[0]);
+            await this.roomService.opBanUserFromRoom(message.room, message.user, args[0]);
             return;
           }
           break;
@@ -55,21 +55,37 @@ export class MessageService {
             return;
           }
           break;
-        case '/setpwd:':
+        case '/setpwd':
           if (args.length == 1) {
             await this.roomService.owChangePasswordRoom(message.room, message.user, args[0]);
             return;
           }
           break;
-        case '/unsetpwd:':
+        case '/unsetpwd':
             await this.roomService.owUnsetPasswordRoom(message.room, message.user);
             return;
           break;
         case '/setop':
-          console.log('The message is a CMD (mode)');
+          if (args.length == 1) {
+            await this.roomService.owSetUserAsOperator(message.room, message.user, args[0]);
+            return;
+          }
           break;
         case '/unsetop':
-          console.log('The message is a CMD (mode)');
+          if (args.length == 1) {
+            await this.roomService.owUnsetUserAsOperator(message.room, message.user, args[0]);
+            return;
+          }
+          break;
+        case '/join':
+          if (args.length == 1) {
+            await this.roomService.usJoinRoom(message.user, args[0], "");
+            return;
+          }
+          if (args.length == 2) {
+            await this.roomService.usJoinRoom(message.user, args[0], args[1]);
+            return;
+          }
           break;
         default:
           // handle unknown command
