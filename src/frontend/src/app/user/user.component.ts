@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { User } from '../user';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -10,10 +11,22 @@ import { User } from '../user';
 })
 export class UserComponent implements OnInit {
 
-  displayedColumns  :  string[] = ['id', 'name', 'title', 'email', 'phone', 'address', 'city', 'actions'];
+  displayedColumns  :  string[] = ['id', 'name', 'password', 'avatar', 'twofactor', 'score', 'played', 'wins', 'losses'];
   dataSource  = [];
   user = {};
-  constructor(private apiService: ApiService) { }
+  checkoutForm;
+  constructor(private apiService: ApiService, private formBuilder: FormBuilder) {
+    this.checkoutForm = this.formBuilder.group({
+      name: '',
+      password: '',
+      avatar: '',
+      twofactor: '',
+      score: '',
+      played: '',
+      wins: '',
+      losses: ''
+    })
+  }
 
   ngOnInit() {
     this.apiService.readUsers().subscribe((result)=>{   
@@ -32,11 +45,11 @@ export class UserComponent implements OnInit {
     this.user = {};
   }
 
-  createUser(f){
+  createUser(f:any){
 
-    console.log("form value: ", f.value);
+    console.log("form value: ", f);
 
-    this.apiService.createUser(f.value).subscribe((result)=>{
+    this.apiService.createUser(f).subscribe((result)=>{
       console.log(result);
     });
     

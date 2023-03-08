@@ -4,21 +4,36 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({nullable: true, unique: true})
   name: string;
 
-  @Column()
-  title: string;
+  @Column({nullable: false})
+  password: string;
 
-  @Column()
-  email: string;
+  @Column({unique: true})
+  id42: number;
 
-  @Column()
-  phone: string;
+  @Column({ default: false })
+  twofactor: boolean
 
-  @Column()
-  address: string;
+  @Column({ default: false })
+  twofactor_valid: boolean
 
-  @Column()
-  city: string;
+  @Column({ default: false })
+  reg_completed: boolean
+
+  @Column({default: 0})
+  score: number;
+
+  @Column({default: 0})
+  played: number;
+
+  @Column({default: 0})
+  wins: number;
+
+  @Column({default: 0})
+  losses: number;
+
+  @Column({nullable: true})
+  avatar: string;
 }

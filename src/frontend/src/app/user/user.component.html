@@ -1,151 +1,92 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Users</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-      </ng-container>
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef> Title </th>
-        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-      </ng-container>
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-      </ng-container>
-      <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef> Phone </th>
-        <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
-      </ng-container>
+<section class="section pb-0">
+   <div class="container">
+      <div style="text-align:center">
+        <h1>
+          User Management
+        </h1>
+      </div>
+      <router-outlet></router-outlet>
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">Users</p>
+        </header>
+        <div class="card-content">
+          <table class="table is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Password</th>
+                <th>Avatar</th>
+                <th>Twofactor</th>
+                <th>Score</th>
+                <th>Played</th>
+                <th>Wins</th>
+                <th>Losses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of dataSource">
+                <td>{{user.id}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.password}}</td>
+                <td>{{user.avatar}}</td>
+                <td>{{user.twofactor}}</td>
+                <td>{{user.score}}</td>
+                <td>{{user.played}}</td>
+                <td>{{user.wins}}</td>
+                <td>{{user.losses}}</td>
+                <td>
+                  <button class="button is-danger" (click)="deleteUser(user.id)">Delete User</button>
+                  <button class="button is-info" (click)="selectUser(user)">Select User</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-      <ng-container matColumnDef="address">
-        <th mat-header-cell *matHeaderCellDef> Address </th>
-        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
-      </ng-container>
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">Create a User</p>
+        </header>
+        <div class="card-content">
+          <form [formGroup]="checkoutForm" (ngSubmit)="createUser(checkoutForm.value)" class="form" style="width: 100%; padding: 5px;">
 
-      <ng-container matColumnDef="city">
-        <th mat-header-cell *matHeaderCellDef> City </th>
-        <td mat-cell *matCellDef="let element"> {{element.city}} </td>
-      </ng-container>
+            <div class="field">
+              <input class="input" formControlName="name" type="text" placeholder="Name" name="name" required>
+            </div>
+            <div class="field">
+              <input class="input" formControlName="password" type="text" placeholder="Password" name="password" required>
+            </div> 
+            <div class="field">
+              <input class="input" formControlName="avatar" type="text" placeholder="Avatar" name="avatar" required>
+            </div>   
+            <div class="field">
+              <input class="input" formControlName="score" type="number" placeholder="Score" name="score" required>
+            </div>   
+            <div class="field">
+              <input class="input" formControlName="played" type="number" placeholder="Played" name="played" required>
+            </div>
+            <div class="field">
+              <input class="input" formControlName="wins" type="number" placeholder="Wins" name="wins" required>
+            </div>
+            <div class="field">
+              <input class="input" formControlName="losses" type="number" placeholder="Losses" name="losses" required>
+            </div>
+            <div class="field">
+              <label class="checkbox">
+                <input formControlName="twofactor" type="checkbox" name="twofactor">
+                TwoFactor Auth
+              </label>
+            </div>
+            <div class="card-footer">
+                <button class="button is-primary" type="submit">New..</button>
+            </div>   
+          </form>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element"> 
-            <button  mat-raised-button (click)="deleteUser(element.id)" color="secondary">Delete User</button>
-            <button  mat-raised-button (click)="selectUser(element)" color="secondary">Select User</button>
+        </div>
 
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-  </mat-card-content>
-</mat-card>
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Create a User</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form #f ="ngForm" class="mat-elevation-z8" style="width: 100%; padding: 5px;">
-
-      <mat-form-field>
-        <input matInput placeholder="Name" name="name" [(ngModel)] = "user.name" required>
-      </mat-form-field>
-      <mat-form-field>
-          <input matInput placeholder="Title" name="title" [(ngModel)] = "user.title" required>
-      </mat-form-field>
-
-      <mat-form-field>
-          <input matInput placeholder="Email" name="email" [(ngModel)] = "user.email" required>
-      </mat-form-field>
-      <mat-form-field>
-          <input matInput placeholder="Phone" name="phone" [(ngModel)] = "user.phone" required>
-      </mat-form-field>
-      <mat-form-field>
-          <textarea  placeholder="Address" name="address" [(ngModel)] = "user.address" matInput></textarea>      
-      </mat-form-field>
-      <mat-form-field>
-          <input matInput placeholder="City" name="city" [(ngModel)] = "user.city" required>
-      </mat-form-field>
-      
-    </form>
-
-  </mat-card-content>
-  <mat-card-actions>
-      <button  mat-raised-button *ngIf="!user.id" (click)="createUser(f)" color="primary">Save User</button>
-      <button  mat-raised-button *ngIf="user.id" (click)="updateUser(f)" color="primary">Update User</button>
-      <button  mat-raised-button (click)="newUser()" color="primary">New..</button>
-      
-  </mat-card-actions>
-</mat-card>
-
-<!-- <div style="text-align:center">
-  <h1>
-    User Management
-  </h1>
-</div>
-<router-outlet></router-outlet>
-<div class="card">
-  <header class="card-header">
-    <p class="card-header-title">Users</p>
-  </header>
-  <div class="card-content">
-    <table class="table is-striped is-hoverable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Title</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Address</th>
-          <th>City</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of dataSource">
-          <td>{{user.id}}</td>
-          <td>{{user.name}}</td>
-          <td>{{user.title}}</td>
-          <td>{{user.email}}</td>
-          <td>{{user.phone}}</td>
-          <td>{{user.address}}</td>
-          <td>{{user.city}}</td>
-          <td>
-            <button class="button is-danger" (click)="deleteUser(user.id)">Delete User</button>
-            <button class="button is-info" (click)="selectUser(user)">Select User</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      </div>
   </div>
-</div>
-
-<div class="card">
-  <header class="card-header">
-    <p class="card-header-title">Create a User</p>
-  </header>
-  <div class="card-content">
-    <form #f="ngForm" class="form" style="width: 100%; padding: 5px;">
-
-      <div class="field">
-        <input class="input" type="text" placeholder="Name" name="name" required>
-      </div>      
-    </form>
-
-  </div>
-  <div class="card-footer">
-      <button class="button is-primary" (click)="newUser()">New..</button>
-  </div>
-</div>
- -->
+</section>

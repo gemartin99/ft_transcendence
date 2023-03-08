@@ -16,6 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt')
 
     async validate(payload, done: Function)
     {
+        console.log('try validating jwt');
         try
         {
             // You could add a function to the authService to verify the claims of the token:
@@ -24,11 +25,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt')
             
             //if (!validClaims)
             //    return done(new UnauthorizedException('invalid token claims'), false);
-    
+            
+            console.log('jwt validated');
             done(null, payload);
         }
         catch (err)
         {
+            console.log('jwt fail validation');
             throw new UnauthorizedException('unauthorized', err.message);
         }
     }
