@@ -1,130 +1,3 @@
-// import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-// import { Socket, Server } from 'socket.io';
-
-
-// @WebSocketGateway({ cors: true })
-// export class ChatGateway
-// {
-
-//   @WebSocketServer()
-//   server: Server;
-
-//   @SubscribeMessage('sendMessage')
-//   async handleSendMessage(client: Socket, payload: string): Promise<string> {
-//       return 'hello world!!!!';
-//   }
-// }
-
-// import {
-//   WebSocketGateway,
-//   WebSocketServer,
-//   SubscribeMessage,
-//   OnGatewayConnection,
-//   OnGatewayDisconnect,
-// } from '@nestjs/websockets';
-// @WebSocketGateway({ cors: true })
-// export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-//   @WebSocketServer() server;
-//   users: number = 0;
-//   async handleConnection() {
-//     // A client has connected
-//     this.users++;
-//     // Notify connected clients of current users
-//     this.server.emit('users', this.users);
-//   }
-//   async handleDisconnect() {
-//     // A client has disconnected
-//     this.users--;
-//     // Notify connected clients of current users
-//     this.server.emit('users', this.users);
-//   }
-//   @SubscribeMessage('chat')
-//   async onChat(client, message) {
-//     client.broadcast.emit('chat', message);
-//   }
-// }
-
-// import {
-//   WebSocketGateway,
-//   WebSocketServer,
-//   SubscribeMessage,
-//   OnGatewayConnection,
-//   OnGatewayDisconnect,
-// } from '@nestjs/websockets';
-
-// @WebSocketGateway({ cors: true })
-// export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-//   @WebSocketServer() server;
-//   users: number = 0;
-//   messages: any[] = [];
-
-//   async handleConnection() {
-//     // A client has connected
-//     this.users++;
-//     // Notify connected clients of current users
-//     this.server.emit('users', this.users);
-//   }
-//   async handleDisconnect() {
-//     // A client has disconnected
-//     this.users--;
-//     // Notify connected clients of current users
-//     this.server.emit('users', this.users);
-//   }
-//   @SubscribeMessage('chat')
-//   async onChat(client, message) {
-//     this.messages.push(message);
-//     client.broadcast.emit('chat', message);
-//   }
-//   @SubscribeMessage('getMessages')
-//   async getMessages(client) {
-//     client.emit('previousMessages', this.messages);
-//   }
-// }
-
-// import {
-//   WebSocketGateway,
-//   WebSocketServer,
-//   SubscribeMessage,
-//   OnGatewayConnection,
-//   OnGatewayDisconnect,
-// } from '@nestjs/websockets';
-
-// @WebSocketGateway({ cors: true })
-// export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-//   @WebSocketServer() server;
-//   users: number = 0;
-//   messages: any[] = [];
-//   userIds: any[] = [];
-
-//   async handleConnection(client) {
-//     // A client has connected
-//     this.users++;
-//     this.userIds.push(client.id);
-//     // Notify connected clients of current users
-//     this.server.emit('users', this.users);
-//   }
-//   async handleDisconnect(client) {
-//     // A client has disconnected
-//     this.users--;
-//     const index = this.userIds.indexOf(client.id);
-//     if (index !== -1) {
-//       this.userIds.splice(index, 1);
-//     }
-//     // Notify connected clients of current users
-//     this.server.emit('users', this.users);
-//   }
-//   @SubscribeMessage('chat')
-//   async onChat(client, message) {
-//     this.messages.push(message);
-//     client.broadcast.emit('chat', message);
-//   }
-//   @SubscribeMessage('getMessages')
-//   async getMessages(client) {
-//     client.emit('previousMessages', this.messages);
-//   }
-// }
-
-
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -138,6 +11,7 @@ import { UserService } from '../user/user.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { RoomService } from './rooms/room.service';
 import { RoomI } from './rooms/room.interface';
+import { PageI } from '../pagination/page.interface';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
@@ -171,6 +45,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
         console.log(rooms);
         // this.title.push('Value ' + Math.random().toString());
         // this.server.emit('message', this.title);
+        rooms.meta.currentPage = rooms.meta.currentPage - 1;
         return this.server.to(socket.id).emit('rooms', rooms);
       }
     } catch {
@@ -198,4 +73,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
     console.log('room: ' + room);
     return this.roomService.createRoom(room, socket.data.user);
   }
+
+  @SubscribeMessage('paginateRooms')
+   async onPaginateRoom(socket: Socket, page: PageI) {
+     page.limit = page.limit > 100 ? 100 : page.limit;
+     // add page +1 to match angular material paginator
+     page.page = page.page + 1;
+     const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, page);
+     // substract page -1 to match the angular material paginator
+     rooms.meta.currentPage = rooms.meta.currentPage - 1;
+     return this.server.to(socket.id).emit('rooms', rooms);
+   }
 }

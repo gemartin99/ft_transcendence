@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { Controller, Get, Post,Put, Delete, Body, Param, Req, Res, UseGuards } from  '@nestjs/common';
+import { Controller, Get, Post,Put, Delete, Body, Param, Req, Res, UseGuards, Query } from  '@nestjs/common';
 import { User } from  './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 // import { CreateUserDto } from './dto/create-user.dto';
@@ -51,4 +51,10 @@ export class UsersController {
     async test(@Req() req, @Res() res): Promise<any> {
       return res.send('test works');
     }
+
+    @Get('/find-by-username')
+    @UseGuards(AuthGuard('jwt'))
+     async findAllByUsername(@Query('name') name: string) {
+       return this.userService.findAllByUsername(name);
+     }
 }

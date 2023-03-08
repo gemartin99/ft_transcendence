@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from  './user';
+import { Observable } from 'rxjs';
+import { UserI } from  './user/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +43,9 @@ export class ApiService {
     const body = JSON.stringify({ name });
     console.log("bpdy antes de mandar:" + body);
     return this.httpClient.post<any>(`${this.API_SERVER}/users/register`, body, httpOptions);
+  }
+
+  public findByUsername(name: string): Observable<UserI[]> {
+    return this.httpClient.get<UserI[]>(`${this.API_SERVER}/users/find-by-username?name=${name}`);
   }
 }

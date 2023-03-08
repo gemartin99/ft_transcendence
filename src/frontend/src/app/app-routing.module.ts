@@ -9,6 +9,7 @@ import { School42Component } from './school42/school42.component';
 import { ChatComponent } from './chat/chat.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from './auth/auth.guard';
+import { CreateRoomComponent } from './chat/rooms/create-room/create-room.component';
 
 const routes: Routes = [
   {path: "", component: HomeComponent},
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent },
   {path: 'game', component: GameComponent },
   {path: 'chat', component: ChatComponent },
-  {path: 'profile', component: ProfileComponent }
+  {path: 'profile', component: ProfileComponent },
+  {path: 'chat/create-room', component: CreateRoomComponent }
 ];
 
 @NgModule({

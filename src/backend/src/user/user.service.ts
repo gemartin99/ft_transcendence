@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, UpdateResult, DeleteResult } from  'typeorm';
+import { Like, Repository, UpdateResult, DeleteResult } from  'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from  './user.entity';
 import { AuthService } from '../auth/auth.service';
+import { UserI } from  './user.interface';
 
 @Injectable()
 export class UserService {
@@ -50,5 +51,13 @@ export class UserService {
 			avatar: null
 		}
 		return await this.userRepository.save(user);
+	}
+
+	async findAllByUsername(name: string): Promise<UserI[]> {
+	  return this.userRepository.find({
+	    where: {
+	      name: Like(`%${name}%`)
+	    }
+	  })
 	}
 }

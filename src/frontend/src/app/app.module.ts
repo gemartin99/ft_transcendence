@@ -16,8 +16,13 @@ import { GameComponent } from './game/game.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChatComponent } from './chat/chat.component';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { CreateRoomComponent } from './chat/rooms/create-room/create-room.component';
 const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} };
 
 @NgModule({
@@ -32,10 +37,14 @@ const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} 
     GameComponent,
     RegisterComponent,
     ProfileComponent,
-    ChatComponent
+    ChatComponent,
+    CreateRoomComponent
   ],
   imports: [
+    MatListModule,
+    MatPaginatorModule,
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,

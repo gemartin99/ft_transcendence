@@ -1,0 +1,10 @@
+.list-item li {
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.list-item {
+    border-top: 1px solid #dbdbdb;
+    height: 40px;
+    line-height: 40px;
+}

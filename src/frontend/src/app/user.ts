@@ -1,9 +1,13 @@
 export class User {
     id: number;
     name: string;
-    title: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
+    avatar: string;
+    reg_completed: boolean;
+    twofactor: boolean;
+    twofactor_valid: boolean;
+    is_online: boolean;
+    score: number;
+    played: number;
+    wins: number;
+    losses: number;
 }

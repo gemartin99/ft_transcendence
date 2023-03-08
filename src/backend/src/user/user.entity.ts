@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { RoomEntity } from "../chat/rooms/room.entity";
 @Entity()
 export class User {
@@ -23,6 +23,9 @@ export class User {
   @Column({ default: false })
   reg_completed: boolean
 
+  @Column({ default: true })
+  is_online: boolean
+
   @Column({default: 0})
   score: number;
 
@@ -40,6 +43,10 @@ export class User {
 
   @ManyToMany(() => RoomEntity, room => room.users)
   rooms: RoomEntity[];
+
+  @ManyToMany(() => User, user => user.friends)
+  @JoinTable()
+  friends: User[];
 }
 
 // import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";

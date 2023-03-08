@@ -3,6 +3,8 @@ import { Socket } from 'ngx-socket-io';
 import { CustomSocket } from '../sockets/custom-socket';
 import { UserI } from "../user/user.interface";
 import { RoomI, RoomPaginateI } from "./rooms/room.interface";
+import { Observable } from 'rxjs';
+//import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Injectable({
@@ -27,20 +29,15 @@ export class ChatService {
     return this.socket.fromEvent('message');
   }
 
-  getMyRooms() {
+  getMyRooms(): Observable<RoomPaginateI> {
      return this.socket.fromEvent<RoomPaginateI>('rooms');
   }
 
-  createRoom() {
-    const user2: UserI = {
-      id: 1
-    }
+  emitPaginateRooms(limit: number, page: number) {
+    this.socket.emit('paginateRooms', {limit, page});
+  }
 
-    const room: RoomI = {
-      name: 'testroom2',
-      users: [user2]
-    }
-
+  createRoom(room: RoomI) {
     this.socket.emit('createRoom', room);
   }
 }
