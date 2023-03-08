@@ -9,9 +9,14 @@ import { RoomEntity } from './rooms/room.entity';
 import { RoomService } from './rooms/room.service';
 import { OnlineUserEntity } from '../onlineuser/onlineuser.entity';
 import { OnlineUserService } from '../onlineuser/onlineuser.service';
+import { MessageService } from './message/message.service';
+import { JoinedRoomService } from './joined-room/joined-room.service';
+import { MessageEntity } from './message/message.entity';
+import { JoinedRoomEntity } from './joined-room/joined-room.entity';
+
 
 @Module({
-  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity])],
-  providers: [ChatGateway, AuthService, RoomService, OnlineUserService]
+  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity])],
+  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService]
 })
 export class ChatModule {} 

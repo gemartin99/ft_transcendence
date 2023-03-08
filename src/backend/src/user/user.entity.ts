@@ -1,5 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { JoinedRoomEntity } from "../chat/joined-room/joined-room.entity";
+import { MessageEntity } from "../chat/message/message.entity";
 import { RoomEntity } from "../chat/rooms/room.entity";
+import { OnlineUserEntity } from "../onlineuser/onlineuser.entity";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -47,6 +50,15 @@ export class User {
   @ManyToMany(() => User, user => user.friends)
   @JoinTable()
   friends: User[];
+
+  @OneToMany(() => OnlineUserEntity, connection => connection.user)
+  connections: OnlineUserEntity[];
+
+  @OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
+  joinedRooms: JoinedRoomEntity[];
+
+  @OneToMany(() => MessageEntity, message => message.user)
+  messages: MessageEntity[];
 }
 
 // import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";

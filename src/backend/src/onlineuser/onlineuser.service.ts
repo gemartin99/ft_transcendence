@@ -33,4 +33,11 @@ export class OnlineUserService {
     return this.OnlineUserRepository.delete({socketId});
   }
 
+  async deleteAll() {
+    await this.OnlineUserRepository
+      .createQueryBuilder()
+      .delete()
+      .execute();
+  }
+
 }

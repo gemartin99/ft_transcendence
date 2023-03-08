@@ -42,6 +42,18 @@ export class RoomService {
     return paginate(query, options);
   }
 
+  // async getRoom(roomId: number): Promise<RoomI> {
+  //   return this.roomRepository.findOne(roomId, {
+  //     relations: ['users']
+  //   });
+  // }
+  async getRoom(roomId: number): Promise<RoomI> {
+    return this.roomRepository.findOne({
+      where: { id: roomId },
+      relations: ['users'],
+    });
+  }
+
   // async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
   //   room.users.push(creator);
   //   console.log('addCreatorToRoom:');
