@@ -6,15 +6,20 @@ import { diskStorage } from 'multer';
 import path = require('path');
 import { join } from 'path';
 import { AuthGuard } from '@nestjs/passport';
+import { UserService } from '../user.service';
+import { v4 as uuidv4 } from 'uuid';
 
 
 export const storage = {
   storage: diskStorage({
       destination: './src/uploads/avatar',
       filename: (req, file, cb) => {
-          const filename: string = path.parse(file.originalname).name;
+          //const filename: string = path.parse(file.originalname).name;
+          const filename: string = uuidv4();
           const extension: string = path.parse(file.originalname).ext;
+          //const uniqueId: string = uuidv4();
 
+          //cb(null, `${filename}-${uniqueId}${extension}`);
           cb(null, `${filename}${extension}`)
       }
   })
@@ -23,11 +28,15 @@ export const storage = {
 
 @Controller('avatar')
 export class AvatarController {
+    constructor(private userService: UserService){
+    }
+
     @UseGuards(AuthGuard('jwt'))
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', storage))
     async uploadFile(@UploadedFile() file, @Request() req): Promise<Object> {
-        //const user: UserI = await this.userService.findOne(req.user.id);
+        console.log(file.filename);
+        //const user: UserI = await this.userService.getById(req.user.id);
         // Remove old avatar
         // if (fs.existsSync('src/uploads/avatar/' + user.avatar) && user.avatar != "user.png"){
         //     fs.unlinkSync('src/uploads/avatar/' + user.avatar)

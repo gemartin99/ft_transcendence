@@ -33,6 +33,7 @@ services:
       - backend
     volumes:
       - backend:/home/transcendence/backend
+      - ./avatars:/app/src/uploads/avatar/
     env_file:
       - ./a.env
     restart: unless-stopped
@@ -53,12 +54,10 @@ services:
     depends_on:
       - backend
 
-
-
 volumes:
   backend:
-
   data:
+  avatars:
 
 networks:
   backend:

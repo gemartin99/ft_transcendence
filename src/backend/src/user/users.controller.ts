@@ -94,16 +94,20 @@ export class UsersController {
     async addFriend(@Req() req, @Res() res, @Body() body): Promise<any> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if(user) {
+          console.log(user);
+          const user_friends = await this.userService.findUserFriends(user.id);
           const friendUser = await this.userService.getById(body.friendId);
           if(friendUser && friendUser.id != user.id){
             if (!user.friends) {
+              console.log('starting a empty array of friends');
               user.friends = []; // initialize the friends array if it doesn't exist
             }
-            else if (user.friends.find((friend) => friend.id === friendUser.id))
+            else if (user_friends.find((friend) => friend.id === friendUser.id))
             {
               return res.status(200).json({ message: 'Friend was not added (users was alredy friend)' });
             }
-            user.friends.push(friendUser);
+            user_friends.push(friendUser);
+            user.friends = user_friends;
             await this.userService.save(user);
             return res.status(200).json({ message: 'Friend added successfully' });
           }

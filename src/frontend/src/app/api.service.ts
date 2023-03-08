@@ -67,7 +67,7 @@ export class ApiService {
   }
 
   public uploadAvatar(avatar: FormData): Observable<any> {
-    return this.httpClient.post(`${this.API_SERVER}/avatar/upload`, avatar);
+    return this.httpClient.post(`${this.API_SERVER}/avatar/upload`, avatar, { withCredentials: true });
   }
 
   public updateTwofactor(twofactor: boolean) {
