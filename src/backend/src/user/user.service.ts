@@ -54,8 +54,6 @@ export class UserService {
 		return user;
 	}
 
-
-
 	async register(id42: number): Promise<User> {
 		console.log('Enter to register user');
 		const user = 

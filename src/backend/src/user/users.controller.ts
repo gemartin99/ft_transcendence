@@ -98,9 +98,11 @@ export class UsersController {
           const user_friends = await this.userService.findUserFriends(user.id);
           const friendUser = await this.userService.getById(body.friendId);
           if(friendUser && friendUser.id != user.id){
-            if (!user.friends) {
+            if (!user_friends) {
               console.log('starting a empty array of friends');
               user.friends = []; // initialize the friends array if it doesn't exist
+              user_friends.push(friendUser);
+              return res.status(200).json({ message: 'Friend added successfully' });
             }
             else if (user_friends.find((friend) => friend.id === friendUser.id))
             {
@@ -109,7 +111,9 @@ export class UsersController {
             user_friends.push(friendUser);
             user.friends = user_friends;
             await this.userService.save(user);
-            return res.status(200).json({ message: 'Friend added successfully' });
+            console.log('Returning of post friends');
+            console.log(user.friends);
+            return user.friends;
           }
       }
       return res.status(200).json({ message: 'Friend was not added' });
@@ -124,18 +128,32 @@ export class UsersController {
       return res.json(friends);
     }
 
-    @Delete('friends/:friendId')
+    @Delete('friends/:id/delete')
     @UseGuards(AuthGuard('jwt'))
-    async removeFriend(@Req() req, @Res() res, @Param('friendId') friendId: number): Promise<any> {
+    async removeFriend(@Req() req, @Res() res, @Param('id') friendId: number): Promise<any> {
+      // console.log('Enter to NEST DELETE FRIEND para fiendId: ' + friendId);
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      console.log(user);
       if (user) {
-        const friendIndex = user.friends.findIndex((friend) => friend.id === friendId);
-        if (friendIndex > -1) {
-          user.friends.splice(friendIndex, 1);
-          await this.userService.save(user);
-          return res.status(200).json({ message: 'Friend removed successfully' });
-        }
+        user.friends = await this.userService.findUserFriends(user.id);
+        // user.friends = user.friends.filter(friend => friend.id !== (friendId as number));
+        // console.log('Ahora user friends es:');
+        // console.log(user.friends);
+        user.friends = user.friends.filter(friend => friend.id != friendId);
+        // console.log('Ahora user friends es:');
+        // console.log(user.friends);
+        // const num: number = (friendId as number);
+        // console.log(num);
+        // const friends = user.friends.filter(friend => friend.id !== num);
+        // console.log('Ahora despues de const num var friends es:');
+        // console.log(friends);
+        // const friends2 = user.friends.filter(friend => friend.id != num);
+        // console.log('Ahora despues de const num var friends es:');
+        // console.log(friends2);
+        await this.userService.save(user);
+        return res.status(200).json({ message: 'Friend removed successfully' });
       }
-      return res.status(404).json({ message: 'Friend not found' });
+      console.log('Friend not found');
+      return res.status(200).json({ message: 'Friend not found' });
     }
 }

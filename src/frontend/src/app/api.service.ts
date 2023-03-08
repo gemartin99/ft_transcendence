@@ -62,8 +62,10 @@ export class ApiService {
     return this.httpClient.get<User[]>(`${this.API_SERVER}/users/friends`, { withCredentials: true });
   }
 
-  public removeFriend(friendId: number) {
-    return this.httpClient.delete(`${this.API_SERVER}/users/friends/${friendId}/delete`, { withCredentials: true });
+  public removeFriend(id: string) {
+    console.log('API front removeFriend');
+    return this.httpClient.delete(`${this.API_SERVER}/users/friends/${id}/delete`, { withCredentials: true });
+    // return this.httpClient.delete(`${this.API_SERVER}/users/friends/5/delete`);
   }
 
   public uploadAvatar(avatar: FormData): Observable<any> {

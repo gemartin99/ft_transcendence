@@ -48,7 +48,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of dataSource">
+              <tr *ngFor="let user of dataSource | async">
                 <td><span class="icon has-text-success"><i class="fa-solid fa-circle"></i></span></td>
                 <td><img class="is-rounded" src="assets/avatar.jpg" class="avatar-table">{{user.avatar}}</td>
                 <td>{{user.name}}</td>
