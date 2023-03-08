@@ -57,6 +57,7 @@
                 <td>{{user.wins}}</td>
                 <td>{{user.losses}}</td>
                 <td>
+                  <a class="button is-small is-primary" [routerLink]="['/profiles', user.id]"><span class="icon is-small"><i class="fas fa-eye"></i></span></a>
                   <button class="button is-danger" (click)="removeFriend(user.id)"><span class="icon is-small"><i class="fas fa-times"></i></span></button>
                   <!-- <button class="button is-info" (click)="selectUser(user)">Select User</button> -->
                 </td>

@@ -43,6 +43,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   // }
 
   async onModuleInit() {
+    const general_room = await this.roomService.getRoomByName("General");
+    if(!general_room)
+    {
+      await this.roomService.createGeneralRoom();
+    }
     await this.onlineUserService.deleteAll();
     await this.joinedRoomService.deleteAll();
   }
@@ -58,6 +63,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         return this.disconnect(socket);
       } else {
         socket.data.user = user;
+        await this.roomService.JoinUserToGeneralRoom(user, socket);
         const rooms = await this.roomService.getRoomsForUser(user.id, {page: 1, limit: 10});
         //const rooms = await this.roomService.getAllRooms({page: 1, limit: 10});
         console.log('In Api trying to getRoomsForUser');
@@ -66,7 +72,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         // this.title.push('Value ' + Math.random().toString());
         // this.server.emit('message', this.title);
         rooms.meta.currentPage = rooms.meta.currentPage - 1;
-
         // Save connection to DB
         await this.onlineUserService.create({ socketId: socket.id, user });
         return this.server.to(socket.id).emit('rooms', rooms);

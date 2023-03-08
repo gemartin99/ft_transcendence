@@ -33,8 +33,8 @@ export class EditProfileComponent implements OnInit {
     }
   }
 
-  updateUser(formData: any) {
-    console.log(formData);
+  updateUser(formData2: any) {
+    console.log(formData2);
     if (this.avatarFile) {
       const formData = new FormData();
       formData.append('file', this.avatarFile);
@@ -42,7 +42,7 @@ export class EditProfileComponent implements OnInit {
           console.log('avatar uploaded');
       });
     } 
-    this.apiService.updateTwofactor(formData.twofactor).subscribe(() => {
+    this.apiService.updateTwofactor(formData2.twofactor).subscribe(() => {
       console.log('Two factor updated successfully');
     });
   }

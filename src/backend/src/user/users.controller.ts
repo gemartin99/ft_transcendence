@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { Controller, Get, Post,Put, Delete, Body, Param, Req, Res, UseGuards, Query } from  '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Req, Res, UseGuards, Query } from  '@nestjs/common';
 import { User } from  './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 // import { CreateUserDto } from './dto/create-user.dto';
@@ -54,9 +54,29 @@ export class UsersController {
 
     @Get('/find-by-username')
     @UseGuards(AuthGuard('jwt'))
-     async findAllByUsername(@Query('name') name: string) {
+    async findAllByUsername(@Query('name') name: string) {
+       console.log('Inside find-by-name');
        return this.userService.findAllByUsername(name);
     }
+
+    @Get('/find-by-id')
+    @UseGuards(AuthGuard('jwt'))
+    async getUserById(@Query('id') id: string) {
+      console.log('Inside find-by-id');
+      const user = await this.userService.getById(parseInt(id));
+      console.log('when get firends the current user is ' + user);
+      return null;
+    }
+
+    @Get('find/:id')
+    getById(@Param('id') id: string): Promise<User>  {
+      console.log('find/:id');
+      return null;
+    }
+
+
+
+
 
     //EDIT PROFILE TWO FACTOR
     @Put('twofactor')

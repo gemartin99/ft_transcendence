@@ -5,12 +5,17 @@ import { RoomEntity } from './room.entity';
 import { RoomI } from './room.interface';
 import { UserI } from '../../user/user.interface';
 import { Repository } from 'typeorm';
+import { Socket, Server } from 'socket.io';
+import { JoinedRoomService } from '../joined-room/joined-room.service';
+import { OwnerService } from '../owner/owner.service';
 
 @Injectable()
 export class RoomService {
 
 
   constructor(
+    private joinedRoomService: JoinedRoomService,
+    private ownerService: OwnerService,
     @InjectRepository(RoomEntity)
     private readonly roomRepository: Repository<RoomEntity>
   ) { }
@@ -42,6 +47,30 @@ export class RoomService {
       return null;
     }
   }
+
+  async opBanUserFromRoom(room: RoomI, username: string) {
+    console.log('Room service Ban User from room');
+    console.log(room);
+  }
+
+  async opMuteUserFromRoom(room: RoomI, username: string) {
+    console.log('Room service Ban User from room');
+    console.log(room);
+  }
+
+  async owChangePasswordRoom(room: RoomI, user: UserI, password: string) {
+    console.log('cambiar password');
+    console.log(room);
+    console.log(user);
+    console.log(password);
+  }
+
+  async owUnsetPasswordRoom(room: RoomI, user: UserI) {
+    console.log('Room service Ban User from room');
+    console.log(room);
+    console.log(user);
+  }
+
 
   async getAllRooms(options: IPaginationOptions): Promise<Pagination<RoomI>> {
       const query = this.roomRepository
@@ -77,12 +106,20 @@ export class RoomService {
     });
   }
 
+  async createGeneralRoom(): Promise<RoomI> {
+    const generalRoom = new RoomEntity();
+    generalRoom.name = "General";
+    generalRoom.type = 1;
+    return this.roomRepository.save(generalRoom);
+  }
 
-  // async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
-  //   room.users.push(creator);
-  //   console.log('addCreatorToRoom:');
-  //   console.log(room);
-  //   return room;
-  // }
-
+  async JoinUserToGeneralRoom(user: UserI, socket: Socket): Promise<RoomI> {
+    const room: RoomI = await this.getRoomByName("General");
+    if(room)
+    {
+       await this.joinRoom(room, user);
+       await this.joinedRoomService.join({ socketId: socket.id, user, room });
+    }
+    return null;
+  }
 }

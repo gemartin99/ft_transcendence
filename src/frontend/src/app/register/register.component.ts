@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { User } from  '../user';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from '../api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,12 @@ export class RegisterComponent implements OnInit {
   ]);
 
   checkoutForm;
-  constructor(private authService: AuthService, private apiService: ApiService, private formBuilder: FormBuilder) {
+  constructor(
+    private authService: AuthService,
+    private apiService: ApiService,
+    private formBuilder: FormBuilder,
+    private router: Router)
+  {
     this.checkoutForm = this.formBuilder.group({
       name: ''
     })
@@ -28,22 +34,18 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.authService.loadLoggedUser().then(() => {
       this.user = this.authService.getLoggedUser();
-    // });
   }
 
 
   completeRegister(f:any) {
-    console.log("submit pressed");
+    if(this.user.reg_completed)
+      this.router.navigate(['/chat']);
     if (this.usernameControl.valid) {
-      console.log("form value: ", f);
-      console.log("usernamecontrol is valid");
-      //this.user = this.apiService.registerUser(this.usernameControl.value);
         this.apiService.registerUser(this.usernameControl.value).subscribe((result)=>{
           console.log(result);
-      });
-
+          this.router.navigate(['/chat']);
+        });
     }
   }
 }

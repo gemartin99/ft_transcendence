@@ -49,6 +49,11 @@ export class ApiService {
     return this.httpClient.get<UserI[]>(`${this.API_SERVER}/users/find-by-username?name=${name}`, { withCredentials: true });
   }
 
+  public findUserById(id: number) {
+    console.log('Call to API SERVICE findUserById:' + id);
+    return this.httpClient.get<User>(`${this.API_SERVER}/users/find/1`);
+  }
+
   public addFriend(userId: number): Observable<any> {
     return this.httpClient.post<any>(`${this.API_SERVER}/users/friends`, { friendId: userId }, { withCredentials: true });
   }

@@ -13,10 +13,14 @@ import { MessageService } from './message/message.service';
 import { JoinedRoomService } from './joined-room/joined-room.service';
 import { MessageEntity } from './message/message.entity';
 import { JoinedRoomEntity } from './joined-room/joined-room.entity';
+import { OperatorService } from './operator/operator.service';
+import { OwnerService } from './owner/owner.service';
+import { OperatorEntity } from './operator/operator.entity';
+import { OwnerEntity } from './owner/owner.entity';
 
 
 @Module({
-  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity])],
-  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService]
+  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity, OperatorEntity, OwnerEntity])],
+  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService, OperatorService, OwnerService]
 })
 export class ChatModule {} 

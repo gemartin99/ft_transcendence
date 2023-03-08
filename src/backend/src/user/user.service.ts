@@ -75,6 +75,14 @@ export class UserService {
 	    }
 	  })
 	}
+	async findAllById(id: number): Promise<UserI[]> {
+	  return this.userRepository.find({
+	  	where: {
+	  		id: id,
+	  	},
+	  	});
+	}
+
 
 	async findUserFriends(userId: number): Promise<User[]> {
 	  console.log('finding users for id ' + userId);

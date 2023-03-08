@@ -3,6 +3,8 @@ import { JoinedRoomEntity } from "../chat/joined-room/joined-room.entity";
 import { MessageEntity } from "../chat/message/message.entity";
 import { RoomEntity } from "../chat/rooms/room.entity";
 import { OnlineUserEntity } from "../onlineuser/onlineuser.entity";
+import { OperatorEntity } from "../chat/operator/operator.entity";
+import { OwnerEntity } from "../chat/owner/owner.entity";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -56,6 +58,12 @@ export class User {
 
   @OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
   joinedRooms: JoinedRoomEntity[];
+
+  @OneToMany(() => OperatorEntity, operator => operator.room)
+  operators: OperatorEntity[];
+
+  @OneToMany(() => OwnerEntity, owner => owner.room)
+  owners: OwnerEntity[];
 
   @OneToMany(() => MessageEntity, message => message.user)
   messages: MessageEntity[];
