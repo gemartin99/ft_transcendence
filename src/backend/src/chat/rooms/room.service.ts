@@ -24,6 +24,25 @@ export class RoomService {
     return this.roomRepository.save(room);
   }
 
+  async joinRoom(room: RoomI, creator: UserI): Promise<RoomI> {
+    const newRoom = await this.getRoomByName(room.name);
+    if(newRoom)
+    {
+      console.log('In room service');
+      console.log('joiner is:');
+      console.log(creator);
+      console.log('joinroom is:');
+      console.log(newRoom);
+      newRoom.users.push(creator);
+      return this.roomRepository.save(newRoom);
+    }
+    else
+    {
+      console.log('Room not found');
+      return null;
+    }
+  }
+
   async getAllRooms(options: IPaginationOptions): Promise<Pagination<RoomI>> {
       const query = this.roomRepository
       .createQueryBuilder('room')
@@ -43,17 +62,21 @@ export class RoomService {
     return paginate(query, options);
   }
 
-  // async getRoom(roomId: number): Promise<RoomI> {
-  //   return this.roomRepository.findOne(roomId, {
-  //     relations: ['users']
-  //   });
-  // }
+  async getRoomByName(name: string): Promise<RoomI> {
+    const room = await this.roomRepository.findOne({
+      where: { name: name },
+      relations: ['users'],
+    });
+    return room;
+  }
+
   async getRoom(roomId: number): Promise<RoomI> {
     return this.roomRepository.findOne({
       where: { id: roomId },
       relations: ['users'],
     });
   }
+
 
   // async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
   //   room.users.push(creator);

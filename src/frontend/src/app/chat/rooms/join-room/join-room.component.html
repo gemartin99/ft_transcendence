@@ -1,10 +1,10 @@
   <section class="section">
     <div class="container">
       <button (click)="close()">Close</button>
-      <h1 class="title">Create Chat Room</h1>
+      <h1 class="title">Join Chat Room</h1>
       <div class="card">
 <!--         <div *ngIf="usernameControl" class="card-content"> -->
-          <form [formGroup]="form" (ngSubmit)="create()">
+          <form [formGroup]="form" (ngSubmit)="join()">
             <div class="field">
               <label class="label">Chat-Room Name</label>
               <div class="control">

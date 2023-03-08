@@ -88,44 +88,44 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @SubscribeMessage('createRoom')
-  async onCreateRoom(socket: Socket, room: RoomI): Promise<RoomI>
+  async onCreateRoom(socket: Socket, room: RoomI)
   {
-    console.log('creator: ' + socket.data.user);
-    console.log('room: ' + room);
-    return this.roomService.createRoom(room, socket.data.user);
+    // console.log('creator: ' + socket.data.user);
+    // console.log('room: ' + room);
+    await this.roomService.createRoom(room, socket.data.user);
+    await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+    const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+    // console.log('room for user: ' + rooms);    
+    await this.server.to(socket.id).emit('rooms', rooms);
   }
-  // async onCreateRoom(socket: Socket, room: RoomI) {
-  //   const createdRoom: RoomI = await this.roomService.createRoom(room, socket.data.user);
-
-  //   for (const user of createdRoom.users) {
-  //     const connections: OnlineUserI[] = await this.onlineUserService.findByUser(user);
-  //     const rooms = await this.roomService.getRoomsForUser(user.id, { page: 1, limit: 10 });
-  //     for (const connection of connections) {
-  //       await this.server.to(connection.socketId).emit('rooms', rooms);
-  //     }
-  //   }
-  // }
-
-
 
   @SubscribeMessage('paginateRooms')
    async onPaginateRoom(socket: Socket, page: PageI) {
-     // page.limit = page.limit > 100 ? 100 : page.limit;
-     // // add page +1 to match angular material paginator
-     // page.page = page.page + 1;
-     // const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, page);
      const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, this.handleIncomingPageRequest(page));
-     // substract page -1 to match the angular material paginator
      rooms.meta.currentPage = rooms.meta.currentPage - 1;
      return this.server.to(socket.id).emit('rooms', rooms);
    }
 
    @SubscribeMessage('joinRoom')
    async onJoinRoom(socket: Socket, room: RoomI) {
+     console.log('chat gateway i enter to joinRoom');
+     console.log('room is:');
+     console.log(room);
+     console.log('user id es:');
+     console.log(socket.data.user)
+     room = await this.roomService.joinRoom(room, socket.data.user);
      const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+     console.log('I take room messajes');
+     console.log(messages);
      messages.meta.currentPage = messages.meta.currentPage - 1;
      // Save Connection to Room
-     await this.joinedRoomService.create({ socketId: socket.id, user: socket.data.user, room });
+     console.log('Before this.joinedRoomService.create');
+     await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+     console.log('After this.joinedRoomService.create');
+
+     const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+     // console.log('room for user: ' + rooms);    
+     await this.server.to(socket.id).emit('rooms', rooms);
      // Send last messages from Room to User
      await this.server.to(socket.id).emit('messages', messages);
    }
@@ -143,7 +143,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         return null;
      const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
      const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
+     console.log('joined users to send message:');
+     console.log(joinedUsers);
      // TODO: Send new Message to all joined Users of the room (currently online)
+     for(const user of joinedUsers) {
+       console.log('Inside the for');
+       await this.server.to(user.socketId).emit('messageAdded', createdMessage);
+     }
    }
 
    private handleIncomingPageRequest(page: PageI) {

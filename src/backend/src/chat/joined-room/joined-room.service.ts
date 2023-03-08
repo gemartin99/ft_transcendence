@@ -15,15 +15,35 @@ export class JoinedRoomService {
   ) { }
 
   async create(joinedRoom: JoinedRoomI): Promise<JoinedRoomI> { 
+    // console.log('Inisde this.joinedRoomService.create');
+    // console.log('joinedRoom is:');
+    // console.log(joinedRoom);
     return this.joinedRoomRepository.save(joinedRoom);
   }
 
+  async join(joinedRoom: JoinedRoomI): Promise<JoinedRoomI> {
+    console.log('Inside this.joinedRoomService.create');
+    console.log('joinedRoom is:');
+    console.log(joinedRoom);
+
+    // const newJoinedRoom = new JoinedRoomEntity();
+    // newJoinedRoom.socketId = joinedRoom.socketId;
+    // newJoinedRoom.user = joinedRoom.user;
+    // newJoinedRoom.room = joinedRoom.room;
+    return await this.joinedRoomRepository.save(joinedRoom);
+    // const savedJoinedRoom = await this.joinedRoomRepository.save(newJoinedRoom);
+    // return savedJoinedRoom;
+  }
+
   async findByUser(user: UserI): Promise<JoinedRoomI[]> {
-    return this.joinedRoomRepository.find({ where: { user }});
+    return await this.joinedRoomRepository.find({ where: { user }});
   }
 
   async findByRoom(room: RoomI): Promise<JoinedRoomI[]> {
-    return this.joinedRoomRepository.find({ where: { room }});
+    console.log('In findByRoom(room: RoomI): Promise<JoinedRoomI[]>');
+    console.log('Room is');
+    console.log(room);
+    return await this.joinedRoomRepository.find({ where: { room: { id: room.id } } });
   }
 
   async deleteBySocketId(socketId: string) {

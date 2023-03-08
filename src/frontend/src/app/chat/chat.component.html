@@ -9,7 +9,8 @@
                 <h2>My Chatrooms</h2>
                 <small style="margin-left:10px;">Logged in as {{user?.name}}</small>
               </span>
-              <button mat-button [routerLink]="['create-room']">Create new Room</button>
+              <button (click)="openModalJoinRoom()">Join Room</button>
+              <button (click)="openModalCreateRoom()">Create Room</button>
             </div>
             <div *ngIf="(rooms$|async)?.items?.length > 0;" class="rooms">
                  <mat-selection-list [multiple]="false" (selectionChange)="onSelectRoom($event)">
@@ -24,6 +25,7 @@
                     [pageSize]="(rooms$ | async)?.meta?.itemsPerPage" (page)="onPaginateRooms($event)"
                     (page)="onPaginateRooms($event)"
                     [pageSizeOptions]="[10,25,50]"
+                    [hidePageSize]="true"
                   ></mat-paginator>
             </div>
           </div>

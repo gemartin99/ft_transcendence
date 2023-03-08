@@ -30,6 +30,8 @@ export class ChatService {
   }
 
   joinRoom(room: RoomI) {
+    console.log('From chat service JoinRoom room is:');
+    console.log(room);
     this.socket.emit('joinRoom', room);
   }
 

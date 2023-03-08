@@ -7,11 +7,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
-  selector: 'app-create-room',
-  templateUrl: './create-room.component.html',
-  styleUrls: ['./create-room.component.css']
+  selector: 'app-join-room',
+  templateUrl: './join-room.component.html',
+  styleUrls: ['./join-room.component.css']
 })
-export class CreateRoomComponent {
+export class JoinRoomComponent {
 
   form: FormGroup = new FormGroup({
     name: new FormControl(null, [
@@ -30,12 +30,12 @@ export class CreateRoomComponent {
     private chatService: ChatService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialogRef: MatDialogRef<CreateRoomComponent>) { }
+    private dialogRef: MatDialogRef<JoinRoomComponent>) { }
 
-  create() {
+  join() {
     if (this.form.valid) {
-      console.log("El formulario create room es valido");
-      this.chatService.createRoom(this.form.getRawValue());
+      console.log("El formulario join room es valido");
+      this.chatService.joinRoom(this.form.getRawValue());
       this.close();
       //this.router.navigate(['../../chat'], { relativeTo: this.activatedRoute });
     }
