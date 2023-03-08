@@ -1,8 +1,14 @@
+tu id de cliente:
+371838028942-1of01tej2qpvk0sodrbiv3o5o2on81ei.apps.googleusercontent.com
+
+tu secreto de cliente:
+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
+
+
+My 42 Oauth APP https://profile.intra.42.fr/oauth/applications/12131
+
+
 sequalize.js para evitar el injection
-
-
-
-
 
 
 FROM node:lts

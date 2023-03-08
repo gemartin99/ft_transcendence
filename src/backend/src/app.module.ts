@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { User } from  './user/user.entity';
 import { UserService } from './user/user.service';
 import { UsersController } from './user/users.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UsersController } from './user/users.controller';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User]),
+    AuthModule,
   ],
   controllers: [AppController, UsersController],
   providers: [AppService, UserService],
