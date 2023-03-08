@@ -19,6 +19,10 @@ export class UserService {
 	    return await this.userRepository.save(user);
 	}
 
+	async save(user: User): Promise<User> {
+	    return await this.userRepository.save(user);
+	}
+
 	async readAll(): Promise<User[]> {
 	    return await this.userRepository.find();
 	}
@@ -32,6 +36,15 @@ export class UserService {
 	    return await this.userRepository.delete(id);
 	}
 
+	async getById(id: number): Promise<User> {
+		const user = await this.userRepository.findOne({
+		where: {
+			id: id,
+		},
+		});
+		return user;
+	}
+
 	async getBy42Id(id42: number): Promise<User> {
 		const user = await this.userRepository.findOne({
 		where: {
@@ -40,6 +53,8 @@ export class UserService {
 		});
 		return user;
 	}
+
+
 
 	async register(id42: number): Promise<User> {
 		console.log('Enter to register user');
@@ -59,5 +74,15 @@ export class UserService {
 	      name: Like(`%${name}%`)
 	    }
 	  })
+	}
+
+	async findUserFriends(userId: number): Promise<User[]> {
+	  console.log('finding users for id ' + userId);
+	  // const user = await this.userRepository.findOne(userId, { relations: ["friends"]});
+	  const user = await this.userRepository.findOne({
+	    where: { id: userId},
+	    relations: ['friends'],
+	  })
+	  return user.friends;
 	}
 }

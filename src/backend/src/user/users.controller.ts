@@ -56,5 +56,62 @@ export class UsersController {
     @UseGuards(AuthGuard('jwt'))
      async findAllByUsername(@Query('name') name: string) {
        return this.userService.findAllByUsername(name);
-     }
+    }
+
+    //EDIT PROFILE TWO FACTOR
+    @Put('twofactor')
+    @UseGuards(AuthGuard('jwt'))
+    async updateTwofactor(@Req() req, @Res() res, @Body() body: { twofactor: boolean }): Promise<User> {
+        const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+        user.twofactor = body.twofactor;
+        return this.userService.save(user);
+    }
+
+
+    //FRIENDS FUNCTIONALITY
+    @Post('friends')
+    @UseGuards(AuthGuard('jwt'))
+    async addFriend(@Req() req, @Res() res, @Body() body): Promise<any> {
+      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      if(user) {
+          const friendUser = await this.userService.getById(body.friendId);
+          if(friendUser && friendUser.id != user.id){
+            if (!user.friends) {
+              user.friends = []; // initialize the friends array if it doesn't exist
+            }
+            else if (user.friends.find((friend) => friend.id === friendUser.id))
+            {
+              return res.status(200).json({ message: 'Friend was not added (users was alredy friend)' });
+            }
+            user.friends.push(friendUser);
+            await this.userService.save(user);
+            return res.status(200).json({ message: 'Friend added successfully' });
+          }
+      }
+      return res.status(200).json({ message: 'Friend was not added' });
+    }
+
+    @Get('friends')
+    @UseGuards(AuthGuard('jwt'))
+    async getFriends(@Req() req, @Res() res): Promise<any> {
+      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      console.log('when get firends the current user is ' + user);
+      const friends = await this.userService.findUserFriends(user.id);
+      return res.json(friends);
+    }
+
+    @Delete('friends/:friendId')
+    @UseGuards(AuthGuard('jwt'))
+    async removeFriend(@Req() req, @Res() res, @Param('friendId') friendId: number): Promise<any> {
+      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      if (user) {
+        const friendIndex = user.friends.findIndex((friend) => friend.id === friendId);
+        if (friendIndex > -1) {
+          user.friends.splice(friendIndex, 1);
+          await this.userService.save(user);
+          return res.status(200).json({ message: 'Friend removed successfully' });
+        }
+      }
+      return res.status(404).json({ message: 'Friend not found' });
+    }
 }

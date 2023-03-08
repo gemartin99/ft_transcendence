@@ -12,9 +12,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class UserComponent implements OnInit {
 
   displayedColumns  :  string[] = ['id', 'name', 'password', 'avatar', 'twofactor', 'score', 'played', 'wins', 'losses'];
+  searchSource  = [];
   dataSource  = [];
   user = {};
   checkoutForm;
+  searchTerm: string;
   constructor(private apiService: ApiService, private formBuilder: FormBuilder) {
     this.checkoutForm = this.formBuilder.group({
       name: '',
@@ -25,11 +27,12 @@ export class UserComponent implements OnInit {
       played: '',
       wins: '',
       losses: ''
-    })
+    });
+    this.searchTerm = '';
   }
 
   ngOnInit() {
-    this.apiService.readUsers().subscribe((result)=>{   
+    this.apiService.getFriends().subscribe((result)=>{   
       console.log(result); 
       this.dataSource  =  result;
     })
@@ -65,6 +68,37 @@ export class UserComponent implements OnInit {
     this.apiService.updateUser(f.value).subscribe((result)=>{
       console.log(result);
     });
+  }
+
+  searchUsers() {
+    if (this.searchTerm) {
+      this.apiService.findUserByname(this.searchTerm).subscribe((result) => {
+        console.log(result);
+        this.searchSource = result;
+      });
+    }
+  }
+
+  addFriend(user) {
+    if (user) {
+      this.apiService.addFriend(user.id).subscribe((result)=>{   
+        console.log(result); 
+      })
+    }
+  }
+
+  getFriends() {
+      this.apiService.getFriends().subscribe((result)=>{   
+        console.log(result); 
+        this.dataSource  =  result;
+      })
+  }
+
+  removeFriend(id: number) {
+      this.apiService.removeFriend(id).subscribe((result)=>{   
+        console.log(result); 
+        this.getFriends();
+      })
   }
 
 }

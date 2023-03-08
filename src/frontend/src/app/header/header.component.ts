@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 //import { ApiService } from '../api.service';
 import { AuthService } from '../auth/auth.service';
 import { User } from  '../user';
@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public user: any;
   private ngUnsubscribe = new Subject();
@@ -36,5 +36,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next(true);
     this.ngUnsubscribe.complete();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      // Add the JavaScript code here
+      (function() {
+        var burger = document.querySelector('.burger');
+        var nav = document.querySelector('#navbar-links');
+
+        burger.addEventListener('click', function(){
+          burger.classList.toggle('is-active');
+          nav.classList.toggle('is-active');
+        });
+      })();
+    }, 100);
   }
 }

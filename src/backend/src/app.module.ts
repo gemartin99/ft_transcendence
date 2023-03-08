@@ -12,7 +12,7 @@ import { UsersModule } from './user/users.module';
 import { ChatModule } from './chat/chat.module';
 import { OnlineUserService } from './onlineuser/onlineuser.service';
 import { OnlineUserEntity } from './onlineuser/onlineuser.entity';
-
+import { AvatarController } from './user/avatar/avatar.controller';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { OnlineUserEntity } from './onlineuser/onlineuser.entity';
     UsersModule,
     ChatModule,
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController, UsersController, AvatarController],
   providers: [AppService, UserService, AuthService, OnlineUserService],
 })
 export class AppModule { }

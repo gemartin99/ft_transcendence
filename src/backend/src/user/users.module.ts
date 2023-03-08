@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { AuthService } from '../auth/auth.service';
+import { AvatarController } from './avatar/avatar.controller';
 
 @Module({
   imports: [
@@ -10,5 +11,6 @@ import { AuthService } from '../auth/auth.service';
   ],
   providers: [UserService, AuthService],
   exports: [UserService],
+  controllers: [AvatarController],
 })
 export class UsersModule {}

@@ -45,7 +45,27 @@ export class ApiService {
     return this.httpClient.post<any>(`${this.API_SERVER}/users/register`, body, httpOptions);
   }
 
-  public findByUsername(name: string): Observable<UserI[]> {
-    return this.httpClient.get<UserI[]>(`${this.API_SERVER}/users/find-by-username?name=${name}`);
+  public findUserByname(name: string): Observable<UserI[]> {
+    return this.httpClient.get<UserI[]>(`${this.API_SERVER}/users/find-by-username?name=${name}`, { withCredentials: true });
+  }
+
+  public addFriend(userId: number): Observable<any> {
+    return this.httpClient.post<any>(`${this.API_SERVER}/users/friends`, { friendId: userId }, { withCredentials: true });
+  }
+
+  public getFriends(){
+    return this.httpClient.get<User[]>(`${this.API_SERVER}/users/friends`, { withCredentials: true });
+  }
+
+  public removeFriend(friendId: number) {
+    return this.httpClient.delete(`${this.API_SERVER}/friends/${friendId}/delete`, { withCredentials: true });
+  }
+
+  public uploadAvatar(avatar: FormData): Observable<any> {
+    return this.httpClient.post(`${this.API_SERVER}/avatar/upload`, avatar);
+  }
+
+  public updateTwofactor(twofactor: boolean) {
+    return this.httpClient.put<User>(`${this.API_SERVER}/users/twofactor`, { twofactor }, { withCredentials: true });
   }
 }

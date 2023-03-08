@@ -1,0 +1,35 @@
+<section class="section pb-0">
+   <div class="container">
+		<div style="text-align:center">
+			<h1>
+			  Edit Profile and Settings
+			</h1>
+		</div>
+
+		<div class="card">
+		  <header class="card-header">
+		    <p class="card-header-title">Edit Profile</p>
+		  </header>
+		  <div class="card-content">
+		    <form [formGroup]="editForm" (ngSubmit)="updateUser(editForm.value)" class="form" style="width: 100%; padding: 5px;">
+
+		      <div class="field">
+		        <input class="input" formControlName="avatar" type="file" (change)="onFileChange($event)" accept="image/*">
+		      </div>
+
+		      <div class="field">
+		        <label class="checkbox">
+		          <input formControlName="twofactor" type="checkbox" name="twofactor">
+		          Two-Factor Authentication
+		        </label>
+		      </div>
+
+		      <div class="card-footer">
+		        <button class="button is-primary" type="submit">Save Changes</button>
+		      </div>
+
+		    </form>
+		  </div>
+		</div>
+	</div>
+</section>
