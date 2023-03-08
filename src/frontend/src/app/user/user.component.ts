@@ -11,18 +11,20 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class UserComponent implements OnInit {
 
-  displayedColumns  :  string[] = ['id', 'name', 'title', 'email', 'phone', 'address', 'city', 'actions'];
+  displayedColumns  :  string[] = ['id', 'name', 'password', 'avatar', 'twofactor', 'score', 'played', 'wins', 'losses'];
   dataSource  = [];
   user = {};
   checkoutForm;
   constructor(private apiService: ApiService, private formBuilder: FormBuilder) {
     this.checkoutForm = this.formBuilder.group({
       name: '',
-      title: '',
-      email: '',
-      phone: '',
-      address: '',
-      city: ''
+      password: '',
+      avatar: '',
+      twofactor: '',
+      score: '',
+      played: '',
+      wins: '',
+      losses: ''
     })
   }
 

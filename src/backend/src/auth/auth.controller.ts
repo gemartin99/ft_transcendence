@@ -4,6 +4,23 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {
 
+    @Get('school42')
+    @UseGuards(AuthGuard('school42'))
+    school42Login()
+    {
+        // initiates the Google OAuth2 login flow
+    }
+
+    @Get('school42/callback')
+    @UseGuards(AuthGuard('school42'))
+    school42Callback(@Req() req, @Res() res)
+    {
+        console.log('call to school42/callback');
+        console.log(req.user);
+        console.log(req.query);
+        return('has llamado al callback');
+    }
+
     @Get('google')
     @UseGuards(AuthGuard('google'))
     googleLogin()
@@ -23,12 +40,10 @@ export class AuthController {
             res.redirect('http://localhost:4200/login/failure');
     }
 
-    
     @Get('protected')
     @UseGuards(AuthGuard('jwt'))
     protectedResource()
     {
         return 'JWT is working!';
     }
-
 }

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,13 +8,14 @@ import { UserService } from './user/user.service';
 import { UsersController } from './user/users.controller';
 import { AuthModule } from './auth/auth.module';
 
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      database: 'test',
-      username: 'test',
-      password: 'test',
+      database: process.env.POSTGRES_DB,
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
       host:  'postgres',
       port: 5432,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
@@ -26,3 +28,25 @@ import { AuthModule } from './auth/auth.module';
   providers: [AppService, UserService],
 })
 export class AppModule { }
+
+// @Module({
+//   imports: [
+//     TypeOrmModule.forRoot({
+//       type: 'postgres',
+//       database: 'test',
+//       username: 'test',
+//       password: 'test',
+//       host:  'postgres',
+//       port: 5432,
+//       entities: [__dirname + '/**/*.entity{.ts,.js}'],
+//       synchronize: true,
+//     }),
+//     TypeOrmModule.forFeature([User]),
+//     AuthModule,
+//   ],
+//   controllers: [AppController, UsersController],
+//   providers: [AppService, UserService],
+// })
+// export class AppModule { }
+
+
