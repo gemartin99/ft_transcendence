@@ -58,7 +58,17 @@ export class GameGateway {
       const message = 'You have been paired for a match';
       player1.emit('matchmakingPair', match.id);
       player2.emit('matchmakingPair', match.id);
+      await this.matchService.initMatch(match.id, player1, player2);
+      this.matchService.gameLoop(match.id);
     }
   }
 
+  @SubscribeMessage('playerInput')
+  async playerInput(client: Socket, input: { input: number[] }) { 
+    console.log('Game Gateway!!!! PlayerInput');
+    //console.log(client.data);
+    console.log('Data array:', input.input);
+    this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
+  }
 }
+

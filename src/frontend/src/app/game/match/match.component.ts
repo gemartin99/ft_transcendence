@@ -1,18 +1,63 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { GameService } from '../game.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-match',
   templateUrl: './match.component.html',
   styleUrls: ['./match.component.css']
 })
-export class MatchComponent implements AfterViewInit {
+export class MatchComponent implements AfterViewInit, OnInit {
 
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   ballSize = 10;
   paddleWidth = 10;
   paddleHeight = 50;
-  id: number = -1;
+  id: number = 1;
+  key_pressed = 0;
+  player: number = 1;
+  matchId: number = 0;
+
+  constructor(private gameService: GameService, private route: ActivatedRoute) {
+  }
+
+  //Send Inputs to server Room ID has been recieved
+  handleMovement = (e) => {
+    if (this.id > -1 && !this.key_pressed )
+    {
+      this.key_pressed = 1;
+      console.log('handleMovement');
+      if (e.key === "ArrowUp"){
+        console.log('Key DOWN ArrowUp');//chatService.emitInput([1,id, type]);
+        this.gameService.playerInput([this.matchId, 1, this.id]);
+      }
+      else if (e.key === "ArrowDown") {
+        console.log('Key DOWN ArrowDown');
+        this.gameService.playerInput([this.matchId, -1, this.id]);
+      }
+    }
+  }
+  // listen to keyboard events to stop the paddle if key is released
+  handleMovementStop = (e) => {
+    if (this.id > -1 && this.key_pressed)
+    {
+      this.key_pressed = 0;
+      console.log('handleMovementStop');
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        console.log('Key UP');
+        this.gameService.playerInput([this.matchId, 0, this.id]);
+      }
+    }
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.matchId = +params.get('id');
+      console.log('Match ID:', this.matchId);
+    });
+  }
 
   ngAfterViewInit() {
     this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -23,31 +68,31 @@ export class MatchComponent implements AfterViewInit {
       this.resizeCanvas();
     });
 
-    //Send Inputs to server Room ID has been recieved
-    function handleMovement(e){
-      console.log('handleMovement');
-      if (this.id > -1)
-      {
-        if (e.key === "ArrowUp")
-          console.log('Key DOWN ArrowUp');//chatService.emitInput([1,id, type]);
-        else if (e.key === "ArrowDown") {
-          console.log('Key DOWN ArrowDown');//chatService.emitInput([-1,id, type]);
-        }
-      }
-    }
-    // listen to keyboard events to stop the paddle if key is released
-    function handleMovementStop(e){
-      console.log('handleMovementStop');
-      if (this.id > -1)
-      {
-        if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-          console.log('Key UP');//chatService.emitInput([0,id, type]);
-        }
-      }
-    }
+    // //Send Inputs to server Room ID has been recieved
+    // function handleMovement(e){
+    //   if (this.id > -1)
+    //   {
+    //     console.log('handleMovement');
+    //     if (e.key === "ArrowUp")
+    //       console.log('Key DOWN ArrowUp');//chatService.emitInput([1,id, type]);
+    //     else if (e.key === "ArrowDown") {
+    //       console.log('Key DOWN ArrowDown');//chatService.emitInput([-1,id, type]);
+    //     }
+    //   }
+    // }
+    // // listen to keyboard events to stop the paddle if key is released
+    // function handleMovementStop(e){
+    //   if (this.id > -1)
+    //   {
+    //     console.log('handleMovementStop');
+    //     if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+    //       console.log('Key UP');//chatService.emitInput([0,id, type]);
+    //     }
+    //   }
+    // }
     //Keyboard event listeners
-    document.addEventListener('keydown', handleMovement);
-    document.addEventListener('keyup', handleMovementStop);
+    document.addEventListener('keydown', this.handleMovement);
+    document.addEventListener('keyup', this.handleMovementStop);
     this.draw();
   }
 
@@ -97,6 +142,10 @@ export class MatchComponent implements AfterViewInit {
     this.context.fillStyle = 'white';
     this.context.fillRect(0, (this.canvas.height - this.paddleHeight) / 2, this.paddleWidth, this.paddleHeight);
     this.context.fillRect(this.canvas.width - this.paddleWidth, (this.canvas.height - this.paddleHeight) / 2, this.paddleWidth, this.paddleHeight);
+  }
+
+  redrawCanvas(matchData) {
+    console.log('gameState:', matchData);
   }
 
 }
