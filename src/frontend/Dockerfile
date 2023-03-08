@@ -14,6 +14,8 @@ COPY . /frontend/
 
 EXPOSE 4200
 
+EXPOSE 80
+
 RUN npm install -g @angular/cli
 
 RUN npm install --save bulma
@@ -22,7 +24,7 @@ RUN npm install
 
 #CMD [ "ng", "serve" ]
 
-ENTRYPOINT [ "/bin/sh", "-c", "ng serve --host 0.0.0.0" ]
+ENTRYPOINT [ "/bin/sh", "-c", "ng serve --host 0.0.0.0 --public-host crazy-pong.com" ]
 
 
 
