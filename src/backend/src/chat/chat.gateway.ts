@@ -180,6 +180,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        await this.server.to(user.socketId).emit('messageAdded', createdMessage);
      }
    }
+   
+  @SubscribeMessage('pvtMessage')
+   async onPvtMessage(socket: Socket, id: number) {
+      console.log('pvtMessage');
+  }
+  
+  @SubscribeMessage('block')
+   async onBlockUser(socket: Socket, id: number) {
+      console.log('block');
+  }
+
+  @SubscribeMessage('inviteGame')
+   async onInviteGame(socket: Socket, id: number) {
+      console.log('inviteGame');
+  }
 
    private handleIncomingPageRequest(page: PageI) {
      page.limit = page.limit > 100 ? 100 : page.limit;

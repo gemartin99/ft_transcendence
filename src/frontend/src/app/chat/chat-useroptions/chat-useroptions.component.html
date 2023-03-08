@@ -1,0 +1,24 @@
+<p>Number Parameter: {{ data.numParam }}</p>
+<section class="section">
+  <div class="container">
+    <h1 class="title">User Actions</h1>
+    <div class="card">
+      <div class="card-content">
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-primary" (click)="viewProfile(data.numParam)">View Profile</button>
+          </div>
+          <div class="control">
+            <button class="button is-info" (click)="sendPrivMSg(data.numParam)">Send Private Message</button>
+          </div>
+          <div class="control">
+            <button class="button is-success" (click)="inviteToGame(data.numParam)">Invite to Game</button>
+          </div>
+          <div class="control">
+            <button class="button is-warning" (click)="muteUser(data.numParam)">Mute User</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

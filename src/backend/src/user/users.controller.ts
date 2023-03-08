@@ -69,7 +69,8 @@ export class UsersController {
     }
 
     @Get('find/:id')
-    getById(@Param('id') id: string): Promise<User>  {
+    @UseGuards(AuthGuard('jwt'))
+    async getById(@Param('id') id: number): Promise<User>  {
       console.log('find/:id');
       return null;
     }
@@ -78,6 +79,14 @@ export class UsersController {
     @UseGuards(AuthGuard('jwt'))
     async getUserRanking(@Param('userId') userId: number): Promise<number> {
       return this.userService.getUserRanking(userId);
+    }
+
+    @Get('finding/:userId')
+    @UseGuards(AuthGuard('jwt'))
+    async getUserFindingById(@Param('userId') userId: number): Promise<User> {
+      console.log('ENDFINDING!!!!!!!');
+      const user = await this.userService.getById(userId);
+      return user;
     }
 
     //EDIT PROFILE TWO FACTOR

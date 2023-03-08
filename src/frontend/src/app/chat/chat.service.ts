@@ -73,4 +73,18 @@ export class ChatService {
     this.socket.emit('getPublicRooms');
   }
 
+  sendPrivMSg(id: number)
+  {
+    this.socket.emit('pvtMessage', id);
+  }
+
+  muteUser(id: number)
+  {
+    this.socket.emit('block', id);
+  }
+
+  inviteToGame(id: number)
+  {
+    this.socket.emit('inviteGame', id);
+  }
 }
