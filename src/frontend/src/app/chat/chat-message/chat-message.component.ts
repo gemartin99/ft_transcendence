@@ -11,7 +11,7 @@ import { AuthService } from '../..//auth/auth.service';
 })
 export class ChatMessageComponent implements OnInit {
 
-  public user: any;
+  public user: any = {};
   @Input() message: MessageI;
 
   constructor(private authService: AuthService) { }
