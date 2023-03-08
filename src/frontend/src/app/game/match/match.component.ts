@@ -57,6 +57,9 @@ export class MatchComponent implements AfterViewInit, OnInit {
       this.matchId = +params.get('id');
       console.log('Match ID:', this.matchId);
     });
+    this.gameService.gameState.subscribe((gameState) => {
+      this.redrawCanvas(gameState);
+    });
   }
 
   ngAfterViewInit() {
@@ -144,8 +147,31 @@ export class MatchComponent implements AfterViewInit, OnInit {
     this.context.fillRect(this.canvas.width - this.paddleWidth, (this.canvas.height - this.paddleHeight) / 2, this.paddleWidth, this.paddleHeight);
   }
 
-  redrawCanvas(matchData) {
-    console.log('gameState:', matchData);
+  // redrawCanvas(matchData) {
+  //   console.log('gameState:', matchData);
+  // }
+
+  redrawCanvas(gameState: any): void {
+    // Redraw canvas using gameState data
+    console.log('Redrawing canvas with gameState:', gameState);
+    const paddle1Y = gameState.paddle1.y;
+
+     // Clear canvas
+     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+     // Draw something on the canvas
+     this.context.fillStyle = 'black';
+     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+     // Draw ball
+     this.context.beginPath();
+     this.context.arc(this.canvas.width / 2, this.canvas.height / 2, this.ballSize, 0, Math.PI * 2);
+     this.context.fillStyle = 'white';
+     this.context.fill();
+
+     // Draw paddles
+     this.context.fillStyle = 'white';
+     this.context.fillRect(0, paddle1Y, this.paddleWidth, this.paddleHeight);
+     this.context.fillRect(this.canvas.width - this.paddleWidth, (this.canvas.height - this.paddleHeight) / 2, this.paddleWidth, this.paddleHeight);
+
   }
 
 }

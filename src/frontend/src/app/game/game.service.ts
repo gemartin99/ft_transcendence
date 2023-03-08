@@ -1,4 +1,4 @@
-import { Injectable, ViewChild, AfterViewInit } from '@angular/core';
+import { Injectable, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { CustomSocket } from '../sockets/custom-socket';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { MatchComponent } from './match/match.component';
 })
 export class GameService implements AfterViewInit{
   @ViewChild(MatchComponent) matchComponent: MatchComponent;
+  private gameStateEmitter = new EventEmitter<any>();
 
   constructor(private socket: CustomSocket, private router: Router) {     
     this.socket.fromEvent('matchmakingPair').subscribe(message => {
@@ -18,8 +19,14 @@ export class GameService implements AfterViewInit{
     });
     this.socket.fromEvent('gameState').subscribe(message => {
       // /this.matchComponent.redrawCanvas(message);
-      console.log('gameState:', message);
+      //this.matchComponent.gameState = message;
+      //console.log('gameState:', message);
+      this.gameStateEmitter.emit(message);
     });
+  }
+
+  get gameState(): EventEmitter<any> {
+    return this.gameStateEmitter;
   }
 
   ngAfterViewInit() {
