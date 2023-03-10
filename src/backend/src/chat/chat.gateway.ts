@@ -184,6 +184,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('pvtMessage')
    async onPvtMessage(socket: Socket, id: number) {
       console.log('pvtMessage');
+      const target_user = await this.userService.getById(id);
+      const joined_target_user = await this.joinedRoomService.findByUser(target_user);
+      if(joined_target_user)
+      {
+        const room = await this.roomService.preparePvtMessageRoom(socket, id);
+        await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+        // await this.joinedRoomService.join({ socketId: joined_target_user.socketId, user: target_user, room });
+        // const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+        // await this.server.to(socket.id).emit('rooms', room);
+        // await this.server.to(socket.id).emit('messages', messages);
+        // await this.server.to(joined_target_user.socketId).emit('rooms', room);
+        // await this.server.to(joined_target_user.socketId).emit('messages', messages);
+      }
+      console.log("User is not logged, and can t receive the private message");
   }
   
   @SubscribeMessage('block')

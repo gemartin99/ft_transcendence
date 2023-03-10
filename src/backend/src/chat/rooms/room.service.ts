@@ -268,4 +268,40 @@ export class RoomService {
         }
     }
   }
+
+  async preparePvtMessageRoom(client: Socket, id: number) {
+
+    // Find all rooms of type 3
+    const rooms = await this.roomRepository.find({ where: { type: 3 }, relations: ["users"] });
+
+    // Loop through each room and check if both users are in it
+    for (const room of rooms) {
+      const users = room.users;
+
+      // Check if both users are in this room
+      const user1InRoom = users.some(user => user.id === id);
+      // const user2InRoom = users.some(user => user.id === client.data.user.id);
+
+      // if (user1InRoom && user2InRoom) {
+      if (user1InRoom) {
+        return room;
+      }
+    }
+    // If no matching room is found, return undefined
+    return await this.createPvtMessageRoom(client.data.user, id);
+  }
+
+  async createPvtMessageRoom(socketUser: UserI, id: number): Promise<RoomI> {
+      // const user = await this.userService.findOne(socketUser.id);
+      const room: RoomI = {
+          // name: `Pvtmsg: ${user.name} | ${socketUser.data.user.name}`,
+          name: `Pvtmsg: ${socketUser.name} | test`,
+          password: null,
+          type: 3,
+          users: [{ id }, { id: socketUser.id }]
+      };
+      console.log(room);
+      const created_room = await this.roomRepository.save(room);
+      return created_room;
+  }
 }
