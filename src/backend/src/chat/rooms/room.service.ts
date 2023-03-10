@@ -160,6 +160,17 @@ export class RoomService {
     return null;
   }
 
+  async userCloseChannel(client: UserI, roomID: number): Promise<RoomI> {
+    const room: RoomI = await this.getRoomById(roomID);
+    if(room)
+    {
+      room.users = room.users.filter(user => user.id != client.id);
+      await this.roomRepository.save(room);
+      return(room);
+    }
+    return null;
+  }
+
   //CHAT COMMANDS
   async opBanUserFromRoom(room: RoomI, user: UserI, userTargetName: string) {
     console.log('Room service Ban User from room');
@@ -269,36 +280,38 @@ export class RoomService {
     }
   }
 
-  async preparePvtMessageRoom(client: Socket, id: number) {
+  async preparePvtMessageRoom(user1: UserI, user2: UserI): Promise<RoomI> {
 
-    // Find all rooms of type 3
-    const rooms = await this.roomRepository.find({ where: { type: 3 }, relations: ["users"] });
-
-    // Loop through each room and check if both users are in it
-    for (const room of rooms) {
-      const users = room.users;
-
-      // Check if both users are in this room
-      const user1InRoom = users.some(user => user.id === id);
-      // const user2InRoom = users.some(user => user.id === client.data.user.id);
-
-      // if (user1InRoom && user2InRoom) {
-      if (user1InRoom) {
-        return room;
-      }
+    //Reorder the users for minor id first, bigger id last
+    if(user1.id > user2.id)
+    {
+        const tmp_user = user1;
+        user1 = user2;
+        user2 = tmp_user;
     }
-    // If no matching room is found, return undefined
-    return await this.createPvtMessageRoom(client.data.user, id);
+    
+    const room = await this.roomRepository
+        .createQueryBuilder("room")
+        .where("room.type = :type", { type: 3 })
+        .andWhere("room.id_pvt_user1 = :user1Id", { user1Id: user1.id })
+        .andWhere("room.id_pvt_user2 = :user2Id", { user2Id: user2.id })
+        .getOne();
+
+    if(room)
+      return room;
+
+    //If room not exist we create one
+    return await this.createPvtMessageRoom(user1, user2);
   }
 
-  async createPvtMessageRoom(socketUser: UserI, id: number): Promise<RoomI> {
-      // const user = await this.userService.findOne(socketUser.id);
+  async createPvtMessageRoom(user1: UserI, user2: UserI): Promise<RoomI> {
       const room: RoomI = {
-          // name: `Pvtmsg: ${user.name} | ${socketUser.data.user.name}`,
-          name: `Pvtmsg: ${socketUser.name} | test`,
+          name: `Pvtmsg: ${user1.name} | ${user2.name}`,
           password: null,
           type: 3,
-          users: [{ id }, { id: socketUser.id }]
+          users: [{ id: user1.id }, { id: user2.id }],
+          id_pvt_user1: user1.id,
+          id_pvt_user2: user2.id
       };
       console.log(room);
       const created_room = await this.roomRepository.save(room);

@@ -37,6 +37,12 @@ export class RoomEntity {
   @OneToMany(() => MessageEntity, message => message.room)
   messages: MessageEntity[];
 
+  @Column({nullable: true})
+  id_pvt_user1: number;
+
+  @Column({nullable: true})
+  id_pvt_user2: number;
+
   @CreateDateColumn()
   created_at: Date;
 

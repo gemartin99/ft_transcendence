@@ -69,6 +69,10 @@ export class ChatService {
     this.socket.emit('createRoom', room);
   }
 
+  closeChatRoom(roomId: number) {
+    this.socket.emit('closeChatRoom', roomId);
+  }
+
   publicRooms(){
     this.socket.emit('getPublicRooms');
   }

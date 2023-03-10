@@ -62,6 +62,11 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.chatMessage.reset();
   }
 
+  closeRoom(roomID: number) {
+    console.log("User want to close channel");
+    this.chatService.closeChatRoom(roomID);
+  }
+
   // scrollToBottom(): void {
   //   setTimeout(() => {this.messagesScroller.nativeElement.scrollTop = this.messagesScroller.nativeElement.scrollHeight}, 1);
   // }

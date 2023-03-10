@@ -165,6 +165,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      await this.joinedRoomService.deleteBySocketId(socket.id);
    }
 
+   //TODO maybe close joined user too?
+   @SubscribeMessage('closeChatRoom')
+   async onCloseChatRoom(socket: Socket, roomID: number) {
+     console.log('Backend: user pressed close channel-room ' + roomID);
+     await this.roomService.userCloseChannel(socket.data.user, roomID); 
+     const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+     await this.server.to(socket.id).emit('rooms', rooms);
+   }
+
    @SubscribeMessage('addMessage')
    async onAddMessage(socket: Socket, message: MessageI) {
      const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
@@ -184,20 +193,34 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('pvtMessage')
    async onPvtMessage(socket: Socket, id: number) {
       console.log('pvtMessage');
+      console.log('Target user id is: + id');
       const target_user = await this.userService.getById(id);
-      const joined_target_user = await this.joinedRoomService.findByUser(target_user);
-      if(joined_target_user)
+      if(!target_user)
       {
-        const room = await this.roomService.preparePvtMessageRoom(socket, id);
-        await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
-        // await this.joinedRoomService.join({ socketId: joined_target_user.socketId, user: target_user, room });
-        // const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
-        // await this.server.to(socket.id).emit('rooms', room);
-        // await this.server.to(socket.id).emit('messages', messages);
-        // await this.server.to(joined_target_user.socketId).emit('rooms', room);
-        // await this.server.to(joined_target_user.socketId).emit('messages', messages);
+          //Error target user not found;
+          console.log("Target user not exist");
+          return null;
       }
-      console.log("User is not logged, and can t receive the private message");
+      if(target_user.id == socket.data.user.id)
+      {
+          console.log("You can t send private messages to yourself");
+          return null;
+      }
+      //Create de pvtmsg channel if need: 
+      const room = await this.roomService.preparePvtMessageRoom(socket.data.user, target_user);
+      await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+      const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+      const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+      await this.server.to(socket.id).emit('rooms', rooms);
+      await this.server.to(socket.id).emit('messages', messages);
+
+
+      // const joined_target_user = await this.joinedRoomService.findByUser(target_user);
+      // if(joined_target_user)
+      // {
+
+      // }
+      // console.log("User is not logged, and can t receive the private message");
   }
   
   @SubscribeMessage('block')

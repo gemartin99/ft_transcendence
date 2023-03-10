@@ -34,7 +34,7 @@ export class CreateRoomComponent {
     private activatedRoute: ActivatedRoute,
     private dialogRef: MatDialogRef<CreateRoomComponent>) { }
 
-  create() {
+  async create() {
     if (this.form.valid) {
       console.log("El formulario create room es valido");
       const room: RoomI = this.form.getRawValue();
@@ -45,9 +45,10 @@ export class CreateRoomComponent {
         console.log("type es FALSE");
         room.type = 1;
       }
-      this.chatService.createRoom(room);
+      await this.chatService.createRoom(room);
       this.close();
-      //this.router.navigate(['../../chat'], { relativeTo: this.activatedRoute });
+      console.log("goign to reroute");
+      this.router.navigate(['chat']);
     }
   }
 
@@ -59,7 +60,6 @@ export class CreateRoomComponent {
     }
   }
 
-
   get name(): FormControl {
     return this.form.get('name') as FormControl;
   }
@@ -70,6 +70,5 @@ export class CreateRoomComponent {
 
   get users(): FormArray {
      return this.form.get('users') as FormArray;
-   }
-
+  }
 }
