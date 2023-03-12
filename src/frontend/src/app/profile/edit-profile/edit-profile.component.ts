@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../api.service';
 import { AuthService } from '../../auth/auth.service';
 import { User } from  '../../user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
@@ -13,8 +14,9 @@ export class EditProfileComponent implements OnInit {
   editForm: FormGroup;
   avatarFile: File;
   user: any;
+  fileTypeError: boolean = false; // Add this variable
 
-  constructor(private formBuilder: FormBuilder, private apiService: ApiService, private authService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private apiService: ApiService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.editForm = this.formBuilder.group({
@@ -29,21 +31,29 @@ export class EditProfileComponent implements OnInit {
 
   onFileChange(event: any) {
     if (event.target.files && event.target.files.length > 0) {
+      const extension = event.target.files[0].name.split('.').pop().toLowerCase();
+      if (extension !== 'jpg' && extension !== 'png') {
+        this.fileTypeError = true; // Set fileTypeError to true if file type is incorrect
+        return;
+      }
+      this.fileTypeError = false; // Set fileTypeError to false if file type is correct
       this.avatarFile = event.target.files[0];
     }
   }
 
-  updateUser(formData2: any) {
+  async updateUser(formData2: any) {
     console.log(formData2);
     if (this.avatarFile) {
       const formData = new FormData();
       formData.append('file', this.avatarFile);
-      this.apiService.uploadAvatar(formData).subscribe((response) => {
+        await this.apiService.uploadAvatar(formData).subscribe((response) => {
           console.log('avatar uploaded');
       });
     } 
-    this.apiService.updateTwofactor(formData2.twofactor).subscribe(() => {
+    await this.apiService.updateTwofactor(formData2.twofactor).subscribe(() => {
       console.log('Two factor updated successfully');
     });
+    if(this.fileTypeError)
+      this.router.navigate(['/profile']);
   }
 }
