@@ -1,24 +1,27 @@
-import { Controller, Get, Req, Res, Post } from '@nestjs/common';
+import { Controller, Get, Req, Res, Post, Body } from '@nestjs/common';
 import * as qrcode from 'qrcode';
 import { TwoFactorService } from './two-factor.service';
 import { Observable, of } from 'rxjs';
 import path = require('path');
 import { join } from 'path';
 import * as fs from 'fs';
+import { User } from '../../user/user.entity';
+import { UserService } from '../../user/user.service';
 
 @Controller()
 export class TwoFactorController {
   constructor(
-    private readonly twoFactorAuthenticationService: TwoFactorService,
+    private readonly twoFactorService: TwoFactorService,
+    private readonly usersService: UserService,
   ) {}
 
   @Post('generate')
   async register(@Req() req, @Res() res) {
-    const otpauth = await this.twoFactorAuthenticationService.generateTwoFactorSecret(
+    const otpauth = await this.twoFactorService.generateTwoFactorSecret(
       req.body,
     );
     console.log('generating otpauth: ' + otpauth);
-    this.twoFactorAuthenticationService.pipeQrCodeStream(otpauth.otpauthUrl);
+    this.twoFactorService.pipeQrCodeStream(otpauth.otpauthUrl);
     console.log('after: pipeQrCodeStream');
     return res.send(JSON.stringify(otpauth.secret));
   }
@@ -27,5 +30,24 @@ export class TwoFactorController {
   async findQrCode(@Res() res) {
     console.log('in: get qrcode');
     return of(res.sendFile(join(process.cwd(), 'src/uploads/qrcode/qrcode.png')));
+  }
+
+  //@UseGuards(JwtAuthGuard)
+  @Post('2faAuthentificate')
+  async authenticate(@Body() body: { user: User, code: string }) {
+    const { user, code } = body;
+    console.log('2faAuthentificate!!!!!! code received');
+    console.log('User:', user);
+    console.log('Code:', code);
+    const isCodeValid = this.twoFactorService.checkCodeIsValid(
+      code, user
+    );
+    if (!isCodeValid) {
+      console.log('Code IS NOT VALID!!!!!!!');
+    }
+    else
+    	console.log('Code IS VALID!!!!!!!');
+    await this.usersService.setTwoFactorAuthentificated(user.id);
+    return(isCodeValid);
   }
 }

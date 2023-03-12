@@ -34,6 +34,13 @@ export class TwoFactorService {
 	  toFile('src/uploads/qrcode/qrcode.png',otpauthUrl);
   }
 
+  public checkCodeIsValid(code: string, user: User) {
+    return authenticator.verify({
+      token: code,
+      secret: user.twofactor_secret
+    })
+  }
+
  //  public isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, user: UserEntity) {
  //    return authenticator.verify({
  //      token: twoFactorAuthenticationCode,

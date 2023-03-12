@@ -10,6 +10,7 @@ import { ApiService} from '../api.service';
 export class TwoFactorComponent implements OnInit {
   twoFactorSecret: string;
   user: any;
+  public code: string = '';
 
   constructor(private authService: AuthService, private apiService: ApiService) { }
 
@@ -19,11 +20,6 @@ export class TwoFactorComponent implements OnInit {
     });
   }
 
-  // generateTwoFactor() {
-  //   this.apiService.get2faSecretKey(this.user).subscribe((response: string) => {
-  //     this.twoFactorSecret = response;
-  //   });
-  // }
   generateTwoFactor() {
     this.apiService.get2faSecretKey(this.user).subscribe(
       (response: string) => {
@@ -36,4 +32,18 @@ export class TwoFactorComponent implements OnInit {
     );
   }
 
+  verifyTwoFactor() {
+    this.apiService.verify2faCode(this.user, this.code).subscribe(
+      (response) => {
+        if (response) {
+          console.log('Two factor authentication successful');
+        } else {
+          console.log('Two factor authentication failed');
+        }
+      },
+      (error) => {
+        console.error('Error verifying two factor authentication: ', error);
+      }
+    );
+  }
 }

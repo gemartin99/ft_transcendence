@@ -20,6 +20,13 @@ export class UserService {
 		twofactor_secret: secret
 		});
 	}
+
+	async setTwoFactorAuthentificated(userId: number) {
+		return this.userRepository.update(userId, {
+		twofactor: true,
+		twofactor_valid: true
+		});
+	}
 	
 	async create(user: User): Promise<User> {
 	    return await this.userRepository.save(user);

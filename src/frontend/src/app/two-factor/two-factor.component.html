@@ -3,3 +3,11 @@
 </p>
 <button (click)="generateTwoFactor()">Generate Two Factor</button>
 <div *ngIf="twoFactorSecret">{{ twoFactorSecret }}</div>
+
+<hr>
+
+<h2>Verify Two Factor</h2>
+<label for="code">Code:</label>
+<input type="text" [(ngModel)]="code" name="code" required>
+<button (click)="verifyTwoFactor()">Verify Two Factor</button>
+

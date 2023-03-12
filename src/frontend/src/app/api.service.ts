@@ -91,5 +91,13 @@ export class ApiService {
     return this.httpClient.post(`${this.API_SERVER}/generate`, user, { withCredentials: true });
   }
 
+  public verify2faCode(user: User, code: string): Observable<any> {
+    const requestBody = {
+      user,
+      code
+    };
+    return this.httpClient.post(`${this.API_SERVER}/2faAuthentificate`, requestBody, { withCredentials: true });
+  }
+
 
 }
