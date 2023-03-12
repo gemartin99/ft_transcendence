@@ -4,10 +4,23 @@
 <button (click)="generateTwoFactor()">Generate Two Factor</button>
 <div *ngIf="twoFactorSecret">{{ twoFactorSecret }}</div>
 
-<hr>
-
-<h2>Verify Two Factor</h2>
-<label for="code">Code:</label>
-<input type="text" [(ngModel)]="code" name="code" required>
-<button (click)="verifyTwoFactor()">Verify Two Factor</button>
+<section class="section">
+  <div class="container">
+    <h1 class="title">Two Factor Authentification</h1>
+    <div class="card">
+      <div class="card-content">
+          <div class="field">
+            <label class="label">Google Auth Code:</label>
+            <div class="control">
+              <input type="text" [(ngModel)]="code" name="code" placeholder="Enter Code" class="form-control input" required>
+                <div *ngIf="input_error" class="help is-danger">{{ input_error }}</div>
+            </div>
+          </div>
+          <div class="field">
+            <button (click)="verifyTwoFactor()" class="button is-primary">Verify Two Factor</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
 

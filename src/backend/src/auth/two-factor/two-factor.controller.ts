@@ -36,6 +36,14 @@ export class TwoFactorController {
   @Post('2faAuthentificate')
   async authenticate(@Body() body: { user: User, code: string }) {
     const { user, code } = body;
+    // Check if the code is empty or not 6 characters
+    if (!code || code.length !== 6) {
+      return(false);
+    }
+    // Check if the code only contains digits
+    if (!/^\d+$/.test(code)) {
+      return(false);
+    }
     console.log('2faAuthentificate!!!!!! code received');
     console.log('User:', user);
     console.log('Code:', code);
