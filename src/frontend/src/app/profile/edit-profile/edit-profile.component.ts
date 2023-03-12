@@ -53,7 +53,7 @@ export class EditProfileComponent implements OnInit {
     await this.apiService.updateTwofactor(formData2.twofactor).subscribe(() => {
       console.log('Two factor updated successfully');
     });
-    if(this.fileTypeError)
+    if(!this.fileTypeError)
       this.router.navigate(['/profile']);
   }
 }
