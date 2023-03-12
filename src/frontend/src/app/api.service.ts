@@ -86,4 +86,10 @@ export class ApiService {
   public getUserRank(userId: number): Observable<number> {
     return this.httpClient.get<number>(`${this.API_SERVER}/users/rank/${userId}`, { withCredentials: true });
   }
+
+  public get2faSecretKey(user: User): Observable<any> {
+    return this.httpClient.post(`${this.API_SERVER}/generate`, user, { withCredentials: true });
+  }
+
+
 }

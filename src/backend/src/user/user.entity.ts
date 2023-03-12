@@ -22,6 +22,9 @@ export class User {
   @Column({ default: false })
   twofactor_valid: boolean
 
+  @Column({ nullable: true, default: null })
+  twofactor_secret: string;
+
   @Column({ default: false })
   reg_completed: boolean
 

@@ -14,6 +14,12 @@ export class UserService {
 	    private readonly userRepository: Repository<User>,
 	    authService: AuthService
 	) { }
+
+	async setTwoFactorSecret(secret: string, userId: number) {
+		return this.userRepository.update(userId, {
+		twofactor_secret: secret
+		});
+	}
 	
 	async create(user: User): Promise<User> {
 	    return await this.userRepository.save(user);

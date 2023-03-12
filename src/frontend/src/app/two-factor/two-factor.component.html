@@ -1,0 +1,5 @@
+<p>
+  two-factor works!
+</p>
+<button (click)="generateTwoFactor()">Generate Two Factor</button>
+<div *ngIf="twoFactorSecret">{{ twoFactorSecret }}</div>

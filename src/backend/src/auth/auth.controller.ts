@@ -131,7 +131,7 @@ export class AuthController {
         console.log('Api dentro de logout');
         res.clearCookie('crazy-pong', {domain:'crazy-pong.com', path:'/'});
         // let user: User = await this.userService.getBy42Id(req.user.id42);
-        this.userService.setUserOffline(req.user);
+        //this.userService.setUserOffline(req.user);
         return res.json({ message: 'Logged out successfully' });
     }
 }
