@@ -34,7 +34,7 @@ const routes: Routes = [
   { path: 'profiles/:id', component: ProfilesComponent, canActivate: [AuthGuard] },
   { path: 'game/match/:id', component: MatchComponent, canActivate: [AuthGuard] },
   { path: 'two-factor', component: TwoFactorComponent, canActivate: [AuthGuard] },
-  { path: 'security-settings', component: EditTwoFactorComponent, canActivate: [AuthGuard] }
+  { path: 'security/settings', component: EditTwoFactorComponent, canActivate: [AuthGuard] }
 
 ];
 

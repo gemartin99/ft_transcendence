@@ -98,15 +98,21 @@ export class AuthController {
         const token = req.cookies['crazy-pong'];
         if (!token) {
             console.log('USER NOT AUTH!!!');
-            return res.send({ message: 'Unauthorized', user: undefined });
+            //return res.send({ message: 'Unauthorized', user: undefined });
+            return res.send( false );
+            //return false;
         }
         try {
             const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
             console.log('USER IS AUTHORITZED');
-            return res.send({ message: 'Authorized', user: decoded });
+            //return res.send({ message: 'Authorized', user: decoded });
+            return res.send(true);
+            //return true;
         } catch (err) {
             console.log('USER NOT AUTH!!!');
-            return res.send({ message: 'Unauthorized', user: undefined });
+            //return res.send({ message: 'Unauthorized', user: undefined });
+            return res.send( false );
+            //return false;
         }
     }
 

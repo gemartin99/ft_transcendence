@@ -14,13 +14,22 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if(!this.authService.isAuthenticated()) {
-      this.router.navigate(['login']);
-      console.log('authGuard no identificado!!!!!');
-      return false;
-    }
-    console.log('authGuard identificado CORRECTAMENTE!!!!!');
-    return true;
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
+    return this.authService.isAuthenticated()
+      .then((authenticated: boolean) => {
+        if (authenticated) {
+          console.log('authGuard identificado CORRECTAMENTE!!!!!');
+          return true;
+        } else {
+          this.router.navigate(['']);
+          console.log('authGuard no identificado!!!!!');
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        return false;
+      });
   }
 }

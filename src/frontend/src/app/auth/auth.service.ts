@@ -16,9 +16,13 @@ export class AuthService {
 
   API_SERVER = "http://crazy-pong.com:3000";
 
-  isAuthenticated() {
+  async isAuthenticated(): Promise<boolean> {
     //return this.httpClient.get('/auth/isAuthenticated');
-    return this.httpClient.get<any>(`${this.API_SERVER}/auth`, { withCredentials: true }).toPromise();
+    const is_auth = await this.httpClient.get<any>(`${this.API_SERVER}/auth`, { withCredentials: true }).toPromise();
+    console.log('is_auth = ' + is_auth);
+    if(!is_auth)
+      return false;
+    return true;
   }
 
   async loadLoggedUser(){
