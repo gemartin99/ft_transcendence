@@ -21,7 +21,7 @@ export class TwoFactorController {
       req.body,
     );
     console.log('generating otpauth: ' + otpauth);
-    this.twoFactorService.pipeQrCodeStream(otpauth.otpauthUrl);
+    await this.twoFactorService.pipeQrCodeStream(otpauth.otpauthUrl);
     console.log('after: pipeQrCodeStream');
     return res.send(JSON.stringify(otpauth.secret));
   }

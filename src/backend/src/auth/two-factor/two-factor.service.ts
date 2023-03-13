@@ -31,7 +31,7 @@ export class TwoFactorService {
   }
 
   public async pipeQrCodeStream(otpauthUrl: string) {	  
-	  toFile('src/uploads/qrcode/qrcode.png',otpauthUrl);
+	  await toFile('src/uploads/qrcode/qrcode.png',otpauthUrl);
   }
 
   public checkCodeIsValid(code: string, user: User) {
@@ -40,31 +40,4 @@ export class TwoFactorService {
       secret: user.twofactor_secret
     })
   }
-
- //  public isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, user: UserEntity) {
- //    return authenticator.verify({
- //      token: twoFactorAuthenticationCode,
- //      secret: user.twoFactorAuthenticationSecret
- //    })
- //  }
-
- //  public getCookieWithJwtToken(userId: number, isSecondFactorAuthenticated = false) {
- //    const payload: TokenPayload = { userId, isSecondFactorAuthenticated };
- //    const token = this.jwtService.sign(payload, {
- //      secret: this.configService.get('JWT_SECRET'),
- //      expiresIn: `10000`
- //    });
- //    const cookie = `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('10000')}`;
-	// return {
-	// 	cookie,
-	// 	token,
-	//   };
- //  }
-
- //  async validate(payload: TokenPayload) {
- //    const user = await this.usersService.getOne(payload.userId);
- //    if (!user.twoFactorAuthEnabled || payload.isSecondFactorAuthenticated) {
- //      return user;
- //    }
- //  }
 }
