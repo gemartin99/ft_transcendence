@@ -99,5 +99,9 @@ export class ApiService {
     return this.httpClient.post(`${this.API_SERVER}/2faAuthentificate`, requestBody, { withCredentials: true });
   }
 
+  public disable2fa(user: User): Observable<any> {
+    console.log('In Frontend calling Backend')
+    return this.httpClient.post(`${this.API_SERVER}/2faUserUnset`, user, { withCredentials: true });
+  }
 
 }

@@ -15,6 +15,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
 import { MatchComponent } from './game/match/match.component';
 import { TwoFactorComponent } from './two-factor/two-factor.component';
+import { EditTwoFactorComponent } from './two-factor/edit-two-factor/edit-two-factor.component';
 
 
 const routes: Routes = [
@@ -31,7 +32,8 @@ const routes: Routes = [
   { path: 'profile/edit', component: EditProfileComponent },
   { path: 'profiles/:id', component: ProfilesComponent },
   { path: 'game/match/:id', component: MatchComponent },
-  { path: 'two-factor', component: TwoFactorComponent}
+  { path: 'two-factor', component: TwoFactorComponent},
+  { path: 'security/settings', component: EditTwoFactorComponent}
 
 ];
 

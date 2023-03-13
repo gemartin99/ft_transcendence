@@ -58,4 +58,17 @@ export class TwoFactorController {
     await this.usersService.setTwoFactorAuthentificated(user.id);
     return(isCodeValid);
   }
+
+  @Post('2faUserUnset')
+  async disable2fa(@Body() user: User) {
+  	console.log('Backend: inside disable2fa');
+    const result = await this.usersService.unsetTwoFactorAuthentificated(user.id);
+    if(result)
+    {
+    	console.log('Two factor disabled');
+    	return(true);
+    }
+    console.log('Two factor keeps enabled');
+    return(true);
+  }
 }

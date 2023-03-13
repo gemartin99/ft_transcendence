@@ -27,6 +27,12 @@ export class UserService {
 		twofactor_valid: true
 		});
 	}
+
+	async unsetTwoFactorAuthentificated(userId: number) {
+		return await this.userRepository.update(userId, {
+		twofactor: false
+		});
+	}
 	
 	async create(user: User): Promise<User> {
 	    return await this.userRepository.save(user);

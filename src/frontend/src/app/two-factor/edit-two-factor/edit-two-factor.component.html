@@ -1,0 +1,22 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title">Security Settings</h1>
+    <div class="card">
+      <div class="card-content">
+        <div *ngIf="twoFactorActivated; else notActivated">
+          Two factor activated
+          <div class="field">
+            <button (click)="unsetTwoFactor()" class="button is-primary">Disable Two Factor Auth</button>
+          </div>
+        </div>
+
+        <ng-template #notActivated>
+          Two factor deactivated
+          <button (click)="generateTwoFactor()">Generate Two Factor</button>
+          <div *ngIf="twoFactorSecret">{{ twoFactorSecret }}</div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</section>
+

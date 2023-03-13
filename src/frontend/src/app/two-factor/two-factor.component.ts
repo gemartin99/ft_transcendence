@@ -22,18 +22,6 @@ export class TwoFactorComponent implements OnInit {
     });
   }
 
-  generateTwoFactor() {
-    this.apiService.get2faSecretKey(this.user).subscribe(
-      (response: string) => {
-        this.twoFactorSecret = response;
-        console.log('Two factor secret key: ', this.twoFactorSecret);
-      },
-      (error) => {
-        console.error('Error generating two factor secret key: ', error);
-      }
-    );
-  }
-
   verifyTwoFactor() {
     // Check if the code is empty or not 6 characters
     if (!this.code || this.code.length !== 6) {
