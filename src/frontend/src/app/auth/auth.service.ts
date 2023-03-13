@@ -17,7 +17,8 @@ export class AuthService {
   API_SERVER = "http://crazy-pong.com:3000";
 
   isAuthenticated() {
-    return this.httpClient.get('/auth/isAuthenticated');
+    //return this.httpClient.get('/auth/isAuthenticated');
+    return this.httpClient.get<any>(`${this.API_SERVER}/auth`, { withCredentials: true }).toPromise();
   }
 
   async loadLoggedUser(){

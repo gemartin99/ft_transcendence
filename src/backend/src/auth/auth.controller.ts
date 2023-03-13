@@ -94,14 +94,18 @@ export class AuthController {
     @Get('')
     userIsAuth(@Req() req: any, @Res() res: Response) {
     console.log(req.cookies);
+        console.log('BAKEND USER IS AUTH?');
         const token = req.cookies['crazy-pong'];
         if (!token) {
+            console.log('USER NOT AUTH!!!');
             return res.send({ message: 'Unauthorized', user: undefined });
         }
         try {
             const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+            console.log('USER IS AUTHORITZED');
             return res.send({ message: 'Authorized', user: decoded });
         } catch (err) {
+            console.log('USER NOT AUTH!!!');
             return res.send({ message: 'Unauthorized', user: undefined });
         }
     }

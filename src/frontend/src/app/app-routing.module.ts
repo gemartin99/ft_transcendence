@@ -18,22 +18,23 @@ import { TwoFactorComponent } from './two-factor/two-factor.component';
 import { EditTwoFactorComponent } from './two-factor/edit-two-factor/edit-two-factor.component';
 
 
+
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "users", component: UserComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'school42/callback', component: School42Component },
-  { path: 'register', component: RegisterComponent },
-  { path: 'game', component: GameComponent },
-  { path: 'chat', component: ChatComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'chat/create-room', component: CreateRoomComponent },
-  { path: 'logout', component: LogoutComponent },
-  { path: 'profile/edit', component: EditProfileComponent },
-  { path: 'profiles/:id', component: ProfilesComponent },
-  { path: 'game/match/:id', component: MatchComponent },
-  { path: 'two-factor', component: TwoFactorComponent},
-  { path: 'security/settings', component: EditTwoFactorComponent}
+  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard]  },
+  { path: 'game', component: GameComponent, canActivate: [AuthGuard]  },
+  { path: 'chat', component: ChatComponent, canActivate: [AuthGuard]  },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]  },
+  { path: 'chat/create-room', component: CreateRoomComponent, canActivate: [AuthGuard]  },
+  { path: 'logout', component: LogoutComponent, canActivate: [AuthGuard]  },
+  { path: 'profile/edit', component: EditProfileComponent, canActivate: [AuthGuard] },
+  { path: 'profiles/:id', component: ProfilesComponent, canActivate: [AuthGuard] },
+  { path: 'game/match/:id', component: MatchComponent, canActivate: [AuthGuard] },
+  { path: 'two-factor', component: TwoFactorComponent, canActivate: [AuthGuard] },
+  { path: 'security-settings', component: EditTwoFactorComponent, canActivate: [AuthGuard] }
 
 ];
 
