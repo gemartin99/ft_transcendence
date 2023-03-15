@@ -46,6 +46,15 @@ export class JoinedRoomService {
     return await this.joinedRoomRepository.find({ where: { room: { id: room.id } } });
   }
 
+  async findByRoomExcludingBlockedUser(room: RoomI, id_blocked_user: number): Promise<JoinedRoomI[]> {
+    return this.joinedRoomRepository
+      .createQueryBuilder("joinedRoom")
+      .leftJoinAndSelect("joinedRoom.user", "user")
+      .leftJoinAndSelect("user.blocked_users", "blocked_users")
+      .where("joinedRoom.room = :roomId", { roomId: room.id })
+      .getMany();
+  }
+
   async deleteBySocketId(socketId: string) {
     return this.joinedRoomRepository.delete({ socketId });
   }

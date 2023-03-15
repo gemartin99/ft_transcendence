@@ -12,4 +12,5 @@ export interface UserI {
   played?: number;
   wins?: number;
   losses?: number;
+  blocked_users?: UserI[];
 }

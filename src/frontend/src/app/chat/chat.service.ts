@@ -14,7 +14,7 @@ import { tap } from 'rxjs/operators';
 })
 export class ChatService {
   
-  // public pub_rooms: RoomI[] = [];
+  public blocked_users: any[] = [4];
 
   constructor(private socket: CustomSocket) {
     // const jwtToken = this.getCookieValue('crazy-pong');
@@ -80,11 +80,6 @@ export class ChatService {
   sendPrivMSg(id: number)
   {
     this.socket.emit('pvtMessage', id);
-  }
-
-  muteUser(id: number)
-  {
-    this.socket.emit('block', id);
   }
 
   inviteToGame(id: number)

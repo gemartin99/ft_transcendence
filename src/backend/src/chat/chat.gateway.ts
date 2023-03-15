@@ -174,21 +174,43 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      await this.server.to(socket.id).emit('rooms', rooms);
    }
 
+
    @SubscribeMessage('addMessage')
    async onAddMessage(socket: Socket, message: MessageI) {
      const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
      if(!createdMessage)
         return null;
      const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
-     const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
+     const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoomExcludingBlockedUser(room, socket.data.user.id);
      console.log('joined users to send message:');
      console.log(joinedUsers);
-     // TODO: Send new Message to all joined Users of the room (currently online)
-     for(const user of joinedUsers) {
+
+     const filteredJoinedUsers = joinedUsers.filter(
+       (user) => !user.user.blocked_users.find((blockedUser) => blockedUser.id === socket.data.user.id)
+     );
+     
+     //TODO: Send new Message to all joined Users of the room (currently online)
+     for(const user of filteredJoinedUsers) {
        console.log('Inside the for');
        await this.server.to(user.socketId).emit('messageAdded', createdMessage);
      }
    }
+
+   // @SubscribeMessage('addMessage')
+   // async onAddMessage(socket: Socket, message: MessageI) {
+   //   const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
+   //   if(!createdMessage)
+   //      return null;
+   //   const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
+   //   const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
+   //   console.log('joined users to send message:');
+   //   console.log(joinedUsers);
+   //   //TODO: Send new Message to all joined Users of the room (currently online)
+   //   for(const user of joinedUsers) {
+   //     console.log('Inside the for');
+   //     await this.server.to(user.socketId).emit('messageAdded', createdMessage);
+   //   }
+   // }
    
   @SubscribeMessage('pvtMessage')
    async onPvtMessage(socket: Socket, id: number) {
@@ -223,10 +245,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       // console.log("User is not logged, and can t receive the private message");
   }
   
-  @SubscribeMessage('block')
-   async onBlockUser(socket: Socket, id: number) {
-      console.log('block');
-  }
+  // @SubscribeMessage('block')
+  //  async onBlockUser(socket: Socket, id: number) {
+  //     console.log('block');
+  //     await this.userService.blockUser(socket.data.user.id, number);
+  //     await this.server.to(socket.id).emit('refresh_user');
+  // }
 
   @SubscribeMessage('inviteGame')
    async onInviteGame(socket: Socket, id: number) {

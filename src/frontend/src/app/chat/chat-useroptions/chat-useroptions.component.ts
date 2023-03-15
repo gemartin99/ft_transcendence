@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA , MatDialogRef} from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ChatService } from '../chat.service';
+import { ApiService } from '../../api.service';
 
 
 @Component({
@@ -14,7 +15,8 @@ export class ChatUseroptionsComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private router: Router,
               private dialogRef: MatDialogRef<ChatUseroptionsComponent>,
-              private chatService: ChatService) {}
+              private chatService: ChatService,
+              private apiService: ApiService) {}
 
   ngOnInit() {
   }
@@ -33,7 +35,17 @@ export class ChatUseroptionsComponent implements OnInit {
 
   muteUser(id: number)
   {
-    this.chatService.muteUser(id);
+    this.apiService.blockUser(id).subscribe((result)=>{
+      console.log('call to muteUser');
+    });
+    this.dialogRef.close();
+  }
+
+  unmuteUser(id: number)
+  {
+    this.apiService.unblockUser(id).subscribe((result)=>{
+      console.log('call to unmuteUser');
+    });
     this.dialogRef.close();
   }
 

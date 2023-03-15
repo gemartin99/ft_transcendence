@@ -149,6 +149,16 @@ export class UserService {
 	  return user.friends;
 	}
 
+	async findBlockedUsers(userId: number): Promise<User[]> {
+	  console.log('finding blcokedds users for id ' + userId);
+	  // const user = await this.userRepository.findOne(userId, { relations: ["friends"]});
+	  const user = await this.userRepository.findOne({
+	    where: { id: userId},
+	    relations: ['blocked_users'],
+	  })
+	  return user.blocked_users;
+	}
+
 	async getUserRanking(userId: number): Promise<number> {
 	  const user = await this.userRepository.findOne({
 	    where: {

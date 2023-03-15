@@ -89,6 +89,47 @@ export class UsersController {
       return user;
     }
 
+    @Get('block')
+    @UseGuards(AuthGuard('jwt'))
+    async getBlockedUsers(@Req() req, @Res() res): Promise<any> {
+      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      const blockeds = await this.userService.findBlockedUsers(user.id);
+      return res.json(blockeds);
+    }
+
+
+    @Get('block/:userId')
+    @UseGuards(AuthGuard('jwt'))
+    async blockUser(@Req() req, @Res() res, @Param('userId') userId: number): Promise<User> {
+      console.log('In backend call to block user');
+      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      if(user) {
+          const targetUser = await this.userService.getById(userId);
+          if(targetUser) {
+              if (!user.blocked_users) {
+                  user.blocked_users = [];
+              }
+              user.blocked_users.push(targetUser);
+              await this.userService.save(user);
+          }
+      }
+      return res.json(user);
+    }
+
+    @Get('unblock/:userId')
+    @UseGuards(AuthGuard('jwt'))
+    async unblockUser(@Req() req, @Res() res, @Param('userId') userId: number): Promise<User> {
+      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      if (user) {
+        if (!user.blocked_users) {
+            user.blocked_users = [];
+        }
+        user.blocked_users = user.blocked_users.filter((blockedUser) => blockedUser.id != userId);
+        await this.userService.save(user);
+      }
+      return res.json(user);
+    }
+
     //EDIT PROFILE TWO FACTOR
     @Put('twofactor')
     @UseGuards(AuthGuard('jwt'))

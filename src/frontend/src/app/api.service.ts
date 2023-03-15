@@ -104,4 +104,17 @@ export class ApiService {
     return this.httpClient.post(`${this.API_SERVER}/2faUserUnset`, user, { withCredentials: true });
   }
 
+  public blockUser(userId: number): Observable<any> {
+    console.log('API call to blockUser');
+    return this.httpClient.get<User>(`${this.API_SERVER}/users/block/${userId}`, { withCredentials: true });
+  }
+
+  public unblockUser(userId: number): Observable<any> {
+    console.log('API call to unblockUser');
+    return this.httpClient.get<User>(`${this.API_SERVER}/users/unblock/${userId}`, { withCredentials: true });
+  }
+
+  public getBlockedUsers(): Observable<User[]>{
+    return this.httpClient.get<User[]>(`${this.API_SERVER}/users/block`, { withCredentials: true });
+  }
 }

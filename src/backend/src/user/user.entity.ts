@@ -59,6 +59,10 @@ export class User {
   @JoinTable()
   friends: User[];
 
+  @ManyToMany(() => User, user => user.blocked_users)
+  @JoinTable()
+  blocked_users: User[];
+
   @OneToMany(() => OnlineUserEntity, connection => connection.user)
   connections: OnlineUserEntity[];
 
