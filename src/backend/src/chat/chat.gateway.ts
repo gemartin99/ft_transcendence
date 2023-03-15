@@ -19,6 +19,8 @@ import { JoinedRoomService } from './joined-room/joined-room.service';
 import { MessageService } from './message/message.service';
 import { MessageI } from './message/message.interface';
 import { JoinedRoomI } from './joined-room/joined-room.interface';
+import { MatchChallange } from '../game/match/match-challange/match-challange.interface';
+import { User } from '../user/user.entity';
 
 
 @WebSocketGateway({ cors: true })
@@ -27,6 +29,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   server;
 
   title: string[] = [];
+  challanges: MatchChallange[] = [];
 
   constructor(
       private authService: AuthService,
@@ -132,7 +135,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
          message.text = "Blocked";
        }
      });
-     
+
      // Save Connection to Room
      console.log('Before this.joinedRoomService.create');
      await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
@@ -266,17 +269,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       // console.log("User is not logged, and can t receive the private message");
   }
   
-  // @SubscribeMessage('block')
-  //  async onBlockUser(socket: Socket, id: number) {
-  //     console.log('block');
-  //     await this.userService.blockUser(socket.data.user.id, number);
-  //     await this.server.to(socket.id).emit('refresh_user');
-  // }
-
-  @SubscribeMessage('inviteGame')
-   async onInviteGame(socket: Socket, id: number) {
-      console.log('inviteGame');
-  }
 
    private handleIncomingPageRequest(page: PageI) {
      page.limit = page.limit > 100 ? 100 : page.limit;
@@ -291,5 +283,88 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       const rooms = await this.roomService.getPublicRooms();
       console.log(rooms);
       await this.server.to(socket.id).emit('pub_rooms', rooms);
+   }
+
+  @SubscribeMessage('inviteGame')
+   async onInviteGame(client: Socket, id_other: number) {
+      console.log('inviteGame');
+      const user2 = await this.userService.getById(id_other);
+      if(!user2){
+        this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not found");
+         return
+      }
+      if (this.checkClientInChallange(client)){
+         this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
+         return
+      }
+      if(this.checkUserInChallange(user2.id)){
+         this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
+         return
+      }
+      this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
+  }
+
+  @SubscribeMessage('acceptGame')
+   async onAcceptGame(socket: Socket, id: number) {
+      console.log('acceptGame');
+  }
+   removeChallangesByUserId(userId: number): void {
+     this.challanges = this.challanges.filter((c) => c.id_player1 != userId && c.id_player2 != userId);
+   }
+
+   checkUserInChallange(userId: number): boolean {
+     return this.challanges.some(
+       challenge =>
+         challenge.id_player1 === userId || challenge.id_player2 === userId,
+     );
+   }
+
+   checkClientInChallange(client: Socket): boolean {
+     for (const challenge of this.challanges) {
+       if (challenge.player1 === client || challenge.player2 === client) {
+         return true;
+       }
+     }
+     return false;
+   }
+
+   openChallenge(client: Socket, userId2: number) {
+     const user1 = client.data.user as User;
+     const user2 = this.userService.getById(userId2);
+     if (!user2) {
+       throw new Error('Target user not found');
+     }
+
+     // Check if client is already in a challenge
+     if (this.checkClientInChallange(client)) {
+       throw new Error('You are already in a challenge');
+     }
+
+     // Check if target user is already in a challenge
+     if (this.checkUserInChallange(userId2)) {
+       throw new Error('Target user is already in a challenge');
+     }
+
+     // // Create new challenge
+     // const challenge: MatchChallange = {
+     //   id_player1: user1.id,
+     //   id_player2: user2.id,
+     //   player1: client,
+     //   player2: null,
+     //   accept1: 0,
+     //   accept2: 0,
+     //   type: 0,
+     // };
+
+     // // Add challenge to list of challenges
+     // this.challanges.push(challenge);
+
+     // // Send challenge request to target user
+     // const challengeRequest = {
+     //   type: 'challengeRequest',
+     //   challengerId: user1.id,
+     //   challengerName: user1.username,
+     // };
+     // user2.socket.emit('gameEvent', challengeRequest);
    }
 }

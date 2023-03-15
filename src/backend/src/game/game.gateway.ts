@@ -30,7 +30,8 @@ export class GameGateway {
 
   handleDisconnect(client: Socket) {
     console.log(`Client disconnected: ${client.id}`);
-    this.usersInQueue = this.usersInQueue.filter((socket) => socket.id !== client.id);
+    this.usersInQueue = this.usersInQueue.filter((socket) => socket.id != client.id);
+    // this.challanges = this.challanges.filter((socket) => socket.id != userId && c.player2 != userId);
   }
 
   @SubscribeMessage('joinMatchMaking')
@@ -78,13 +79,5 @@ export class GameGateway {
     //this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
     this.matchService.updatePlayerInput(input.input[0],  input.input[1], client.data.user.id);
   }
-
-  // @SubscribeMessage('witchPlayerIam')
-  // async playerInput(client: Socket, input: { input: number[] }) { 
-  //   console.log('Game Gateway!!!! PlayerInput');
-  //   //console.log(client.data);
-  //   console.log('Data array:', input.input);
-  //   this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
-  // }
 }
 

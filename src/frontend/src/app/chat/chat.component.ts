@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateRoomComponent } from './rooms/create-room/create-room.component';
 import { JoinRoomComponent } from './rooms/join-room/join-room.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Router, NavigationEnd } from '@angular/router';
+import { CustomSocket } from '../sockets/custom-socket';
 
 @Component({
   selector: 'app-chat',
@@ -17,20 +19,29 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./chat.component.css'],
   encapsulation: ViewEncapsulation.None
 })
+
 export class ChatComponent implements OnInit, AfterViewInit {
   rooms$: Observable<RoomPaginateI> = this.chatService.getMyRooms();
   selectedRoom = null;
+  error_string = null;
   public user: any;
 
   constructor(
     private chatService: ChatService,
     private authService: AuthService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private socket: CustomSocket,
+    private readonly router: Router)
+  {}
 
   ngOnInit() {
     this.user = this.authService.getLoggedUser();
     this.chatService.emitPaginateRooms(10, 0);
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        console.log('You moved out of chat page');
+      }
+    });
   }
 
   ngAfterViewInit() {

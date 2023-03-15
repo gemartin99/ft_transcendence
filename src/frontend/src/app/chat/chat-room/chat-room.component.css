@@ -12,6 +12,13 @@ h3 {
   scrollbar-width: thin;
 }
 
+.error-message{
+    width: 100%;
+    text-align: center;
+    color: #ea0f38;
+    margin-top: -20px;
+}
+
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);

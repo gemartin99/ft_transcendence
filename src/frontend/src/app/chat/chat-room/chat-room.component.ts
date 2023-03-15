@@ -6,6 +6,7 @@ import { MessagePaginateI } from '../message/message.interface';
 import { RoomI } from '../rooms/room.interface';
 import { ChatService } from '../chat.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { CustomSocket } from '../../sockets/custom-socket';
 
 
 
@@ -17,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   @Input() chatRoom: RoomI;
+  error_string = null;
   @ViewChild('messages') private messagesScroller: ElementRef;
 
   // messages$: Observable<MessagePaginateI> = this.chatService.getMessages().pipe(
@@ -40,7 +42,15 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService,
+              private socket: CustomSocket) { }
+
+  ngOnInit() {
+    this.socket.on('chat_error', (errorMessage: string) => {
+      console.log('chat error received');
+      this.error_string = errorMessage;
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.chatService.leaveRoom(changes['chatRoom'].previousValue);
