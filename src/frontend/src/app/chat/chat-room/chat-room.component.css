@@ -13,10 +13,10 @@ h3 {
 }
 
 .error-message{
-    width: 100%;
-    text-align: center;
-    color: #ea0f38;
-    margin-top: -20px;
+  width: 100%;
+  text-align: center;
+  color: #ea0f38;
+  margin-top: -20px;
 }
 
 ::-webkit-scrollbar-track {

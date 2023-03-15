@@ -12,6 +12,7 @@ import { JoinRoomComponent } from './rooms/join-room/join-room.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router, NavigationEnd } from '@angular/router';
 import { CustomSocket } from '../sockets/custom-socket';
+import { MatchChallange } from '../game/match/match-challange/match-challange.interface';
 
 @Component({
   selector: 'app-chat',
@@ -24,6 +25,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   rooms$: Observable<RoomPaginateI> = this.chatService.getMyRooms();
   selectedRoom = null;
   error_string = null;
+  matchChallange: MatchChallange = null;
   public user: any;
 
   constructor(
@@ -42,6 +44,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
         console.log('You moved out of chat page');
       }
     });
+    this.socket.on('gameChallange', (gameChallange: MatchChallange) => {
+      this.matchChallange = gameChallange;
+      console.log('gameChallange received');
+    });
+    this.chatService.haveOpenChallange();
   }
 
   ngAfterViewInit() {
@@ -102,6 +109,18 @@ export class ChatComponent implements OnInit, AfterViewInit {
         overlayContainer.style.display = 'none';
       }
     });
+  }
+
+  acceptChallange()
+  {
+    this.matchChallange = null;
+    this.chatService.acceptChallange();
+  }
+
+  cancelChallange()
+  {
+    this.matchChallange = null;
+    this.chatService.cancelChallange();
   }
 }
 

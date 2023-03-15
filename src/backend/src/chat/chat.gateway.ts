@@ -296,84 +296,78 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       const other_online = await this.onlineUserService.findByUser(user2);
       console.log('other_online');
       console.log(other_online);
-      if(other_online.length === 0){
-        this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
-        return
-      }
-      if (this.checkClientInChallange(client)){
-         this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
-         return
-      }
-      if(this.checkUserInChallange(user2.id)){
-         this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
-         return
-      }
+      // if(other_online.length === 0){
+      //   this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
+      //   return
+      // }
+      // if (this.checkClientInChallange(client)){
+      //    this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
+      //    return
+      // }
+      // if(this.checkUserInChallange(user2.id)){
+      //    this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
+      //    return
+      // }
       // this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
       this.openChallenge(client, user2, other_online);
   }
 
-  @SubscribeMessage('acceptGame')
-   async onAcceptGame(socket: Socket, id: number) {
-      console.log('acceptGame');
+  @SubscribeMessage('acceptChallange')
+   async onAcceptChallange(client: Socket, id: number) {
+      console.log('acceptChallange');
   }
-   removeChallangesByUserId(userId: number): void {
-     this.challanges = this.challanges.filter((c) => c.id_player1 != userId && c.id_player2 != userId);
-   }
 
-   checkUserInChallange(userId: number): boolean {
+  @SubscribeMessage('cancelChallange')
+   async onCancelChallange(client: Socket, id: number) {
+      console.log('cancelChallange');
+      this.removeChallangesByUserId(client.data.user.id);
+  }
+
+  @SubscribeMessage('haveOpenChallange')
+   async onHaveOpenChallange(client: Socket) {
+      console.log('haveOpenChallange');
+      const challange_data = this.challanges.some(
+        challenge =>
+          challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
+      );
+      this.server.to(client.id).emit('gameChallange', challange_data);
+  }
+
+  removeChallangesByUserId(userId: number): void {
+   this.challanges = this.challanges.filter((c) => c.id_player1 != userId && c.id_player2 != userId);
+  }
+
+  checkUserInChallange(userId: number): boolean {
      return this.challanges.some(
        challenge =>
          challenge.id_player1 === userId || challenge.id_player2 === userId,
      );
-   }
+  }
 
-   checkClientInChallange(client: Socket): boolean {
+  checkClientInChallange(client: Socket): boolean {
      for (const challenge of this.challanges) {
-       if (challenge.player1 === client || challenge.player2 === client) {
+       if (challenge.player1 === client.id || challenge.player2 === client.id) {
          return true;
        }
      }
      return false;
-   }
+  }
 
-   openChallenge(client: Socket, other_user: User, other_online: any) {
-     this.server.to(client.id).emit('chat_error', "in openChallenge");
-     // const user1 = client.data.user as User;
-     // const user2 = this.userService.getById(userId2);
-     // if (!user2) {
-     //   throw new Error('Target user not found');
-     // }
+  openChallenge(client: Socket, other_user: User, other_online: any) {
+     // Create new challenge
+     const challenge: MatchChallange = {
+       id_player1: client.data.user.id,
+       id_player2: other_user.id,
+       player1: client.id,
+       player2: null,
+       name1: client.data.user.name,
+       name2: other_user.name,
+       accept1: 1,
+       accept2: 0,
+       type: 1,
+     };
 
-     // // Check if client is already in a challenge
-     // if (this.checkClientInChallange(client)) {
-     //   throw new Error('You are already in a challenge');
-     // }
-
-     // // Check if target user is already in a challenge
-     // if (this.checkUserInChallange(userId2)) {
-     //   throw new Error('Target user is already in a challenge');
-     // }
-
-     // // Create new challenge
-     // const challenge: MatchChallange = {
-     //   id_player1: user1.id,
-     //   id_player2: user2.id,
-     //   player1: client,
-     //   player2: null,
-     //   accept1: 0,
-     //   accept2: 0,
-     //   type: 0,
-     // };
-
-     // // Add challenge to list of challenges
-     // this.challanges.push(challenge);
-
-     // // Send challenge request to target user
-     // const challengeRequest = {
-     //   type: 'challengeRequest',
-     //   challengerId: user1.id,
-     //   challengerName: user1.username,
-     // };
-     // user2.socket.emit('gameEvent', challengeRequest);
+     this.challanges.push(challenge);
+     this.server.to(client.id).emit('gameChallange', challenge);
    }
 }

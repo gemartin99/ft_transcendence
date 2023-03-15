@@ -2,6 +2,10 @@
   <div class="container">
     <div class="card">
       <div class="card-content">
+        <div *ngIf="matchChallange" class="notification is-challange">
+            Player Marza-ga <strong>Challange you</strong> for a classic crazy-pong game &nbsp;<button (click)="acceptChallange()" class="button is-small is-primary">Accept</button>&nbsp;
+            <button (click)="cancelChallange()" class="button is-small is-danger">Cancel</button>
+        </div>
         <div class="columns">
           <div class="column is-one-third">
             <div>

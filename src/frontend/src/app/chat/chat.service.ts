@@ -86,4 +86,22 @@ export class ChatService {
   {
     this.socket.emit('inviteGame', id);
   }
+
+  acceptChallange()
+  {
+    console.log(`accept challange pressed`);
+    this.socket.emit('acceptChallange');
+  }
+
+  cancelChallange()
+  {
+    console.log(`cancel challange pressed`);
+    this.socket.emit('cancelChallange');
+  }
+
+  haveOpenChallange()
+  {
+    console.log(`cancel challange pressed`);
+    this.socket.emit('haveOpenChallange');
+  }
 }
