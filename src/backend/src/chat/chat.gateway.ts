@@ -123,6 +123,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      console.log('I take room messajes');
      console.log(messages);
      messages.meta.currentPage = messages.meta.currentPage - 1;
+
+     // Replace text of messages sent by blocked users with "Blocked"
+     const blockedUsers = await this.userService.findBlockedUsers(socket.data.user.id);
+     messages.items.forEach(message => {
+       const isBlocked = blockedUsers.some(user => user.id === message.user.id);
+       if (isBlocked) {
+         message.text = "Blocked";
+       }
+     });
+     
      // Save Connection to Room
      console.log('Before this.joinedRoomService.create');
      await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
@@ -147,6 +157,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      console.log('I take room messajes');
      console.log(messages);
      messages.meta.currentPage = messages.meta.currentPage - 1;
+
+
+     // Replace text of messages sent by blocked users with "Blocked"
+     const blockedUsers = await this.userService.findBlockedUsers(socket.data.user.id);
+     messages.items.forEach(message => {
+       const isBlocked = blockedUsers.some(user => user.id === message.user.id);
+       if (isBlocked) {
+         message.text = "Blocked";
+       }
+     });
+
      // Save Connection to Room
      console.log('Before this.joinedRoomService.create');
      await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
@@ -188,7 +209,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      const filteredJoinedUsers = joinedUsers.filter(
        (user) => !user.user.blocked_users.find((blockedUser) => blockedUser.id === socket.data.user.id)
      );
-     
+
      //TODO: Send new Message to all joined Users of the room (currently online)
      for(const user of filteredJoinedUsers) {
        console.log('Inside the for');

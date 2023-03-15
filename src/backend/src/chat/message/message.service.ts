@@ -6,6 +6,8 @@ import { MessageI } from './message.interface';
 import { RoomI } from '../rooms/room.interface';
 import { Repository } from 'typeorm';
 import { RoomService } from '../rooms/room.service';
+import { UserService } from '../../user/user.service';
+import { In } from 'typeorm';
 
 @Injectable()
 export class MessageService {
@@ -13,6 +15,7 @@ export class MessageService {
 
   constructor(
     private roomService: RoomService,
+    private userService: UserService,
     @InjectRepository(MessageEntity)
     private readonly messageRepository: Repository<MessageEntity>
   ) {}
@@ -35,6 +38,20 @@ export class MessageService {
 
     return paginate(query, options);
   }
+
+// async findMessagesForRoomExcludingBlockedUsers(clientId: number, room: RoomI, options: IPaginationOptions): Promise<Pagination<MessageI>> {   
+//   const blocked_users = await this.userService.findBlockedUsers(clientId);
+
+//   const query = this.messageRepository
+//     .createQueryBuilder('message')
+//     .leftJoin('message.room', 'room')
+//     .where('room.id = :roomId', { roomId: room.id })
+//     .andWhere('message.user NOT IN (:...blockedUserIds)', { blockedUserIds: blocked_users.map(user => user.id) })
+//     .leftJoinAndSelect('message.user', 'user')
+//     .orderBy('message.created_at', 'DESC');
+
+//   return paginate(query, options);
+// }
 
   async processCommand(message: MessageI) {
     if (message.text.startsWith('/')) {
