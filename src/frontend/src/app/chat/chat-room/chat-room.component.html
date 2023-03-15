@@ -24,11 +24,11 @@
 
     <!-- Add Message -->
     <div>
+      <div *ngIf="error_string" class="error-message">{{ error_string }}</div>
       <div class="field has-addons">
           <div class="control has-icons-left has-icons-right is-expanded">
               <input type="text" class="input" [formControl]="chatMessage">
           </div>
-          <div *ngIf="error_string" class="error-message">{{ error_string }}</div>
           <p class="control">
               <button [disabled]="!chatMessage.valid" (click)="sendMessage()" class="button is-info">Send</button>
           </p>

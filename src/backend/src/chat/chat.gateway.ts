@@ -293,6 +293,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not found");
          return
       }
+      const other_online = await this.onlineUserService.findByUser(user2);
+      console.log('other_online');
+      console.log(other_online);
+      if(other_online.length === 0){
+        this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
+        return
+      }
       if (this.checkClientInChallange(client)){
          this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
          return
@@ -301,7 +308,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
          this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
          return
       }
-      this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
+      // this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
+      this.openChallenge(client, user2, other_online);
   }
 
   @SubscribeMessage('acceptGame')
@@ -328,22 +336,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      return false;
    }
 
-   openChallenge(client: Socket, userId2: number) {
-     const user1 = client.data.user as User;
-     const user2 = this.userService.getById(userId2);
-     if (!user2) {
-       throw new Error('Target user not found');
-     }
+   openChallenge(client: Socket, other_user: User, other_online: any) {
+     this.server.to(client.id).emit('chat_error', "in openChallenge");
+     // const user1 = client.data.user as User;
+     // const user2 = this.userService.getById(userId2);
+     // if (!user2) {
+     //   throw new Error('Target user not found');
+     // }
 
-     // Check if client is already in a challenge
-     if (this.checkClientInChallange(client)) {
-       throw new Error('You are already in a challenge');
-     }
+     // // Check if client is already in a challenge
+     // if (this.checkClientInChallange(client)) {
+     //   throw new Error('You are already in a challenge');
+     // }
 
-     // Check if target user is already in a challenge
-     if (this.checkUserInChallange(userId2)) {
-       throw new Error('Target user is already in a challenge');
-     }
+     // // Check if target user is already in a challenge
+     // if (this.checkUserInChallange(userId2)) {
+     //   throw new Error('Target user is already in a challenge');
+     // }
 
      // // Create new challenge
      // const challenge: MatchChallange = {
