@@ -5,8 +5,8 @@
       <span style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
         <h2>{{chatRoom.name}}</h2>
         <span style="display: flex; flex-direction: row; align-items: center;">
-          <button (click)="closeRoom(chatRoom.id)">Close</button>
-          <p style="margin-left: 10px;">{{chatRoom.updated_at | date}}</p>
+          <button *ngIf="chatRoom.name !== 'General'" (click)="closeRoom(chatRoom.id)">Close</button>
+          <!-- <p style="margin-left: 10px;">{{chatRoom.updated_at | date}}</p> -->
         </span>
       </span>
       <span>
