@@ -20,7 +20,11 @@ import { MessageService } from './message/message.service';
 import { MessageI } from './message/message.interface';
 import { JoinedRoomI } from './joined-room/joined-room.interface';
 import { MatchChallange } from '../game/match/match-challange/match-challange.interface';
+import { MatchService } from '../game/match/match.service';
+import { MatchEntity } from '../game/match/match.entity';
 import { User } from '../user/user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 
 @WebSocketGateway({ cors: true })
@@ -32,11 +36,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   challanges: MatchChallange[] = [];
 
   constructor(
+      @InjectRepository(MatchEntity)
+      private readonly matchRepository: Repository<MatchEntity>,
       private authService: AuthService,
       private userService: UserService,
       private roomService: RoomService,
       private onlineUserService: OnlineUserService,
       private joinedRoomService: JoinedRoomService,
+      private matchService: MatchService,
       private messageService: MessageService
   ){}
 
@@ -309,12 +316,40 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       //    return
       // }
       // this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
-      this.openChallenge(client, user2, other_online);
+      this.openChallenge(client, user2, other_online[0]);
   }
 
   @SubscribeMessage('acceptChallange')
-   async onAcceptChallange(client: Socket, id: number) {
+   async onAcceptChallange(client: Socket) {
       console.log('acceptChallange');
+      const challange_data = this.challanges.find(
+        challenge =>
+          challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
+      );
+      if (!challange_data) {
+        return; // no challenge found for the user
+      }
+
+      console.log("in acceptChallange challange_data is:");
+      console.log(challange_data);
+      
+
+      this.removeChallangesByUserId(challange_data.id_player1);
+      // const player1 = await this.userService.getById(challange_data.id_player1);
+
+      console.log("in acceptChallange challange_data.socketChallanger.data.user:");
+      console.log(challange_data.socketChallanger.data.user);
+      console.log("in acceptChallange client.data.user:");
+      console.log(client.data.user);
+
+      // console.log(`Starting match between ${player1.id} and ${client.data.user.id}`);
+      const match = await this.matchService.createMatch(challange_data.socketChallanger.data.user as User, client.data.user as User);
+      const message = 'You have been paired for a match';
+      // this.server.to(player1).emit('matchmakingPair', match.id);
+      client.emit('matchmakingPair', match.id);
+      challange_data.socketChallanger.emit('matchmakingPair', match.id);
+      await this.matchService.initMatch(match.id, challange_data.socketChallanger, client);
+      this.matchService.gameLoop(match.id);
   }
 
   @SubscribeMessage('cancelChallange')
@@ -359,15 +394,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        id_player1: client.data.user.id,
        id_player2: other_user.id,
        player1: client.id,
-       player2: null,
+       player2: other_online.socketId,
        name1: client.data.user.name,
        name2: other_user.name,
        accept1: 1,
        accept2: 0,
        type: 1,
+       socketChallanger: client,
      };
 
      this.challanges.push(challenge);
+     challenge.socketChallanger = null;
      this.server.to(client.id).emit('gameChallange', challenge);
+     console.log('In open Challange the other socket is ' + other_online.socketId)
+     this.server.to(other_online.socketId).emit('gameChallange', challenge);
+     challenge.socketChallanger = client;
    }
 }

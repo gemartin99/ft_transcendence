@@ -10,4 +10,5 @@ export interface MatchChallange {
   accept1: number;
   accept2: number;
   type: number;
+  socketChallanger: Socket;
 }

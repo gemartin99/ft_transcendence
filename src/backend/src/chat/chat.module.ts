@@ -17,10 +17,13 @@ import { OperatorService } from './operator/operator.service';
 import { OwnerService } from './owner/owner.service';
 import { OperatorEntity } from './operator/operator.entity';
 import { OwnerEntity } from './owner/owner.entity';
+import { MatchService } from '../game/match/match.service';
+import { MatchEntity } from '../game/match/match.entity';
+
 
 
 @Module({
-  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity, OperatorEntity, OwnerEntity])],
-  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService, OperatorService, OwnerService]
+  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity, OperatorEntity, OwnerEntity, MatchEntity])],
+  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService, OperatorService, OwnerService, MatchService]
 })
 export class ChatModule {} 

@@ -18,6 +18,7 @@ export class MatchService {
   ) {}
 
   async createMatch(player1: User, player2: User): Promise<MatchEntity> {
+    console.log("INSIDE CREATE MATCH!!!!!!!!!:");
     const newMatch = new MatchEntity();
     newMatch.status = 0;
     newMatch.player1 = player1;

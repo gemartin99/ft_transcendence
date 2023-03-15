@@ -34,7 +34,14 @@ export class ChatComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private socket: CustomSocket,
     private readonly router: Router)
-  {}
+  {
+    this.socket.fromEvent('matchmakingPair').subscribe(message => {
+      console.log('Matchmaking pair:', message);
+      this.router.navigate(['/game/match', message]);
+      this.matchChallange = null
+      // Do something with the message
+    }); 
+  }
 
   ngOnInit() {
     this.user = this.authService.getLoggedUser();
