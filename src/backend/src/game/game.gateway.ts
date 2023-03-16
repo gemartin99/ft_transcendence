@@ -11,6 +11,10 @@ import { UserService } from '../user/user.service';
 import { UnauthorizedException, OnModuleInit } from '@nestjs/common';
 import { MatchService } from './match/match.service';
 import { User } from '../user/user.entity';
+import { OnlineUserService } from '../onlineuser/onlineuser.service';
+import { MatchChallange } from './match/match-challange/match-challange.interface';
+import { MatchEntity } from './match/match.entity';
+
 
 
 
@@ -21,11 +25,13 @@ export class GameGateway {
 
   title: string[] = [];
   usersInQueue: Socket[] = [];
+  challanges: MatchChallange[] = [];
 
   constructor(
       private authService: AuthService,
       private userService: UserService,
       private matchService: MatchService,
+      private onlineUserService: OnlineUserService,
   ){}
 
   handleDisconnect(client: Socket) {
@@ -79,5 +85,124 @@ export class GameGateway {
     //this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
     this.matchService.updatePlayerInput(input.input[0],  input.input[1], client.data.user.id);
   }
+
+  @SubscribeMessage('inviteGame')
+   async onInviteGame(client: Socket, id_other: number) {
+      console.log('inviteGame');
+      const user2 = await this.userService.getById(id_other);
+      if(!user2){
+        this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not found");
+         return
+      }
+      const other_online = await this.onlineUserService.findByUser(user2);
+      console.log('other_online');
+      console.log(other_online);
+      // if(other_online.length === 0){
+      //   this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
+      //   return
+      // }
+      // if (this.checkClientInChallange(client)){
+      //    this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
+      //    return
+      // }
+      // if(this.checkUserInChallange(user2.id)){
+      //    this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
+      //    return
+      // }
+      // this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
+      this.openChallenge(client, user2, other_online[0]);
+  }
+
+  @SubscribeMessage('acceptChallange')
+   async onAcceptChallange(client: Socket) {
+      console.log('acceptChallange');
+      const challange_data = this.challanges.find(
+        challenge =>
+          challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
+      );
+      if (!challange_data) {
+        return; // no challenge found for the user
+      }
+
+      console.log("in acceptChallange challange_data is:");
+      console.log(challange_data);
+      
+
+      this.removeChallangesByUserId(challange_data.id_player1);
+      // const player1 = await this.userService.getById(challange_data.id_player1);
+
+      console.log("in acceptChallange challange_data.socketChallanger.data.user:");
+      console.log(challange_data.socketChallanger.data.user);
+      console.log("in acceptChallange client.data.user:");
+      console.log(client.data.user);
+
+      // console.log(`Starting match between ${player1.id} and ${client.data.user.id}`);
+      const match = await this.matchService.createMatch(challange_data.socketChallanger.data.user as User, client.data.user as User);
+      const message = 'You have been paired for a match';
+      // this.server.to(player1).emit('matchmakingPair', match.id);
+      client.emit('matchmakingPair', match.id);
+      challange_data.socketChallanger.emit('matchmakingPair', match.id);
+      await this.matchService.initMatch(match.id, challange_data.socketChallanger, client);
+      this.matchService.gameLoop(match.id);
+  }
+
+  @SubscribeMessage('cancelChallange')
+   async onCancelChallange(client: Socket, id: number) {
+      console.log('cancelChallange');
+      this.removeChallangesByUserId(client.data.user.id);
+  }
+
+  @SubscribeMessage('haveOpenChallange')
+   async onHaveOpenChallange(client: Socket) {
+      console.log('haveOpenChallange');
+      const challange_data = this.challanges.some(
+        challenge =>
+          challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
+      );
+      this.server.to(client.id).emit('gameChallange', challange_data);
+  }
+
+  removeChallangesByUserId(userId: number): void {
+   this.challanges = this.challanges.filter((c) => c.id_player1 != userId && c.id_player2 != userId);
+  }
+
+  checkUserInChallange(userId: number): boolean {
+     return this.challanges.some(
+       challenge =>
+         challenge.id_player1 === userId || challenge.id_player2 === userId,
+     );
+  }
+
+  checkClientInChallange(client: Socket): boolean {
+     for (const challenge of this.challanges) {
+       if (challenge.player1 === client.id || challenge.player2 === client.id) {
+         return true;
+       }
+     }
+     return false;
+  }
+
+  openChallenge(client: Socket, other_user: User, other_online: any) {
+     // Create new challenge
+     const challenge: MatchChallange = {
+       id_player1: client.data.user.id,
+       id_player2: other_user.id,
+       player1: client.id,
+       player2: other_online.socketId,
+       name1: client.data.user.name,
+       name2: other_user.name,
+       accept1: 1,
+       accept2: 0,
+       type: 1,
+       socketChallanger: client,
+     };
+
+     this.challanges.push(challenge);
+     challenge.socketChallanger = null;
+     this.server.to(client.id).emit('gameChallange', challenge);
+     console.log('In open Challange the other socket is ' + other_online.socketId)
+     this.server.to(other_online.socketId).emit('gameChallange', challenge);
+     challenge.socketChallanger = client;
+   }
 }
 

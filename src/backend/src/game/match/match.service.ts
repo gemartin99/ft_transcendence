@@ -141,6 +141,13 @@ export class MatchService {
       throw new Error(`Match with id ${idMatch} not found`);
     }
 
+    // console.log("Inside gameLoop idmatch gameobj: ")
+    // console.log(game);
+    // console.log("Inside gameLoop idmatch users obj: ")
+    // console.log(users);
+
+
+
     game.isPaused = false;
     this.resetBall(game);
     while (!game.isGameOver) {
@@ -155,9 +162,13 @@ export class MatchService {
         // const gameState = this.getGameState(game);
         users.player1.emit('gameState', game);
         users.player2.emit('gameState', game);
+        console.log("Inside gameLoop socket player 1: " + users.player1.id)
+        console.log("Inside gameLoop socket player 2: " + users.player2.id)
         for (const spectator of users.spectators) {
           spectator.emit('gameState', game);
+          console.log("Inside gameLoop socket spectator : " + spectator.id)
         }
+        console.log(game)
         // console.log('inside game loop of match: ' + game.idMatch)
       }
 
@@ -180,10 +191,12 @@ export class MatchService {
   updatePlayerInput(matchId: number, input: number, player: number)
   {
     console.log('Entering to updatePlayerInput');
+    console.log('matchId:' + matchId + 'player:' + player);
     const matchData = this.games.get(matchId);
     if (matchData) {
       if(player == parseInt(matchData.player1.id))
       {
+        console.log('Entering to updatePlayerInput PLAYER1');
         const playerData = matchData.player1;
         playerData.input = input;
       }
@@ -191,10 +204,17 @@ export class MatchService {
       {
         if(player == parseInt(matchData.player2.id))
         {
+          console.log('Entering to updatePlayerInput PLAYER2');
           const playerData = matchData.player2;
           playerData.input = input;
         }
+        else
+          console.log('Entering to updatePlayerInput NO PLAYER');
       }
+    }
+    else
+    {
+      console.log('NO MATCH DATA!!!!!!!');
     }
   }
 
@@ -210,23 +230,28 @@ export class MatchService {
   // }
 
   updateGameState(game: MatchData) {
+    console.log('Entering to updateGameState');
     // Move paddle1 up
     if (game.player1.input == 1 && game.paddle1.y - 3 >= 0) {
+      console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle1.y -= 3;
     }
 
     // Move paddle2 up
     if (game.player2.input == 1 && game.paddle2.y - 3 >= 0) {
+      console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle2.y -= 3;
     }
 
     // Move paddle1 down
     if (game.player1.input == -1 && game.paddle1.y + game.paddle1.height + 3 <= 750) {
+      console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle1.y += 3;
     }
 
     // Move paddle2 down
     if (game.player2.input == -1 && game.paddle2.y + game.paddle2.height + 3 <= 750) {
+      console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle2.y += 3;
     }
   }
