@@ -180,14 +180,8 @@ export class MatchComponent implements AfterViewInit, OnInit {
     this.context.textAlign = 'center';
     this.context.textBaseline = 'middle';
 
-    console.log('IN DRAW MATCH RESULT');
-    console.log('Player1 Score: ' +  gameState.player1.score);
-    console.log('Player2 Score: ' +  gameState.player2.score);
-    console.log('Player1 Name: ' +  gameState.player1.name);
-    console.log('Player2 Name: ' +  gameState.player2.name);
-
     // Draw text
-    const winnerName = gameState.player1.score > gameState.player2.score ? gameState.player1.name : gameState.player2.name;
+    const winnerName = gameState.score1 > gameState.score2 ? gameState.player1.name : gameState.player2.name;
     const text = `${winnerName} wins!`;
     this.context.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
 
