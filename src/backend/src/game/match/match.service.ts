@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../user/user.entity';
+import { UserService } from '../../user/user.service';
 import { MatchEntity } from './match.entity';
 import { MatchData } from './match-data/match-data.interface';
 import { MatchUsers } from './match-users/match-users.interface';
@@ -15,6 +16,7 @@ export class MatchService {
   constructor(
     @InjectRepository(MatchEntity)
     private readonly matchRepository: Repository<MatchEntity>,
+    private userService: UserService,
   ) {}
 
   async createMatch(player1: User, player2: User): Promise<MatchEntity> {
@@ -31,24 +33,51 @@ export class MatchService {
 
   async saveMatchResult(game: MatchData)
   {
+    console.log('IN SAVING MATCH DATA');
+    console.log(game);
     // Retrieve the match entity from the database
     const match = await this.matchRepository.findOne({
       where: { id: game.idMatch }
     });
 
     if (match) {
+      //Get players
+      const player1 = await this.userService.getById(parseInt(game.player1.id));
+      const player2 = await this.userService.getById(parseInt(game.player2.id));
+      
       // Update the match entity with the new scores and winner
       match.player1Score = game.score1;
       match.player2Score = game.score2;
       if(match.player1Score > match.player2Score)
+      {
+         console.log('Player1 has won: ' + game.player1.name);
          match.winner = parseInt(game.player1.id);
+         player1.score += (100 + game.score1);
+         player2.score += 10;
+         player1.wins += 1;
+         player2.losses += 1;
+      }
       else if(match.player2Score > match.player1Score)
+      {
+         console.log('Player2 has won: ' + game.player2.name);
          match.winner = parseInt(game.player2.id);
+         player2.score += (100 + game.score2);
+         player1.score += (10 + game.score1);
+         player2.wins += 1;
+         player1.losses += 1;
+      }
       else
         match.winner = 0;
       match.status = 1;
       // Save the updated match entity back to the database
       await this.matchRepository.save(match);
+
+      player1.is_playing = 0;
+      player2.is_playing = 0;
+      player1.played += 1;
+      player2.played += 1;
+      await this.userService.save(player1);
+      await this.userService.save(player2);
     }
   }
 

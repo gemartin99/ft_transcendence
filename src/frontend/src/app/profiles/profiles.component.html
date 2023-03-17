@@ -9,7 +9,9 @@
             </figure>
             <p class="title is-4 has-text-centered">{{profile_user.name}}</p>
             <div class="content">
+              <p>Rank Position: {{userRank}}</p>
               <p>Played Games: {{profile_user.played}}</p>
+              <p>Player Score: {{profile_user.score}}</p>
               <p>Total Wins: {{profile_user.wins}}</p>
               <p>Total Losses: {{profile_user.losses}}</p>
             </div>
@@ -60,7 +62,7 @@
                   <td>{{match.player1Score}}</td>
                   <td>{{match.player2Score}}</td>
                   <td>
-                    {{ match.winner === 0 ? '-' : match.winner === 1 ? match.player1.name : match.player2.name }}
+                    {{ match.winner === 0 ? '-' : match.winner == match.player1.id ? match.player1.name : match.player2.name }}
                   </td>
                   <td>
                     <ng-container *ngIf="match.status === 0">
