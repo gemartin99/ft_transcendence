@@ -46,7 +46,11 @@ export class AuthController {
                 {
                     
                     if(!user.twofactor)
+                    {
+                        user.is_online = true;
+                        await this.userService.save(user);
                         return res.redirect('http://crazy-pong.com'); //User is totaly registered and not have two-factor auth
+                    }
                     else
                         return res.redirect('http://crazy-pong.com/two-factor'); //User is totaly registered but have two-factor auth
                 }
@@ -137,11 +141,16 @@ export class AuthController {
     }
 
     @Get('/logout')
+    @UseGuards(AuthGuard('jwt'))
     async logoutEndpoint(@Req() req, @Res() res) {
-        console.log('Api dentro de logout');
+        let user: User = await this.userService.getBy42Id(req.user.thirdPartyId);
+        console.log('INSIDE BACKEND LOGOUT');
+        console.log(req.user);
+        user.is_playing = 0;
+        user.is_online = false;
+        user.twofactor_valid = false;
+        await this.userService.save(user);
         res.clearCookie('crazy-pong', {domain:'crazy-pong.com', path:'/'});
-        // let user: User = await this.userService.getBy42Id(req.user.id42);
-        //this.userService.setUserOffline(req.user);
         return res.json({ message: 'Logged out successfully' });
     }
 }

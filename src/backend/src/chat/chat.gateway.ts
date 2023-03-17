@@ -84,6 +84,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         rooms.meta.currentPage = rooms.meta.currentPage - 1;
         // Save connection to DB
         await this.onlineUserService.create({ socketId: socket.id, user });
+        await this.userService.setUserOnlineById(user.id);
         return this.server.to(socket.id).emit('rooms', rooms);
       }
     } catch {
@@ -93,6 +94,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
    
   async handleDisconnect(socket: Socket) {
     // remove connection from DB
+    this.userService.setUserOfflineById(socket.data.user.id);
     await this.onlineUserService.deleteBySocketId(socket.id);
     socket.disconnect();
   }

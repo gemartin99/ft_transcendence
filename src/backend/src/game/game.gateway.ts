@@ -37,6 +37,7 @@ export class GameGateway {
   handleDisconnect(client: Socket) {
     console.log(`Client disconnected: ${client.id}`);
     this.usersInQueue = this.usersInQueue.filter((socket) => socket.id != client.id);
+    this.userService.setUserOfflineById(client.data.user.id);
     // this.challanges = this.challanges.filter((socket) => socket.id != userId && c.player2 != userId);
   }
 

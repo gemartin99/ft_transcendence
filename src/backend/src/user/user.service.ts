@@ -57,10 +57,23 @@ export class UserService {
 		return await this.update(user);
 	}
 
+	async setUserOfflineById(userId: number) {
+		return this.userRepository.update(userId, {
+		is_online: false
+		});
+	}
+
+
 	async setUserOnline(user: User)
 	{
 		user.is_online = true;
 		return await this.update(user);
+	}
+
+	async setUserOnlineById(userId: number) {
+		return this.userRepository.update(userId, {
+		is_online: true
+		});
 	}
 
 	async setUserAvatar(user: User, filename: string)
