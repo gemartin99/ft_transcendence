@@ -24,7 +24,7 @@ export class EditProfileComponent implements OnInit {
       twofactor: [false]
     });
 
-    this.authService.loadLoggedUser().then(async () => {
+    this.authService.refreshLoggedUser().then(async () => {
       this.user = await this.authService.getLoggedUser();
     });
   }
@@ -42,18 +42,24 @@ export class EditProfileComponent implements OnInit {
   }
 
   async updateUser(formData2: any) {
+    // await this.apiService.updateTwofactor(formData2.twofactor).subscribe(() => {
+    //   console.log('Two factor updated successfully');
+    // });
     console.log(formData2);
     if (this.avatarFile) {
-      const formData = new FormData();
-      formData.append('file', this.avatarFile);
+        const formData = new FormData();
+        formData.append('file', this.avatarFile);
+        formData.append('id', this.user.id);
         await this.apiService.uploadAvatar(formData).subscribe((response) => {
-          console.log('avatar uploaded');
+        console.log('avatar uploaded');
       });
     } 
-    await this.apiService.updateTwofactor(formData2.twofactor).subscribe(() => {
-      console.log('Two factor updated successfully');
-    });
     if(!this.fileTypeError)
+    {
+      this.authService.refreshLoggedUser().then(async () => {
+        this.user = await this.authService.getLoggedUser();
+      });
       this.router.navigate(['/profile']);
+    }
   }
 }

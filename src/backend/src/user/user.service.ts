@@ -65,8 +65,14 @@ export class UserService {
 
 	async setUserAvatar(user: User, filename: string)
 	{
-		user.avatar = filename;
-		return await this.update(user);
+		console.log('In setUserAvatar');
+		console.log(user);
+		console.log(filename);
+		return await this.userRepository.update(user.id, {
+		avatar: filename
+		});
+		// user.avatar = filename;
+		// return await this.update(user);
 	}
 
 	async setUserInPlay(user: User, matchId: number)

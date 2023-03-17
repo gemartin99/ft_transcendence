@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Get, Res, Post, Request, Put, Query, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Param, Get, Req, Res, Post, Request, Put, Query, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -37,23 +37,20 @@ export class AvatarController {
     constructor(private userService: UserService){
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Post('upload')
+    @UseGuards(AuthGuard('jwt'))
     @UseInterceptors(FileInterceptor('file', storage))
-    async uploadFile(@UploadedFile() file, @Request() req): Promise<Object> {
+    @UseGuards(AuthGuard('jwt'))
+    async uploadFile(@UploadedFile() file, @Body() body, @Req() req): Promise<Object> {
       console.log('uploadFile');
       try {
-          console.log('try');
-          console.log(file.filename);
-          const user: User = await this.userService.getById(req.user.id);
-          console.log('try2');
+          console.log(req)
+          const user: User = await this.userService.getById(body.id);
           await this.userService.setUserAvatar(user, file.filename);
-          console.log('try3');
           return null;
       } catch (error) {
-          console.log('catch 1');
           console.error('Error uploading file:', error);
-          throw error;
+          return null;
       }
       console.log('here 1');
       return null;

@@ -3,7 +3,7 @@
     <div class="columns">
       <div class="column is-one-third">
         <div class="card">
-          <div class="card-content" *ngIf="profile_user">
+          <div class="card-content profile-card" *ngIf="profile_user">
             <figure class="image is-128x128 is-centered">
               <img class="is-rounded" [src]="profile_user.avatar ? 'http://crazy-pong.com:3000/avatar/' + profile_user.avatar : 'assets/avatar.jpg'">
             </figure>

@@ -44,6 +44,12 @@ export class AuthService {
       return this.user;
   }
 
+
+  async refreshLoggedUser() {
+      this.user = await this.httpClient.get<User>(`${this.API_SERVER}/auth/user`, { withCredentials: true }).toPromise();
+      return this.user;
+  }
+
   async logout(): Promise<number>{
     document.cookie = "crazy-pong=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     console.log('auth service the frontend logout()');

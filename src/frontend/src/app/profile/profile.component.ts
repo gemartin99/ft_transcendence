@@ -40,6 +40,7 @@ export class ProfileComponent implements OnInit {
     this.apiService.getUserRank(this.user.id).subscribe(rank => {
       this.userRank = rank;
     });
+    this.user = await this.authService.refreshLoggedUser();
   }
 
   //test
