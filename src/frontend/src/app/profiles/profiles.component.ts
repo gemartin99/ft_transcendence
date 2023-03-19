@@ -14,7 +14,9 @@ export class ProfilesComponent implements OnInit {
   public profile_user: any;
   public userMatches: any;
   public userRank: any;
-  //public user: any;
+  public archivements: number[];
+  public isfriend: boolean = false;
+  public isblocked: boolean = false; 
 
   constructor(private authService: AuthService, private apiService: ApiService, private route: ActivatedRoute) { }
 
@@ -32,6 +34,31 @@ export class ProfilesComponent implements OnInit {
     this.apiService.getUserRank(parseInt(id)).subscribe(rank => {
       this.userRank = rank;
     });
+    this.apiService.getArchivements(parseInt(id)).subscribe((response) => {
+      this.archivements = response;
+      console.log('archivements:');
+      console.log(this.archivements);
+    });
     console.log(this.profile_user);
+  }
+
+  addFriend(id)
+  {
+    this.isfriend = true;
+  }
+
+  blockUser(id)
+  {
+    this.isblocked = true;
+  }
+
+  removeFriend(id)
+  {
+    this.isfriend = false;
+  }
+
+  unblockUser(id)
+  {
+    this.isblocked = false;
   }
 }

@@ -10,38 +10,62 @@
             <p class="title is-4 has-text-centered">{{profile_user.name}}</p>
             <div class="content">
               <p>Rank Position: {{userRank}}</p>
-              <p>Played Games: {{profile_user.played}}</p>
               <p>Player Score: {{profile_user.score}}</p>
+              <p>Played Games: {{profile_user.played}}</p>
               <p>Total Wins: {{profile_user.wins}}</p>
               <p>Total Losses: {{profile_user.losses}}</p>
             </div>
+             <button *ngIf="!isfriend" class="button is-primary" (click)="addFriend(profile_user.id)">Add Friend</button>
+             <button *ngIf="isfriend" class="button is-warning" (click)="removeFriend(profile_user.id)">Remove Friend</button>
+             <button *ngIf="!isblocked" class="button is-danger" (click)="blockUser(profile_user.id)">Block User</button>
+             <button *ngIf="isblocked" class="button is-warning" (click)="unblockUser(profile_user.id)">Unblock User</button>
           </div>
         </div>
       </div>
       <div class="column">
-        <div class="card">
-          <div class="card-content">
-            <p class="title is-5">Achievements</p>
+         <div class="card" *ngIf="archivements?.length !== 0">
+          <div class="card-content" >
+            <p class="title is-5">Archivements</p>
             <div class="columns is-multiline">
-              <div class="column is-one-quarter">
+              <div class="column is-one-fifth" *ngIf="archivements?.includes(1)">
                 <div class="achievement">
-                  <img src="/assets/archivement1.png" alt="Achievement Name">
-                  <p class="subtitle is-6">Noobie</p>
+                  <img src="/assets/archivement1.png" class="archivements" title="You played your first match">
                 </div>
               </div>
-              <div class="column is-one-quarter">
+              <div class="column is-one-fifth" *ngIf="archivements?.includes(2)">
                 <div class="achievement">
-                  <img src="/assets/archivement2.png" alt="Achievement Name">
-                  <p class="subtitle is-6">Rockie</p>
+                  <img src="/assets/archivement2.png" class="archivements" title="In you first match, you ended whit a victory">
+                </div>
+              </div>
+              <div class="column is-one-fifth" *ngIf="archivements?.includes(3)">
+                <div class="achievement">
+                  <img src="/assets/archivement3.png" class="archivements" title="You played 10 matches">
+                </div>
+              </div>
+              <div class="column is-one-fifth" *ngIf="archivements?.includes(4)">
+                <div class="achievement">
+                  <img src="/assets/archivement4.png" class="archivements" title="You played 50 matches">
+                </div>
+              </div>
+              <div class="column is-one-fifth" *ngIf="archivements?.includes(4)">
+                <div class="achievement">
+                  <img src="/assets/archivement5.png" class="archivements" title="You won a match without let other player score">
                 </div>
               </div>
               <!-- Add more columns for each achievement -->
             </div>
           </div>
         </div>
+        <div class="card" *ngIf="archivements?.length === 0">
+          <div class="card-content" >
+              <p class="title is-5">Archivements</p>
+              <p>No archivements won yet</p>
+          </div>
+        </div>
+        <br><br>
         <div class="card">
           <div class="card-content">
-            <p class="title is-5">Last 10 Played Matches</p>
+            <p class="title is-5">Played Matches History</p>
             <table class="table">
               <thead>
                 <tr>

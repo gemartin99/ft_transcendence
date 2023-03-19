@@ -23,7 +23,7 @@
       <div class="column">
         <div class="card" *ngIf="archivements?.length !== 0">
           <div class="card-content" >
-            <p class="title is-5">Achievements</p>
+            <p class="title is-5">Archivements</p>
             <div class="columns is-multiline">
               <div class="column is-one-fifth" *ngIf="archivements?.includes(1)">
                 <div class="achievement">
@@ -56,6 +56,7 @@
         </div>
         <div class="card" *ngIf="archivements?.length === 0">
           <div class="card-content" >
+              <p class="title is-5">Archivements</p>
               <p>No archivements won yet</p>
           </div>
         </div>
