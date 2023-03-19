@@ -109,5 +109,4 @@ export class UserComponent implements OnInit {
         this.dataSource  =  this.apiService.getFriends();
       })
   }
-
 }

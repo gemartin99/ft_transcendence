@@ -42,6 +42,10 @@ export class UsersController {
         console.log('Inside BACKEND Name is empty');
         return false; // Name is empty, so it's not valid
       }
+      if (name.length > 30) {
+        console.log('Inside BACKEND isvalidname name length is too long');
+        return false; // Name is too long, so it's not valid
+      }
       const regex = /^[a-zA-Z0-9]*$/;
       if (!regex.test(name)) {
         console.log('Inside BACKEND isvalidname name dont pass the regex');
@@ -85,8 +89,17 @@ export class UsersController {
     @Get('/find-by-username')
     @UseGuards(AuthGuard('jwt'))
     async findAllByUsername(@Query('name') name: string) {
-       console.log('Inside find-by-name');
-       return this.userService.findAllByUsername(name);
+      if (!name) {
+        return [];
+      }
+      if (name.length > 30) {
+        return [];
+      }
+      const regex = /^[a-zA-Z0-9]*$/;
+      if (!regex.test(name)) {
+        return [];
+      }
+      return this.userService.findAllByUsername(name);
     }
 
     @Get('/find-by-id')
