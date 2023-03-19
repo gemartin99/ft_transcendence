@@ -15,10 +15,10 @@
               <p>Total Wins: {{profile_user.wins}}</p>
               <p>Total Losses: {{profile_user.losses}}</p>
             </div>
-             <button *ngIf="!isfriend" class="button is-primary" (click)="addFriend(profile_user.id)">Add Friend</button>
-             <button *ngIf="isfriend" class="button is-warning" (click)="removeFriend(profile_user.id)">Remove Friend</button>
-             <button *ngIf="!isblocked" class="button is-danger" (click)="blockUser(profile_user.id)">Block User</button>
-             <button *ngIf="isblocked" class="button is-warning" (click)="unblockUser(profile_user.id)">Unblock User</button>
+             <button *ngIf="!isfriend" class="button is-primary" [disabled]="fiendsButtonDisabled" (click)="addFriend(profile_user.id)">Add Friend</button>
+             <button *ngIf="isfriend" class="button is-warning" [disabled]="fiendsButtonDisabled" (click)="removeFriend(profile_user.id)">Remove Friend</button>
+             <button *ngIf="!isblocked" class="button is-danger" [disabled]="blockButtonDisabled" (click)="blockUser(profile_user.id)">Block User</button>
+             <button *ngIf="isblocked" class="button is-warning" [disabled]="blockButtonDisabled" (click)="unblockUser(profile_user.id)">Unblock User</button>
           </div>
         </div>
       </div>

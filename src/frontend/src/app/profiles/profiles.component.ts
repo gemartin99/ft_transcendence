@@ -16,7 +16,9 @@ export class ProfilesComponent implements OnInit {
   public userRank: any;
   public archivements: number[];
   public isfriend: boolean = false;
-  public isblocked: boolean = false; 
+  public isblocked: boolean = false;
+  public fiendsButtonDisabled: boolean = false;
+  public blockButtonDisabled: boolean = false;
 
   constructor(private authService: AuthService, private apiService: ApiService, private route: ActivatedRoute) { }
 
@@ -55,23 +57,40 @@ export class ProfilesComponent implements OnInit {
     console.log(this.profile_user);
   }
 
-  addFriend(id)
+  async addFriend(id)
   {
-    this.isfriend = true;
+    this.fiendsButtonDisabled = true;
+    this.apiService.addFriend(id).subscribe((result)=>{   
+      this.isfriend = true;
+      this.fiendsButtonDisabled = false;
+    });
+
   }
 
-  blockUser(id)
+  async blockUser(id)
   {
-    this.isblocked = true;
+    this.blockButtonDisabled = true;
+    this.apiService.blockUser(id).subscribe((result)=>{   
+      this.isblocked = true;
+      this.blockButtonDisabled = false;
+    });
   }
 
-  removeFriend(id)
+  async removeFriend(id)
   {
-    this.isfriend = false;
+    this.fiendsButtonDisabled = true;
+    this.apiService.removeFriend(id).subscribe((result)=>{   
+      this.isfriend = false;
+      this.fiendsButtonDisabled = false;
+    });
   }
 
-  unblockUser(id)
+  async unblockUser(id)
   {
-    this.isblocked = false;
+    this.blockButtonDisabled = true;
+    this.apiService.removeFriend(id).subscribe((result)=>{   
+      this.isblocked = false;
+      this.blockButtonDisabled = false;
+    });
   }
 }
