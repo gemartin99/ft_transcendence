@@ -1,36 +1,41 @@
-<section class="section pb-0">
-   <div class="container">
-		<div style="text-align:center">
-			<h1>
-			  Edit Profile and Settings
-			</h1>
-		</div>
+<section class="section">
+	<div class="container">
+	  <div style="text-align:center">
+	    <h1>
+	      Edit Profile and Settings
+	    </h1>
+	  </div>
 
-		<div class="card">
-		  <header class="card-header">
-		    <p class="card-header-title">Edit Profile</p>
-		  </header>
-		  <div class="card-content">
-		    <form [formGroup]="editForm" (ngSubmit)="updateUser(editForm.value)" class="form" style="width: 100%; padding: 5px;">
+	  <div class="card">
+	    <header class="card-header">
+	      <p class="card-header-title">Edit Profile</p>
+	    </header>
+	    <div class="card-content" *ngIf="!profileUpdated">
+	      <form [formGroup]="editForm" (ngSubmit)="updateUser(editForm.value)" class="form" style="width: 100%; padding: 5px;">
 
-		    	<div class="field">
-		    	  <input class="input" formControlName="avatar" type="file" (change)="onFileChange($event)" accept="image/*">
-		    	  <!-- Add the following line to display the error message -->
-		    	  <p class="help is-danger" *ngIf="fileTypeError">Incorrect file type. Only .jpg or .png are allowed.</p>
-		    	</div>
-		      <div class="field">
-		        <label class="checkbox">
-		          <input formControlName="twofactor" type="checkbox" name="twofactor">
-		          Two-Factor Authentication
-		        </label>
-		      </div>
+	        <div class="field">
+	          <input type="text" formControlName="name" placeholder="Enter your username" class="form-control input" value="{{ user?.name }}" required>
+	          <div *ngIf="editForm.get('name').invalid && editForm.get('name').touched">
+	          </div>
+	          <p class="help is-danger" *ngIf="nameInUseError">Username alredy in use.</p>
+	        </div>
+	        <div class="field">
+	          <input class="input" formControlName="avatar" type="file" (change)="onFileChange($event)" accept="image/*">
+	          <p class="help is-danger" *ngIf="fileTypeError">Incorrect file type. Only .jpg or .png are allowed.</p>
+	        </div>
 
-		      <div class="card-footer">
-		        <button class="button is-primary" type="submit">Save Changes</button>
-		      </div>
+	        <div class="card-footer">
+	          <button class="button is-primary" type="submit">Save Changes</button>
+	        </div>
 
-		    </form>
-		  </div>
-		</div>
+	      </form>
+	    </div>
+	    <div class="card-content" *ngIf="profileUpdated">
+	    	<div class="notification is-success">
+				User Profile info updated correctly<br>
+				<button class="button is-info" (click)="returnProfile()">Return to Profile</button>
+	    	</div>
+	    </div>
+	  </div>
 	</div>
 </section>

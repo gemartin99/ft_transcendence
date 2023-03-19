@@ -21,29 +21,48 @@
         </div>
       </div>
       <div class="column">
-        <div class="card">
-          <div class="card-content">
+        <div class="card" *ngIf="archivements?.length !== 0">
+          <div class="card-content" >
             <p class="title is-5">Achievements</p>
             <div class="columns is-multiline">
-              <div class="column is-one-quarter">
+              <div class="column is-one-quarter" *ngIf="archivements?.includes(1)">
                 <div class="achievement">
-                  <img src="/assets/archivement1.png" alt="Achievement Name">
-                  <p class="subtitle is-6">Noobie</p>
+                  <img src="/assets/archivement1.png" title="You played your first match">
                 </div>
               </div>
-              <div class="column is-one-quarter">
+              <div class="column is-one-quarter" *ngIf="archivements?.includes(2)">
                 <div class="achievement">
-                  <img src="/assets/archivement2.png" alt="Achievement Name">
-                  <p class="subtitle is-6">Rockie</p>
+                  <img src="/assets/archivement2.png" title="In you first match, you ended whit a victory">
+                </div>
+              </div>
+              <div class="column is-one-quarter" *ngIf="archivements?.includes(3)">
+                <div class="achievement">
+                  <img src="/assets/archivement3.png" title="You played 10 matches">
+                </div>
+              </div>
+              <div class="column is-one-quarter" *ngIf="archivements?.includes(4)">
+                <div class="achievement">
+                  <img src="/assets/archivement4.png" title="You played 50 matches">
+                </div>
+              </div>
+              <div class="column is-one-quarter" *ngIf="archivements?.includes(4)">
+                <div class="achievement">
+                  <img src="/assets/archivement5.png" title="You won a match without let other player score">
                 </div>
               </div>
               <!-- Add more columns for each achievement -->
             </div>
           </div>
         </div>
+        <div class="card" *ngIf="archivements?.length === 0">
+          <div class="card-content" >
+              <p>No archivements won yet</p>
+          </div>
+        </div>
+        <br><br>
         <div class="card">
           <div class="card-content">
-            <p class="title is-5">Last 10 Played Matches</p>
+            <p class="title is-5">Played Matches History</p>
             <table class="table">
               <thead>
                 <tr>

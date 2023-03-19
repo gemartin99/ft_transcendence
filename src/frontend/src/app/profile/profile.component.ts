@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
   public user: any;
   public userMatches: any;
   public userRank: any;
+  public archivements: number[];
 
   constructor(private authService: AuthService, private apiService: ApiService) { }
 
@@ -39,6 +40,12 @@ export class ProfileComponent implements OnInit {
     });
     this.apiService.getUserRank(this.user.id).subscribe(rank => {
       this.userRank = rank;
+    });
+    console.log('getArchivements:');
+    this.apiService.getArchivements(this.user.id).subscribe((response) => {
+      this.archivements = response;
+      console.log('archivements:');
+      console.log(this.archivements);
     });
     this.user = await this.authService.refreshLoggedUser();
   }

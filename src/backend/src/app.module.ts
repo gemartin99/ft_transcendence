@@ -14,6 +14,8 @@ import { GameModule } from './game/game.module';
 import { OnlineUserService } from './onlineuser/onlineuser.service';
 import { OnlineUserEntity } from './onlineuser/onlineuser.entity';
 import { AvatarController } from './user/avatar/avatar.controller';
+import { ArchivementsService } from './archivements/archivements.service';
+import { ArchivementsEntity } from './archivements/archivements.entity';
 
 @Module({
   imports: [
@@ -27,14 +29,14 @@ import { AvatarController } from './user/avatar/avatar.controller';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, OnlineUserEntity]),
+    TypeOrmModule.forFeature([User, OnlineUserEntity, ArchivementsEntity]),
     AuthModule,
     UsersModule,
     ChatModule,
     GameModule,
   ],
   controllers: [AppController, UsersController, AvatarController],
-  providers: [AppService, UserService, AuthService, OnlineUserService],
+  providers: [AppService, UserService, AuthService, OnlineUserService, ArchivementsService],
 })
 export class AppModule { }
 

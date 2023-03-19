@@ -5,6 +5,8 @@ import { RoomEntity } from "../chat/rooms/room.entity";
 import { OnlineUserEntity } from "../onlineuser/onlineuser.entity";
 import { OperatorEntity } from "../chat/operator/operator.entity";
 import { OwnerEntity } from "../chat/owner/owner.entity";
+import { ArchivementsEntity } from "../archivements/archivements.entity";
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -77,4 +79,7 @@ export class User {
 
   @OneToMany(() => MessageEntity, message => message.user)
   messages: MessageEntity[];
+
+  @OneToMany(() => ArchivementsEntity, archivements => archivements.user)
+  archivements: ArchivementsEntity[];
 }

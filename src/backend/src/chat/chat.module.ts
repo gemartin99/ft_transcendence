@@ -19,11 +19,13 @@ import { OperatorEntity } from './operator/operator.entity';
 import { OwnerEntity } from './owner/owner.entity';
 import { MatchService } from '../game/match/match.service';
 import { MatchEntity } from '../game/match/match.entity';
+import { ArchivementsEntity } from '../archivements/archivements.entity';
+import { ArchivementsService } from '../archivements/archivements.service';
 
 
 
 @Module({
-  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity, OperatorEntity, OwnerEntity, MatchEntity])],
-  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService, OperatorService, OwnerService, MatchService]
+  imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity, OperatorEntity, OwnerEntity, MatchEntity, ArchivementsEntity])],
+  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService, OperatorService, OwnerService, MatchService, ArchivementsService]
 })
 export class ChatModule {} 

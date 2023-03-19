@@ -7,6 +7,7 @@ import { MatchEntity } from './match.entity';
 import { MatchData } from './match-data/match-data.interface';
 import { MatchUsers } from './match-users/match-users.interface';
 import { Socket, Server } from 'socket.io';
+import { ArchivementsService } from '../../archivements/archivements.service';
 
 @Injectable()
 export class MatchService {
@@ -17,6 +18,7 @@ export class MatchService {
     @InjectRepository(MatchEntity)
     private readonly matchRepository: Repository<MatchEntity>,
     private userService: UserService,
+    private archivementsService: ArchivementsService,
   ) {}
 
   async createMatch(player1: User, player2: User): Promise<MatchEntity> {
@@ -78,6 +80,7 @@ export class MatchService {
       player2.played += 1;
       await this.userService.save(player1);
       await this.userService.save(player2);
+      await this.archivementsService.updateArchivements(game, player1, player2);
     }
   }
 

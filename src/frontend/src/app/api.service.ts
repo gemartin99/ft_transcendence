@@ -71,6 +71,12 @@ export class ApiService {
     // return this.httpClient.delete(`${this.API_SERVER}/users/friends/5/delete`);
   }
 
+  public userNameIsValid(name: string): Observable<any> {
+    console.log('API front userNameIsValid');
+    console.log('name is: ' + name);
+    return this.httpClient.post(`${this.API_SERVER}/users/isvalidname`, { name: name }, { withCredentials: true });
+  }
+
   public uploadAvatar(avatar: FormData): Observable<any> {
     return this.httpClient.post(`${this.API_SERVER}/avatar/upload`, avatar, { withCredentials: true });
   }
@@ -116,5 +122,9 @@ export class ApiService {
 
   public getBlockedUsers(): Observable<User[]>{
     return this.httpClient.get<User[]>(`${this.API_SERVER}/users/block`, { withCredentials: true });
+  }
+
+  public getArchivements(userId: number): Observable<number[]>{
+    return this.httpClient.get<number[]>(`${this.API_SERVER}/users/archivements/${userId}`, { withCredentials: true });
   }
 }

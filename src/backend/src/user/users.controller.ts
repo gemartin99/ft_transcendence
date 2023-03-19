@@ -1,4 +1,5 @@
 import { UserService } from './user.service';
+import { ArchivementsService } from '../archivements/archivements.service';
 import { Controller, Get, Post, Put, Delete, Body, Param, Req, Res, UseGuards, Query } from  '@nestjs/common';
 import { User } from  './user.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -7,7 +8,7 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('users')
 export class UsersController {
 
-    constructor(private userService: UserService){
+    constructor(private userService: UserService, private archivementsService: ArchivementsService){
     }
 
     @Get()
@@ -29,6 +30,35 @@ export class UsersController {
     @Delete(':id/delete')
     async delete(@Param('id') id): Promise<any> {
       return this.userService.delete(id);
+    }
+    
+    @Post('isvalidname')
+    @UseGuards(AuthGuard('jwt'))
+    async isValidName(@Req() req, @Body() body: { name: string }): Promise<boolean> {
+      console.log('Inside BACKEND isvalidname');
+      console.log('Inside BACKEND name:' + body.name);
+      const name = body.name;
+      if (!name) {
+        console.log('Inside BACKEND Name is empty');
+        return false; // Name is empty, so it's not valid
+      }
+      const regex = /^[a-zA-Z0-9]*$/;
+      if (!regex.test(name)) {
+        console.log('Inside BACKEND isvalidname name dont pass the regex');
+        return false; // Name contains invalid characters, so it's not valid
+      }
+      const user = await this.userService.getByName(name);
+      if (user && (user.id42 != req.user.thirdPartyId)) {
+        console.log('Inside BACKEND isvalidname Name is in use');
+        return false; // Name is already in use by another user, so it's not valid
+      }
+      console.log('Inside BACKEND req.user.thirdPartyId:' + req.user.thirdPartyId);
+      const req_user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      console.log('Inside BACKEND name is valid going to update it for user');
+      console.log(req_user);
+      req_user.name = body.name;
+      await this.userService.save(req_user);
+      return true; // Name is valid
     }
 
     @Post('register')
@@ -128,6 +158,20 @@ export class UsersController {
         await this.userService.save(user);
       }
       return res.json(user);
+    }
+
+    //ARCHIVEMENTS
+    @Get('archivements/:userId')
+    @UseGuards(AuthGuard('jwt'))
+    async getArchivements(@Req() req, @Res() res, @Param('userId') userId: number): Promise<any> {
+      // console.log('Requesting archivements for user:' + userId)
+      // if (typeof userId !== 'number') {
+      //   console.log('USER ID is not NUMBER');
+      //   return res.status(200).send([]);
+      // }
+      // console.log('USER ID is NUMBER');
+      const archivements = await this.archivementsService.getArchivementsForUser(userId);
+      return res.status(200).send(archivements);
     }
 
     //EDIT PROFILE TWO FACTOR
