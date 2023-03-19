@@ -124,6 +124,12 @@ export class UsersController {
       return this.userService.getUserRanking(userId);
     }
 
+    @Get('relation/with/:userId')
+    @UseGuards(AuthGuard('jwt'))
+    async getRelationByUserId(@Req() req, @Param('userId') userId: number): Promise<{is_friend: boolean, is_blocked: boolean}  | null> {
+      return this.userService.getRelationById(req.user.thirdPartyId ,userId);
+    }
+
     @Get('finding/:userId')
     @UseGuards(AuthGuard('jwt'))
     async getUserFindingById(@Param('userId') userId: number): Promise<User> {

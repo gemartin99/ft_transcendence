@@ -143,6 +143,25 @@ export class UserService {
 		return await this.userRepository.save(user);
 	}
 
+	async getRelationById(user_id42: number, target_id: number):  Promise<{is_friend: boolean, is_blocked: boolean}  | null> {
+		console.log('Inside getRelationById:')
+		console.log('user_id42: ' + user_id42);
+		console.log('target_id: ' + target_id);
+		const user = await this.userRepository.findOne({
+	      where: { id42: user_id42 },
+	      relations: ['friends', 'blocked_users'],
+    	});
+		if (!user) {
+		    return null;
+		}
+		console.log(user);
+		const is_friend = user.friends.some(friend => friend.id == target_id);
+		console.log('is_friend: ' + is_friend);
+		const is_blocked = user.blocked_users.some(blockedUser => blockedUser.id == target_id);
+		console.log('is_blocked: ' + is_blocked);
+		return {is_friend, is_blocked};
+	}
+
 	async findAllByUsername(name: string): Promise<UserI[]> {
 	  return this.userRepository.find({
 	    where: {

@@ -16,6 +16,7 @@ import { EditProfileComponent } from './profile/edit-profile/edit-profile.compon
 import { MatchComponent } from './game/match/match.component';
 import { TwoFactorComponent } from './two-factor/two-factor.component';
 import { EditTwoFactorComponent } from './two-factor/edit-two-factor/edit-two-factor.component';
+import { GameOptionsComponent } from './game/game-options/game-options.component';
 
 
 
@@ -34,7 +35,8 @@ const routes: Routes = [
   { path: 'profiles/:id', component: ProfilesComponent, canActivate: [AuthGuard] },
   { path: 'game/match/:id', component: MatchComponent, canActivate: [AuthGuard] },
   { path: 'two-factor', component: TwoFactorComponent, canActivate: [AuthGuard] },
-  { path: 'security/settings', component: EditTwoFactorComponent, canActivate: [AuthGuard] }
+  { path: 'security/settings', component: EditTwoFactorComponent, canActivate: [AuthGuard] },
+  { path: 'game/settings', component: GameOptionsComponent, canActivate: [AuthGuard] }
 
 ];
 

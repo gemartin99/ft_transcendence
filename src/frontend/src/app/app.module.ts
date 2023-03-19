@@ -39,6 +39,7 @@ import { MatchComponent } from './game/match/match.component';
 import { ChatUseroptionsComponent } from './chat/chat-useroptions/chat-useroptions.component';
 import { TwoFactorComponent } from './two-factor/two-factor.component';
 import { EditTwoFactorComponent } from './two-factor/edit-two-factor/edit-two-factor.component';
+import { GameOptionsComponent } from './game/game-options/game-options.component';
 const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} };
 
 @NgModule({
@@ -64,7 +65,8 @@ const config: SocketIoConfig = { url: 'http://crazy-pong.com:3000', options: {} 
     MatchComponent,
     ChatUseroptionsComponent,
     TwoFactorComponent,
-    EditTwoFactorComponent
+    EditTwoFactorComponent,
+    GameOptionsComponent
   ],
   imports: [
     MatListModule,

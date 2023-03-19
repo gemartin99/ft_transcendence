@@ -127,4 +127,8 @@ export class ApiService {
   public getArchivements(userId: number): Observable<number[]>{
     return this.httpClient.get<number[]>(`${this.API_SERVER}/users/archivements/${userId}`, { withCredentials: true });
   }
+
+  public getRelationByUserId(userId: number): Observable<{is_friend: boolean, is_blocked: boolean} | null> {
+    return this.httpClient.get<{is_friend: boolean, is_blocked: boolean} | null>(`${this.API_SERVER}/users/relation/with/${userId}`, { withCredentials: true });
+  }
 }

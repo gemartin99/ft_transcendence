@@ -39,6 +39,19 @@ export class ProfilesComponent implements OnInit {
       console.log('archivements:');
       console.log(this.archivements);
     });
+
+    this.apiService.getRelationByUserId(parseInt(id)).subscribe((response) => {
+      console.log('getRelationByUserId');
+      console.log(response);
+      if (response) {
+        this.isfriend = response.is_friend;
+        this.isblocked = response.is_blocked;
+        console.log('isfriend: ' + response.is_friend);
+        console.log('isblocked: ' + response.is_friend);
+      }
+    });
+
+
     console.log(this.profile_user);
   }
 
