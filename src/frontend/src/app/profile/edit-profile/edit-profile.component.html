@@ -2,7 +2,7 @@
 	<div class="container">
 	  <div style="text-align:center">
 	    <h1>
-	      Edit Profile and Settings
+	      Edit Profile Information
 	    </h1>
 	  </div>
 
@@ -16,6 +16,9 @@
 	        <div class="field">
 	          <input type="text" formControlName="name" placeholder="Enter your username" class="form-control input" value="{{ user?.name }}" required>
 	          <div *ngIf="editForm.get('name').invalid && editForm.get('name').touched">
+	          	<p class="help is-danger" *ngIf="editForm.get('name').errors?.['required']">Username is required</p>
+	          	<p class="help is-danger" *ngIf="editForm.get('name').errors?.['maxlength']">Username can't be longer than 30 characters</p>
+	          	<p class="help is-danger" *ngIf="editForm.get('name').errors?.['pattern']">Username can only contain letters and digits</p>
 	          </div>
 	          <p class="help is-danger" *ngIf="nameInUseError">Username alredy in use.</p>
 	        </div>
@@ -25,7 +28,7 @@
 	        </div>
 
 	        <div class="card-footer">
-	          <button class="button is-primary" type="submit">Save Changes</button>
+	          <button class="button is-primary" type="submit" [disabled]="editForm.invalid || nameInUseError || fileTypeError">Save Changes</button>
 	        </div>
 
 	      </form>

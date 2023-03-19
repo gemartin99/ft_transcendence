@@ -23,15 +23,12 @@ export class EditProfileComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.editForm = this.formBuilder.group({
       avatar: [''],
-      name: ['', Validators.pattern('^[a-zA-Z0-9]*$')]
+      name: ['', [Validators.required, Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9]+$/)]],
     });
     this.profileUpdated= false;
-    console.log('refreshLoggedUser:');
     await this.authService.refreshLoggedUser();
-    console.log('getLoggedUser:');
     this.user = await this.authService.getLoggedUser();
     this.editForm.get('name').setValue(this.user.name);
-    console.log('end ngOnInit:');
   }
 
   onFileChange(event: any) {
@@ -53,30 +50,22 @@ export class EditProfileComponent implements OnInit {
 
   async updateUser(formData2: any) {
     this.nameInUseError = false;
-    console.log(formData2);
-    console.log('updateUSer name is:');
-    console.log(this.editForm.get('name').value);
-
 
     const isValidName = await this.apiService.userNameIsValid(this.editForm.get('name').value).toPromise();
-    console.log('Username validation result: ', isValidName);
     if(!isValidName)
     {
       this.nameInUseError = true;
-      console.log('Username is in use or invalid');
       return;
     }
     
     if (!this.nameInUseError)
     {
-      console.log('name is valid');
       this.nameInUseError = false;
       if (this.avatarFile) {
           const formData = new FormData();
           formData.append('file', this.avatarFile);
           formData.append('id', this.user.id);
           await this.apiService.uploadAvatar(formData).subscribe((response) => {
-          console.log('avatar uploaded');
         });
       } 
       if(!this.fileTypeError)
