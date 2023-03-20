@@ -131,4 +131,9 @@ export class ApiService {
   public getRelationByUserId(userId: number): Observable<{is_friend: boolean, is_blocked: boolean} | null> {
     return this.httpClient.get<{is_friend: boolean, is_blocked: boolean} | null>(`${this.API_SERVER}/users/relation/with/${userId}`, { withCredentials: true });
   }
+
+  public setGameOption(optionId: number): Observable<User> {
+    console.log('setGameOption selected option:' + optionId);
+    return this.httpClient.post<User>(`${this.API_SERVER}/users/game/options`, { optionId: optionId }, { withCredentials: true });
+  }
 }

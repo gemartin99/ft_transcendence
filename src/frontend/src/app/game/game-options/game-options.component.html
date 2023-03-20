@@ -15,33 +15,34 @@
           <div class="columns is-multiline is-centered">
             <div class="column is-narrow">
               <label class="radio">
-                <img src="classic.png">
-                <input type="radio" name="game-map" value="classic">
-                Classic
+                <img src="assets/court_0.png">
+                <input type="radio" name="game-map" [(ngModel)]="selectedOption" value="0">
+                Classic court
               </label>
             </div>
             <div class="column is-narrow">
               <label class="radio">
-                <img src="grass.png">
-                <input type="radio" name="game-map" value="grass">
-                Grass
+                <img src="assets/court_1.png">
+                <input type="radio" name="game-map" [(ngModel)]="selectedOption" value="1">
+                Grass court
               </label>
             </div>
             <div class="column is-narrow">
               <label class="radio">
-                <img src="sand.png">
-                <input type="radio" name="game-map" value="sand">
-                Sand
+                <img src="assets/court_2.png">
+                <input type="radio" name="game-map" [(ngModel)]="selectedOption" value="2">
+                Clay court
               </label>
             </div>
             <div class="column is-narrow">
               <label class="radio">
-                <img src="stone.png">
-                <input type="radio" name="game-map" value="stone">
-                Stone
+                <img src="assets/court_3.png">
+                <input type="radio" name="game-map" [(ngModel)]="selectedOption" value="3">
+                Concrete court
               </label>
             </div>
           </div>
+          <button type="button" (click)="saveGameOption()">Save</button>
         </form>
       </div>
     </div>

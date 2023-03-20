@@ -146,15 +146,24 @@ export class UsersController {
       return res.json(blockeds);
     }
 
-    @Get('game/options/:optionId')
+    @Post('game/options')
     @UseGuards(AuthGuard('jwt'))
-    async unblockUser(@Req() req, @Res() res, @Param('optionId') optionId: number): Promise<User> {
+    async setGameOption(@Req() req, @Body() body: { optionId: number }): Promise<User> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if (user) {
-        user.game_option = optionId;
+        user.game_options = body.optionId;
         await this.userService.save(user);
       }
-      return res.json(user);
+      return user;
+    }
+
+    @Get('game/options')
+    @UseGuards(AuthGuard('jwt'))
+    async getGameOption(@Req() req): Promise<number> {
+      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      if(!user)
+        return 0;
+      return user.game_options;
     }
 
 

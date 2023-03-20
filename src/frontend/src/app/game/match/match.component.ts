@@ -2,7 +2,6 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-match',
   templateUrl: './match.component.html',
@@ -19,6 +18,7 @@ export class MatchComponent implements AfterViewInit, OnInit {
   key_pressed = 0;
   player: number = 1;
   matchId: number = 0;
+  court_color: string = 'black'
   // set_player_num: number = 0;
 
   constructor(private gameService: GameService, private route: ActivatedRoute) {
@@ -54,6 +54,9 @@ export class MatchComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
+    this.gameService.getGameColorOption().subscribe((result)=>{
+        this.court_color = result;
+    });
     this.route.paramMap.subscribe(params => {
       this.matchId = +params.get('id');
       console.log('Match ID:', this.matchId);
@@ -114,7 +117,7 @@ export class MatchComponent implements AfterViewInit, OnInit {
     // Clear canvas
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     // Draw something on the canvas
-    this.context.fillStyle = 'black';
+    this.context.fillStyle = this.court_color;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     // Draw ball
     this.context.beginPath();
@@ -143,7 +146,7 @@ export class MatchComponent implements AfterViewInit, OnInit {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // Draw something on the canvas
-    this.context.fillStyle = 'black';
+    this.context.fillStyle = this.court_color;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     // Draw ball
