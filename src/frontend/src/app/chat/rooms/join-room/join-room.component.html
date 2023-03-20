@@ -1,38 +1,32 @@
-  <section class="section">
-    <div class="container">
-      <button (click)="close()">Close</button>
-      <h1 class="title">Join Chat Room</h1>
-      <div class="card">
-<!--         <div *ngIf="usernameControl" class="card-content"> -->
-          <form [formGroup]="form" (ngSubmit)="join()">
-            <div class="field">
-              <label class="label">Chat-Room Name</label>
-              <ng-container *ngIf="pub_rooms">
-                <select formControlName="id" class="form-control input" required>
-                  <option [value]="pub_rooms[0]?.id" selected>{{ pub_rooms[0]?.name }}</option>
-                  <option *ngFor="let room of pub_rooms.slice(1)" [value]="room.id">{{ room.name }}</option>
-                </select>
-              </ng-container>
-              <label class="label">Password (optional)</label>
-              <div class="control">
-                <input type="text" formControlName="password" placeholder="Channel Password (optional)" class="form-control input">
-                  <div *ngIf="password.invalid && password.touched">
-                </div>
-              </div>
-              <div class="field">
-                <div>
-                     <p *ngIf="password.errors?.['pattern']" class="help is-danger">Invalid characters</p>
-                    <p *ngIf="password.errors?.['maxlength']" class="help is-danger">Max length exceeded</p>
-                </div>
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                <button class="button is-link"  [disabled]="!form.valid" type="submit">Join Chat Room</button>
-              </div>
-            </div>
-          </form>
-<!--         </div> -->
+<div class="card modal-box">
+    <button (click)="close()" class="button is-danger is-small close_button"><i class="fa-regular fa-circle-xmark"></i> </button>
+    <h1 class="title">Join Chat Room</h1>
+    <form [formGroup]="form" (ngSubmit)="join()">
+      <div class="field">
+        <label class="label">Chat-Room Name</label>
+        <ng-container *ngIf="pub_rooms">
+          <select formControlName="id" class="form-control input" required>
+            <option [value]="pub_rooms[0]?.id" selected>{{ pub_rooms[0]?.name }}</option>
+            <option *ngFor="let room of pub_rooms.slice(1)" [value]="room.id">{{ room.name }}</option>
+          </select>
+        </ng-container>
+        <label class="label">Password (optional)</label>
+        <div class="control">
+          <input type="text" formControlName="password" placeholder="Channel Password (optional)" class="form-control input">
+            <div *ngIf="password.invalid && password.touched">
+          </div>
+        </div>
+        <div class="field">
+          <div>
+               <p *ngIf="password.errors?.['pattern']" class="help is-danger">Invalid characters</p>
+              <p *ngIf="password.errors?.['maxlength']" class="help is-danger">Max length exceeded</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+      <div class="field">
+        <div class="control">
+          <button class="button is-link"  [disabled]="!form.valid" type="submit">Join Chat Room</button>
+        </div>
+      </div>
+    </form>
+</div>

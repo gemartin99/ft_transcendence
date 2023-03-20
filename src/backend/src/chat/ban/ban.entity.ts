@@ -15,4 +15,7 @@ export class BanEntity {
 
   @Column()
   ban_expires: Date;
+
+  @Column()
+  mute_expires: Date;
 }
