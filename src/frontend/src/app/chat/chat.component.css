@@ -28,6 +28,27 @@
   margin-bottom: 9px;
 }
 
+.manual
+{
+  float: right;
+  border-radius: 30px;
+  padding: 12px;
+  margin-right: 7px;
+}
+
+.manual-box
+{
+  margin-top: 30px;
+}
+
+.close_manual {
+    padding: 10px;
+    float: right;
+}
+
+.mat-mdc-paginator-range-label, span.mdc-list-item__end {
+    display: none;
+}
 
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);

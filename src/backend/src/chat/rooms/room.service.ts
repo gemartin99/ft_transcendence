@@ -136,6 +136,13 @@ export class RoomService {
     return room;
   }
 
+  async getRoomByIdWhitNoUsersRelation(id: number): Promise<RoomI> {
+    const room = await this.roomRepository.findOne({
+      where: { id: id },
+    });
+    return room;
+  }
+
   async getRoom(roomId: number): Promise<RoomI> {
     return this.roomRepository.findOne({
       where: { id: roomId },
@@ -171,6 +178,20 @@ export class RoomService {
     return null;
   }
 
+  async checkRoomPassword(roomPass: string, inputPass: string) {
+    if(!inputPass)
+      return false;
+    const regex = /^[a-zA-Z0-9]*$/;
+    if (!regex.test(inputPass)) {
+      return false;
+    }
+
+    if (await bcrypt.compare(inputPass, roomPass)) {
+      return true;
+    }
+    return false;
+  }
+
   //CHAT COMMANDS
   async opBanUserFromRoom(room: RoomI, user: UserI, userTargetName: string) {
     console.log('Room service Ban User from room');
@@ -191,16 +212,20 @@ export class RoomService {
   }
 
   async owChangePasswordRoom(room: RoomI, user: UserI, password: string) {
-    console.log('cambiar password');
-    console.log('Room service change password of the room');
+    const regex = /^[A-Za-z0-9]{1,30}$/;
+    if (!regex.test(password)) {
+      return 2;
+    }
     if (await this.ownerService.isOwner(user.id, room.id)) {
       const saltRounds = 10;
       const hash = await bcrypt.hash(password, saltRounds);
       room.password = hash;
       await this.roomRepository.save(room);
     } else {
-      console.log('user is not owner, he can\'t change the password');
+      //console.log('user is not owner, he can\'t change the password');
+      return 1;
     }
+    return 0;
   }
 
   async owUnsetPasswordRoom(room: RoomI, user: UserI) {

@@ -21,10 +21,10 @@ export class MessageService {
   ) {}
 
   async create(message: MessageI): Promise<MessageI> {
-    if (message.text.startsWith('/')) {
-      this.processCommand(message);
-      return null;
-    }
+    // if (message.text.startsWith('/')) {
+    //   this.processCommand(message);
+    //   return null;
+    // }
     return this.messageRepository.save(this.messageRepository.create(message));
   }
 
@@ -53,61 +53,61 @@ export class MessageService {
 //   return paginate(query, options);
 // }
 
-  async processCommand(message: MessageI) {
-    if (message.text.startsWith('/')) {
-      const [command, ...args] = message.text.split(' ');
-      switch (command) {
-        case '/msg':
-          console.log('The message is a CMD (private msj)');
-          break;
-        case '/ban':
-          if (args.length == 1) {
-            await this.roomService.opBanUserFromRoom(message.room, message.user, args[0]);
-            return;
-          }
-          break;
-        case '/mute':
-          if (args.length == 1) {
-            await this.roomService.opMuteUserFromRoom(message.room, args[0]);
-            return;
-          }
-          break;
-        case '/setpwd':
-          if (args.length == 1) {
-            await this.roomService.owChangePasswordRoom(message.room, message.user, args[0]);
-            return;
-          }
-          break;
-        case '/unsetpwd':
-            await this.roomService.owUnsetPasswordRoom(message.room, message.user);
-            return;
-          break;
-        case '/setop':
-          if (args.length == 1) {
-            await this.roomService.owSetUserAsOperator(message.room, message.user, args[0]);
-            return;
-          }
-          break;
-        case '/unsetop':
-          if (args.length == 1) {
-            await this.roomService.owUnsetUserAsOperator(message.room, message.user, args[0]);
-            return;
-          }
-          break;
-        case '/join':
-          if (args.length == 1) {
-            await this.roomService.usJoinRoom(message.user, args[0], "");
-            return;
-          }
-          if (args.length == 2) {
-            await this.roomService.usJoinRoom(message.user, args[0], args[1]);
-            return;
-          }
-          break;
-        default:
-          // handle unknown command
-          break;
-      }
-    }
-  }
+  // async processCommand(message: MessageI) {
+  //   if (message.text.startsWith('/')) {
+  //     const [command, ...args] = message.text.split(' ');
+  //     switch (command) {
+  //       case '/msg':
+  //         console.log('The message is a CMD (private msj)');
+  //         break;
+  //       case '/ban':
+  //         if (args.length == 1) {
+  //           await this.roomService.opBanUserFromRoom(message.room, message.user, args[0]);
+  //           return;
+  //         }
+  //         break;
+  //       case '/mute':
+  //         if (args.length == 1) {
+  //           await this.roomService.opMuteUserFromRoom(message.room, args[0]);
+  //           return;
+  //         }
+  //         break;
+  //       case '/setpwd':
+  //         if (args.length == 1) {
+  //           await this.roomService.owChangePasswordRoom(message.room, message.user, args[0]);
+  //           return;
+  //         }
+  //         break;
+  //       case '/unsetpwd':
+  //           await this.roomService.owUnsetPasswordRoom(message.room, message.user);
+  //           return;
+  //         break;
+  //       case '/setop':
+  //         if (args.length == 1) {
+  //           await this.roomService.owSetUserAsOperator(message.room, message.user, args[0]);
+  //           return;
+  //         }
+  //         break;
+  //       case '/unsetop':
+  //         if (args.length == 1) {
+  //           await this.roomService.owUnsetUserAsOperator(message.room, message.user, args[0]);
+  //           return;
+  //         }
+  //         break;
+  //       case '/join':
+  //         if (args.length == 1) {
+  //           await this.roomService.usJoinRoom(message.user, args[0], "");
+  //           return;
+  //         }
+  //         if (args.length == 2) {
+  //           await this.roomService.usJoinRoom(message.user, args[0], args[1]);
+  //           return;
+  //         }
+  //         break;
+  //       default:
+  //         // handle unknown command
+  //         break;
+  //     }
+  //   }
+  // }
 }

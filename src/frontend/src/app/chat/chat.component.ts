@@ -26,6 +26,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   selectedRoom = null;
   error_string = null;
   matchChallange: MatchChallange = null;
+  chat_manual = false;
   public user: any;
 
   constructor(
@@ -128,6 +129,16 @@ export class ChatComponent implements OnInit, AfterViewInit {
   {
     this.matchChallange = null;
     this.chatService.cancelChallange();
+  }
+
+  showManual()
+  {
+    this.chat_manual = true;
+  }
+
+  close_manual()
+  {
+    this.chat_manual = false;
   }
 }
 

@@ -19,6 +19,7 @@
               </span>
               <button (click)="openModalJoinRoom()" class="button is-primary">Join Room</button>
               <button (click)="openModalCreateRoom()" class="button is-link">Create Room</button>
+              <button (click)="showManual()" class="button manual" title="Show Chat Manaual"><i class="fa-solid fa-book"></i></button>
             </div>
             <div *ngIf="(rooms$|async)?.items?.length > 0;" class="rooms">
                  <mat-selection-list [multiple]="false" (selectionChange)="onSelectRoom($event)">
@@ -45,3 +46,59 @@
     </div>
   </div>
 </section>
+
+<div class="container manual-box" *ngIf="chat_manual">
+  <div class="card">
+    <div class="card-content">
+      <button (click)="close_manual()" class="button is-danger is-small close_manual"><i class="fa-regular fa-circle-xmark"></i> </button>
+      <h3 class="title is-3">Chat Manual</h3>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Arguments</th>
+            <th>Explanation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/ban</td>
+            <td><em>username</em></td>
+            <td>Bans a user from the chat.</td>
+          </tr>
+          <tr>
+            <td>/mute</td>
+            <td><em>username</em></td>
+            <td>Mutes a user in the chat.</td>
+          </tr>
+          <tr>
+            <td>/setpwd</td>
+            <td><em>password</em></td>
+            <td>Sets a password to enter the chat room.</td>
+          </tr>
+          <tr>
+            <td>/unsetpwd</td>
+            <td></td>
+            <td>Removes the password from the chat room.</td>
+          </tr>
+          <tr>
+            <td>/setop</td>
+            <td><em>username</em></td>
+            <td>Sets a user as a chat room operator.</td>
+          </tr>
+          <tr>
+            <td>/unsetop</td>
+            <td><em>username</em></td>
+            <td>Removes a user from the chat room operators list.</td>
+          </tr>
+          <tr>
+            <td>/join</td>
+            <td><em>room_name</em></td>
+            <td>Joins a specific chat room.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

@@ -157,39 +157,45 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      await this.server.to(socket.id).emit('messages', messages);
    }
 
+
+   //this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not found");
    @SubscribeMessage('joinRoomById')
    async onJoinRoomById(socket: Socket, room: RoomI) {
-     console.log('chat gateway i enter to joinRoom');
-     console.log('room is:');
-     console.log(room);
-     console.log('user id es:');
-     console.log(socket.data.user)
-     room = await this.roomService.joinRoomById(room, socket.data.user);
-     const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
-     console.log('I take room messajes');
-     console.log(messages);
-     messages.meta.currentPage = messages.meta.currentPage - 1;
-
-
-     // Replace text of messages sent by blocked users with "Blocked"
-     const blockedUsers = await this.userService.findBlockedUsers(socket.data.user.id);
-     messages.items.forEach(message => {
-       const isBlocked = blockedUsers.some(user => user.id === message.user.id);
-       if (isBlocked) {
-         message.text = "Blocked";
-       }
-     });
-
-     // Save Connection to Room
-     console.log('Before this.joinedRoomService.create');
-     await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
-     console.log('After this.joinedRoomService.create');
-
-     const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
-     // console.log('room for user: ' + rooms);    
-     await this.server.to(socket.id).emit('rooms', rooms);
-     // Send last messages from Room to User
-     await this.server.to(socket.id).emit('messages', messages);
+     //Check if is num
+     if(!isNaN(room.id))
+     {
+        //Check Password
+        const target_room = await this.roomService.getRoomByIdWhitNoUsersRelation(room.id);
+        if(target_room.password)
+        {
+            const is_valid = await this.roomService.checkRoomPassword(target_room.password, room.password)
+            if(!is_valid)
+            {
+              this.server.to(socket.id).emit('chat_error', "can't join: invalid password");
+              return;
+            }
+        }
+       //All correct lets join and emit needed info =)
+       room = await this.roomService.joinRoomById(room, socket.data.user);
+       //get messages for this room
+       const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+       messages.meta.currentPage = messages.meta.currentPage - 1;
+       // Replace text of messages sent by blocked users with "Blocked"
+       const blockedUsers = await this.userService.findBlockedUsers(socket.data.user.id);
+       messages.items.forEach(message => {
+         const isBlocked = blockedUsers.some(user => user.id === message.user.id);
+         if (isBlocked) {
+           message.text = "Blocked";
+         }
+       });
+       // Save Connection to Room
+       await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+       // Get User Rooms
+       const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+       //emit to user
+       await this.server.to(socket.id).emit('rooms', rooms);
+       await this.server.to(socket.id).emit('messages', messages);
+     }
    }
 
    @SubscribeMessage('leaveRoom')
@@ -210,6 +216,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
    @SubscribeMessage('addMessage')
    async onAddMessage(socket: Socket, message: MessageI) {
+     if (message.text.startsWith('/')) {
+       this.processCommand(socket, message);
+       return null;
+     }
      const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
      if(!createdMessage)
         return null;
@@ -221,8 +231,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      const filteredJoinedUsers = joinedUsers.filter(
        (user) => !user.user.blocked_users.find((blockedUser) => blockedUser.id === socket.data.user.id)
      );
-
-     //TODO: Send new Message to all joined Users of the room (currently online)
      for(const user of filteredJoinedUsers) {
        console.log('Inside the for');
        await this.server.to(user.socketId).emit('messageAdded', createdMessage);
@@ -294,122 +302,76 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       await this.server.to(socket.id).emit('pub_rooms', rooms);
    }
 
-  // @SubscribeMessage('inviteGame')
-  //  async onInviteGame(client: Socket, id_other: number) {
-  //     console.log('inviteGame');
-  //     const user2 = await this.userService.getById(id_other);
-  //     if(!user2){
-  //       this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not found");
-  //        return
-  //     }
-  //     const other_online = await this.onlineUserService.findByUser(user2);
-  //     console.log('other_online');
-  //     console.log(other_online);
-  //     // if(other_online.length === 0){
-  //     //   this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
-  //     //   return
-  //     // }
-  //     // if (this.checkClientInChallange(client)){
-  //     //    this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
-  //     //    return
-  //     // }
-  //     // if(this.checkUserInChallange(user2.id)){
-  //     //    this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
-  //     //    return
-  //     // }
-  //     // this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
-  //     this.openChallenge(client, user2, other_online[0]);
-  // }
+   async processCommand(socket: Socket, message: MessageI) {
+     console.log('IN processCommand: message is:');
+     console.log(message);
+     if (message.text.startsWith('/')) {
+       const [command, ...args] = message.text.split(' ');
+       switch (command) {
+         case '/msg':
+           console.log('The message is a CMD (private msj)');
+           break;
+         case '/ban':
+           if (args.length == 1) {
+             await this.roomService.opBanUserFromRoom(message.room, message.user, args[0]);
+             return;
+           }
+           break;
+         case '/mute':
+           if (args.length == 1) {
+             await this.roomService.opMuteUserFromRoom(message.room, args[0]);
+             return;
+           }
+           break;
+         case '/setpwd':
+           if (args.length == 1) {
+             await this.processCommandSetPwd(socket, message, args[0]);
+             return;
+           }
+           break;
+         case '/unsetpwd':
+             await this.roomService.owUnsetPasswordRoom(message.room, message.user);
+             return;
+           break;
+         case '/setop':
+           if (args.length == 1) {
+             await this.roomService.owSetUserAsOperator(message.room, message.user, args[0]);
+             return;
+           }
+           break;
+         case '/unsetop':
+           if (args.length == 1) {
+             await this.roomService.owUnsetUserAsOperator(message.room, message.user, args[0]);
+             return;
+           }
+           break;
+         case '/join':
+           if (args.length == 1) {
+             await this.roomService.usJoinRoom(message.user, args[0], "");
+             return;
+           }
+           if (args.length == 2) {
+             await this.roomService.usJoinRoom(message.user, args[0], args[1]);
+             return;
+           }
+           break;
+         default:
+           // handle unknown command
+           break;
+       }
+     }
+   }
 
-  // @SubscribeMessage('acceptChallange')
-  //  async onAcceptChallange(client: Socket) {
-  //     console.log('acceptChallange');
-  //     const challange_data = this.challanges.find(
-  //       challenge =>
-  //         challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
-  //     );
-  //     if (!challange_data) {
-  //       return; // no challenge found for the user
-  //     }
+   async processCommandSetPwd(socket: Socket, message: MessageI, password: string) {
+     const result = await this.roomService.owChangePasswordRoom(message.room, socket.data.user, password);
+     if (result == 1) {
+       this.server.to(socket.id).emit('chat_error', "You are not owner, you can't change the password");
+       return;
+     }
+     if (result == 2) {
+       this.server.to(socket.id).emit('chat_error', "Password format is incorrect");
+       return;
+     }
 
-  //     console.log("in acceptChallange challange_data is:");
-  //     console.log(challange_data);
-      
-
-  //     this.removeChallangesByUserId(challange_data.id_player1);
-  //     // const player1 = await this.userService.getById(challange_data.id_player1);
-
-  //     console.log("in acceptChallange challange_data.socketChallanger.data.user:");
-  //     console.log(challange_data.socketChallanger.data.user);
-  //     console.log("in acceptChallange client.data.user:");
-  //     console.log(client.data.user);
-
-  //     // console.log(`Starting match between ${player1.id} and ${client.data.user.id}`);
-  //     const match = await this.matchService.createMatch(challange_data.socketChallanger.data.user as User, client.data.user as User);
-  //     const message = 'You have been paired for a match';
-  //     // this.server.to(player1).emit('matchmakingPair', match.id);
-  //     client.emit('matchmakingPair', match.id);
-  //     challange_data.socketChallanger.emit('matchmakingPair', match.id);
-  //     await this.matchService.initMatch(match.id, challange_data.socketChallanger, client);
-  //     this.matchService.gameLoop(match.id);
-  // }
-
-  // @SubscribeMessage('cancelChallange')
-  //  async onCancelChallange(client: Socket, id: number) {
-  //     console.log('cancelChallange');
-  //     this.removeChallangesByUserId(client.data.user.id);
-  // }
-
-  // @SubscribeMessage('haveOpenChallange')
-  //  async onHaveOpenChallange(client: Socket) {
-  //     console.log('haveOpenChallange');
-  //     const challange_data = this.challanges.some(
-  //       challenge =>
-  //         challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
-  //     );
-  //     this.server.to(client.id).emit('gameChallange', challange_data);
-  // }
-
-  // removeChallangesByUserId(userId: number): void {
-  //  this.challanges = this.challanges.filter((c) => c.id_player1 != userId && c.id_player2 != userId);
-  // }
-
-  // checkUserInChallange(userId: number): boolean {
-  //    return this.challanges.some(
-  //      challenge =>
-  //        challenge.id_player1 === userId || challenge.id_player2 === userId,
-  //    );
-  // }
-
-  // checkClientInChallange(client: Socket): boolean {
-  //    for (const challenge of this.challanges) {
-  //      if (challenge.player1 === client.id || challenge.player2 === client.id) {
-  //        return true;
-  //      }
-  //    }
-  //    return false;
-  // }
-
-  // openChallenge(client: Socket, other_user: User, other_online: any) {
-  //    // Create new challenge
-  //    const challenge: MatchChallange = {
-  //      id_player1: client.data.user.id,
-  //      id_player2: other_user.id,
-  //      player1: client.id,
-  //      player2: other_online.socketId,
-  //      name1: client.data.user.name,
-  //      name2: other_user.name,
-  //      accept1: 1,
-  //      accept2: 0,
-  //      type: 1,
-  //      socketChallanger: client,
-  //    };
-
-  //    this.challanges.push(challenge);
-  //    challenge.socketChallanger = null;
-  //    this.server.to(client.id).emit('gameChallange', challenge);
-  //    console.log('In open Challange the other socket is ' + other_online.socketId)
-  //    this.server.to(other_online.socketId).emit('gameChallange', challenge);
-  //    challenge.socketChallanger = client;
-  //  }
+   }
 }
