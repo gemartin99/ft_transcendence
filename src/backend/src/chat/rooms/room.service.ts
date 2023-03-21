@@ -423,22 +423,38 @@ export class RoomService {
   }
 
   //TODO check if user is in room
-  async usJoinRoom(user: UserI, roomName: string, roomPass: string) {
+  async usJoinRoom(userId: number, roomName: string, roomPass: string) {
+    let regex = /^[A-Za-z0-9]{1,30}$/;
+    if (!regex.test(roomName)) {
+      return 4;
+    }
+
+    regex = /^[A-Za-z0-9]{0,30}$/;
+    if (!regex.test(roomPass)) {
+      return 3;
+    }
+
+    const user = await this.userService.getById(userId);
+    if(!user)
+      return 2;
+
     const newRoom = await this.getRoomByName(roomName);
     if(!newRoom)
-      return(null);
-    if(roomPass == "" || newRoom.password == null)
-    {
-        newRoom.users.push(user);
-        return this.roomRepository.save(newRoom);
-    }
-    else
+      return 1;
+    if(newRoom.password)
     {
         if (await bcrypt.compare(roomPass, newRoom.password)) {
             newRoom.users.push(user);
-            return this.roomRepository.save(newRoom);
+            await this.roomRepository.save(newRoom);
+            return 0;
         }
+        else
+          return 3;
     }
+    
+    newRoom.users.push(user);
+    await this.roomRepository.save(newRoom);
+    return 0;
   }
 
   async preparePvtMessageRoom(user1: UserI, user2: UserI): Promise<RoomI> {

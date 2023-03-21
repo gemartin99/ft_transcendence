@@ -107,6 +107,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('createRoom')
   async onCreateRoom(socket: Socket, room: RoomI)
   {
+    let regex = /^[a-zA-Z0-9]{1,30}$/;
+    if (!regex.test(room.name)) {
+      this.server.to(socket.id).emit('chat_error', "Invalid name, only alphanumeric allowed and maxlenght of 30");
+      return;
+    }
+    regex = /^[a-zA-Z0-9]{0,30}$/;
+    if (!regex.test(room.password)) {
+      this.server.to(socket.id).emit('chat_error', "Invalid password, only alphanumeric allowed and maxlenght of 30");
+      return;
+    }
     // console.log('creator: ' + socket.data.user);
     // console.log('room: ' + room);
     await this.roomService.createRoom(room, socket.data.user);
@@ -380,20 +390,65 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
              return;
            }
            break;
-         // case '/join':
-         //   if (args.length == 1) {
-         //     await this.roomService.usJoinRoom(message.user, args[0], "");
-         //     return;
-         //   }
-         //   if (args.length == 2) {
-         //     await this.roomService.usJoinRoom(message.user, args[0], args[1]);
-         //     return;
-         //   }
-         //   break;
+         case '/join':
+           if (args.length == 1) {
+             await this.processCommandJoin(socket, args[0], "");
+             return;
+           }
+           if (args.length == 2) {
+             await this.processCommandJoin(socket, args[0], args[1]);
+             return;
+           }
+           break;
          default:
            // handle unknown command
            break;
        }
+     }
+   }
+
+   async processCommandJoin(socket: Socket, channel_name: string, channel_password: string) {
+     const result = await this.roomService.usJoinRoom(socket.data.user.id, channel_name, channel_password)
+     if (result == 1) {
+       this.server.to(socket.id).emit('chat_error', "Room not found");
+       return;
+     }
+     if (result == 2) {
+       this.server.to(socket.id).emit('chat_error', "User not found");
+       return;
+     }
+     if (result == 3) {
+       this.server.to(socket.id).emit('chat_error', "Invalid password");
+       return;
+     }
+     if (result == 4) {
+       this.server.to(socket.id).emit('chat_error', "Channel name not found");
+       return;
+     }
+
+     //case joined
+     if (result == 0)
+     {
+        //All correct lets join and emit needed info =)
+        const room = await this.roomService.getRoomByName(channel_name);
+        //get messages for this room
+        const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+        messages.meta.currentPage = messages.meta.currentPage - 1;
+        // Replace text of messages sent by blocked users with "Blocked"
+        const blockedUsers = await this.userService.findBlockedUsers(socket.data.user.id);
+        messages.items.forEach(message => {
+          const isBlocked = blockedUsers.some(user => user.id === message.user.id);
+          if (isBlocked) {
+            message.text = "Blocked";
+          }
+        });
+        // Save Connection to Room
+        await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+        // Get User Rooms
+        const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+        //emit to user
+        await this.server.to(socket.id).emit('rooms', rooms);
+        await this.server.to(socket.id).emit('messages', messages);
      }
    }
 
