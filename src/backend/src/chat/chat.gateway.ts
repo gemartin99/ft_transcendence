@@ -125,36 +125,52 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
    @SubscribeMessage('joinRoom')
    async onJoinRoom(socket: Socket, room: RoomI) {
-     console.log('chat gateway i enter to joinRoom');
-     console.log('room is:');
-     console.log(room);
-     console.log('user id es:');
-     console.log(socket.data.user)
-     room = await this.roomService.joinRoom(room, socket.data.user);
-     const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
-     console.log('I take room messajes');
-     console.log(messages);
-     messages.meta.currentPage = messages.meta.currentPage - 1;
-
-     // Replace text of messages sent by blocked users with "Blocked"
-     const blockedUsers = await this.userService.findBlockedUsers(socket.data.user.id);
-     messages.items.forEach(message => {
-       const isBlocked = blockedUsers.some(user => user.id === message.user.id);
-       if (isBlocked) {
-         message.text = "Blocked";
+     if(!isNaN(room.id)){
+       //Check Password
+       const target_room = await this.roomService.getRoomByIdWhitNoUsersRelation(room.id);
+       if(!target_room)
+       {
+         this.server.to(socket.id).emit('chat_error', "can't join: channel not found");
+         return;
        }
-     });
+       //check you are not banned
+       const is_banned = await this.roomService.isUserBanedFromChannel(target_room.id, socket.data.user.id);
+       if(is_banned)
+       {
+         this.server.to(socket.id).emit('chat_error', "can't join: you are banned from this channel");
+         return;
+       }
+       console.log('chat gateway i enter to joinRoom');
+       console.log('room is:');
+       console.log(room);
+       console.log('user id es:');
+       console.log(socket.data.user)
+       room = await this.roomService.joinRoom(room, socket.data.user);
+       const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+       console.log('I take room messajes');
+       console.log(messages);
+       messages.meta.currentPage = messages.meta.currentPage - 1;
 
-     // Save Connection to Room
-     console.log('Before this.joinedRoomService.create');
-     await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
-     console.log('After this.joinedRoomService.create');
+       // Replace text of messages sent by blocked users with "Blocked"
+       const blockedUsers = await this.userService.findBlockedUsers(socket.data.user.id);
+       messages.items.forEach(message => {
+         const isBlocked = blockedUsers.some(user => user.id === message.user.id);
+         if (isBlocked) {
+           message.text = "Blocked";
+         }
+       });
 
-     const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
-     // console.log('room for user: ' + rooms);    
-     await this.server.to(socket.id).emit('rooms', rooms);
-     // Send last messages from Room to User
-     await this.server.to(socket.id).emit('messages', messages);
+       // Save Connection to Room
+       console.log('Before this.joinedRoomService.create');
+       await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
+       console.log('After this.joinedRoomService.create');
+
+       const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
+       // console.log('room for user: ' + rooms);    
+       await this.server.to(socket.id).emit('rooms', rooms);
+       // Send last messages from Room to User
+       await this.server.to(socket.id).emit('messages', messages);
+     }
    }
 
 
@@ -166,6 +182,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      {
         //Check Password
         const target_room = await this.roomService.getRoomByIdWhitNoUsersRelation(room.id);
+        if(!target_room)
+        {
+          this.server.to(socket.id).emit('chat_error', "can't join: channel not found");
+          return;
+        }
+        //check you are not banned
+        const is_banned = this.roomService.isUserBanedFromChannel(target_room.id, socket.data.user.id);
+        if(is_banned)
+        {
+          this.server.to(socket.id).emit('chat_error', "can't join: you are banned from this channel");
+          return;
+        }
         if(target_room.password)
         {
             const is_valid = await this.roomService.checkRoomPassword(target_room.password, room.password)
@@ -219,6 +247,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      if (message.text.startsWith('/')) {
        this.processCommand(socket, message);
        return null;
+     }
+     const is_muted = await this.roomService.isUserMutedFromChannel(message.room.id, socket.data.user.id);
+     if(is_muted)
+     {
+        this.server.to(socket.id).emit('chat_error', "can't talk: you are muted from this channel");
+        return;
      }
      const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
      if(!createdMessage)
@@ -365,28 +399,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
    async processCommandMuteUser(socket: Socket, message: MessageI, username: string) {
      const result = await this.roomService.opMuteUserFromRoom(message.room, socket.data.user, username);
-     // if (result == 1) {
-     //   this.server.to(socket.id).emit('chat_error', "Room not found");
-     //   return;
-     // }
-     // if (result == 2) {
-     //   this.server.to(socket.id).emit('chat_error', "You are not owner, you can't promote operators");
-     //   return;
-     // }
-     // if (result == 3) {
-     //   this.server.to(socket.id).emit('chat_error', "Username not found");
-     //   return;
-     // }
-   }
-
-   async processCommandBanUser(socket: Socket, message: MessageI, username: string) {
-     const result = await this.roomService.opBanUserFromRoom(message.room, socket.data.user, username);
      if (result == 1) {
        this.server.to(socket.id).emit('chat_error', "Room not found");
        return;
      }
      if (result == 2) {
-       this.server.to(socket.id).emit('chat_error', "You are not owner, you can't promote operators");
+       this.server.to(socket.id).emit('chat_error', "Username not found");
        return;
      }
      if (result == 3) {
@@ -398,7 +416,31 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        return;
      }
      if (result == 5) {
-       this.server.to(socket.id).emit('chat_error', "user owner cant be banned");
+       this.server.to(socket.id).emit('chat_error', "user owner cant be muted");
+       return;
+     }
+   }
+
+   async processCommandBanUser(socket: Socket, message: MessageI, username: string) {
+     const result = await this.roomService.opBanUserFromRoom(message.room, socket.data.user, username);
+     if (result == 1) {
+       this.server.to(socket.id).emit('chat_error', "Room not found");
+       return;
+     }
+     if (result == 2) {
+       this.server.to(socket.id).emit('chat_error', "Username not found");
+       return;
+     }
+     if (result == 3) {
+       this.server.to(socket.id).emit('chat_error', "Username not found");
+       return;
+     }
+     if (result == 4) {
+       this.server.to(socket.id).emit('chat_error', "You are not a operator");
+       return;
+     }
+     if (result == 5) {
+       this.server.to(socket.id).emit('chat_error', "user owner cant be muted");
        return;
      }
    }

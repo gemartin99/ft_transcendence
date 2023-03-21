@@ -12,11 +12,7 @@ export class BanService {
     private readonly banRepository: Repository<BanEntity>,
   ) {}
 
-  async banUserFromRoom(
-    room_id: number,
-    user: User,
-    banDurationMinutes: number,
-  ): Promise<BanEntity> {
+  async banUserFromRoom(room_id: number, user: User, banDurationMinutes: number): Promise<BanEntity> {
     const banExpiry = new Date(Date.now() + banDurationMinutes * 60000);
 
     const existingBan = await this.banRepository.findOne({
@@ -45,11 +41,49 @@ export class BanService {
     }
   }
 
-  async isUserBannedFromRoom(room: RoomEntity, user: User): Promise<boolean> {
+  async isUserBannedFromRoom(roomId: number, userId: number): Promise<boolean> {
     const ban = await this.banRepository.findOne({
-      where: { user_id: user.id, room_id: room.id },
+      where: { user_id: userId, room_id: roomId },
     });
 
     return !!ban && ban.ban_expires > new Date();
+  }
+
+  async muteUserFromRoom(room_id: number, user: User, muteDurationMinutes: number): Promise<BanEntity> {
+    const muteExpiry = new Date(Date.now() + muteDurationMinutes * 60000);
+
+    const existingBan = await this.banRepository.findOne({
+      where: { user_id: user.id, room_id: room_id },
+    });
+
+    if (existingBan) {
+      existingBan.mute_expires = muteExpiry;
+      return await this.banRepository.save(existingBan);
+    } else {
+      const ban = new BanEntity();
+      ban.user_id = user.id;
+      ban.room_id = room_id;
+      ban.mute_expires = muteExpiry;
+      return await this.banRepository.save(ban);
+    }
+  }
+
+  async unmuteUserFromRoom(room: RoomEntity, user: User): Promise<void> {
+    const existingBan = await this.banRepository.findOne({
+      where: { user_id: user.id, room_id: room.id },
+    });
+
+    if (existingBan) {
+      existingBan.mute_expires = null;
+      await this.banRepository.save(existingBan);
+    }
+  }
+
+  async isUserMutedFromRoom(roomId: number, userId: number): Promise<boolean> {
+    const ban = await this.banRepository.findOne({
+      where: { user_id: userId, room_id: roomId },
+    });
+
+    return !!ban && ban.mute_expires > new Date();
   }
 }

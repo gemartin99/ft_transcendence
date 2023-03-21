@@ -1,3 +1,10 @@
+qiskit libro de texto bases computacion quantica
+algoritmos 
+
+https://qiskit.org/learn/
+
+
+
 II.4 Chat
 TODO:
 

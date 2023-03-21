@@ -215,6 +215,16 @@ export class RoomService {
     await this.roomRepository.save(channel);
   }
 
+  async isUserBanedFromChannel(roomId: number, userId: number): Promise<boolean>
+  {
+      return(await this.banService.isUserBannedFromRoom(roomId, userId));
+  }
+
+  async isUserMutedFromChannel(roomId: number, userId: number): Promise<boolean>
+  {
+      return(await this.banService.isUserMutedFromRoom(roomId, userId));
+  }
+
   //CHAT COMMANDS
   async opBanUserFromRoom(room: RoomI, user: UserI, userTargetName: string) {
     const target_room = await this.getRoomByIdWhitNoUsersRelation(room.id);
@@ -233,7 +243,8 @@ export class RoomService {
 
     if(await this.ownerService.isOwner(user.id, room.id))
     {
-      await this.banService.banUserFromRoom(target_room.id, target, 2);
+      await this.banService.banUserFromRoom(target_room.id, target, 5);
+      await this.kick_user_from_channel(target_room.id, user.id);
       //console.log('user is owner, and wants to ban');
       return 0;
     }
@@ -244,7 +255,8 @@ export class RoomService {
          //console.log('user owner cant be banned');
         return 5;
       }
-      await this.banService.banUserFromRoom(target_room.id, target, 2);
+      await this.banService.banUserFromRoom(target_room.id, target, 5);
+      await this.kick_user_from_channel(target_room.id, user.id);
       //console.log('user is operator, and wants to ban');
       return 0;
     }
@@ -256,6 +268,12 @@ export class RoomService {
   }
 
   async opMuteUserFromRoom(room: RoomI, user: UserI, userTargetName: string) {
+    const target_room = await this.getRoomByIdWhitNoUsersRelation(room.id);
+    if(!target_room){
+      //room not found
+      return 1;
+    }
+
     const regex = /^[A-Za-z0-9]{1,30}$/;
     if (!regex.test(userTargetName)) {
       return 2;
@@ -267,15 +285,25 @@ export class RoomService {
 
     if(await this.ownerService.isOwner(user.id, room.id))
     {
-      console.log('user is owner, and wants to ban');
+      await this.banService.muteUserFromRoom(target_room.id, target, 5);
+      //console.log('user is owner, and wants to ban');
+      return 0;
     }
     else if(await this.operatorService.isOperator(user.id, room.id))
     {
-      console.log('user is operator, and wants to ban');
+      if(await this.ownerService.isOwner(target.id, room.id))
+      {
+         //console.log('user owner cant be banned');
+        return 5;
+      }
+      await this.banService.muteUserFromRoom(target_room.id, target, 5);
+      //console.log('user is operator, and wants to ban');
+      return 0;
     }
     else
     {
-      console.log('user is not operator, and wants to ban');
+      //console.log('user is not operator, and wants to ban');
+      return 4
     }
   }
 
