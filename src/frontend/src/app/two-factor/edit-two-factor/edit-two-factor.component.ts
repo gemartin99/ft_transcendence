@@ -15,6 +15,7 @@ export class EditTwoFactorComponent implements OnInit, AfterViewInit {
   twoFactorSecret: string;
   input_error: string;
   public code: string = '';
+  steep1 = true;
   
   constructor(private authService: AuthService, private apiService: ApiService, private router: Router) { }
 
@@ -48,6 +49,7 @@ export class EditTwoFactorComponent implements OnInit, AfterViewInit {
   }
 
   generateTwoFactor() {
+    this.steep1 = false;
     this.apiService.get2faSecretKey(this.user).subscribe(
       (response: string) => {
         this.twoFactorSecret = response;

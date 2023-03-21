@@ -15,22 +15,25 @@
 <!--           <button (click)="generateTwoFactor()">Generate Two Factor</button>
           <div *ngIf="twoFactorSecret">{{ twoFactorSecret }}</div> -->
           <div class="field">
-            <div class="notification is-info" style="margin: 20px; display: inline-table;">
+            <div class="notification is-info">
               To can use, the two factor auth, you need to have/download Google Authentificator App. Scan the QR, and sumbit in the form the Code that Google Authentificator App will generate.
             </div>
-            <label class="label">Scan Google Auth QR:</label>
-            <div class="control">
+            <div class="control" *ngIf=steep1>
+              <label class="label">Click to generate QR:</label>
               <button (click)="generateTwoFactor()" class="button is-primary">Generate QR</button>
-                <div id="QR"></div>
             </div>
-            <label class="label">Confirm the code:</label>
-            <div class="control">
-              <input type="text" [(ngModel)]="code" name="code" placeholder="Enter Code" class="form-control input" required>
-                <div *ngIf="input_error" class="help is-danger">{{ input_error }}</div>
+            <div *ngIf=!steep1>
+              <label class="label">Scan Google Auth QR:</label>
+              <div id="QR"></div>
+              <label class="label">Confirm the code:</label>
+              <div class="control">
+                <input type="text" [(ngModel)]="code" name="code" placeholder="Enter Code" class="form-control input" required>
+                  <div *ngIf="input_error" class="help is-danger">{{ input_error }}</div>
+              </div>
+              <div class="field verify">
+                <button (click)="verifyTwoFactor()" class="button is-primary">Verify Two Factor</button>
+              </div>
             </div>
-          </div>
-          <div class="field">
-            <button (click)="verifyTwoFactor()" class="button is-primary">Verify Two Factor</button>
           </div>
         </ng-template>
       </div>
