@@ -101,7 +101,7 @@ export class ChatService {
 
   haveOpenChallange()
   {
-    console.log(`cancel challange pressed`);
+    //console.log(`cancel challange pressed`);
     this.socket.emit('haveOpenChallange');
   }
 }

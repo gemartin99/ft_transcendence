@@ -55,6 +55,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.socket.on('gameChallange', (gameChallange: MatchChallange) => {
       this.matchChallange = gameChallange;
       console.log('gameChallange received');
+      console.log(gameChallange);
     });
     this.chatService.haveOpenChallange();
   }

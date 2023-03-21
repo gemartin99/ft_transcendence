@@ -2,11 +2,11 @@
   <div class="container">
     <div class="card">
       <div class="card-content">
-        <div *ngIf="matchChallange && matchChallange.id_player1 === user.id" class="notification is-challange">
+        <div *ngIf="matchChallange && matchChallange.id_player1 == user.id" class="notification is-challange">
             Player {{matchChallange.name1}} <strong>Challange you</strong> for a classic crazy-pong game &nbsp;<button (click)="acceptChallange()" class="button is-small is-primary">Accept</button>&nbsp;
             <button (click)="cancelChallange()" class="button is-small is-danger">Cancel</button>
         </div>
-        <div *ngIf="matchChallange && matchChallange.id_player1 !== user.id" class="notification is-challange">
+        <div *ngIf="matchChallange && matchChallange.id_player1 != user.id" class="notification is-challange">
             You <strong>Challanged</strong> {{matchChallange.name2}} for a classic crazy-pong game &nbsp;
             <button (click)="cancelChallange()" class="button is-small is-danger">Cancel</button>
         </div>

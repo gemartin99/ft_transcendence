@@ -98,18 +98,18 @@ export class GameGateway {
       const other_online = await this.onlineUserService.findByUser(user2);
       console.log('other_online');
       console.log(other_online);
-      // if(other_online.length === 0){
-      //   this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
-      //   return
-      // }
-      // if (this.checkClientInChallange(client)){
-      //    this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
-      //    return
-      // }
-      // if(this.checkUserInChallange(user2.id)){
-      //    this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
-      //    return
-      // }
+      if(other_online.length === 0){
+        this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
+        return
+      }
+      if (this.checkClientInChallange(client)){
+         this.server.to(client.id).emit('chat_error', "can't challanege: you have a open challange yet");
+         return
+      }
+      if(this.checkUserInChallange(user2.id)){
+         this.server.to(client.id).emit('chat_error', "can't challanege: target user is in a challange");
+         return
+      }
       // this.server.to(client.id).emit('chat_error', "on invite game  3 steeps passeds");
       this.openChallenge(client, user2, other_online[0]);
   }

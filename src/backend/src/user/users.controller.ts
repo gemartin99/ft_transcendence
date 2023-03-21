@@ -70,6 +70,11 @@ export class UsersController {
     async completeRegister(@Req() req, @Res() res, @Body() body): Promise<any> {
       console.log('Call to abckend completeRegister');
       console.log(body);
+      // Validate name field
+      const nameRegex = /^[a-zA-Z0-9]{1,30}$/;
+      if (!body.name || !nameRegex.test(body.name)) {
+        return res.send(false);
+      }
       res.header('Access-Control-Allow-Origin', 'http://crazy-pong.com');
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if(user) {
