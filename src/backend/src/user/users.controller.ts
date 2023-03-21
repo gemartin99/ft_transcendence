@@ -3,6 +3,7 @@ import { ArchivementsService } from '../archivements/archivements.service';
 import { Controller, Get, Post, Put, Delete, Body, Param, Req, Res, UseGuards, Query } from  '@nestjs/common';
 import { User } from  './user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { TwoFactorGuard } from '../auth/two-factor/two-factor.guard';
 // import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
@@ -86,7 +87,7 @@ export class UsersController {
     }
 
     @Get('test')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async test(@Req() req, @Res() res): Promise<any> {
       return res.send('test works');
     }
@@ -206,7 +207,7 @@ export class UsersController {
 
     //ARCHIVEMENTS
     @Get('archivements/:userId')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getArchivements(@Req() req, @Res() res, @Param('userId') userId: number): Promise<any> {
       // console.log('Requesting archivements for user:' + userId)
       // if (typeof userId !== 'number') {
