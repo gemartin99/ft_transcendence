@@ -25,6 +25,15 @@ export class AuthService {
     return true;
   }
 
+  async isTwoFactorAuthenticated(): Promise<boolean> {
+    //return this.httpClient.get('/auth/isAuthenticated');
+    const is_auth = await this.httpClient.get<any>(`${this.API_SERVER}/auth/twofactor`, { withCredentials: true }).toPromise();
+    console.log('is_auth = ' + is_auth);
+    if(!is_auth)
+      return false;
+    return true;
+  }
+
   async loadLoggedUser(){
       if (!this.user) {
           try {

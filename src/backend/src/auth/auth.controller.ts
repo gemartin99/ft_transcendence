@@ -120,6 +120,39 @@ export class AuthController {
         }
     }
 
+    @Get('twofactor')
+    async userIsTwoFactorAuth(@Req() req: any, @Res() res: Response) {
+    console.log(req.cookies);
+        console.log('BAKEND USER IS AUTH?');
+        const token = req.cookies['crazy-pong'];
+        if (!token) {
+            console.log('USER NOT AUTH!!!');
+            //return res.send({ message: 'Unauthorized', user: undefined });
+            return res.send( false );
+            //return false;
+        }
+        try {
+            const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+            console.log('USER IS AUTHORITZED');
+            const user = await this.userService.getBy42Id(decoded.thirdPartyId);
+            if(!user)
+                return res.send( false );
+            if (user.twofactor)
+            {
+                if(!user.twofactor_valid)
+                    return res.send( false );
+            }
+            //return res.send({ message: 'Authorized', user: decoded });
+            return res.send(true);
+            //return true;
+        } catch (err) {
+            console.log('USER NOT AUTH!!!');
+            //return res.send({ message: 'Unauthorized', user: undefined });
+            return res.send( false );
+            //return false;
+        }
+    }
+
     @Get('user')
     async getLoggedUser(@Req() req: any, @Res() res: Response) {
         console.log('inside getLoggedUser');
