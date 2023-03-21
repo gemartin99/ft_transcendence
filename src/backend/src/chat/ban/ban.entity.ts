@@ -13,9 +13,9 @@ export class BanEntity {
   @Column()
   room_id: number;
 
-  @Column()
+  @Column({ nullable: true })
   ban_expires: Date;
 
-  @Column()
+  @Column({ nullable: true })
   mute_expires: Date;
 }

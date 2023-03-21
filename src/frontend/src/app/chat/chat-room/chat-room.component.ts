@@ -69,6 +69,7 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
   }
 
   sendMessage() {
+    this.error_string = null;
     this.chatService.sendMessage({text: this.chatMessage.value, room: this.chatRoom});
     this.chatMessage.reset();
   }

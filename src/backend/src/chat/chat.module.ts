@@ -21,12 +21,13 @@ import { MatchService } from '../game/match/match.service';
 import { MatchEntity } from '../game/match/match.entity';
 import { ArchivementsEntity } from '../archivements/archivements.entity';
 import { ArchivementsService } from '../archivements/archivements.service';
+import { BanService } from './ban/ban.service';
 import { BanEntity } from './ban/ban.entity';
 
 
 
 @Module({
   imports: [AuthModule, UsersModule, forwardRef(() => UsersModule), TypeOrmModule.forFeature([ User, RoomEntity, OnlineUserEntity, MessageEntity, JoinedRoomEntity, OperatorEntity, OwnerEntity, MatchEntity, ArchivementsEntity, BanEntity])],
-  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService, OperatorService, OwnerService, MatchService, ArchivementsService]
+  providers: [ChatGateway, AuthService, RoomService, OnlineUserService, MessageService, JoinedRoomService, OperatorService, OwnerService, MatchService, ArchivementsService, BanService]
 })
 export class ChatModule {} 

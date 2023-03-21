@@ -10,6 +10,7 @@ import { JoinedRoomService } from '../joined-room/joined-room.service';
 import { OwnerService } from '../owner/owner.service';
 import { OperatorService } from '../operator/operator.service';
 import { UserService } from '../../user/user.service';
+import { BanService } from '../ban/ban.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -21,6 +22,7 @@ export class RoomService {
     private ownerService: OwnerService,
     private operatorService: OperatorService,
     private userService: UserService,
+    private banService: BanService,
     @InjectRepository(RoomEntity)
     private readonly roomRepository: Repository<RoomEntity>
   ) { }
@@ -192,11 +194,82 @@ export class RoomService {
     return false;
   }
 
+  async kick_user_from_channel(channelId: number, userId: number) {
+    const channel = await this.roomRepository.findOne({
+      where: { id: channelId },
+      relations: ["joinedUsers", "users"],
+    });
+    if(!channel)
+      return;
+
+    const joinedUser = channel.joinedUsers.find(joinedUser => joinedUser.user.id === userId);
+    if (!joinedUser) {
+      throw new Error("User is not joined in the channel");
+    }
+
+    // Remove the joined user from the channel's joinedUsers array
+    await this.joinedRoomService.remove(joinedUser);
+
+    // Remove the user from the channel's users array
+    channel.users = channel.users.filter(user => user.id !== userId);
+    await this.roomRepository.save(channel);
+  }
+
   //CHAT COMMANDS
   async opBanUserFromRoom(room: RoomI, user: UserI, userTargetName: string) {
-    console.log('Room service Ban User from room');
-    console.log(room);
-    if(await this.operatorService.isOperator(user.id, room.id))
+    const target_room = await this.getRoomByIdWhitNoUsersRelation(room.id);
+    if(!target_room){
+      //room not found
+      return 1;
+    }
+    const regex = /^[A-Za-z0-9]{1,30}$/;
+    if (!regex.test(userTargetName)) {
+      return 2;
+    }
+
+    const target = await this.userService.getByName(userTargetName);
+    if(!target)
+      return 3;
+
+    if(await this.ownerService.isOwner(user.id, room.id))
+    {
+      await this.banService.banUserFromRoom(target_room.id, target, 2);
+      //console.log('user is owner, and wants to ban');
+      return 0;
+    }
+    else if(await this.operatorService.isOperator(user.id, room.id))
+    {
+      if(await this.ownerService.isOwner(target.id, room.id))
+      {
+         //console.log('user owner cant be banned');
+        return 5;
+      }
+      await this.banService.banUserFromRoom(target_room.id, target, 2);
+      //console.log('user is operator, and wants to ban');
+      return 0;
+    }
+    else
+    {
+      //console.log('user is not operator, and wants to ban');
+      return 4
+    }
+  }
+
+  async opMuteUserFromRoom(room: RoomI, user: UserI, userTargetName: string) {
+    const regex = /^[A-Za-z0-9]{1,30}$/;
+    if (!regex.test(userTargetName)) {
+      return 2;
+    }
+
+    const target = await this.userService.getByName(userTargetName);
+    if(!target)
+      return 3;
+
+    if(await this.ownerService.isOwner(user.id, room.id))
+    {
+      console.log('user is owner, and wants to ban');
+    }
+    else if(await this.operatorService.isOperator(user.id, room.id))
     {
       console.log('user is operator, and wants to ban');
     }
@@ -204,11 +277,6 @@ export class RoomService {
     {
       console.log('user is not operator, and wants to ban');
     }
-  }
-
-  async opMuteUserFromRoom(room: RoomI, username: string) {
-    console.log('Room service Ban User from room');
-    console.log(room);
   }
 
   async owChangePasswordRoom(room: RoomI, user: UserI, password: string) {
@@ -229,61 +297,101 @@ export class RoomService {
   }
 
   async owUnsetPasswordRoom(room: RoomI, user: UserI) {
-    console.log('Room service unset password of the room');
-    if(await this.ownerService.isOwner(user.id, room.id))
+    const target_room = await this.getRoomByIdWhitNoUsersRelation(room.id);
+    if(!target_room){
+      //room not found
+      return 1;
+    }
+      //console.log('Room service unset password of the room');
+
+    if(await this.ownerService.isOwner(user.id, target_room.id))
     {
-      console.log('user is owner, the password is unseted');
-      room.password = null;
-      await this.roomRepository.save(room);
+      //user is owner, the password is unseted
+      //console.log('user is owner, the password is unseted');
+      target_room.password = null;
+      await this.roomRepository.save(target_room);
+      return 0;
     }
     else
     {
-      console.log('user is not owner, he can t unset the password');
+      //console.log('user is not owner, he can t unset the password');
+      return 2;
     }
+    return 0;
   }
 
   async owSetUserAsOperator(room: RoomI, user: UserI, userTargetName: string) {
+    const target_room = await this.getRoomByIdWhitNoUsersRelation(room.id);
+    if(!target_room){
+      //room not found
+      return 1;
+    }
+
+    const regex = /^[A-Za-z0-9]{1,30}$/;
+    if (!regex.test(userTargetName)) {
+      return 3;
+    }
+
     console.log('Room service promote user as operator');
-    if(await this.ownerService.isOwner(user.id, room.id))
+    if(await this.ownerService.isOwner(user.id, target_room.id))
     {
       console.log('user is owner, try promoting user to operator');
       const target = await this.userService.getByName(userTargetName);
       if(target)
       {
-        this.operatorService.addOperator(target.id, room.id);
+        await this.operatorService.addOperator(target.id, target_room.id);
         console.log('user promoted to oeprator');
+        return 0;
       }
       else
       {
         console.log('target user not found');
+        return 3;
       }
     }
     else
     {
       console.log('user is not owner, he can t promote to operator');
+      return 2;
     }
+    return 0;
   }
 
   async owUnsetUserAsOperator(room: RoomI, user: UserI, userTargetName: string) {
+    const target_room = await this.getRoomByIdWhitNoUsersRelation(room.id);
+    if(!target_room){
+      //room not found
+      return 1;
+    }
+
+    const regex = /^[A-Za-z0-9]{1,30}$/;
+    if (!regex.test(userTargetName)) {
+      return 3;
+    }
+
     console.log('Room service try to degrade user as operator');
-    if(await this.ownerService.isOwner(user.id, room.id))
+    if(await this.ownerService.isOwner(user.id, target_room.id))
     {
       console.log('user is owner, try degrade user as operator');
       const target = await this.userService.getByName(userTargetName);
       if(target)
       {
-        this.operatorService.removeOperator(target.id, room.id);
+        this.operatorService.removeOperator(target.id, target_room.id);
         console.log('user removed from operators');
+        return 0;
       }
       else
       {
         console.log('target user not found');
+        return 3;
       }
     }
     else
     {
       console.log('user is not owner, he can t degrade operators');
+      return 2
     }
+    return 0;
   }
 
   //TODO check if user is in room

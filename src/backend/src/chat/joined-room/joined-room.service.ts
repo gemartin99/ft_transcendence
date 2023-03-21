@@ -35,6 +35,11 @@ export class JoinedRoomService {
     // return savedJoinedRoom;
   }
 
+  async remove(joinedRoom: JoinedRoomI): Promise<void> {
+    await this.joinedRoomRepository.delete(joinedRoom.id);
+  }
+
+
   async findByUser(user: UserI): Promise<JoinedRoomI[]> {
     return await this.joinedRoomRepository.find({ where: { user }});
   }
@@ -58,6 +63,7 @@ export class JoinedRoomService {
   async deleteBySocketId(socketId: string) {
     return this.joinedRoomRepository.delete({ socketId });
   }
+
 
   async deleteAll() {
     await this.joinedRoomRepository

@@ -313,13 +313,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
            break;
          case '/ban':
            if (args.length == 1) {
-             await this.roomService.opBanUserFromRoom(message.room, message.user, args[0]);
+             await this.processCommandBanUser(socket, message, args[0]);
              return;
            }
            break;
          case '/mute':
            if (args.length == 1) {
-             await this.roomService.opMuteUserFromRoom(message.room, args[0]);
+             await this.processCommandMuteUser(socket, message, args[0]);
              return;
            }
            break;
@@ -330,37 +330,111 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
            }
            break;
          case '/unsetpwd':
-             await this.roomService.owUnsetPasswordRoom(message.room, message.user);
+             //await this.roomService.owUnsetPasswordRoom(message.room, message.user);
+             await this.processCommandUnsetPwd(socket, message.room);
              return;
            break;
          case '/setop':
            if (args.length == 1) {
-             await this.roomService.owSetUserAsOperator(message.room, message.user, args[0]);
+             await this.processCommandSetOp(socket, message, args[0]);
              return;
            }
            break;
          case '/unsetop':
            if (args.length == 1) {
-             await this.roomService.owUnsetUserAsOperator(message.room, message.user, args[0]);
+             await this.processCommandUnsetOp(socket,message, args[0]);
              return;
            }
            break;
-         case '/join':
-           if (args.length == 1) {
-             await this.roomService.usJoinRoom(message.user, args[0], "");
-             return;
-           }
-           if (args.length == 2) {
-             await this.roomService.usJoinRoom(message.user, args[0], args[1]);
-             return;
-           }
-           break;
+         // case '/join':
+         //   if (args.length == 1) {
+         //     await this.roomService.usJoinRoom(message.user, args[0], "");
+         //     return;
+         //   }
+         //   if (args.length == 2) {
+         //     await this.roomService.usJoinRoom(message.user, args[0], args[1]);
+         //     return;
+         //   }
+         //   break;
          default:
            // handle unknown command
            break;
        }
      }
    }
+
+   async processCommandMuteUser(socket: Socket, message: MessageI, username: string) {
+     const result = await this.roomService.opMuteUserFromRoom(message.room, socket.data.user, username);
+     // if (result == 1) {
+     //   this.server.to(socket.id).emit('chat_error', "Room not found");
+     //   return;
+     // }
+     // if (result == 2) {
+     //   this.server.to(socket.id).emit('chat_error', "You are not owner, you can't promote operators");
+     //   return;
+     // }
+     // if (result == 3) {
+     //   this.server.to(socket.id).emit('chat_error', "Username not found");
+     //   return;
+     // }
+   }
+
+   async processCommandBanUser(socket: Socket, message: MessageI, username: string) {
+     const result = await this.roomService.opBanUserFromRoom(message.room, socket.data.user, username);
+     if (result == 1) {
+       this.server.to(socket.id).emit('chat_error', "Room not found");
+       return;
+     }
+     if (result == 2) {
+       this.server.to(socket.id).emit('chat_error', "You are not owner, you can't promote operators");
+       return;
+     }
+     if (result == 3) {
+       this.server.to(socket.id).emit('chat_error', "Username not found");
+       return;
+     }
+     if (result == 4) {
+       this.server.to(socket.id).emit('chat_error', "You are not a operator");
+       return;
+     }
+     if (result == 5) {
+       this.server.to(socket.id).emit('chat_error', "user owner cant be banned");
+       return;
+     }
+   }
+
+   async processCommandUnsetOp(socket: Socket, message: MessageI, username: string) {
+     const result = await this.roomService.owUnsetUserAsOperator(message.room, socket.data.user, username);
+     if (result == 1) {
+       this.server.to(socket.id).emit('chat_error', "Room not found");
+       return;
+     }
+     if (result == 2) {
+       this.server.to(socket.id).emit('chat_error', "You are not owner, you can't promote operators");
+       return;
+     }
+     if (result == 3) {
+       this.server.to(socket.id).emit('chat_error', "Username not found");
+       return;
+     }
+   }
+
+   async processCommandSetOp(socket: Socket, message: MessageI, username: string) {
+     const result = await this.roomService.owSetUserAsOperator(message.room, socket.data.user, username);
+     if (result == 1) {
+       this.server.to(socket.id).emit('chat_error', "Room not found");
+       return;
+     }
+     if (result == 2) {
+       this.server.to(socket.id).emit('chat_error', "You are not owner, you can't promote operators");
+       return;
+     }
+     if (result == 3) {
+       this.server.to(socket.id).emit('chat_error', "Username not found");
+       return;
+     }
+   }
+
 
    async processCommandSetPwd(socket: Socket, message: MessageI, password: string) {
      const result = await this.roomService.owChangePasswordRoom(message.room, socket.data.user, password);
@@ -372,6 +446,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        this.server.to(socket.id).emit('chat_error', "Password format is incorrect");
        return;
      }
-
    }
+
+   async processCommandUnsetPwd(socket: Socket, room: RoomI) {
+     const result = await this.roomService.owUnsetPasswordRoom(room, socket.data.user);
+     if (result == 1) {
+       this.server.to(socket.id).emit('chat_error', "Room not found");
+       return;
+     }
+     if (result == 2) {
+       this.server.to(socket.id).emit('chat_error', "You are not owner, you can't unset the password");
+       return;
+     }
+   }
+
+
+
+   // async processLeaveRoom(socket: Socket) {
+
+   // }
+
+   // async processGetRoomList(socket: Socket) {
+
+   // }
 }
