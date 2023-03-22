@@ -29,26 +29,26 @@ export class RoomService {
 
   async createRoom(room: RoomI, creator: UserI): Promise<RoomI> {
     //const newRoom = await this.addCreatorToRoom(room, creator);
-    console.log('createRoom:');
+    //console.log('createRoom:');
     if(room.password != null && room.password != '')
     {
-      console.log('createRoom: passsword is set');
+      //console.log('createRoom: passsword is set');
       room.password = await bcrypt.hash(room.password, 10);
     }
-    console.log(room);
+    //console.log(room);
     room.users = [{ id: creator.id }];
-    if(room.type == 1)
-    {
-      console.log('createRoom: room is public');
-    }
-    else if(room.type == 2)
-    {
-      console.log('createRoom: room is private');
-    }
-    else
-    {
-      console.log('createRoom: room is not 1 or 2');
-    }
+    // if(room.type == 1)
+    // {
+    //   //console.log('createRoom: room is public');
+    // }
+    // else if(room.type == 2)
+    // {
+    //   //console.log('createRoom: room is private');
+    // }
+    // else
+    // {
+    //   //console.log('createRoom: room is not 1 or 2');
+    // }
     const created_room = await this.roomRepository.save(room);
     await this.ownerService.addOwner(creator.id, created_room.id);
     return created_room;
@@ -58,11 +58,11 @@ export class RoomService {
     const newRoom = await this.getRoomByName(room.name);
     if(newRoom)
     {
-      console.log('In room service');
-      console.log('joiner is:');
-      console.log(creator);
-      console.log('joinroom is:');
-      console.log(newRoom);
+      //console.log('In room service');
+      //console.log('joiner is:');
+      //console.log(creator);
+      //console.log('joinroom is:');
+      //console.log(newRoom);
       newRoom.users.push(creator);
       return this.roomRepository.save(newRoom);
     }
@@ -77,11 +77,11 @@ export class RoomService {
     const newRoom = await this.getRoomById(room.id);
     if(newRoom)
     {
-      console.log('In room service');
-      console.log('joiner is:');
-      console.log(creator);
-      console.log('joinroom is:');
-      console.log(newRoom);
+      //console.log('In room service');
+      //console.log('joiner is:');
+      //console.log(creator);
+      //console.log('joinroom is:');
+      //console.log(newRoom);
       newRoom.users.push(creator);
       return this.roomRepository.save(newRoom);
     }
@@ -360,26 +360,26 @@ export class RoomService {
       return 3;
     }
 
-    console.log('Room service promote user as operator');
+    //console.log('Room service promote user as operator');
     if(await this.ownerService.isOwner(user.id, target_room.id))
     {
-      console.log('user is owner, try promoting user to operator');
+      //console.log('user is owner, try promoting user to operator');
       const target = await this.userService.getByName(userTargetName);
       if(target)
       {
         await this.operatorService.addOperator(target.id, target_room.id);
-        console.log('user promoted to oeprator');
+        //console.log('user promoted to oeprator');
         return 0;
       }
       else
       {
-        console.log('target user not found');
+        //console.log('target user not found');
         return 3;
       }
     }
     else
     {
-      console.log('user is not owner, he can t promote to operator');
+      //console.log('user is not owner, he can t promote to operator');
       return 2;
     }
     return 0;
@@ -397,26 +397,26 @@ export class RoomService {
       return 3;
     }
 
-    console.log('Room service try to degrade user as operator');
+    //console.log('Room service try to degrade user as operator');
     if(await this.ownerService.isOwner(user.id, target_room.id))
     {
-      console.log('user is owner, try degrade user as operator');
+      //console.log('user is owner, try degrade user as operator');
       const target = await this.userService.getByName(userTargetName);
       if(target)
       {
         this.operatorService.removeOperator(target.id, target_room.id);
-        console.log('user removed from operators');
+        //console.log('user removed from operators');
         return 0;
       }
       else
       {
-        console.log('target user not found');
+        //console.log('target user not found');
         return 3;
       }
     }
     else
     {
-      console.log('user is not owner, he can t degrade operators');
+      //console.log('user is not owner, he can t degrade operators');
       return 2
     }
     return 0;
@@ -490,7 +490,7 @@ export class RoomService {
           id_pvt_user1: user1.id,
           id_pvt_user2: user2.id
       };
-      console.log(room);
+      //console.log(room);
       const created_room = await this.roomRepository.save(room);
       return created_room;
   }

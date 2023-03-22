@@ -12,11 +12,11 @@ export class JwtStrategy extends PassportStrategy(Strategy,'jwt') {
             jwtFromRequest:ExtractJwt.fromExtractors([(request:Request) => {
                 let data = request.cookies["crazy-pong"];
                 if(!data){
-                    console.log('En JWT NO COOKIE ENCONTRADA')
+                    //console.log('En JWT NO COOKIE ENCONTRADA')
                     return null;
                 }
-                console.log('COOKIE ENCONTRADA')
-                console.log(data);
+                //console.log('COOKIE ENCONTRADA')
+                //console.log(data);
                 return data;
             }])
         });

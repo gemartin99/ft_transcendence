@@ -29,10 +29,10 @@ export class School42Strategy extends PassportStrategy(Strategy, 'school42')
     async validate(accessToken: string, refreshToken: string, profile: any, done: Function, res: Response)
     {
 
-        console.log('validating...');
-        console.log('accessToken:' + accessToken);
-        console.log('refreshToken:' + refreshToken);
-        console.log('profile:' + profile);
+        //console.log('validating...');
+        //console.log('accessToken:' + accessToken);
+        //console.log('refreshToken:' + refreshToken);
+        //console.log('profile:' + profile);
 
         try
         {
@@ -40,7 +40,7 @@ export class School42Strategy extends PassportStrategy(Strategy, 'school42')
                 headers: { Authorization: `Bearer ${accessToken}` },
             });
 
-            console.log('Id usuario 42:' + data.id);
+            //console.log('Id usuario 42:' + data.id);
             const jwt: string = await this.authService.validateOAuthLogin(data.id, Provider.SCHOOL42);
             // localStorage.setItem('jwt', jwt);
             
@@ -53,8 +53,8 @@ export class School42Strategy extends PassportStrategy(Strategy, 'school42')
         }
         catch(err)
         {
-            console.log('Error try de valdiate2');
-            console.log(err)
+            //console.log('Error try de valdiate2');
+            //console.log(err)
             done(err, false);
         }
     }

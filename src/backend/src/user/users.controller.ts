@@ -12,55 +12,55 @@ export class UsersController {
     constructor(private userService: UserService, private archivementsService: ArchivementsService){
     }
 
-    @Get()
-    read(): Promise<User[]> {
-      return this.userService.readAll();
-    }
+    // @Get()
+    // read(): Promise<User[]> {
+    //   return this.userService.readAll();
+    // }
     
-    @Post('create')
-    async create(@Body() user: User): Promise<any> {
-      return this.userService.create(user);
-    }  
+    // @Post('create')
+    // async create(@Body() user: User): Promise<any> {
+    //   return this.userService.create(user);
+    // }  
     
-    @Put(':id/update')
-    async update(@Param('id') id, @Body() user: User): Promise<any> {
-        user.id = Number(id);
-        return this.userService.update(user);
-    }  
+    // @Put(':id/update')
+    // async update(@Param('id') id, @Body() user: User): Promise<any> {
+    //     user.id = Number(id);
+    //     return this.userService.update(user);
+    // }  
     
-    @Delete(':id/delete')
-    async delete(@Param('id') id): Promise<any> {
-      return this.userService.delete(id);
-    }
+    // @Delete(':id/delete')
+    // async delete(@Param('id') id): Promise<any> {
+    //   return this.userService.delete(id);
+    // }
     
     @Post('isvalidname')
     @UseGuards(AuthGuard('jwt'))
     async isValidName(@Req() req, @Body() body: { name: string }): Promise<boolean> {
-      console.log('Inside BACKEND isvalidname');
-      console.log('Inside BACKEND name:' + body.name);
+      //console.log('Inside BACKEND isvalidname');
+      //console.log('Inside BACKEND name:' + body.name);
       const name = body.name;
       if (!name) {
-        console.log('Inside BACKEND Name is empty');
+        //console.log('Inside BACKEND Name is empty');
         return false; // Name is empty, so it's not valid
       }
       if (name.length > 30) {
-        console.log('Inside BACKEND isvalidname name length is too long');
+        //console.log('Inside BACKEND isvalidname name length is too long');
         return false; // Name is too long, so it's not valid
       }
       const regex = /^[a-zA-Z0-9]*$/;
       if (!regex.test(name)) {
-        console.log('Inside BACKEND isvalidname name dont pass the regex');
+        //console.log('Inside BACKEND isvalidname name dont pass the regex');
         return false; // Name contains invalid characters, so it's not valid
       }
       const user = await this.userService.getByName(name);
       if (user && (user.id42 != req.user.thirdPartyId)) {
-        console.log('Inside BACKEND isvalidname Name is in use');
+        //console.log('Inside BACKEND isvalidname Name is in use');
         return false; // Name is already in use by another user, so it's not valid
       }
-      console.log('Inside BACKEND req.user.thirdPartyId:' + req.user.thirdPartyId);
+      //console.log('Inside BACKEND req.user.thirdPartyId:' + req.user.thirdPartyId);
       const req_user = await this.userService.getBy42Id(req.user.thirdPartyId);
-      console.log('Inside BACKEND name is valid going to update it for user');
-      console.log(req_user);
+      //console.log('Inside BACKEND name is valid going to update it for user');
+      //console.log(req_user);
       req_user.name = body.name;
       await this.userService.save(req_user);
       return true; // Name is valid
@@ -69,8 +69,8 @@ export class UsersController {
     @Post('register')
     @UseGuards(AuthGuard('jwt'))
     async completeRegister(@Req() req, @Res() res, @Body() body): Promise<any> {
-      console.log('Call to abckend completeRegister');
-      console.log(body);
+      //console.log('Call to abckend completeRegister');
+      //console.log(body);
       // Validate name field
       const nameRegex = /^[a-zA-Z0-9]{1,30}$/;
       if (!body.name || !nameRegex.test(body.name)) {
@@ -93,7 +93,7 @@ export class UsersController {
     }
 
     @Get('/find-by-username')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async findAllByUsername(@Query('name') name: string) {
       if (!name) {
         return [];
@@ -109,43 +109,43 @@ export class UsersController {
     }
 
     @Get('/find-by-id')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getUserById(@Query('id') id: string) {
-      console.log('Inside find-by-id');
+      //console.log('Inside find-by-id');
       const user = await this.userService.getById(parseInt(id));
-      console.log('when get firends the current user is ' + user);
+      //console.log('when get firends the current user is ' + user);
       return null;
     }
 
     @Get('find/:id')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getById(@Param('id') id: number): Promise<User>  {
-      console.log('find/:id');
+      //console.log('find/:id');
       return null;
     }
 
     @Get('rank/:userId')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getUserRanking(@Param('userId') userId: number): Promise<number> {
       return this.userService.getUserRanking(userId);
     }
 
     @Get('relation/with/:userId')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getRelationByUserId(@Req() req, @Param('userId') userId: number): Promise<{is_friend: boolean, is_blocked: boolean}  | null> {
       return this.userService.getRelationById(req.user.thirdPartyId ,userId);
     }
 
     @Get('finding/:userId')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getUserFindingById(@Param('userId') userId: number): Promise<User> {
-      console.log('ENDFINDING!!!!!!!');
+      //console.log('ENDFINDING!!!!!!!');
       const user = await this.userService.getById(userId);
       return user;
     }
 
     @Get('block')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getBlockedUsers(@Req() req, @Res() res): Promise<any> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       const blockeds = await this.userService.findBlockedUsers(user.id);
@@ -153,7 +153,7 @@ export class UsersController {
     }
 
     @Post('game/options')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async setGameOption(@Req() req, @Body() body: { optionId: number }): Promise<User> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if (user) {
@@ -164,7 +164,7 @@ export class UsersController {
     }
 
     @Get('game/options')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getGameOption(@Req() req): Promise<number> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if(!user)
@@ -174,7 +174,7 @@ export class UsersController {
 
 
     @Get('block/:userId')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async blockUser(@Req() req, @Res() res, @Param('userId') userId: number): Promise<User> {
       console.log('In backend call to block user');
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
@@ -192,7 +192,7 @@ export class UsersController {
     }
 
     @Get('unblock/:userId')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async unblockUser(@Req() req, @Res() res, @Param('userId') userId: number): Promise<User> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if (user) {
@@ -221,7 +221,7 @@ export class UsersController {
 
     //EDIT PROFILE TWO FACTOR
     @Put('twofactor')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async updateTwofactor(@Req() req, @Res() res, @Body() body: { twofactor: boolean }): Promise<User> {
         const user = await this.userService.getBy42Id(req.user.thirdPartyId);
         user.twofactor = body.twofactor;
@@ -231,16 +231,16 @@ export class UsersController {
 
     //FRIENDS FUNCTIONALITY
     @Post('friends')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async addFriend(@Req() req, @Res() res, @Body() body): Promise<any> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if(user) {
-          console.log(user);
+          //console.log(user);
           const user_friends = await this.userService.findUserFriends(user.id);
           const friendUser = await this.userService.getById(body.friendId);
           if(friendUser && friendUser.id != user.id){
             if (!user_friends) {
-              console.log('starting a empty array of friends');
+              //console.log('starting a empty array of friends');
               user.friends = []; // initialize the friends array if it doesn't exist
               user_friends.push(friendUser);
               return res.status(200).json({ message: 'Friend added successfully' });
@@ -252,8 +252,8 @@ export class UsersController {
             user_friends.push(friendUser);
             user.friends = user_friends;
             await this.userService.save(user);
-            console.log('Returning of post friends');
-            console.log(user.friends);
+            //console.log('Returning of post friends');
+            //console.log(user.friends);
             return res.status(200).json({ message: 'Friend added successfully' });
           }
       }
@@ -261,27 +261,27 @@ export class UsersController {
     }
 
     @Get('friends')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async getFriends(@Req() req, @Res() res): Promise<any> {
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
-      console.log('when get firends the current user is ' + user);
+      //console.log('when get firends the current user is ' + user);
       const friends = await this.userService.findUserFriends(user.id);
       return res.json(friends);
     }
 
     @Delete('friends/:id/delete')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
     async removeFriend(@Req() req, @Res() res, @Param('id') friendId: number): Promise<any> {
       // console.log('Enter to NEST DELETE FRIEND para fiendId: ' + friendId);
       const user = await this.userService.getBy42Id(req.user.thirdPartyId);
-      console.log(user);
+      //console.log(user);
       if (user) {
         user.friends = await this.userService.findUserFriends(user.id);
         user.friends = user.friends.filter(friend => friend.id != friendId);
         await this.userService.save(user);
         return res.status(200).json({ message: 'Friend removed successfully' });
       }
-      console.log('Friend not found');
+      //console.log('Friend not found');
       return res.status(200).json({ message: 'Friend not found' });
     }
 }

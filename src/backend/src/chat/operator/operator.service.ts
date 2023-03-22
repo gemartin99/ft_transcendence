@@ -17,14 +17,14 @@ export class OperatorService {
 
 
 	async findByRoom(room: RoomI): Promise<OperatorI[]> {
-	  console.log(room);
+	  //console.log(room);
 	  return await this.operatorRepository.find({ where: { room: { id: room.id } } });
 	}
 
 	async isOperator(user_id: number, room_id: number): Promise<boolean> {
 	  const operator = await this.operatorRepository.findOne({ where: { user: { id: user_id }, room: { id: room_id } } });
-	  console.log('is oeprator true or false:');
-	  console.log(!!operator);
+	  //console.log('is oeprator true or false:');
+	  //console.log(!!operator);
 	  return !!operator; // Returns true if an operator record was found, false otherwise.
 	}
 

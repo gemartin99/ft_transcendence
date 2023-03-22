@@ -30,15 +30,15 @@ export class ArchivementsService {
 	}
 
 	async getArchivementsForUser(userId: number): Promise<number[]> {
-		console.log('IN getArchivements');
+		//console.log('IN getArchivements');
 	  const user = await this.userService.getById(userId);
 	  if (!user) {
 	    return [];
 	  }
-	  console.log(user);
+	  //console.log(user);
 	  const archivements = await this.archivementsRepository.find({ where: { user: { id: userId } } });
-	  console.log('IN getArchivements archivements are:');
-	  console.log(archivements);
+	  //console.log('IN getArchivements archivements are:');
+	  //console.log(archivements);
 	  return archivements.map((archivement) => archivement.archivement);
 	}
 

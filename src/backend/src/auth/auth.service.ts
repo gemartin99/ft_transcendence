@@ -26,7 +26,7 @@ export class AuthService {
 
     async validateOAuthLogin(thirdPartyId: number, provider: Provider): Promise<string>
     {
-        console.log('Entro a auth.AuthService validateOAuthLogin...');
+        //console.log('Entro a auth.AuthService validateOAuthLogin...');
         try 
         {
             // You can add some registration logic here, 
@@ -45,14 +45,14 @@ export class AuthService {
                 provider
             }
 
-            console.log('Entro a auth.AuthService intento firmar el JWT...');
+            //console.log('Entro a auth.AuthService intento firmar el JWT...');
             const signed_token: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 3600 });
-            console.log('JWT Firmado...');
+            //console.log('JWT Firmado...');
             return signed_token;
         }
         catch (err)
         {
-            console.log('JWT Error Firmando...');
+            //console.log('JWT Error Firmando...');
             throw new InternalServerErrorException('validateOAuthLogin', err.message);
         }
     }
@@ -60,25 +60,25 @@ export class AuthService {
     //Posat recentment
     async verifyJwt(authorizationHeader: string): Promise<any> {
       if (!authorizationHeader) {
-        console.log('no authorizationHeader:' + authorizationHeader);
+        //console.log('no authorizationHeader:' + authorizationHeader);
         throw new UnauthorizedException();
       }
 
       const [bearer, jwtToken] = authorizationHeader.split(' ');
       if (bearer !== 'Bearer') {
-        console.log('no Bearer');
+        //console.log('no Bearer');
         throw new UnauthorizedException();
       }
 
-      console.log('jwt.verify :' + jwtToken);
+      //console.log('jwt.verify :' + jwtToken);
       // jwt.verify(jwtToken, process.env.JWT_SECRET)
       // console.log('resultado verify: ' + jwt.verify(jwtToken, process.env.JWT_SECRET));
       // return(1);
       try {
-        console.log('jwt.verify :' + jwtToken);
+        //console.log('jwt.verify :' + jwtToken);
         return verify(jwtToken, this.JWT_SECRET_KEY);
       } catch (err) {
-        console.log('jwt.verify FAILS: ' + err);
+        //console.log('jwt.verify FAILS: ' + err);
         throw new UnauthorizedException();
       }
     }

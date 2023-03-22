@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, Post, Body } from '@nestjs/common';
+import { Controller, Get, Req, Res, Post, Body, UseGuards } from '@nestjs/common';
 import * as qrcode from 'qrcode';
 import { TwoFactorService } from './two-factor.service';
 import { Observable, of } from 'rxjs';
@@ -7,6 +7,8 @@ import { join } from 'path';
 import * as fs from 'fs';
 import { User } from '../../user/user.entity';
 import { UserService } from '../../user/user.service';
+import { AuthGuard } from '@nestjs/passport';
+import { TwoFactorGuard } from './two-factor.guard';
 
 @Controller()
 export class TwoFactorController {
@@ -16,24 +18,26 @@ export class TwoFactorController {
   ) {}
 
   @Post('generate')
+  @UseGuards(AuthGuard('jwt'))
   async register(@Req() req, @Res() res) {
     const otpauth = await this.twoFactorService.generateTwoFactorSecret(
       req.body,
     );
-    console.log('generating otpauth: ' + otpauth);
+    //console.log('generating otpauth: ' + otpauth);
     await this.twoFactorService.pipeQrCodeStream(otpauth.otpauthUrl);
-    console.log('after: pipeQrCodeStream');
+    //console.log('after: pipeQrCodeStream');
     return res.send(JSON.stringify(otpauth.secret));
   }
 
   @Get('qrcode')
+  @UseGuards(AuthGuard('jwt'))
   async findQrCode(@Res() res) {
-    console.log('in: get qrcode');
+    //console.log('in: get qrcode');
     return of(res.sendFile(join(process.cwd(), 'src/uploads/qrcode/qrcode.png')));
   }
 
-  //@UseGuards(JwtAuthGuard)
   @Post('2faAuthentificate')
+  @UseGuards(AuthGuard('jwt'))
   async authenticate(@Body() body: { user: User, code: string }) {
     const { user, code } = body;
     // Check if the code is empty or not 6 characters
@@ -44,31 +48,32 @@ export class TwoFactorController {
     if (!/^\d+$/.test(code)) {
       return(false);
     }
-    console.log('2faAuthentificate!!!!!! code received');
-    console.log('User:', user);
-    console.log('Code:', code);
+    //console.log('2faAuthentificate!!!!!! code received');
+    //console.log('User:', user);
+    //console.log('Code:', code);
     const isCodeValid = this.twoFactorService.checkCodeIsValid(
       code, user
     );
     if (!isCodeValid) {
-      console.log('Code IS NOT VALID!!!!!!!');
+      //console.log('Code IS NOT VALID!!!!!!!');
     }
-    else
-    	console.log('Code IS VALID!!!!!!!');
+    //else
+    	//console.log('Code IS VALID!!!!!!!');
     await this.usersService.setTwoFactorAuthentificated(user.id);
     return(isCodeValid);
   }
 
   @Post('2faUserUnset')
+  @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
   async disable2fa(@Body() user: User) {
-  	console.log('Backend: inside disable2fa');
+  	//console.log('Backend: inside disable2fa');
     const result = await this.usersService.unsetTwoFactorAuthentificated(user.id);
     if(result)
     {
-    	console.log('Two factor disabled');
+    	//console.log('Two factor disabled');
     	return(true);
     }
-    console.log('Two factor keeps enabled');
+    //console.log('Two factor keeps enabled');
     return(true);
   }
 }

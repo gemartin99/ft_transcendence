@@ -16,14 +16,14 @@ export class TwoFactorService {
  
   public async generateTwoFactorSecret(user: UserI) {
     const secret = authenticator.generateSecret();
-    console.log('generatign secret 2fa: ' + secret);
+    //console.log('generatign secret 2fa: ' + secret);
 	
     //const otpauthUrl = authenticator.keyuri(user.email, this.configService.get('TWO_FACTOR_AUTHENTICATION_APP_NAME'), secret);
     const otpauthUrl = authenticator.keyuri(user.id.toString(),'crazy-pong', secret);
-    console.log('generatign otpauthUrl: ' + otpauthUrl);
+    //console.log('generatign otpauthUrl: ' + otpauthUrl);
 	
     await this.usersService.setTwoFactorSecret(secret, user.id);
- 	console.log('after setTwoFactorSecret');
+ 	//console.log('after setTwoFactorSecret');
     return {
       secret,
       otpauthUrl

@@ -22,9 +22,9 @@ export class JoinedRoomService {
   }
 
   async join(joinedRoom: JoinedRoomI): Promise<JoinedRoomI> {
-    console.log('Inside this.joinedRoomService.create');
-    console.log('joinedRoom is:');
-    console.log(joinedRoom);
+    //console.log('Inside this.joinedRoomService.create');
+    //console.log('joinedRoom is:');
+    //console.log(joinedRoom);
 
     // const newJoinedRoom = new JoinedRoomEntity();
     // newJoinedRoom.socketId = joinedRoom.socketId;
@@ -45,9 +45,9 @@ export class JoinedRoomService {
   }
 
   async findByRoom(room: RoomI): Promise<JoinedRoomI[]> {
-    console.log('In findByRoom(room: RoomI): Promise<JoinedRoomI[]>');
-    console.log('Room is');
-    console.log(room);
+    //console.log('In findByRoom(room: RoomI): Promise<JoinedRoomI[]>');
+    //console.log('Room is');
+    //console.log(room);
     return await this.joinedRoomRepository.find({ where: { room: { id: room.id } } });
   }
 

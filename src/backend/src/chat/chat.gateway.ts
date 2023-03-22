@@ -64,11 +64,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async handleConnection(socket: Socket) {
     try {
-      console.log('socket.handshake.headers.authorization es' + socket.handshake.headers.authorization);
+      //console.log('socket.handshake.headers.authorization es' + socket.handshake.headers.authorization);
       const decodedToken = await this.authService.verifyJwt(socket.handshake.headers.authorization);
-      console.log('decoded token es' + decodedToken);
+      //console.log('decoded token es' + decodedToken);
       const user = await this.userService.getBy42Id(decodedToken.thirdPartyId);
-      console.log('user is found?' + user);
+      //console.log('user is found?' + user);
       if (!user) {
         return this.disconnect(socket);
       } else {
@@ -76,9 +76,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         await this.roomService.JoinUserToGeneralRoom(user, socket);
         const rooms = await this.roomService.getRoomsForUser(user.id, {page: 1, limit: 10});
         //const rooms = await this.roomService.getAllRooms({page: 1, limit: 10});
-        console.log('In Api trying to getRoomsForUser');
+        //console.log('In Api trying to getRoomsForUser');
         //console.log('In Api trying to getAllRooms');
-        console.log(rooms);
+        //console.log(rooms);
         // this.title.push('Value ' + Math.random().toString());
         // this.server.emit('message', this.title);
         rooms.meta.currentPage = rooms.meta.currentPage - 1;
@@ -150,15 +150,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
          this.server.to(socket.id).emit('chat_error', "can't join: you are banned from this channel");
          return;
        }
-       console.log('chat gateway i enter to joinRoom');
-       console.log('room is:');
-       console.log(room);
-       console.log('user id es:');
-       console.log(socket.data.user)
+       //console.log('chat gateway i enter to joinRoom');
+       //console.log('room is:');
+       //console.log(room);
+       //console.log('user id es:');
+       //console.log(socket.data.user)
        room = await this.roomService.joinRoom(room, socket.data.user);
        const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
-       console.log('I take room messajes');
-       console.log(messages);
+       //console.log('I take room messajes');
+       //console.log(messages);
        messages.meta.currentPage = messages.meta.currentPage - 1;
 
        // Replace text of messages sent by blocked users with "Blocked"
@@ -171,9 +171,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        });
 
        // Save Connection to Room
-       console.log('Before this.joinedRoomService.create');
+       //console.log('Before this.joinedRoomService.create');
        await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
-       console.log('After this.joinedRoomService.create');
+       //console.log('After this.joinedRoomService.create');
 
        const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
        // console.log('room for user: ' + rooms);    
@@ -269,14 +269,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         return null;
      const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
      const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoomExcludingBlockedUser(room, socket.data.user.id);
-     console.log('joined users to send message:');
-     console.log(joinedUsers);
+     //console.log('joined users to send message:');
+     //console.log(joinedUsers);
 
      const filteredJoinedUsers = joinedUsers.filter(
        (user) => !user.user.blocked_users.find((blockedUser) => blockedUser.id === socket.data.user.id)
      );
      for(const user of filteredJoinedUsers) {
-       console.log('Inside the for');
+       //console.log('Inside the for');
        await this.server.to(user.socketId).emit('messageAdded', createdMessage);
      }
    }
@@ -299,18 +299,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
    
   @SubscribeMessage('pvtMessage')
    async onPvtMessage(socket: Socket, id: number) {
-      console.log('pvtMessage');
-      console.log('Target user id is: + id');
+      //console.log('pvtMessage');
+      //console.log('Target user id is: + id');
       const target_user = await this.userService.getById(id);
       if(!target_user)
       {
           //Error target user not found;
-          console.log("Target user not exist");
+          //console.log("Target user not exist");
           return null;
       }
       if(target_user.id == socket.data.user.id)
       {
-          console.log("You can t send private messages to yourself");
+          //console.log("You can t send private messages to yourself");
           return null;
       }
       //Create de pvtmsg channel if need: 
@@ -340,15 +340,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
    @SubscribeMessage('getPublicRooms')
    async onGetPublicRooms(socket: Socket) {
-      console.log('getPublicRooms');
+      //console.log('getPublicRooms');
       const rooms = await this.roomService.getPublicRooms();
-      console.log(rooms);
+      //console.log(rooms);
       await this.server.to(socket.id).emit('pub_rooms', rooms);
    }
 
    async processCommand(socket: Socket, message: MessageI) {
-     console.log('IN processCommand: message is:');
-     console.log(message);
+     //console.log('IN processCommand: message is:');
+     //console.log(message);
      if (message.text.startsWith('/')) {
        const [command, ...args] = message.text.split(' ');
        switch (command) {

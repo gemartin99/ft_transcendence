@@ -16,7 +16,7 @@ export class OwnerService {
 	) { }
 
 	async findByRoom(room: RoomI): Promise<OwnerI[]> {
-	  console.log(room);
+	  //console.log(room);
 	  return await this.ownerRepository.find({ where: { room: { id: room.id } } });
 	}
 

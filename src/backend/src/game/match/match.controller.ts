@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { MatchEntity } from './match.entity';
 import { User } from '../../user/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { TwoFactorGuard } from '../../auth/two-factor/two-factor.guard';
 
 @Controller('match')
 export class MatchController {
@@ -13,7 +14,7 @@ export class MatchController {
   ) {}
 
   @Get('user-matches/:userId')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), TwoFactorGuard)
   async getUserMatches(@Param('userId') userId: number): Promise<MatchEntity[]> {
     const user = new User(); // create an instance of the user entity with the provided userId
     user.id = userId;

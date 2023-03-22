@@ -6,6 +6,8 @@ import * as cookieParser from 'cookie-parser';
 import * as jsonwebtoken from 'jsonwebtoken';
 // import { Request} from '@nestjs/common';
 import { Response } from 'express';
+import { TwoFactorGuard } from './two-factor/two-factor.guard';
+
 
 @Controller('auth')
 export class AuthController {
@@ -25,20 +27,20 @@ export class AuthController {
     @UseGuards(AuthGuard('school42'))
     async school42Callback(@Req() req, @Res() res)
     {
-        console.log('call to school42/callback');
-        console.log(req.user);
-        console.log(req.query);
+        //console.log('call to school42/callback');
+        //console.log(req.user);
+        //console.log(req.query);
         if(!req.err)
         {
             //Set the jwt token cookie
             res.cookie('crazy-pong', req.user.jwt);
 
-            console.log('user id 42 es: ' + req.user.id42);
+            //console.log('user id 42 es: ' + req.user.id42);
             let user: User = await this.userService.getBy42Id(req.user.id42);
             //User was totaly registered
             if(user)
             {
-                console.log('Usuario encontrado, ye preregistradi');
+                //console.log('Usuario encontrado, ye preregistradi');
                 //User was found but register is not yet completed
                 if(!user.reg_completed)
                     return res.redirect('http://crazy-pong.com/register');
@@ -52,12 +54,16 @@ export class AuthController {
                         return res.redirect('http://crazy-pong.com'); //User is totaly registered and not have two-factor auth
                     }
                     else
+                    {
+                        user.twofactor_valid = false;
+                        await this.userService.save(user);
                         return res.redirect('http://crazy-pong.com/two-factor'); //User is totaly registered but have two-factor auth
+                    }
                 }
             }
             else
             {
-                console.log('Usuario NO encontrado');
+                //console.log('Usuario NO encontrado');
                 //User is not yet pregistered
                 let user: User = await this.userService.register(req.user.id42);
                 if(user)
@@ -97,23 +103,23 @@ export class AuthController {
 
     @Get('')
     userIsAuth(@Req() req: any, @Res() res: Response) {
-    console.log(req.cookies);
-        console.log('BAKEND USER IS AUTH?');
+    //console.log(req.cookies);
+        //console.log('BAKEND USER IS AUTH?');
         const token = req.cookies['crazy-pong'];
         if (!token) {
-            console.log('USER NOT AUTH!!!');
+            //console.log('USER NOT AUTH!!!');
             //return res.send({ message: 'Unauthorized', user: undefined });
             return res.send( false );
             //return false;
         }
         try {
             const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
-            console.log('USER IS AUTHORITZED');
+            //console.log('USER IS AUTHORITZED');
             //return res.send({ message: 'Authorized', user: decoded });
             return res.send(true);
             //return true;
         } catch (err) {
-            console.log('USER NOT AUTH!!!');
+            //console.log('USER NOT AUTH!!!');
             //return res.send({ message: 'Unauthorized', user: undefined });
             return res.send( false );
             //return false;
@@ -122,18 +128,18 @@ export class AuthController {
 
     @Get('twofactor')
     async userIsTwoFactorAuth(@Req() req: any, @Res() res: Response) {
-    console.log(req.cookies);
-        console.log('BAKEND USER IS AUTH?');
+    //console.log(req.cookies);
+        //console.log('BAKEND USER IS AUTH?');
         const token = req.cookies['crazy-pong'];
         if (!token) {
-            console.log('USER NOT AUTH!!!');
+            //console.log('USER NOT AUTH!!!');
             //return res.send({ message: 'Unauthorized', user: undefined });
             return res.send( false );
             //return false;
         }
         try {
             const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
-            console.log('USER IS AUTHORITZED');
+            //console.log('USER IS AUTHORITZED');
             const user = await this.userService.getBy42Id(decoded.thirdPartyId);
             if(!user)
                 return res.send( false );
@@ -146,7 +152,7 @@ export class AuthController {
             return res.send(true);
             //return true;
         } catch (err) {
-            console.log('USER NOT AUTH!!!');
+            //console.log('USER NOT AUTH!!!');
             //return res.send({ message: 'Unauthorized', user: undefined });
             return res.send( false );
             //return false;
@@ -155,18 +161,18 @@ export class AuthController {
 
     @Get('user')
     async getLoggedUser(@Req() req: any, @Res() res: Response) {
-        console.log('inside getLoggedUser');
+        //console.log('inside getLoggedUser');
         // console.log(req.cookies);
         const token = req.cookies['crazy-pong'];
         if (!token) {
-            console.log('No hay token en getLoggedUser');
+            //console.log('No hay token en getLoggedUser');
             return undefined;
         }
         try {
-            console.log('SI hay token en getLoggedUser');
+            //console.log('SI hay token en getLoggedUser');
             const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
             let user: User = await this.userService.getBy42Id(decoded.thirdPartyId);
-            console.log('Auth user devuelve' + user);
+            //console.log('Auth user devuelve' + user);
             return res.send( user );
         } catch (err) {
             return undefined;
@@ -177,8 +183,8 @@ export class AuthController {
     @UseGuards(AuthGuard('jwt'))
     async logoutEndpoint(@Req() req, @Res() res) {
         let user: User = await this.userService.getBy42Id(req.user.thirdPartyId);
-        console.log('INSIDE BACKEND LOGOUT');
-        console.log(req.user);
+        //console.log('INSIDE BACKEND LOGOUT');
+        //console.log(req.user);
         user.is_playing = 0;
         user.is_online = false;
         user.twofactor_valid = false;

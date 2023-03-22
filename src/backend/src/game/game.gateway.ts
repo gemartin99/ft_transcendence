@@ -43,9 +43,9 @@ export class GameGateway {
 
   @SubscribeMessage('joinMatchMaking')
   async joinMatchMaking(client: Socket, payload: any) {
-    console.log('Game Gateway!!!! joinMatchMaking');
-    console.log(client);
-    console.log(payload);
+    //console.log('Game Gateway!!!! joinMatchMaking');
+    //console.log(client);
+    //console.log(payload);
 
     // const isAlreadyInQueue = this.usersInQueue.some(user => user.id === client.id);
     // if (isAlreadyInQueue) {
@@ -62,7 +62,7 @@ export class GameGateway {
 
       const match = await this.matchService.createMatch(player1.data.user as User, player2.data.user as User);
       // TODO: Start matchmaking process
-      console.log(`Starting match between ${player1.id} and ${player2.id}`);
+      //console.log(`Starting match between ${player1.id} and ${player2.id}`);
       const message = 'You have been paired for a match';
       player1.emit('matchmakingPair', match.id);
       player2.emit('matchmakingPair', match.id);
@@ -73,16 +73,16 @@ export class GameGateway {
 
   @SubscribeMessage('joinClientToMatch')
   async joinClientToMatch(client: Socket, matchId: number) {
-    console.log('In Game Gateway!!!! joinClientToMatch');
-    console.log('matchID joinClientToMatch ' + matchId);
+    //console.log('In Game Gateway!!!! joinClientToMatch');
+    //console.log('matchID joinClientToMatch ' + matchId);
     this.matchService.joinClientToMatch(client, matchId);
   }
 
   @SubscribeMessage('playerInput')
   async playerInput(client: Socket, input: { input: number[] }) { 
-    console.log('Game Gateway!!!! PlayerInput');
+    //console.log('Game Gateway!!!! PlayerInput');
     //console.log(client.data);
-    console.log('Data array:', input.input);
+    //console.log('Data array:', input.input);
     //this.matchService.updatePlayerInput(input.input[0], input.input[1], input.input[2]);
     this.matchService.updatePlayerInput(input.input[0],  input.input[1], client.data.user.id);
   }
@@ -96,8 +96,8 @@ export class GameGateway {
          return
       }
       const other_online = await this.onlineUserService.findByUser(user2);
-      console.log('other_online');
-      console.log(other_online);
+      //console.log('other_online');
+      //console.log(other_online);
       if(other_online.length === 0){
         this.server.to(client.id).emit('chat_error', "can't challanege: challanged user not online in chat");
         return
@@ -125,17 +125,17 @@ export class GameGateway {
         return; // no challenge found for the user
       }
 
-      console.log("in acceptChallange challange_data is:");
-      console.log(challange_data);
+      //console.log("in acceptChallange challange_data is:");
+      //console.log(challange_data);
       
 
       this.removeChallangesByUserId(challange_data.id_player1);
       // const player1 = await this.userService.getById(challange_data.id_player1);
 
-      console.log("in acceptChallange challange_data.socketChallanger.data.user:");
-      console.log(challange_data.socketChallanger.data.user);
-      console.log("in acceptChallange client.data.user:");
-      console.log(client.data.user);
+      //console.log("in acceptChallange challange_data.socketChallanger.data.user:");
+      //console.log(challange_data.socketChallanger.data.user);
+      //console.log("in acceptChallange client.data.user:");
+      //console.log(client.data.user);
 
       // console.log(`Starting match between ${player1.id} and ${client.data.user.id}`);
       const match = await this.matchService.createMatch(challange_data.socketChallanger.data.user as User, client.data.user as User);
@@ -149,13 +149,13 @@ export class GameGateway {
 
   @SubscribeMessage('cancelChallange')
    async onCancelChallange(client: Socket, id: number) {
-      console.log('cancelChallange');
+      //console.log('cancelChallange');
       this.removeChallangesByUserId(client.data.user.id);
   }
 
   @SubscribeMessage('haveOpenChallange')
    async onHaveOpenChallange(client: Socket) {
-      console.log('haveOpenChallange');
+      //console.log('haveOpenChallange');
       const challange_data = this.challanges.some(
         challenge =>
           challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
@@ -201,7 +201,7 @@ export class GameGateway {
      this.challanges.push(challenge);
      challenge.socketChallanger = null;
      this.server.to(client.id).emit('gameChallange', challenge);
-     console.log('In open Challange the other socket is ' + other_online.socketId)
+     //console.log('In open Challange the other socket is ' + other_online.socketId)
      this.server.to(other_online.socketId).emit('gameChallange', challenge);
      challenge.socketChallanger = client;
    }
