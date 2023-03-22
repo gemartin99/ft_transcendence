@@ -194,13 +194,13 @@ export class MatchService {
         // const gameState = this.getGameState(game);
         users.player1.emit('gameState', game);
         users.player2.emit('gameState', game);
-        console.log("Inside gameLoop socket player 1: " + users.player1.id)
-        console.log("Inside gameLoop socket player 2: " + users.player2.id)
+        //console.log("Inside gameLoop socket player 1: " + users.player1.id)
+        //console.log("Inside gameLoop socket player 2: " + users.player2.id)
         for (const spectator of users.spectators) {
           spectator.emit('gameState', game);
-          console.log("Inside gameLoop socket spectator : " + spectator.id)
+          //console.log("Inside gameLoop socket spectator : " + spectator.id)
         }
-        console.log(game)
+        //console.log(game)
         // console.log('inside game loop of match: ' + game.idMatch)
       }
 
@@ -222,13 +222,13 @@ export class MatchService {
 
   updatePlayerInput(matchId: number, input: number, player: number)
   {
-    console.log('Entering to updatePlayerInput');
-    console.log('matchId:' + matchId + 'player:' + player);
+    //console.log('Entering to updatePlayerInput');
+    //console.log('matchId:' + matchId + 'player:' + player);
     const matchData = this.games.get(matchId);
     if (matchData) {
       if(player == parseInt(matchData.player1.id))
       {
-        console.log('Entering to updatePlayerInput PLAYER1');
+        //console.log('Entering to updatePlayerInput PLAYER1');
         const playerData = matchData.player1;
         playerData.input = input;
       }
@@ -236,17 +236,16 @@ export class MatchService {
       {
         if(player == parseInt(matchData.player2.id))
         {
-          console.log('Entering to updatePlayerInput PLAYER2');
+          //console.log('Entering to updatePlayerInput PLAYER2');
           const playerData = matchData.player2;
           playerData.input = input;
         }
-        else
-          console.log('Entering to updatePlayerInput NO PLAYER');
+          //console.log('Entering to updatePlayerInput NO PLAYER');
       }
     }
     else
     {
-      console.log('NO MATCH DATA!!!!!!!');
+      //console.log('NO MATCH DATA!!!!!!!');
     }
   }
 
@@ -262,28 +261,28 @@ export class MatchService {
   // }
 
   updateGameState(game: MatchData) {
-    console.log('Entering to updateGameState');
+    //console.log('Entering to updateGameState');
     // Move paddle1 up
     if (game.player1.input == 1 && game.paddle1.y - 3 >= 0) {
-      console.log('Entering to updateGameState MOVIENDO!!!!');
+      //console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle1.y -= 3;
     }
 
     // Move paddle2 up
     if (game.player2.input == 1 && game.paddle2.y - 3 >= 0) {
-      console.log('Entering to updateGameState MOVIENDO!!!!');
+      //console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle2.y -= 3;
     }
 
     // Move paddle1 down
     if (game.player1.input == -1 && game.paddle1.y + game.paddle1.height + 3 <= 750) {
-      console.log('Entering to updateGameState MOVIENDO!!!!');
+      //console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle1.y += 3;
     }
 
     // Move paddle2 down
     if (game.player2.input == -1 && game.paddle2.y + game.paddle2.height + 3 <= 750) {
-      console.log('Entering to updateGameState MOVIENDO!!!!');
+      //console.log('Entering to updateGameState MOVIENDO!!!!');
       game.paddle2.y += 3;
     }
   }
@@ -330,6 +329,7 @@ export class MatchService {
 
 updateBallPosition(matchData: MatchData): MatchData {
     const ball = matchData.ball;
+    let speed = 5;
 
     // ball.vx *= 1.1;
     // ball.vy *= 1.1;
@@ -388,8 +388,12 @@ updateBallPosition(matchData: MatchData): MatchData {
       const relativeIntersectY = (matchData.paddle1.y + matchData.paddle1.height / 2) - ball.y;
       const normalizedRelativeIntersectionY = relativeIntersectY / (matchData.paddle1.height / 2);
       const bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
-      ball.vx = (Math.abs(ball.vx) * Math.cos(bounceAngle));
-      ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
+      //speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+      console.log('SPEED IS:' + speed);
+      ball.vx = (speed * Math.sign(ball.vx) * Math.cos(bounceAngle)) * -1;
+      ball.vy = -speed * Math.sin(bounceAngle);
+      // ball.vx = (Math.abs(ball.vx) * Math.cos(bounceAngle));
+      // ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
       ball.x = matchData.paddle1.x + matchData.paddle1.width + ball.radius;
     }
 
@@ -403,8 +407,11 @@ updateBallPosition(matchData: MatchData): MatchData {
       const relativeIntersectY = (matchData.paddle2.y + matchData.paddle2.height / 2) - ball.y;
       const normalizedRelativeIntersectionY = relativeIntersectY / (matchData.paddle2.height / 2);
       const bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
-      ball.vx = (-Math.abs(ball.vx) * Math.cos(bounceAngle));
-      ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
+      //speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+      ball.vx = -speed * Math.cos(bounceAngle);
+      ball.vy = -speed * Math.sin(bounceAngle);
+      // ball.vx = (-Math.abs(ball.vx) * Math.cos(bounceAngle));
+      // ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
       ball.x = matchData.paddle2.x - ball.radius;
     }
 
