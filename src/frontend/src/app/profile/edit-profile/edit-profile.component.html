@@ -14,6 +14,7 @@
 	      <form [formGroup]="editForm" (ngSubmit)="updateUser(editForm.value)" class="form" style="width: 100%; padding: 5px;">
 
 	        <div class="field">
+	          <label class="label">Username:</label>
 	          <input type="text" formControlName="name" placeholder="Enter your username" class="form-control input" value="{{ user?.name }}" required>
 	          <div *ngIf="editForm.get('name').invalid && editForm.get('name').touched">
 	          	<p class="help is-danger" *ngIf="editForm.get('name').errors?.['required']">Username is required</p>
@@ -23,6 +24,7 @@
 	          <p class="help is-danger" *ngIf="nameInUseError">Username alredy in use.</p>
 	        </div>
 	        <div class="field">
+	          <label class="label">Avatar (optional):</label>
 	          <input class="input" formControlName="avatar" type="file" (change)="onFileChange($event)" accept="image/*">
 	          <p class="help is-danger" *ngIf="fileTypeError">Incorrect file type. Only .jpg or .png are allowed.</p>
 	        </div>

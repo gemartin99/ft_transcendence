@@ -19,6 +19,7 @@
             </div>
             <div class="field">
               <div>
+                  <p *ngIf=name_in_use class="help is-danger">Name is in use</p> 
                   <p *ngIf="usernameControl.errors?.['required']" class="help is-danger">Username is required</p>
                   <p *ngIf="usernameControl.errors?.['pattern']" class="help is-danger">Invalid characters</p>
                   <p *ngIf="usernameControl.errors?.['maxlength']" class="help is-danger">Max length exceeded</p>

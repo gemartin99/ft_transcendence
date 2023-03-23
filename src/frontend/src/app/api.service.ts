@@ -40,9 +40,9 @@ export class ApiService {
       withCredentials: true,
     };
 
-    console.log("api registerUSer whit name: " + name);
+    //console.log("api registerUSer whit name: " + name);
     const body = JSON.stringify({ name });
-    console.log("bpdy antes de mandar:" + body);
+    //console.log("bpdy antes de mandar:" + body);
     return this.httpClient.post<any>(`${this.API_SERVER}/users/register`, body, httpOptions);
   }
 
@@ -51,7 +51,7 @@ export class ApiService {
   }
 
   public findUserById(userId: number): Observable<User> {
-    console.log('Call to API SERVICE findUserById:' + userId);
+    //console.log('Call to API SERVICE findUserById:' + userId);
     return this.httpClient.get<User>(`${this.API_SERVER}/users/finding/${userId}`, { withCredentials: true });
     //return this.httpClient.get<User>(`${this.API_SERVER}/users/find/${id}`, { withCredentials: true });
     //return this.httpClient.get<User>(`${this.API_SERVER}/users/find/${id}`);
@@ -66,14 +66,14 @@ export class ApiService {
   }
 
   public removeFriend(id: string) {
-    console.log('API front removeFriend');
+    //console.log('API front removeFriend');
     return this.httpClient.delete(`${this.API_SERVER}/users/friends/${id}/delete`, { withCredentials: true });
     // return this.httpClient.delete(`${this.API_SERVER}/users/friends/5/delete`);
   }
 
   public userNameIsValid(name: string): Observable<any> {
-    console.log('API front userNameIsValid');
-    console.log('name is: ' + name);
+    //console.log('API front userNameIsValid');
+    //console.log('name is: ' + name);
     return this.httpClient.post(`${this.API_SERVER}/users/isvalidname`, { name: name }, { withCredentials: true });
   }
 
@@ -106,17 +106,17 @@ export class ApiService {
   }
 
   public disable2fa(user: User): Observable<any> {
-    console.log('In Frontend calling Backend')
+    //console.log('In Frontend calling Backend')
     return this.httpClient.post(`${this.API_SERVER}/2faUserUnset`, user, { withCredentials: true });
   }
 
   public blockUser(userId: number): Observable<any> {
-    console.log('API call to blockUser');
+    //console.log('API call to blockUser');
     return this.httpClient.get<User>(`${this.API_SERVER}/users/block/${userId}`, { withCredentials: true });
   }
 
   public unblockUser(userId: number): Observable<any> {
-    console.log('API call to unblockUser');
+    //console.log('API call to unblockUser');
     return this.httpClient.get<User>(`${this.API_SERVER}/users/unblock/${userId}`, { withCredentials: true });
   }
 
@@ -133,7 +133,7 @@ export class ApiService {
   }
 
   public setGameOption(optionId: number): Observable<User> {
-    console.log('setGameOption selected option:' + optionId);
+    //console.log('setGameOption selected option:' + optionId);
     return this.httpClient.post<User>(`${this.API_SERVER}/users/game/options`, { optionId: optionId }, { withCredentials: true });
   }
 }

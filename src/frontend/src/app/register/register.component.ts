@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   public user: any;
+  public name_in_use = false;
   usernameControl = new FormControl('', [
     Validators.required,
     Validators.pattern(/^[a-zA-Z0-9]+$/),
@@ -33,18 +34,35 @@ export class RegisterComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-      this.user = this.authService.getLoggedUser();
+  async ngOnInit() {
+      this.user = await this.authService.getLoggedUser();
+      if (this.user.reg_completed) {
+        this.router.navigate(['/chat']);
+      }
+
+
+      this.usernameControl.valueChanges.subscribe(() => {
+        this.name_in_use = false;
+      });
   }
 
 
   completeRegister(f:any) {
+    this.name_in_use = false;
     if(this.user.reg_completed)
       this.router.navigate(['/chat']);
     if (this.usernameControl.valid) {
+        
         this.apiService.registerUser(this.usernameControl.value).subscribe((result)=>{
-          console.log(result);
-          this.router.navigate(['/chat']);
+          if(!result)
+          {
+            this.name_in_use = true;
+          }
+          else
+          {
+            console.log(result);
+            this.router.navigate(['/profile/edit']);
+          }
         });
     }
   }

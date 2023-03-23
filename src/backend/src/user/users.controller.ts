@@ -43,7 +43,7 @@ export class UsersController {
         //console.log('Inside BACKEND Name is empty');
         return false; // Name is empty, so it's not valid
       }
-      if (name.length > 30) {
+      if (name.length > 30 || name.length <= 0) {
         //console.log('Inside BACKEND isvalidname name length is too long');
         return false; // Name is too long, so it's not valid
       }
@@ -69,15 +69,19 @@ export class UsersController {
     @Post('register')
     @UseGuards(AuthGuard('jwt'))
     async completeRegister(@Req() req, @Res() res, @Body() body): Promise<any> {
-      //console.log('Call to abckend completeRegister');
-      //console.log(body);
-      // Validate name field
+      res.header('Access-Control-Allow-Origin', 'http://crazy-pong.com');
+
       const nameRegex = /^[a-zA-Z0-9]{1,30}$/;
       if (!body.name || !nameRegex.test(body.name)) {
         return res.send(false);
       }
-      res.header('Access-Control-Allow-Origin', 'http://crazy-pong.com');
-      const user = await this.userService.getBy42Id(req.user.thirdPartyId);
+      
+      let user = await this.userService.getByName(body.name);
+      if (user && (user.id42 != req.user.thirdPartyId)) {
+        return res.send(false);
+      }
+
+      user = await this.userService.getBy42Id(req.user.thirdPartyId);
       if(user) {
         user.name = body.name;
         user.reg_completed = true;
