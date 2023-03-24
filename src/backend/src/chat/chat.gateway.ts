@@ -198,7 +198,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
           return;
         }
         //check you are not banned
-        const is_banned = this.roomService.isUserBanedFromChannel(target_room.id, socket.data.user.id);
+        const is_banned = await this.roomService.isUserBanedFromChannel(target_room.id, socket.data.user.id);
         if(is_banned)
         {
           this.server.to(socket.id).emit('chat_error', "can't join: you are banned from this channel");

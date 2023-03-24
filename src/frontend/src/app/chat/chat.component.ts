@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ChatService } from './chat.service';
 import { MatSelectionListChange } from '@angular/material/list';
 import { PageEvent } from '@angular/material/paginator';
@@ -13,6 +13,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Router, NavigationEnd } from '@angular/router';
 import { CustomSocket } from '../sockets/custom-socket';
 import { MatchChallange } from '../game/match/match-challange/match-challange.interface';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-chat',
@@ -28,6 +29,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
   matchChallange: MatchChallange = null;
   chat_manual = false;
   public user: any;
+  public rooms_number: number = 0;
+  @ViewChild('roomlist') roomlist: MatSelectionList;
 
   constructor(
     private chatService: ChatService,
@@ -57,6 +60,22 @@ export class ChatComponent implements OnInit, AfterViewInit {
       console.log('gameChallange received');
       console.log(gameChallange);
     });
+    this.rooms$.subscribe(rooms => {
+      if (rooms.items.length != this.rooms_number) {
+        this.rooms_number = rooms.items.length;
+        //this.chatService.joinRoom(rooms.items[0]);
+        this.selectedRoom = rooms.items[0];
+        // console.log('this.rooms$.subscribe');
+        // console.log(rooms);
+        // console.log(rooms.items[0].id);
+        //this.rooms[0].select();
+      }
+    });
+    // this.chatService.getMyRooms().subscribe(
+    //   (rooms: RoomPaginateI) => {
+    //     this.selectedRoom = rooms.items[0].id;
+    //   }
+    // );
     this.chatService.haveOpenChallange();
   }
 

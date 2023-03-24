@@ -22,7 +22,7 @@
               <button (click)="showManual()" class="button manual" title="Show Chat Manaual"><i class="fa-solid fa-book"></i></button>
             </div>
             <div *ngIf="(rooms$|async)?.items?.length > 0;" class="rooms">
-                 <mat-selection-list [multiple]="false" (selectionChange)="onSelectRoom($event)">
+                 <mat-selection-list #roomlist [multiple]="false" (selectionChange)="onSelectRoom($event)">
                     <mat-list-option *ngFor="let room of (rooms$ | async)?.items" [value]="room">
                       Name: {{room.name}} Id: {{room.id}}
                       <mat-divider></mat-divider>
