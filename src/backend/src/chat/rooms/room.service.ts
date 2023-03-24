@@ -56,6 +56,7 @@ export class RoomService {
   }
 
   async joinRoom(room: RoomI, creator: UserI): Promise<RoomI> {
+    await this.updateRoomUpdatedAt(room.id);
     const newRoom = await this.getRoomByName(room.name);
     if(newRoom)
     {
@@ -75,6 +76,7 @@ export class RoomService {
   }
 
   async joinRoomById(room: RoomI, creator: UserI): Promise<RoomI> {
+    await this.updateRoomUpdatedAt(room.id); 
     const newRoom = await this.getRoomById(room.id);
     if(newRoom)
     {
@@ -153,6 +155,12 @@ export class RoomService {
     });
   }
 
+  async updateRoomUpdatedAt(roomId: number): Promise<void> {
+    const room = await this.getRoom(roomId);
+    room.updated_at = new Date();
+    await this.roomRepository.save(room);
+  }
+
   async createGeneralRoom(): Promise<RoomI> {
     const generalRoom = new RoomEntity();
     generalRoom.name = "General";
@@ -208,6 +216,7 @@ export class RoomService {
     if(user){
       await this.userCloseChannel(user as UserI, channelId); 
       await this.joinedRoomService.removeByUserAndRoom(userId, channelId);
+      console.log('user KICKED');
       return 1;
     }
     // const channel = await this.roomRepository.findOne({
@@ -264,7 +273,7 @@ export class RoomService {
     if(await this.ownerService.isOwner(user.id, room.id))
     {
       await this.banService.banUserFromRoom(target_room.id, target, 5);
-      if(await this.kick_user_from_channel(target_room.id, user.id))
+      if(await this.kick_user_from_channel(target_room.id, target.id))
       {
         return -1;
       }
@@ -279,8 +288,9 @@ export class RoomService {
         return 5;
       }
       await this.banService.banUserFromRoom(target_room.id, target, 5);
-      if(await this.kick_user_from_channel(target_room.id, user.id))
+      if(await this.kick_user_from_channel(target_room.id, target.id))
       {
+        console.log('user KICKED');
         return -1;
       }
       //console.log('user is operator, and wants to ban');

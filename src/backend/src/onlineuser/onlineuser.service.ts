@@ -19,6 +19,18 @@ export class OnlineUserService {
     return this.OnlineUserRepository.save(onlineUser);
   }
 
+  // async create(onlineUser: OnlineUserI): Promise<OnlineUserI> {
+  //   try {
+  //     return await this.OnlineUserRepository.save(onlineUser);
+  //   } catch (error) {
+  //     if (error.code === '23505') {
+  //       // Unique constraint violation, update socketId
+  //       await this.OnlineUserRepository.update({user: onlineUser.user}, {socketId: onlineUser.socketId});
+  //       return await this.findOneByUser(onlineUser.user as User);
+  //     } 
+  //   }
+  // }
+
   async findByUser(user: User): Promise<OnlineUserI[]> {
     // return this.OnlineUserRepository.find(where: { user });
     // return this.OnlineUserRepository.find(where: { user });
@@ -26,6 +38,12 @@ export class OnlineUserService {
       where: {
         user: user
       }
+    });
+  }
+
+  async findOneByUser(user: User): Promise<OnlineUserI> {
+    return this.OnlineUserRepository.findOne({
+      where: { user },
     });
   }
 

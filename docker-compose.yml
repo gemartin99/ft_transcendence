@@ -34,7 +34,7 @@ services:
       - backend
     volumes:
       - ./src/backend:/backend
-      - ./avatars:/app/src/uploads/avatar/
+      - ./avatars:/backend/src/uploads/avatar/
       - '/backend/node_modules'
     env_file:
       - ./a.env

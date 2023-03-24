@@ -11,11 +11,13 @@ import { UserService } from '../user/user.service';
 import { UnauthorizedException, OnModuleInit } from '@nestjs/common';
 import { RoomService } from './rooms/room.service';
 import { RoomI } from './rooms/room.interface';
+import { RoomEntity } from './rooms/room.entity';
 import { PageI } from '../pagination/page.interface';
 import { OnlineUserEntity } from '../onlineuser/onlineuser.entity';
 import { OnlineUserI } from '../onlineuser/onlineuser.interface';
 import { OnlineUserService } from '../onlineuser/onlineuser.service';
 import { JoinedRoomService } from './joined-room/joined-room.service';
+import { JoinedRoomEntity } from './joined-room/joined-room.entity';
 import { MessageService } from './message/message.service';
 import { MessageI } from './message/message.interface';
 import { JoinedRoomI } from './joined-room/joined-room.interface';
@@ -53,13 +55,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   // }
 
   async onModuleInit() {
+    await this.onlineUserService.deleteAll();
+    await this.joinedRoomService.deleteAll();
     const general_room = await this.roomService.getRoomByName("General");
     if(!general_room)
     {
       await this.roomService.createGeneralRoom();
     }
-    await this.onlineUserService.deleteAll();
-    await this.joinedRoomService.deleteAll();
   }
 
   async handleConnection(socket: Socket) {
@@ -300,12 +302,36 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      if(!createdMessage)
         return null;
      const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
+     await this.roomService.updateRoomUpdatedAt(room.id);
      const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoomExcludingBlockedUser(room, socket.data.user.id);
      //console.log('joined users to send message:');
      //console.log(joinedUsers);
      if(room.type == 3)
-     {
-        console.log("IS a private messaje channel where you want to write");
+     {  
+        try
+        {
+          console.log("IS a private messaje channel where you want to write");
+          const currentUserID = socket.data.user.id;
+          const otherUserID = room.id_pvt_user1 === currentUserID ? room.id_pvt_user2 : room.id_pvt_user1;
+          const isReceiverJoined = joinedUsers.find((user) => user.user.id === otherUserID);
+          if (!isReceiverJoined) {
+            const otherUser = await this.userService.getById(otherUserID);
+            await this.roomService.joinRoom(room, otherUser);
+
+            const socket_target_user = await this.onlineUserService.findByUser(otherUser);
+            if(socket_target_user && socket_target_user.length > 0)
+            {
+              const newJoinedRoom = new JoinedRoomEntity();
+              newJoinedRoom.socketId = socket_target_user[0].socketId;
+              newJoinedRoom.user = otherUser;
+              newJoinedRoom.room = room as RoomEntity;
+              await this.joinedRoomService.create(newJoinedRoom);
+              const rooms2 = await this.roomService.getRoomsForUser(otherUserID, { page: 1, limit: 10 });
+              await this.server.to(socket_target_user[0].socketId).emit('rooms', rooms2);
+            }
+          }
+        }
+        catch{}
      }
 
      const filteredJoinedUsers = joinedUsers.filter(
@@ -316,22 +342,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        await this.server.to(user.socketId).emit('messageAdded', createdMessage);
      }
    }
-
-   // @SubscribeMessage('addMessage')
-   // async onAddMessage(socket: Socket, message: MessageI) {
-   //   const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
-   //   if(!createdMessage)
-   //      return null;
-   //   const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
-   //   const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
-   //   console.log('joined users to send message:');
-   //   console.log(joinedUsers);
-   //   //TODO: Send new Message to all joined Users of the room (currently online)
-   //   for(const user of joinedUsers) {
-   //     console.log('Inside the for');
-   //     await this.server.to(user.socketId).emit('messageAdded', createdMessage);
-   //   }
-   // }
    
   @SubscribeMessage('pvtMessage')
    async onPvtMessage(socket: Socket, id: number) {
@@ -351,6 +361,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       }
       //Create de pvtmsg channel if need: 
       const room = await this.roomService.preparePvtMessageRoom(socket.data.user, target_user);
+      await this.roomService.updateRoomUpdatedAt(room.id);
       await this.joinedRoomService.join({ socketId: socket.id, user: socket.data.user, room });
       const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
       const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
