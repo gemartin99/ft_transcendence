@@ -57,7 +57,7 @@ services:
       - ./a.env
     environment:
         - CHOKIDAR_USEPOLLING=true
-    command: ng serve --host 0.0.0.0 --disable-host-check
+    command: ng serve --host 0.0.0.0 --public-host crazy-pong.com
     restart: unless-stopped
     depends_on:
       - backend
