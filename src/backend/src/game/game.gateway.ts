@@ -35,9 +35,21 @@ export class GameGateway {
   ){}
 
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
-    this.usersInQueue = this.usersInQueue.filter((socket) => socket.id != client.id);
-    this.userService.setUserOfflineById(client.data.user.id);
+    //console.log(`Client disconnected: ${client.id}`);
+    try{
+        this.usersInQueue = this.usersInQueue.filter((socket) => socket.id != client.id);      
+    }
+    catch
+    {
+        //console.log('handleDisconect from game 1');
+    }
+    try{
+        this.userService.setUserOfflineById(client.data.user.id);
+    }
+    catch
+    {
+        //console.log('handleDisconect from game 3');
+    }
     // this.challanges = this.challanges.filter((socket) => socket.id != userId && c.player2 != userId);
   }
 

@@ -94,11 +94,31 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
    
   async handleDisconnect(socket: Socket) {
     // remove connection from DB
-    console.log('In handleDisconnect');
-    console.log('socket.data.user.id: ' + socket.data.user.id);
-    this.userService.setUserOfflineById(socket.data.user.id);
-    await this.onlineUserService.deleteBySocketId(socket.id);
-    socket.disconnect();
+    // console.log('In handleDisconnect');
+    // console.log('socket.data.user.id: ' + socket.data.user.id);
+    try{
+      this.userService.setUserOfflineById(socket.data.user.id);
+    }
+    catch
+    {
+      //console.log('handleDisconect from chat 1');
+    }
+
+    try{
+      await this.onlineUserService.deleteBySocketId(socket.id);
+    }
+    catch
+    {
+      //console.log('handleDisconect from chat 2');
+    }
+
+    try{
+      socket.disconnect();
+    }
+    catch
+    {
+      //console.log('handleDisconect from chat 3');
+    }
   }
 
   private disconnect(socket: Socket) {
