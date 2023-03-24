@@ -83,7 +83,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         // this.server.emit('message', this.title);
         rooms.meta.currentPage = rooms.meta.currentPage - 1;
         // Save connection to DB
-        await this.onlineUserService.create({ socketId: socket.id, user });
+        try
+        {
+          await this.onlineUserService.create({ socketId: socket.id, user });
+        }
+        catch
+        {
+          await this.onlineUserService.updateSocketIdByUser( user , socket.id );
+        }
         await this.userService.setUserOnlineById(user.id);
         return this.server.to(socket.id).emit('rooms', rooms);
       }
