@@ -4,6 +4,7 @@ import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginat
 import { RoomEntity } from './room.entity';
 import { RoomI } from './room.interface';
 import { UserI } from '../../user/user.interface';
+import { User } from '../../user/user.entity';
 import { Repository } from 'typeorm';
 import { Socket, Server } from 'socket.io';
 import { JoinedRoomService } from '../joined-room/joined-room.service';
@@ -175,6 +176,14 @@ export class RoomService {
     {
       room.users = room.users.filter(user => user.id != client.id);
       await this.roomRepository.save(room);
+      try{
+         await this.operatorService.removeOperator(client.id, roomID);
+         await this.ownerService.removeOwner(client.id, roomID);
+      }
+      catch
+      {
+
+      }
       return(room);
     }
     return null;
@@ -200,11 +209,12 @@ export class RoomService {
       relations: ["joinedUsers", "users"],
     });
     if(!channel)
-      return;
+      return 0;
 
-    const joinedUser = channel.joinedUsers.find(joinedUser => joinedUser.user.id === userId);
+    const joinedUser = channel.joinedUsers.find(joinedUser => joinedUser.id === userId);
     if (!joinedUser) {
       throw new Error("User is not joined in the channel");
+      return 0;
     }
 
     // Remove the joined user from the channel's joinedUsers array
@@ -213,6 +223,7 @@ export class RoomService {
     // Remove the user from the channel's users array
     channel.users = channel.users.filter(user => user.id !== userId);
     await this.roomRepository.save(channel);
+    return 1;
   }
 
   async isUserBanedFromChannel(roomId: number, userId: number): Promise<boolean>
@@ -244,7 +255,10 @@ export class RoomService {
     if(await this.ownerService.isOwner(user.id, room.id))
     {
       await this.banService.banUserFromRoom(target_room.id, target, 5);
-      await this.kick_user_from_channel(target_room.id, user.id);
+      if(await this.kick_user_from_channel(target_room.id, user.id))
+      {
+        return -1;
+      }
       //console.log('user is owner, and wants to ban');
       return 0;
     }
@@ -256,7 +270,10 @@ export class RoomService {
         return 5;
       }
       await this.banService.banUserFromRoom(target_room.id, target, 5);
-      await this.kick_user_from_channel(target_room.id, user.id);
+      if(await this.kick_user_from_channel(target_room.id, user.id))
+      {
+        return -1;
+      }
       //console.log('user is operator, and wants to ban');
       return 0;
     }
@@ -368,7 +385,7 @@ export class RoomService {
       if(target)
       {
         await this.operatorService.addOperator(target.id, target_room.id);
-        //console.log('user promoted to oeprator');
+        console.log('user promoted to oeprator');
         return 0;
       }
       else
@@ -474,9 +491,23 @@ export class RoomService {
         .andWhere("room.id_pvt_user2 = :user2Id", { user2Id: user2.id })
         .getOne();
 
-    if(room)
-      return room;
-
+        if(room)
+        {
+            if (room.users) {
+                const user1Found = room.users.some(u => u.id === user1.id);
+                const user2Found = room.users.some(u => u.id === user2.id);
+                if (!user1Found) {
+                    room.users.push(user1 as User);
+                }
+                if (!user2Found) {
+                    room.users.push(user2 as User);
+                }
+            } else {
+                room.users = [user1 as User, user2 as User];
+            }
+            await this.roomRepository.save(room);
+            return room;
+        }
     //If room not exist we create one
     return await this.createPvtMessageRoom(user1, user2);
   }

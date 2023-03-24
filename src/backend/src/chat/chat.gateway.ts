@@ -337,12 +337,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       if(!target_user)
       {
           //Error target user not found;
-          //console.log("Target user not exist");
+          await this.server.to(socket.id).emit('chat_error', 'user not found');
           return null;
       }
       if(target_user.id == socket.data.user.id)
       {
-          //console.log("You can t send private messages to yourself");
+          await this.server.to(socket.id).emit('chat_error', 'You can t send private messages to yourself');
           return null;
       }
       //Create de pvtmsg channel if need: 
@@ -354,12 +354,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       await this.server.to(socket.id).emit('messages', messages);
 
 
-      // const joined_target_user = await this.joinedRoomService.findByUser(target_user);
-      // if(joined_target_user)
-      // {
-
-      // }
-      // console.log("User is not logged, and can t receive the private message");
+      const socket_target_user = await this.onlineUserService.findByUser(target_user);
+      if(socket_target_user && socket_target_user.length > 0)
+      {
+          await this.joinedRoomService.join({ socketId: socket_target_user[0].socketId, user: target_user, room });
+          const rooms2 = await this.roomService.getRoomsForUser(target_user.id, { page: 1, limit: 10 });
+          await this.server.to(socket_target_user[0].socketId).emit('rooms', rooms2);
+          await this.server.to(socket_target_user[0].socketId).emit('messages', messages);
+      }
   }
   
 
@@ -530,6 +532,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        this.server.to(socket.id).emit('chat_error', "user owner cant be muted");
        return;
      }
+     if (result == 0) {
+       this.server.to(socket.id).emit('chat_error', username + "banned from channel");
+       return;
+     }
+
+     if (result == -1) {
+       const target = await this.userService.getByName(username);
+       if(target)
+       {  
+          const jroom = await this.joinedRoomService.findByUser(target);
+          if(jroom && jroom.length > 0)
+          {
+            const rooms = await this.roomService.getRoomsForUser(target.id, { page: 1, limit: 10 });
+            // console.log('room for user: ' + rooms);    
+            await this.server.to(jroom[0].socketId).emit('rooms', rooms);
+          }
+          this.server.to(socket.id).emit('chat_error', username + "banned from channel");
+          return;
+       }
+       return;
+     }
    }
 
    async processCommandUnsetOp(socket: Socket, message: MessageI, username: string) {
@@ -544,6 +567,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      }
      if (result == 3) {
        this.server.to(socket.id).emit('chat_error', "Username not found");
+       return;
+     }
+     if (result == 0) {
+       this.server.to(socket.id).emit('chat_error', username + "promoted to oeprator");
        return;
      }
    }
