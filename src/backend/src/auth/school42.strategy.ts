@@ -15,10 +15,10 @@ export class School42Strategy extends PassportStrategy(Strategy, 'school42')
     )
     {
         super({
-            authorizationURL: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0a3a4869eb0242ff32bdffe102dc9021ccbba3501e7da809f76c877b404a84ba&redirect_uri=http%3A%2F%2Fcrazy-pong.com%3A4200&response_type=code",
+            authorizationURL: process.env.API42AUTHURL,
             tokenURL: "https://api.intra.42.fr/oauth/token",
-            clientID: 'u-s4t2ud-0a3a4869eb0242ff32bdffe102dc9021ccbba3501e7da809f76c877b404a84ba',     // <- Replace this with your client id
-            clientSecret: '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', // <- Replace this with your client secret
+            clientID: process.env.API42CLIENTID,     // <- Replace this with your client id
+            clientSecret: process.env.API42SECRET, // <- Replace this with your client secret
             callbackURL : 'http://crazy-pong.com:3000/auth/school42/callback',
             scope: ['public'],
             proxy: true

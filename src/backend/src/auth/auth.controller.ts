@@ -75,25 +75,6 @@ export class AuthController {
         return res.redirect('http://crazy-pong.com/login_error');
     }
 
-    @Get('google')
-    @UseGuards(AuthGuard('google'))
-    googleLogin()
-    {
-        // initiates the Google OAuth2 login flow
-    }
-
-    @Get('google/callback')
-    @UseGuards(AuthGuard('google'))
-    googleLoginCallback(@Req() req, @Res() res)
-    {
-        // handles the Google OAuth2 callback
-        const jwt: string = req.user.jwt;
-        if (jwt)
-            res.redirect('http://localhost:4200/login/succes/' + jwt);
-        else 
-            res.redirect('http://localhost:4200/login/failure');
-    }
-
     @Get('protected')
     @UseGuards(AuthGuard('jwt'))
     protectedResource()
@@ -127,6 +108,7 @@ export class AuthController {
     }
 
     @Get('twofactor')
+    @UseGuards(AuthGuard('jwt'))
     async userIsTwoFactorAuth(@Req() req: any, @Res() res: Response) {
     //console.log(req.cookies);
         //console.log('BAKEND USER IS AUTH?');
@@ -160,6 +142,7 @@ export class AuthController {
     }
 
     @Get('user')
+    @UseGuards(AuthGuard('jwt'))
     async getLoggedUser(@Req() req: any, @Res() res: Response) {
         //console.log('inside getLoggedUser');
         // console.log(req.cookies);
