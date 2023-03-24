@@ -146,6 +146,7 @@ export class MatchService {
       },
       score1: 0,
       score2: 0,
+      speed: 5.83,
       isPaused: true,
       isGameOver: false,
       winner: 0,
@@ -329,7 +330,7 @@ export class MatchService {
 
 updateBallPosition(matchData: MatchData): MatchData {
     const ball = matchData.ball;
-    let speed = 5;
+    //let speed = 5;
 
     // ball.vx *= 1.1;
     // ball.vy *= 1.1;
@@ -385,13 +386,14 @@ updateBallPosition(matchData: MatchData): MatchData {
       ball.y - ball.radius <= matchData.paddle1.y + matchData.paddle1.height &&
       ball.vx < 0
     ) {
+      matchData.speed += 0.01;
       const relativeIntersectY = (matchData.paddle1.y + matchData.paddle1.height / 2) - ball.y;
       const normalizedRelativeIntersectionY = relativeIntersectY / (matchData.paddle1.height / 2);
       const bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
       //speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
-      console.log('SPEED IS:' + speed);
-      ball.vx = (speed * Math.sign(ball.vx) * Math.cos(bounceAngle)) * -1;
-      ball.vy = -speed * Math.sin(bounceAngle);
+      console.log('SPEED IS:' + matchData.speed);
+      ball.vx = (matchData.speed * Math.sign(ball.vx) * Math.cos(bounceAngle)) * -1;
+      ball.vy = -matchData.speed * Math.sin(bounceAngle);
       // ball.vx = (Math.abs(ball.vx) * Math.cos(bounceAngle));
       // ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
       ball.x = matchData.paddle1.x + matchData.paddle1.width + ball.radius;
@@ -404,12 +406,13 @@ updateBallPosition(matchData: MatchData): MatchData {
       ball.y - ball.radius <= matchData.paddle2.y + matchData.paddle2.height &&
       ball.vx > 0
     ) {
+      matchData.speed += 0.01;
       const relativeIntersectY = (matchData.paddle2.y + matchData.paddle2.height / 2) - ball.y;
       const normalizedRelativeIntersectionY = relativeIntersectY / (matchData.paddle2.height / 2);
       const bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
       //speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
-      ball.vx = -speed * Math.cos(bounceAngle);
-      ball.vy = -speed * Math.sin(bounceAngle);
+      ball.vx = -matchData.speed * Math.cos(bounceAngle);
+      ball.vy = -matchData.speed * Math.sin(bounceAngle);
       // ball.vx = (-Math.abs(ball.vx) * Math.cos(bounceAngle));
       // ball.vy = (-Math.abs(ball.vx) * Math.sin(bounceAngle));
       ball.x = matchData.paddle2.x - ball.radius;
@@ -421,6 +424,7 @@ updateBallPosition(matchData: MatchData): MatchData {
 
   resetBall(matchData: MatchData): void {
     const ball = matchData.ball;
+    matchData.speed = 5.83;
     ball.x = 600;
     ball.y = 375;
     ball.vx = Math.random() < 0.5 ? -5 : 5;
