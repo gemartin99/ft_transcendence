@@ -162,6 +162,22 @@ export class GameGateway {
   @SubscribeMessage('cancelChallange')
    async onCancelChallange(client: Socket, id: number) {
       //console.log('cancelChallange');
+      const challange_data = this.challanges.find(
+        challenge =>
+          challenge.id_player1 === client.data.user.id || challenge.id_player2 === client.data.user.id,
+      );
+      if (!challange_data) {
+        return; // no challenge found for the user
+      }
+
+      if(challange_data.id_player1 === client.data.user.id)
+      {
+        this.server.to(challange_data.player2).emit('gameChallange', null);
+      }
+      else if(challange_data.id_player2 === client.data.user.id)
+      {
+        this.server.to(challange_data.player1).emit('gameChallange', null);
+      }
       this.removeChallangesByUserId(client.data.user.id);
   }
 

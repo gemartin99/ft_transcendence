@@ -29,6 +29,14 @@ export class OnlineUserService {
     });
   }
 
+  async updateSocketIdByUser(user: User, socketId: string): Promise<void> {
+    const onlineUser = await this.OnlineUserRepository.findOne({ where: { user } });
+    if (onlineUser) {
+      onlineUser.socketId = socketId;
+      await this.OnlineUserRepository.save(onlineUser);
+    }
+  }
+
   async deleteBySocketId(socketId: string) {
     return this.OnlineUserRepository.delete({socketId});
   }
