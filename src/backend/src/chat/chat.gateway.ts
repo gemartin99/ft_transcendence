@@ -94,6 +94,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
    
   async handleDisconnect(socket: Socket) {
     // remove connection from DB
+    console.log('In handleDisconnect');
+    console.log('socket.data.user.id: ' + socket.data.user.id);
     this.userService.setUserOfflineById(socket.data.user.id);
     await this.onlineUserService.deleteBySocketId(socket.id);
     socket.disconnect();
@@ -124,6 +126,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, { page: 1, limit: 10 });
     // console.log('room for user: ' + rooms);    
     await this.server.to(socket.id).emit('rooms', rooms);
+    await this.server.to(socket.id).emit('chat_error', null);
   }
 
   @SubscribeMessage('paginateRooms')
@@ -180,6 +183,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        await this.server.to(socket.id).emit('rooms', rooms);
        // Send last messages from Room to User
        await this.server.to(socket.id).emit('messages', messages);
+       await this.server.to(socket.id).emit('chat_error', null);
      }
    }
 
@@ -233,6 +237,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        //emit to user
        await this.server.to(socket.id).emit('rooms', rooms);
        await this.server.to(socket.id).emit('messages', messages);
+       await this.server.to(socket.id).emit('chat_error', null);
      }
    }
 
