@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { GameService } from './game.service';
 
 @Component({
@@ -7,24 +7,31 @@ import { GameService } from './game.service';
   styleUrls: ['./game.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
-  // title = '';
+  public matchmaking = false;
 
-  constructor(private gameService: GameService) {
-  }
+  constructor(private gameService: GameService) {}
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   matchMaking() {
     console.log('matchmaking pressed');
+    this.matchmaking = true;
     this.gameService.joinMatchMaking();
   }
 
-}
+  leaveMaking() {
+    console.log('leaveMaking pressed');
+    this.matchmaking = false;
+    this.gameService.leaveMatchMaking();
+  }
 
+  ngOnDestroy() {
+    this.leaveMaking();
+  }
+
+}
 
 // import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 // import Phaser from 'phaser';

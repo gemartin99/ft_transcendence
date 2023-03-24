@@ -71,4 +71,8 @@ export class JoinedRoomService {
       .delete()
       .execute();
   }
+
+  async removeByUserAndRoom(userId: number, roomId: number): Promise<void> {
+    await this.joinedRoomRepository.delete({ user: { id: userId }, room: { id: roomId } });
+  }
 }

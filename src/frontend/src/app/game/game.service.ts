@@ -43,6 +43,11 @@ export class GameService implements AfterViewInit{
     return this.socket.fromEvent('joinMatchMaking');
   }
 
+  leaveMatchMaking() {
+    this.socket.emit('leaveMatchMaking');
+    //return this.socket.fromEvent('leaveMatchMaking');
+  }
+
   playerInput(data: number[]){
 
     const input = { input: data };

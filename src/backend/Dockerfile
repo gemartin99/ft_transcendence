@@ -1,18 +1,15 @@
 FROM node:lts
 
-RUN apt-get update && \
-	apt-get autoremove -y && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/*
+WORKDIR /backend
 
-WORKDIR /app
-
-COPY . /app/
-
-EXPOSE 3000
-
-RUN npm install -g @nestjs/cli
+COPY package*.json ./
 
 RUN npm install
 
-CMD [ "nest", "start" ]
+COPY . .
+
+
+EXPOSE 3000
+
+
+CMD ["npm", "run", "start:dev"]

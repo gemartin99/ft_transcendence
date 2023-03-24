@@ -303,6 +303,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoomExcludingBlockedUser(room, socket.data.user.id);
      //console.log('joined users to send message:');
      //console.log(joinedUsers);
+     if(room.type == 3)
+     {
+        console.log("IS a private messaje channel where you want to write");
+     }
 
      const filteredJoinedUsers = joinedUsers.filter(
        (user) => !user.user.blocked_users.find((blockedUser) => blockedUser.id === socket.data.user.id)
@@ -541,7 +545,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        const target = await this.userService.getByName(username);
        if(target)
        {  
-          const jroom = await this.joinedRoomService.findByUser(target);
+          const jroom = await this.onlineUserService.findByUser(target);
           if(jroom && jroom.length > 0)
           {
             const rooms = await this.roomService.getRoomsForUser(target.id, { page: 1, limit: 10 });

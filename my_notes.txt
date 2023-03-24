@@ -1,5 +1,8 @@
 beluga
 
+TODO: 
+.env
+
 
 transcendence-backend-1          | /app/src/chat/chat.gateway.ts:97
 transcendence-backend-1          |     this.userService.setUserOfflineById(socket.data.user.id);

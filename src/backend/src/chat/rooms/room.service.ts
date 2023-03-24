@@ -204,26 +204,35 @@ export class RoomService {
   }
 
   async kick_user_from_channel(channelId: number, userId: number) {
-    const channel = await this.roomRepository.findOne({
-      where: { id: channelId },
-      relations: ["joinedUsers", "users"],
-    });
-    if(!channel)
-      return 0;
-
-    const joinedUser = channel.joinedUsers.find(joinedUser => joinedUser.id === userId);
-    if (!joinedUser) {
-      throw new Error("User is not joined in the channel");
-      return 0;
+    const user = await this.userService.getById(userId);
+    if(user){
+      await this.userCloseChannel(user as UserI, channelId); 
+      await this.joinedRoomService.removeByUserAndRoom(userId, channelId);
+      return 1;
     }
+    // const channel = await this.roomRepository.findOne({
+    //   where: { id: channelId },
+    //   relations: ["joinedUsers", "users"],
+    // });
+    // if(!channel)
+    //   return 0;
 
-    // Remove the joined user from the channel's joinedUsers array
-    await this.joinedRoomService.remove(joinedUser);
 
-    // Remove the user from the channel's users array
-    channel.users = channel.users.filter(user => user.id !== userId);
-    await this.roomRepository.save(channel);
-    return 1;
+    // await this.joinedRoomService.removeByUserAndRoom(userId, channelId);
+    // // const joinedUser = channel.joinedUsers.find(joinedUser => joinedUser.id === userId);
+    // // if (!joinedUser) {
+    // //   console.log("User is not joined in the channel");
+    // //   return 0;
+    // // }
+
+    // // // Remove the joined user from the channel's joinedUsers array
+    // // await this.joinedRoomService.remove(joinedUser);
+
+    // // Remove the user from the channel's users array
+    // channel.users = channel.users.filter(user => user.id !== userId);
+    // await this.roomRepository.save(channel);
+    // await this.roomService.userCloseChannel(socket.data.user, roomID); 
+    return 0;
   }
 
   async isUserBanedFromChannel(roomId: number, userId: number): Promise<boolean>

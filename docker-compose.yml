@@ -13,46 +13,51 @@ services:
     networks:
       - backend
 
-  postgres_admin2:
-     image: dpage/pgadmin4:6.16
-     depends_on: 
-       - postgres
-     environment:
-       PGADMIN_DEFAULT_EMAIL: marc@arza.com
-       PGADMIN_DEFAULT_PASSWORD: rielf222
-     ports:
-       - 5050:80
-     networks:
-       - backend
+  # postgres_admin2:
+  #    image: dpage/pgadmin4:6.16
+  #    depends_on: 
+  #      - postgres
+  #    environment:
+  #      PGADMIN_DEFAULT_EMAIL: marc@arza.com
+  #      PGADMIN_DEFAULT_PASSWORD: 1234
+  #    ports:
+  #      - 5050:80
+  #    networks:
+  #      - backend
 
   backend:
-    build: ./src/backend
+    build:
+      context: ./src/backend
     ports:
       - 3000:3000
     networks:
       - backend
     volumes:
-      - backend:/home/transcendence/backend
-      - ./src/backend:/home/transcendence/src/backend/src
+      - ./src/backend:/backend
       - ./avatars:/app/src/uploads/avatar/
+      - '/backend/node_modules'
     env_file:
       - ./a.env
     restart: unless-stopped
     depends_on:
       - postgres
+    command: npm run start:dev
 
   frontend:
     build:
       context: ./src/frontend
-      dockerfile: Dockerfile
     ports:
       - 80:4200
     networks:
       - backend
     volumes:
-      - ./src/frontend:/home/transcendance/src/frontend
-    env_file:
+      - ./src/frontend:/frontend
+      - '/frontend/node_modules'
+    env_file: 
       - ./a.env
+    environment:
+        - CHOKIDAR_USEPOLLING=true
+    command: ng serve --host 0.0.0.0 --disable-host-check
     restart: unless-stopped
     depends_on:
       - backend

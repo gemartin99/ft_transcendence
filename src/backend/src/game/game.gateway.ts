@@ -83,6 +83,18 @@ export class GameGateway {
     }
   }
 
+  @SubscribeMessage('leaveMatchMaking')
+  async leaveMatchmaking(client: Socket) {
+    const index = this.usersInQueue.findIndex(user => user.id === client.id);
+    if (index === -1) {
+      //console.log(`Client ${client.id} is not in the queue`);
+      return;
+    }
+
+    this.usersInQueue.splice(index, 1);
+    //console.log(`Client ${client.id} has left the matchmaking queue`);
+  }
+
   @SubscribeMessage('joinClientToMatch')
   async joinClientToMatch(client: Socket, matchId: number) {
     //console.log('In Game Gateway!!!! joinClientToMatch');
