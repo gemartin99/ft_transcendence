@@ -142,7 +142,6 @@ export class AuthController {
     }
 
     @Get('user')
-    @UseGuards(AuthGuard('jwt'))
     async getLoggedUser(@Req() req: any, @Res() res: Response) {
         //console.log('inside getLoggedUser');
         // console.log(req.cookies);

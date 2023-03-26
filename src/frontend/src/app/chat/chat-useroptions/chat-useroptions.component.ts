@@ -12,13 +12,24 @@ import { ApiService } from '../../api.service';
 })
 export class ChatUseroptionsComponent implements OnInit {
 
+  isblocked = false;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private router: Router,
               private dialogRef: MatDialogRef<ChatUseroptionsComponent>,
               private chatService: ChatService,
               private apiService: ApiService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const num = this.data.numParam;
+    this.apiService.getRelationByUserId(parseInt(num)).subscribe((response) => {
+      console.log('getRelationByUserId');
+      console.log(response);
+      if (response) {
+        this.isblocked = response.is_blocked;
+        console.log('isblocked: ' + response.is_friend);
+      }
+    });
   }
 
   viewProfile(id: number)

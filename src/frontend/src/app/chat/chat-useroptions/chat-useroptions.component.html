@@ -14,9 +14,13 @@
           <div class="control">
             <button class="button is-success" (click)="inviteToGame(data.numParam)">Invite to Game</button>
           </div>
-          <div class="control">
+<!--           <div class="control">
             <button class="button is-warning" (click)="muteUser(data.numParam)">Mute User</button>
-          </div>
+          </div> -->
+          <div class="control">
+            <button *ngIf="!isblocked" class="button is-danger" (click)="muteUser(data.numParam)">Block User</button>
+            <button *ngIf="isblocked" class="button is-warning" (click)="unmuteUser(data.numParam)">Unblock User</button>
+        </div>
         </div>
       </div>
     </div>

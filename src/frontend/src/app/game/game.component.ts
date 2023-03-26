@@ -10,6 +10,7 @@ import { GameService } from './game.service';
 export class GameComponent implements OnInit, OnDestroy {
 
   public matchmaking = false;
+  public gamerules = false;
 
   constructor(private gameService: GameService) {}
 
@@ -31,6 +32,15 @@ export class GameComponent implements OnInit, OnDestroy {
     this.leaveMaking();
   }
 
+  viewRules()
+  {
+    this.gamerules = true;
+  }
+
+  closeRules()
+  {
+    this.gamerules = false;
+  }
 }
 
 // import { Component, OnInit, ViewEncapsulation } from '@angular/core';

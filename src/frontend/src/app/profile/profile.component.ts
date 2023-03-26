@@ -31,9 +31,9 @@ export class ProfileComponent implements OnInit {
   async ngOnInit() {
     await this.authService.loadLoggedUser();
     this.user = await this.authService.getLoggedUser();
-    console.log('This is the user data from profile onInit:' + this.user);
-    console.log('User name: ', this.user.name);
-    console.log('User played: ', this.user.played);
+    // console.log('This is the user data from profile onInit:' + this.user);
+    // console.log('User name: ', this.user.name);
+    // console.log('User played: ', this.user.played);
 
     this.apiService.getUserMatches(this.user.id).subscribe(matches => {
       this.userMatches = matches;
@@ -41,11 +41,11 @@ export class ProfileComponent implements OnInit {
     this.apiService.getUserRank(this.user.id).subscribe(rank => {
       this.userRank = rank;
     });
-    console.log('getArchivements:');
+    // console.log('getArchivements:');
     this.apiService.getArchivements(this.user.id).subscribe((response) => {
       this.archivements = response;
-      console.log('archivements:');
-      console.log(this.archivements);
+      // console.log('archivements:');
+      // console.log(this.archivements);
     });
     this.user = await this.authService.refreshLoggedUser();
   }
