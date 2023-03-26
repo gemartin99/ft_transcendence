@@ -46,7 +46,7 @@ export class AuthService {
             }
 
             //console.log('Entro a auth.AuthService intento firmar el JWT...');
-            const signed_token: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 3600 });
+            const signed_token: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 86400 });
             //console.log('JWT Firmado...');
             return signed_token;
         }

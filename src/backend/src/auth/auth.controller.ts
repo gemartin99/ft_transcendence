@@ -32,6 +32,8 @@ export class AuthController {
         //console.log(req.query);
         if(!req.err)
         {
+            if(!req.user.id42)
+                return res.redirect('http://crazy-pong.com');
             //Set the jwt token cookie
             res.cookie('crazy-pong', req.user.jwt);
 
@@ -69,10 +71,10 @@ export class AuthController {
                 if(user)
                     return res.redirect('http://crazy-pong.com/register');
                 else
-                    return res.redirect('http://crazy-pong.com/login_error');
+                    return res.redirect('http://crazy-pong.com');
             }
         }
-        return res.redirect('http://crazy-pong.com/login_error');
+        return res.redirect('http://crazy-pong.com');
     }
 
     @Get('protected')
