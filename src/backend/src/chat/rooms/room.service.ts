@@ -353,6 +353,7 @@ export class RoomService {
       const hash = await bcrypt.hash(password, saltRounds);
       room.password = hash;
       await this.roomRepository.save(room);
+      return 0;
     } else {
       //console.log('user is not owner, he can\'t change the password');
       return 1;

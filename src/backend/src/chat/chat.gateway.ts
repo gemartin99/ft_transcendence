@@ -523,6 +523,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        this.server.to(socket.id).emit('chat_error', "user owner cant be muted");
        return;
      }
+     if (result == 0) {
+       this.server.to(socket.id).emit('chat_error', username + " has been muted in the channel");
+       return;
+     }
    }
 
    async processCommandBanUser(socket: Socket, message: MessageI, username: string) {
@@ -585,7 +589,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        return;
      }
      if (result == 0) {
-       this.server.to(socket.id).emit('chat_error', username + "promoted to oeprator");
+       this.server.to(socket.id).emit('chat_error', username + " promoted to operator");
        return;
      }
    }
@@ -604,6 +608,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        this.server.to(socket.id).emit('chat_error', "Username not found");
        return;
      }
+     if (result == 0) {
+       this.server.to(socket.id).emit('chat_error', username + " promoted to operator");
+       return;
+     }
    }
 
 
@@ -617,6 +625,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        this.server.to(socket.id).emit('chat_error', "Password format is incorrect");
        return;
      }
+     if (result == 0) {
+       this.server.to(socket.id).emit('chat_error', "Channel Password has been seted");
+       return;
+     }
    }
 
    async processCommandUnsetPwd(socket: Socket, room: RoomI) {
@@ -627,6 +639,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
      }
      if (result == 2) {
        this.server.to(socket.id).emit('chat_error', "You are not owner, you can't unset the password");
+       return;
+     }
+     if (result == 0) {
+       this.server.to(socket.id).emit('chat_error', "Channel Password has been unseted");
        return;
      }
    }
