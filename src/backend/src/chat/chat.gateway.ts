@@ -398,6 +398,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
    async processCommand(socket: Socket, message: MessageI) {
      //console.log('IN processCommand: message is:');
      //console.log(message);
+     if (message.room.type == 3)
+        return;
      if (message.text.startsWith('/')) {
        const [command, ...args] = message.text.split(' ');
        switch (command) {

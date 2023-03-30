@@ -27,7 +27,7 @@ export class AuthController {
     @UseGuards(AuthGuard('school42'))
     async school42Callback(@Req() req, @Res() res)
     {
-        //console.log('call to school42/callback');
+        console.log('call to school42/callback');
         //console.log(req.user);
         //console.log(req.query);
         if(!req.err)

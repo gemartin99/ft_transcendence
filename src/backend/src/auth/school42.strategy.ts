@@ -29,10 +29,7 @@ export class School42Strategy extends PassportStrategy(Strategy, 'school42')
     async validate(accessToken: string, refreshToken: string, profile: any, done: Function, res: Response)
     {
 
-        //console.log('validating...');
-        //console.log('accessToken:' + accessToken);
-        //console.log('refreshToken:' + refreshToken);
-        //console.log('profile:' + profile);
+        console.log('validating...');
 
         try
         {
@@ -53,7 +50,7 @@ export class School42Strategy extends PassportStrategy(Strategy, 'school42')
         }
         catch(err)
         {
-            //console.log('Error try de valdiate2');
+            console.log('Error try de valdiate2');
             //console.log(err)
             done(err, false);
         }
