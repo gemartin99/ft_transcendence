@@ -48,7 +48,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.user = await this.authService.getLoggedUser();
+    this.user = await this.authService.refreshLoggedUser();
+    //this.user = await this.authService.getLoggedUser();
     this.chatService.emitPaginateRooms(10, 0);
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

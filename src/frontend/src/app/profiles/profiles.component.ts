@@ -88,7 +88,7 @@ export class ProfilesComponent implements OnInit {
   async unblockUser(id)
   {
     this.blockButtonDisabled = true;
-    this.apiService.removeFriend(id).subscribe((result)=>{   
+    this.apiService.unblockUser(id).subscribe((result)=>{   
       this.isblocked = false;
       this.blockButtonDisabled = false;
     });

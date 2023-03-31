@@ -292,18 +292,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
        this.processCommand(socket, message);
        return null;
      }
-     const is_muted = await this.roomService.isUserMutedFromChannel(message.room.id, socket.data.user.id);
+     const currentUser = await this.userService.getById(socket.data.user.id);
+     if (!currentUser)
+        return;
+     
+     const is_muted = await this.roomService.isUserMutedFromChannel(message.room.id, currentUser.id);
      if(is_muted)
      {
         this.server.to(socket.id).emit('chat_error', "can't talk: you are muted from this channel");
         return;
      }
-     const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
+     
+     const createdMessage: MessageI = await this.messageService.create({...message, user: currentUser});
      if(!createdMessage)
         return null;
      const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
      await this.roomService.updateRoomUpdatedAt(room.id);
-     const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoomExcludingBlockedUser(room, socket.data.user.id);
+     const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoomExcludingBlockedUser(room, currentUser.id);
      //console.log('joined users to send message:');
      //console.log(joinedUsers);
      if(room.type == 3)
@@ -311,7 +316,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         try
         {
           console.log("IS a private messaje channel where you want to write");
-          const currentUserID = socket.data.user.id;
+          const currentUserID = currentUser.id;
           const otherUserID = room.id_pvt_user1 === currentUserID ? room.id_pvt_user2 : room.id_pvt_user1;
           const isReceiverJoined = joinedUsers.find((user) => user.user.id === otherUserID);
           if (!isReceiverJoined) {
@@ -359,6 +364,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
           await this.server.to(socket.id).emit('chat_error', 'You can t send private messages to yourself');
           return null;
       }
+      const relation = await this.userService.getRelationById(target_user.id42, socket.data.user.id);
+      if(relation.is_blocked)
+        return;
       //Create de pvtmsg channel if need: 
       const room = await this.roomService.preparePvtMessageRoom(socket.data.user, target_user);
       await this.roomService.updateRoomUpdatedAt(room.id);
