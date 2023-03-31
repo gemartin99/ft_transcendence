@@ -57,6 +57,7 @@ export class UserService {
 		return await this.update(user);
 	}
 
+
 	async setUserOfflineById(userId: number) {
 		return this.userRepository.update(userId, {
 		is_online: false
@@ -98,6 +99,12 @@ export class UserService {
 	{
 		user.is_playing = 0;
 		return await this.update(user);
+	}
+
+	async setUserOffPlayById(userId: number) {
+		return this.userRepository.update(userId, {
+		is_playing: 0
+		});
 	}
 
 	async delete(id): Promise<DeleteResult> {		

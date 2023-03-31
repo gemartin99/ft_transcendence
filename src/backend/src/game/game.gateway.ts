@@ -65,7 +65,7 @@ export class GameGateway {
     //   return;
     // }
     const user_client = await this.userService.getById(client.data.user.id);
-    if(user_client.is_playing == 0)
+    if(user_client.is_playing != 0)
       return;
 
     this.usersInQueue.push(client);
@@ -81,8 +81,8 @@ export class GameGateway {
       
       const user1 = await this.userService.getById(player1.data.user.id);
       const user2 = await this.userService.getById(player2.data.user.id);
-      await this.userService.setUserOnline(user1);
-      await this.userService.setUserOnline(user2);
+      await this.userService.setUserInPlay(user1, match.id);
+      await this.userService.setUserInPlay(user2, match.id);
       const message = 'You have been paired for a match';
       player1.emit('matchmakingPair', match.id);
       player2.emit('matchmakingPair', match.id);

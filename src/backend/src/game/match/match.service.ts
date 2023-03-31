@@ -212,8 +212,8 @@ export class MatchService {
 
     //Game is over, clean up
     this.saveMatchResult(game);
-    await this.userService.setUserOfflineById(users.player1.data.user.id);
-    await this.userService.setUserOfflineById(users.player2.data.user.id);
+    await this.userService.setUserOffPlayById(users.player1.data.user.id);
+    await this.userService.setUserOffPlayById(users.player2.data.user.id);
     this.games.delete(idMatch);
     this.games_users.delete(idMatch);
     // users.player1.leave(matchId);
