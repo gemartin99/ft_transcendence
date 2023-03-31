@@ -64,6 +64,9 @@ export class GameGateway {
     //   console.log(`Client ${client.id} is already in the queue`);
     //   return;
     // }
+    const user_client = await this.userService.getById(client.data.user.id);
+    if(user_client.is_playing == 0)
+      return;
 
     this.usersInQueue.push(client);
     // Check if there are enough users in queue to start a match
@@ -75,6 +78,11 @@ export class GameGateway {
       const match = await this.matchService.createMatch(player1.data.user as User, player2.data.user as User);
       // TODO: Start matchmaking process
       //console.log(`Starting match between ${player1.id} and ${player2.id}`);
+      
+      const user1 = await this.userService.getById(player1.data.user.id);
+      const user2 = await this.userService.getById(player2.data.user.id);
+      await this.userService.setUserOnline(user1);
+      await this.userService.setUserOnline(user2);
       const message = 'You have been paired for a match';
       player1.emit('matchmakingPair', match.id);
       player2.emit('matchmakingPair', match.id);

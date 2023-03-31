@@ -94,6 +94,7 @@ export class MatchService {
         // If the client is a player, update the corresponding player socket in the games_users map
         const matchUsers = this.games_users.get(matchId);
         if (game.player1.id === client.id) {
+          
           matchUsers.player1 = client;
         } else {
           matchUsers.player2 = client;
@@ -211,6 +212,8 @@ export class MatchService {
 
     //Game is over, clean up
     this.saveMatchResult(game);
+    await this.userService.setUserOfflineById(users.player1.data.user.id);
+    await this.userService.setUserOfflineById(users.player2.data.user.id);
     this.games.delete(idMatch);
     this.games_users.delete(idMatch);
     // users.player1.leave(matchId);

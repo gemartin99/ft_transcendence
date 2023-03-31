@@ -148,6 +148,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.server.to(socket.id).emit('chat_error', "Invalid password, only alphanumeric allowed and maxlenght of 30");
       return;
     }
+
+    const room_exist = await this.roomService.getRoomByName(room.name);
+    if(room_exist)
+    {
+      this.server.to(socket.id).emit('chat_error', "can't create: there is a channel whit same name");
+      return;
+    }
+
     // console.log('creator: ' + socket.data.user);
     // console.log('room: ' + room);
     await this.roomService.createRoom(room, socket.data.user);
