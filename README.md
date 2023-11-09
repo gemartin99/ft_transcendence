@@ -1,24 +1,3 @@
-# trans
+# README 
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![IMG_3153](https://github.com/gemartin99/ft_transcendence/assets/66915274/1cb768c3-29a2-4460-bb8c-6cec502b0959)
