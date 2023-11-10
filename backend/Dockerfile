@@ -1,0 +1,11 @@
+FROM: python:3x
+
+WORKDIR /usr/src/app
+
+COPY ./backend_django /usr/src/app
+
+RUN pip install -r requirements.txt
+
+EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver". "0.0.0.0:8000"]
