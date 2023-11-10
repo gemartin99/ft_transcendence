@@ -1,0 +1,36 @@
+version: '3'
+services:
+  frontend_vanilla:
+    build:
+      context: ./frontend_vanilla
+    container_name: frontend_vanilla
+    ports:
+      - "80:80"
+
+  backend_django:
+    build:
+      context: ./backend_django
+    container_name: backend_django
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db_postgres
+    volumes:
+      - backend_data:/usr/src/app/static #aqui deben ir archivos estaticos img o cosas asi que no se carguen/actualicen etc
+      - backend_data:/usr/src/app/media #aqui archivos que se puedan cargar en tiempo de ejecucuion ejemplo : imagenes de foto perfil
+
+  db_postgres:
+    build:
+      context: ./db_postgres
+    container_name: database_postgre
+    image: postgre:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: transcendence
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  backend_data:
+  postgres_data:
