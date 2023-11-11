@@ -2,15 +2,15 @@ version: '3'
 services:
   frontend_vanilla:
     build:
-      context: ./frontend_vanilla
-    container_name: frontend_vanilla
+      context: ./front
+    container_name: front
     ports:
       - "80:80"
 
   backend_django:
     build:
-      context: ./backend_django
-    container_name: backend_django
+      context: ./back
+    container_name: back
     ports:
       - "8000:8000"
     depends_on:
@@ -20,10 +20,8 @@ services:
       - backend_data:/usr/src/app/media #aqui archivos que se puedan cargar en tiempo de ejecucuion ejemplo : imagenes de foto perfil
 
   db_postgres:
-    build:
-      context: ./db_postgres
+    image: postgres:alpine3.18
     container_name: database_postgre
-    image: postgre:latest
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
