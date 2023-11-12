@@ -22,6 +22,9 @@ RUN pip install gunicorn
 RUN apt-get update && \
     apt-get install -y postgresql-client
 
+# Install django-cors-headers
+RUN pip install django-cors-headers
+
 # Set up Django and PostgreSQL environment variables
 # ENV DJANGO_SETTINGS_MODULE=myproject.settings
 # ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
@@ -31,4 +34,3 @@ EXPOSE 8000
 
 # Define command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "crazy_pong.crazy_pong.wsgi:application", "--env", "DJANGO_SETTINGS_MODULE=crazy_pong.crazy_pong.settings"]
-
