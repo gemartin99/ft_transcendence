@@ -15,16 +15,16 @@ COPY . /app
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# Install PostgreSQL client
+# Install PostgreSQL client and update package index
 RUN apt-get update && \
     apt-get install -y postgresql-client
 
 # Set up Django and PostgreSQL environment variables
-#ENV DJANGO_SETTINGS_MODULE=myproject.settings
-#ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
+# ENV DJANGO_SETTINGS_MODULE=myproject.settings
+# ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
 
 # Collect static files
-#RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
