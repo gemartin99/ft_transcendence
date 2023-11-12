@@ -1,5 +1,7 @@
 // index.js
+
 baseurl = "http://crazy-pong.com"
+// baseurl = "http://localhost"
 
 document.addEventListener('DOMContentLoaded', function () {
     const heading = document.getElementById('helloHeading');
@@ -13,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         heading.textContent = 'Loading...';
 
         fetch(baseurl + ':8000/api/hello/')
+
             .then(response => response.json())
             .then(data => {
                 console.log('Response from backend:', data);
