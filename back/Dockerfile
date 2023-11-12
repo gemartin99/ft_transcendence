@@ -15,6 +15,9 @@ COPY . /app
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+# Install gunicorn
+RUN pip install gunicorn
+
 # Install PostgreSQL client and update package index
 RUN apt-get update && \
     apt-get install -y postgresql-client
@@ -23,12 +26,9 @@ RUN apt-get update && \
 # ENV DJANGO_SETTINGS_MODULE=myproject.settings
 # ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
 
-# Collect static files
-# RUN python manage.py collectstatic --noinput
-
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
 # Define command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myproject.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "crazy_pong.crazy_pong.wsgi:application", "--env", "DJANGO_SETTINGS_MODULE=crazy_pong.crazy_pong.settings"]
 
