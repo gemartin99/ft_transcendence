@@ -1,0 +1,15 @@
+.DS_Store
+a.out
+*.o
+*.gcda
+*.gcno
+*.gcov
+*.d
+*.ignore
+.vscode/
+bin/
+uncrustify-targets.txt
+*.log
+coverage.info
+rep/
+*.swp
