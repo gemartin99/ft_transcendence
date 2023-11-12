@@ -8,3 +8,4 @@ def hello_view(request):
 def get_hello_message(request):
     data = {'message': 'Hello, World!'}
     return JsonResponse(data)
+
