@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const heading = document.getElementById('helloHeading');
     const home = document.getElementById('home');
     const login = document.getElementById('login');
+    const hola = document.getElementById('hola');
     const app = document.getElementById('app'); // Get the app div
 
 
@@ -14,8 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const newPath = baseurl + path;
         window.history.pushState({ path: newPath }, '', newPath);
     }
-
-
 
 
 
@@ -41,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
+
+
+
     login.addEventListener('click', function () {
         heading.textContent = 'Loading...';
          updateUrl('/login');
@@ -51,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Response from backend:', data);
 
                 if (data.title && data.content && data.additionalInfo) {
-                    // Update different parts of your HTML based on the data
                     heading.textContent = data.title;
                     app.innerHTML = data.content + '<br>' + data.additionalInfo;
                 } else {
@@ -63,6 +64,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 heading.textContent = 'Error: Failed to fetch data from the backend';
             });
     });
+
+
+
+    hola.addEventListener('click', function () {
+        heading.textContent = 'dasdasdasda';
+         updateUrl('/template1');
+
+        fetch(baseurl + ':8000/api/template1/')
+            .then(response => response.text())
+            .then(html => {
+                app.innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching HTML:', error));
+            });
+
 
     console.log('Hello, World! from JavaScript');
 });
