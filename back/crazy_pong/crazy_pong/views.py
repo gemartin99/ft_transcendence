@@ -1,5 +1,6 @@
 # views.py
 from django.http import JsonResponse
+from django.shortcuts import render
 
 def hello_view(request):
     data = {'message': 'Hello,hhhhhhh World!'}
@@ -16,3 +17,12 @@ def get_login(request):
         'additionalInfo': 'Some additional information here',
     }
     return JsonResponse(data)
+
+def change_view(request):
+    # Your view logic here
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+        # Add other variables as needed
+    }
+    return render(request, 'crazy_pong/template_1.html', context)
