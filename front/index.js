@@ -1,7 +1,7 @@
 // index.js
 
-baseurl = "http://crazy-pong.com"
-// baseurl = "http://localhost"
+//baseurl = "http://crazy-pong.com"
+baseurl = "http://localhost"
 
 document.addEventListener('DOMContentLoaded', function () {
     const heading = document.getElementById('helloHeading');
@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Assuming the backend sends a message field in the response
                 if (data.message) {
-                    heading.textContent = data.message;
+                    document.getElementById('app').innerHTML = JSON.stringify(data.message);
+                    //heading.textContent = data.message;
                 } else {
                     heading.textContent = 'Error: Invalid response from backend';
                 }
