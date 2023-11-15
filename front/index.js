@@ -1,7 +1,7 @@
 // index.js
 
-baseurl = "http://crazy-pong.com"
-// baseurl = "http://localhost"
+//baseurl = "http://crazy-pong.com"
+baseurl = "http://localhost"
 
 document.addEventListener('DOMContentLoaded', function () {
     const heading = document.getElementById('helloHeading');
