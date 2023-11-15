@@ -11,6 +11,15 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+import crazy_pong.routing
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crazy_pong.settings')
 
 application = get_asgi_application()
+
+
+application = ProtocolTypeRouter({
+    "websocket": URLRouter(
+        crazy_pong.routing.websocket_urlpatterns
+    ),
+})
