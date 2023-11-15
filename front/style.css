@@ -5,30 +5,49 @@ body{
 
 a {
     text-decoration: none; /*Para quitar el subrayado en los a href*/
-    color: black;
+    color: white;
 }
 
 header {
     display: flex;
     min-height: 70px;
     justify-content: space-between;
-    background-color: gold;
+    background-color: darkblue; 
     align-items: center;
     padding: 10px;
 }
 
-.logo img{
-    height: 50px;
+.logo img {
+    height: 100px;
+}
+
+a.profile img.profile-img {
+    height: 100px;
+    width: auto;
+}
+
+nav {
+    display: flex;
+    align-items: center; /* Alinea verticalmente */
 }
 
 nav a {
     font-weight: 600;
-    padding-right: 10px;
+    padding-right: 20px;
+    display: flex; /* Usa display:flex para alinear verticalmente */
+    align-items: center; /* Alinea contenido verticalmente */
+    height: 70px; /* Ajusta la altura de tus enlaces */
+    line-height: 70px; /* Alinea el texto verticalmente */
 }
 
 nav a:hover{
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
+
+nav a.profile:hover {
+    box-shadow: none;
+}
+
 
 @media (max-width:700px) {
     header {

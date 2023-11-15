@@ -20,10 +20,17 @@ RUN pip install gunicorn
 
 # Install PostgreSQL client and update package index
 RUN apt-get update && \
-    apt-get install -y postgresql-client
+    apt-get install -y postgresql-client && \
+    apt-get install -y libpq-dev  # This line installs the PostgreSQL development libraries
+
+# Install psycopg2
+RUN pip install psycopg2-binary
 
 # Install django-cors-headers
 RUN pip install django-cors-headers
+
+# Install django-entity
+RUN pip install django-entity
 
 # Set up Django and PostgreSQL environment variables
 # ENV DJANGO_SETTINGS_MODULE=myproject.settings
@@ -33,6 +40,8 @@ RUN pip install django-cors-headers
 EXPOSE 8000
 
 # Define command to run the application
-#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "crazy_pong.crazy_pong.wsgi:application", "--env", "DJANGO_SETTINGS_MODULE=crazy_pong.crazy_pong.settings"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "crazy_pong.crazy_pong.wsgi:application", "--env", "DJANGO_SETTINGS_MODULE=crazy_pong.crazy_pong.settings"]
 
 CMD ["python", "/app/crazy_pong/manage.py", "runserver", "0.0.0.0:8000"]
+
+

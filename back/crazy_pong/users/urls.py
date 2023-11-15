@@ -1,4 +1,3 @@
-# En crazy_pong/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from .views import get_hello_message
