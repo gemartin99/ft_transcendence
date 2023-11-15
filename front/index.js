@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const login = document.getElementById('login');
     const hola = document.getElementById('hola');
     const app = document.getElementById('app'); // Get the app div
+    const backend = document.getElementById('backend'); // Get the app div
 
 
     function updateUrl(path) {
@@ -79,6 +80,34 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Error fetching HTML:', error));
             });
 
+    backend.addEventListener('click', function () {
+        heading.textContent = 'noo';
 
-    console.log('Hello, World! from JavaScript');
+
+            console.log('Hello, World1! from JavaScript!');
+            const socket = new WebSocket('ws://localhost:8000/ws/some_path/');
+            console.log('Hello, World2! from JavaScript!');
+
+            socket.onopen = (event) => {
+                console.log('WebSocket connection opened:', event);
+            };
+            
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                heading.textContent = data.message;
+                console.log('WebSocket message received:', data);
+        
+            };
+            
+            socket.onclose = (event) => {
+                console.log('WebSocket connection closed:', event);
+            };
+            
+            const message = { message: 'Hello, server!' };
+            socket.send(JSON.stringify(message));
+            
+            });
+
+
+    console.log('Hello, World! from JavaScript!');
 });
