@@ -1,8 +1,7 @@
-"""
-URL configuration for crazy_pong project.
+"""crazy_pong URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+    https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,16 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
 from django.urls import path
-from django.urls import re_path
-from .views import get_home, get_login, change_view
-
-from . import pongClients
 
 urlpatterns = [
-    #path('admin/', admin.site.urls),
-    path('api/home/', get_home, name='get_home'),
-    path('api/login/', get_login, name='get_login'),
-    path('api/template1/', change_view, name='change_view'),
-    # Add other URL patterns as needed
+    path('admin/', admin.site.urls),
 ]

@@ -80,12 +80,13 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Error fetching HTML:', error));
             });
 
+
     backend.addEventListener('click', function () {
-        heading.textContent = 'noo';
+             heading.textContent = 'noo';
 
 
             console.log('Hello, World1! from JavaScript!');
-            const socket = new WebSocket('ws://localhost:8000/ws/some_path/');
+            const socket = new WebSocket('ws://10.11.10.6:8000/ws/game/');
             console.log('Hello, World2! from JavaScript!');
 
             socket.onopen = (event) => {
@@ -93,9 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             
             socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                heading.textContent = data.message;
-                console.log('WebSocket message received:', data);
+                heading.textContent = event.data;
+                console.log('WebSocket message received:', event.data);
         
             };
             
@@ -103,11 +103,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('WebSocket connection closed:', event);
             };
             
-            const message = { message: 'Hello, server!' };
-            socket.send(JSON.stringify(message));
+            //const message = { message: 'Hello, server!' };
+            //socket.send(JSON.stringify(message));
             
             });
 
 
     console.log('Hello, World! from JavaScript!');
 });
+
