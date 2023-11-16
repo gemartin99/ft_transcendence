@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
 
+    const socket = new WebSocket('ws://10.11.10.6:8000/ws/game/');
 
     function updateUrl(path) {
         const newPath = baseurl + path;
@@ -84,11 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
     backend.addEventListener('click', function () {
              heading.textContent = 'noo';
 
-
-            console.log('Hello, World1! from JavaScript!');
-            const socket = new WebSocket('ws://10.11.10.6:8000/ws/game/');
-            console.log('Hello, World2! from JavaScript!');
-
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);
             };
@@ -103,8 +99,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('WebSocket connection closed:', event);
             };
             
-            //const message = { message: 'Hello, server!' };
+            //const message = { message: 'buscar' };
             //socket.send(JSON.stringify(message));
+            socket.send('buscar')
             
             });
 
