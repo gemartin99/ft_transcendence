@@ -1,11 +1,17 @@
 html,
+
+/*
+div {
+    border: 1px dashed red;
+}
+*/
+
 body {
     position: relative;
     height: 100%;
 }
 
 body {
-    font-family: var(--bs-body-font-family);
     font-size: 14px;
     color: black;
     margin: 0;
@@ -22,7 +28,6 @@ body {
     height: 800px;
     background-color: #343a40;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-    padding: 40px;
     text-align: center;
 }
 
@@ -30,11 +35,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
 }
 
 .icons img {
     width: 120px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 20px;
 }
 
 .student-content {
@@ -55,7 +62,6 @@ body {
 
 .student-txt h3 {
     font-size: 20px;
-    color: black;
     text-transform: uppercase;
 }
 
@@ -66,9 +72,8 @@ body {
 
 .student-img img {
     width: 300px;
-    height: auto;
+    height: 300px;
     justify-content: center;
-    border: 3px solid #f5c344;
 }
 
 .logos {
@@ -84,7 +89,7 @@ body {
   }
 
   .logos a + a {
-    margin-left: 50px; /* Añade un margen entre los enlaces */
+    margin-left: 60px; /* Añade un margen entre los enlaces */
   }
   
   .logos img {
@@ -92,9 +97,31 @@ body {
     height: auto;
   }
 
+  .logos img[src="img/42logo.png"] {
+    width: 65px; /* Ajusta el ancho según sea necesario */
+    height: auto; /* Mantiene la proporción de aspecto */
+  }
+  
+
   .bi-github {
     font-size: 3em; /* Tamaño personalizado */
     text-decoration: none;
     color: #000; /* Cambia el color del ícono de GitHub */
   }
   
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px 0;
+    margin-top: auto; 
+  }
+
+  
+  .footer-bottom {
+    max-width: 1200px;
+    text-align: center;
+    margin: 0 auto;
+  }
