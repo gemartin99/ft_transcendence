@@ -5,7 +5,7 @@ body {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--bs-body-font-family);
     font-size: 14px;
     color: black;
     margin: 0;
@@ -18,8 +18,8 @@ body {
 }
 
 .swiper-slide {
-    width: 300px;
-    height: 500px;
+    width: 500px;
+    height: 800px;
     background-color: #343a40;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     padding: 40px;
@@ -33,40 +33,68 @@ body {
     margin-bottom: 40px;
 }
 
-.icons i {
-    font-size: 20px;
-    color: #f5c344;
-}
-
 .icons img {
     width: 120px;
 }
 
-.product-content {
+.student-content {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Cambia la disposición de los elementos a columna */
+    align-items: center; /* Centra los elementos horizontalmente */
+    text-align: center; /* Centra el texto */
 }
 
-.product-txt {
+.student-txt {
     flex-basis: 50%;
     text-align: left;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 }
 
-.product-txt h3 {
+.student-txt h3 {
     font-size: 20px;
-    color: aliceblue;
+    color: black;
     text-transform: uppercase;
 }
 
-.product-img {
+.student-img {
     flex-basis: 50%;
     text-align: right;
 }
 
-.product-img img {
-    width: 120px;
+.student-img img {
+    width: 300px;
+    height: auto;
     justify-content: center;
+    border: 3px solid #f5c344;
 }
+
+.logos {
+    display: flex;
+    justify-content: space-around; /* Distribuye los logos equitativamente en el contenedor */
+    align-items: center; /* Centra verticalmente los logos */
+    margin-top: 10px; /* Margen superior */
+    
+  }
+  
+  .logos a {
+    text-decoration: none; /* Quita la decoración del enlace */
+  }
+
+  .logos a + a {
+    margin-left: 50px; /* Añade un margen entre los enlaces */
+  }
+  
+  .logos img {
+    width: 50px; /* Tamaño de las imágenes */
+    height: auto;
+  }
+
+  .bi-github {
+    font-size: 3em; /* Tamaño personalizado */
+    text-decoration: none;
+    color: #000; /* Cambia el color del ícono de GitHub */
+  }
+  
