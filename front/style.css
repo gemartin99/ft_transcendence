@@ -7,15 +7,8 @@ div {
 */
 
 body {
-    position: relative;
-    height: 100%;
-}
+  color: black;
 
-body {
-    font-size: 14px;
-    color: black;
-    margin: 0;
-    padding: 0;
 }
 
 .swiper {
@@ -109,19 +102,7 @@ body {
     color: #000; /* Cambia el color del ícono de GitHub */
   }
   
-  footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #343a40;
-    color: #fff;
-    padding: 20px 0;
-    margin-top: auto; 
-  }
-
-  
-  .footer-bottom {
-    max-width: 1200px;
+  .footer {
     text-align: center;
-    margin: 0 auto;
+    margin-top: auto;
   }
