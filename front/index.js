@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
 
-    const socket = new WebSocket('ws://10.11.10.6:8000/ws/game/');
+    const socket = new WebSocket('ws://localhost:8000/ws/game/');
 
     function updateUrl(path) {
         const newPath = baseurl + path;
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     home.addEventListener('click', function () {
         heading.textContent = 'Loading...';
-         updateUrl('/home');
+         // updateUrl('/home');
          
         fetch(baseurl + ':8000/api/home/')
             .then(response => response.json())
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     login.addEventListener('click', function () {
         heading.textContent = 'Loading...';
-         updateUrl('/login');
+         // updateUrl('/login');
 
         fetch(baseurl + ':8000/api/login/')
             .then(response => response.json())
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     hola.addEventListener('click', function () {
         heading.textContent = 'dasdasdasda';
-         updateUrl('/template1');
+         // updateUrl('/template1');
 
         fetch(baseurl + ':8000/api/template1/')
             .then(response => response.text())

@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'game', 
+    'game',
+    'login',
 ]
 
 MIDDLEWARE = [
@@ -76,9 +77,13 @@ WSGI_APPLICATION = 'crazy_pong.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'transcendence', 
+        'USER': 'admin',
+        'PASSWORD': 'admin123',
+        'HOST': 'database_postgre', 
+        'PORT': '5432',
     }
 }
 
