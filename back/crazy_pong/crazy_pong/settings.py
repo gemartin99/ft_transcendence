@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_n0$)x6mxk-08#jcj1b%d*!5nf_iwg*m*qt325-0-7br%g!ke$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '*.localhost', 'crazy-pong.com', '*.crazy-pong.com']
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'game', 
+    'game',
+    'corsheaders',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'crazy_pong.urls'
@@ -77,8 +80,12 @@ WSGI_APPLICATION = 'crazy_pong.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'transcendence', 
+        'USER': 'admin',
+        'PASSWORD': 'admin123',
+        'HOST': 'database_postgre', 
+        'PORT': '5432',
     }
 }
 
@@ -130,3 +137,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ##added
 
 ASGI_APPLICATION = 'crazy_pong.asgi.application'
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://crazy-pong.com",
+]
