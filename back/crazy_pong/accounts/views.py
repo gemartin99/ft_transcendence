@@ -1,3 +1,6 @@
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 from django.shortcuts import render
 
 def get_login_form_page(request):
@@ -12,3 +15,35 @@ def get_login_form_page(request):
         'additionalInfo': 'Some additional information here',
     }
     return JsonResponse(data)
+
+
+def get_home_page(request):
+    data = {
+        'title': 'Login Page',
+        'content': '<strong>Hello,holadsfa World!</strong>',
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+
+@csrf_exempt  # Use this decorator for simplicity in this example. 
+#In production, handle CSRF properly.
+def request_login(request):
+    if request.method == 'POST':
+        try:
+            # Check if the request body is empty
+            if not request.body:
+                raise json.JSONDecodeError("Empty request body", request.body, 0)
+
+            data = json.loads(request.body)
+            # Do something with the data
+
+            # Assuming you want to send a JSON response back to the frontend
+            response_data = {'message': 'Data received successfully'}
+            return JsonResponse(response_data)
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': str(e) + 'gracias si muy bueno'}, status=400)
+
+    return JsonResponse({'message': 'Invalid method'})
+
+
