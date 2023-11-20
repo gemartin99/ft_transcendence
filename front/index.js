@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
 
-    const socket = new WebSocket('ws://10.11.10.6:8000/ws/game/');
+    const socket = new WebSocket('ws://localhost:8000/ws/game/');
 
     function updateUrl(path) {
         const newPath = baseurl + path;
