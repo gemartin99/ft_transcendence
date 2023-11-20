@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const hola = document.getElementById('hola');
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
-    const login = document.getElementById('login'); // Get the app div
+    // const login = document.getElementById('login'); // Get the app div
 
     const socket = new WebSocket('ws://localhost:8000/ws/game/');
 
@@ -108,27 +108,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    login.addEventListener('click', function () {
-        heading.textContent = 'loginin...';
-         // updateUrl('/home');
+    // login.addEventListener('click', function () {
+    //     heading.textContent = 'loginin...';
+    //      // updateUrl('/home');
          
-        fetch(baseurl + ':8000/accounts/request1/')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response from backend:', data);
+    //     fetch(baseurl + ':8000/accounts/request1/')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log('Response from backend:', data);
 
-                if (data.message) {
-                    // Update different parts of your HTML based on the data
-                    app.innerHTML = data.message;
-                } else {
-                    heading.textContent = 'Error: Invalid response from backend';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                heading.textContent = 'Error: Failed to fetch data from the backend';
-            });
-    });
+    //             if (data.message) {
+    //                 // Update different parts of your HTML based on the data
+    //                 app.innerHTML = data.message;
+    //             } else {
+    //                 heading.textContent = 'Error: Invalid response from backend';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             heading.textContent = 'Error: Failed to fetch data from the backend';
+    //         });
+    // });
 
 
     console.log('Hello, World! from JavaScript!');
