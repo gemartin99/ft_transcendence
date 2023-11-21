@@ -36,10 +36,20 @@ def request_login(request):
                 raise json.JSONDecodeError("Empty request body", request.body, 0)
 
             data = json.loads(request.body)
+            
+            # Access the value of 'dataInput' from the JSON data
+            data_input_value = data.get('dataInput')
+
+            # Do something with the data_input_value
+            # For example, print it to the console
+            print('dataInput value:', data_input_value)
+
+
             # Do something with the data
 
-            # Assuming you want to send a JSON response back to the frontend
             response_data = {'message': 'Data received successfully'}
+
+            # Assuming you want to send a JSON response back to the frontend
             return JsonResponse(response_data)
         except json.JSONDecodeError as e:
             return JsonResponse({'error': str(e) + 'gracias si muy bueno'}, status=400)
