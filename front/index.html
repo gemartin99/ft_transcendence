@@ -24,10 +24,17 @@
 
         <script>
             function submitForm() {
-                const formData = new FormData(document.getElementById('LogForm'));
+                const dataInputValue = document.getElementById('dataInput').value;
+                const formData = {
+                    dataInput: dataInputValue
+                };
+
                 fetch('http://localhost:8000/accounts/request1/', {
                     method: 'POST',
-                    body: formData,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
                 })
                 .then(response => response.text())
                 .then(data => {
