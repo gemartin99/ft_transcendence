@@ -99,9 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('WebSocket connection closed:', event);
             };
             
-            //const message = { message: 'buscar' };
-            //socket.send(JSON.stringify(message));
-            socket.send('buscar')
+            const message = { message: 'search' };
+            socket.send(JSON.stringify(message));
             
             });
 
