@@ -90,7 +90,13 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             
             socket.onmessage = (event) => {
-                heading.textContent = event.data;
+                const jsonData = JSON.parse(event.data.toString());
+                if (jsonData['cmd'] == 'connection') {
+                    heading.textContent = jsonData['ball'];
+                }
+                else if (jsonData['cmd'] == 'update') {
+                    heading.textContent =  "Posicio x: " + jsonData.ball.x + " Posicio y: " + jsonData.ball.y;
+                }
                 console.log('WebSocket message received:', event.data);
         
             };
@@ -99,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('WebSocket connection closed:', event);
             };
             
-            const message = { message: 'search' };
+            const message = { cmd: 'search' };
             socket.send(JSON.stringify(message));
             
             });
