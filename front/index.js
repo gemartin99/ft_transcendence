@@ -23,16 +23,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     home.addEventListener('click', function () {
         heading.textContent = 'Loading...';
-         updateUrl('/home');
+         // updateUrl('/home');
          
-        fetch(baseurl + ':8000/api/home/')
+        fetch(baseurl + ':8000/api/')
             .then(response => response.json())
             .then(data => {
                 console.log('Response from backend:', data);
 
-                if (data.message) {
+                if (data) {
                     // Update different parts of your HTML based on the data
-                    app.innerHTML = data.message;
+                    app.innerHTML = data.content;
                 } else {
                     heading.textContent = 'Error: Invalid response from backend';
                 }
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     login.addEventListener('click', function () {
         heading.textContent = 'Loading...';
-         updateUrl('/login');
+         // updateUrl('/login');
 
         fetch(baseurl + ':8000/api/login/')
             .then(response => response.json())
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     hola.addEventListener('click', function () {
         heading.textContent = 'dasdasdasda';
-         updateUrl('/template1');
+         // updateUrl('/template1');
 
         fetch(baseurl + ':8000/api/template1/')
             .then(response => response.text())
