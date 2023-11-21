@@ -17,35 +17,9 @@
         <form id="LogForm">
             <label for="dataInput">Data:</label>
             <input type="text" id="dataInput" name="dataInput">
-            <button type="button" onclick="submitForm()">Submit</button>
+            <button type="button" id="logbutton">Submit</button>
         </form>
 
-
-
-        <script>
-            function submitForm() {
-                const dataInputValue = document.getElementById('dataInput').value;
-                const formData = {
-                    dataInput: dataInputValue
-                };
-
-                fetch('http://localhost:8000/accounts/request1/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    // helloHeading.textContent = data.message;
-                    console.log('Response:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            }
-        </script>
 
 
 
