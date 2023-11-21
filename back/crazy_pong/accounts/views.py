@@ -43,11 +43,15 @@ def request_login(request):
             # Do something with the data_input_value
             # For example, print it to the console
             print('dataInput value:', data_input_value)
+            if (data_input_value == "hola"):
+                response_data = {'message': 'Data received successfully'}
+            else:
+                response_data = {'message': 'wrong data stupid'}
 
 
             # Do something with the data
 
-            response_data = {'message': 'Data received successfully'}
+            # response_data = {'message': 'Data received successfully'}
 
             # Assuming you want to send a JSON response back to the frontend
             return JsonResponse(response_data)

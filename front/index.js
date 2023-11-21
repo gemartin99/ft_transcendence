@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const hola = document.getElementById('hola');
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
-    // const login = document.getElementById('login'); // Get the app div
+    const logbutton = document.getElementById('logbutton'); // Get the app div
 
     const socket = new WebSocket('ws://localhost:8000/ws/game/');
 
@@ -108,27 +108,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    // login.addEventListener('click', function () {
-    //     heading.textContent = 'loginin...';
-    //      // updateUrl('/home');
-         
-    //     fetch(baseurl + ':8000/accounts/request1/')
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log('Response from backend:', data);
 
-    //             if (data.message) {
-    //                 // Update different parts of your HTML based on the data
-    //                 app.innerHTML = data.message;
-    //             } else {
-    //                 heading.textContent = 'Error: Invalid response from backend';
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //             heading.textContent = 'Error: Failed to fetch data from the backend';
-    //         });
-    // });
+    logbutton.addEventListener('click', function () {
+                const dataInputValue = document.getElementById('dataInput').value;
+                const formData = {
+                    dataInput: dataInputValue
+                };
+
+                fetch('http://localhost:8000/accounts/request1/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    heading.textContent = data.message;
+                    console.log('Response:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+
+
+
+
 
 
     console.log('Hello, World! from JavaScript!');
