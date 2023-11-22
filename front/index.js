@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Iterate over the users and create HTML elements to display the data
                 jsonData.users.forEach(user => {
                     const userDiv = document.createElement('div');
-                    userDiv.innerHTML = `<p>User ID: ${user.id}, Email: ${user.email}, Active: ${user.active}</p>`;
+                    userDiv.innerHTML = `<p>User ID: ${user.id}, Email: ${user.email}, Active: ${user.active}, Pass: ${user.password}</p>`;
                     userDataDisplay.appendChild(userDiv);
                 });
             })
