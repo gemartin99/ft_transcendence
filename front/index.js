@@ -11,8 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
     const logbutton = document.getElementById('logbutton'); // Get the app div
+    const userDataDisplay = document.getElementById('userDataDisplay');
+    const displayUsers = document.getElementById('displayUsers');
 
     const socket = new WebSocket('ws://localhost:8000/ws/game/');
+
+
 
     function updateUrl(path) {
         const newPath = baseurl + path;
@@ -108,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
     logbutton.addEventListener('click', function () {
                 const dataInputValue = document.getElementById('dataInput').value;
                 const formData = {
@@ -132,7 +135,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
+    displayUsers.addEventListener('click', function() {
+        userDataDisplay.innerHTML = '';
 
+        fetch('http://localhost:8000/accounts/request1/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                return response.json();
+            })
+            .then(jsonData => {
+                // Clear existing content
+                userDataDisplay.innerHTML = '';
+
+                // Iterate over the users and create HTML elements to display the data
+                jsonData.users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.innerHTML = `<p>User ID: ${user.id}, Email: ${user.email}, Active: ${user.active}</p>`;
+                    userDataDisplay.appendChild(userDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    });
 
 
 
