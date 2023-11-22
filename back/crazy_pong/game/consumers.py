@@ -32,14 +32,14 @@ class match():
         },
         "paddle1": {
             "x": 10,
-            "y": 0,
+            "y": 300,
             "width": 10,
             "height": 100,
             "vy": 0,
         },
         "paddle2": {
             "x": 1180,
-            "y": 0,
+            "y": 300,
             "width": 10,
             "height": 100,
             "vy": 0,

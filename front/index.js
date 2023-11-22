@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const hola = document.getElementById('hola');
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
+    
+    
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
     const socket = new WebSocket('ws://localhost:8000/ws/game/');
 
@@ -96,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 else if (jsonData['cmd'] == 'update') {
                     heading.textContent =  "Posicio x: " + jsonData.ball.x + " Posicio y: " + jsonData.ball.y;
+                    printMap(jsonData);
                 }
                 console.log('WebSocket message received:', event.data);
         
@@ -110,7 +115,26 @@ document.addEventListener('DOMContentLoaded', function () {
             
             });
 
+    
+    function drawBall(ball) {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+        ctx.closePath();
+    }
 
+    function drawPaddles(paddle1, paddle2) {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
+        ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
+    }
+    function printMap(jsonData) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall(jsonData.ball);
+        drawPaddles(jsonData.paddle1, jsonData.paddle2);
+
+    }
     console.log('Hello, World! from JavaScript!');
 });
 
