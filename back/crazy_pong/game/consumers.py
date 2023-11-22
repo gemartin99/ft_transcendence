@@ -1,12 +1,14 @@
 import json
 import asyncio
+import threading
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 matchmaking = []
 
+matches = {}
 
-
+id = 0
 
 class match():
     match_data = {
@@ -69,6 +71,7 @@ class match():
             await self.p2.send(json.dumps(self.match_data))
             await asyncio.sleep(1 / 30)
             i += 1
+            print(i)
 
     async def updateBall(self):
         ball = self.match_data['ball']
@@ -90,7 +93,7 @@ class match():
             ball['vx'] = -ball['vx']
     
         elif (ball['x'] + ball['radius'] > 1200):
-            ball['x'] = 750 - ball['radius']
+            ball['x'] = 1200 - ball['radius']
             ball['vx'] = -ball['vx']
         self.match_data['ball'] = ball
 
@@ -100,6 +103,7 @@ class gameConnection(AsyncWebsocketConsumer):
     
     async def connect(self):
         await self.accept()
+        id = 0
         print("Connected to client")
 
 
@@ -110,11 +114,12 @@ class gameConnection(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
+        print(data)
         if (data['cmd'] == "search"):
             if (len(matchmaking) == 0):
                 matchmaking.append(self)
                 data_to_send = {
-                    'cmd': 'connection',
+                    'cmd': 'matchmaking',
                     'ball': 'first client',
                 }
                 await self.send(json.dumps(data_to_send))
@@ -123,7 +128,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
             else:
                 data_to_send = {
-                    'cmd': 'connection',
+                    'cmd': 'matchmaking',
                     'ball': 'second client',
                 }
                 await self.send(json.dumps(data_to_send))
@@ -131,16 +136,25 @@ class gameConnection(AsyncWebsocketConsumer):
                 await asyncio.sleep(2)
                 data_to_send = {
                     'cmd': 'connection',
-                    'ball': 'starting',
+                    'id': 0,
+                    'pl': 1,
                 }
                 await self.send(json.dumps(data_to_send))
+                data_to_send = {
+                    'cmd': 'connection',
+                    'id': 0,
+                    'pl': 2,
+                }
                 await client2.send(json.dumps(data_to_send))
                 print("starting")
-                m = match(self, client2)
-                await m.start()
+                matches[0] = match(self, client2)
+                await matches[0].start()
                 print("finished")
                 
         elif data['cmd'] == "update":
-            print("updating")
+            if (data['pl'] == 1):
+                matches[data['id']].match_data['paddle1']['y'] += data['key'] * 15
+            if (data['pl'] == 2):
+                matches[data['id']].match_data['paddle2']['y'] += data['key'] * 15
         else:
             self.send("Unknown command")

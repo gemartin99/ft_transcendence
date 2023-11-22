@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const hola = document.getElementById('hola');
     const app = document.getElementById('app'); // Get the app div
     const backend = document.getElementById('backend'); // Get the app div
-    
+    current_match = 0
+    player = 0
     
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
@@ -95,14 +96,18 @@ document.addEventListener('DOMContentLoaded', function () {
             
             socket.onmessage = (event) => {
                 const jsonData = JSON.parse(event.data.toString());
-                if (jsonData['cmd'] == 'connection') {
+                if (jsonData['cmd'] == 'matchmaking') {
                     heading.textContent = jsonData['ball'];
+                }
+                if (jsonData['cmd'] == 'connection') {
+                    current_match = jsonData['id']
+                    player = jsonData['pl']
                 }
                 else if (jsonData['cmd'] == 'update') {
                     heading.textContent =  "Posicio x: " + jsonData.ball.x + " Posicio y: " + jsonData.ball.y;
                     printMap(jsonData);
                 }
-                console.log('WebSocket message received:', event.data);
+                //console.log('WebSocket message received:', event.data);
         
             };
             
@@ -115,6 +120,34 @@ document.addEventListener('DOMContentLoaded', function () {
             
             });
 
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowUp') {
+            const message = { cmd: 'update',
+                                id: current_match,
+                                pl: player,
+                                key: -1 };
+            socket.send(JSON.stringify(message));
+            console.log(JSON.stringify(message));
+        } else if (event.key === 'ArrowDown') {
+            if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
+                const message = { cmd: 'update',
+                                    id: current_match,
+                                    pl: player,
+                                    key: 1 };
+                socket.send(JSON.stringify(message));
+                console.log(JSON.stringify(message));
+            }
+        }
+        
+        });
+    
+        document.addEventListener('keyup', function(event) {
+            const message = { cmd: 'update',
+                                id: current_match,
+                                pl: player,
+                                key: 0 };
+            socket.send(JSON.stringify(message));
+        });
     
     function drawBall(ball) {
         ctx.beginPath();
