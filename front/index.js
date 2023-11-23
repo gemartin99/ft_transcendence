@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     backend.addEventListener('click', function () {
              heading.textContent = 'noo';
 
-             socket = new WebSocket('ws://localhost:8000/ws/game/');
+             socket = new WebSocket('ws://10.11.13.6:8000/ws/game/?user=hola&mode=IA');
 
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);

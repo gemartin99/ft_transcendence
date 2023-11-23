@@ -22,25 +22,25 @@ class MatchInfo():
             "y": 0,
             "vx": 5,
             "vy": 3,
-            "radius": 6,
+            "radius": 20,
         },
         "paddle1": {
-            "x": 10,
+            "x": 30,
             "y": 300,
-            "width": 10,
-            "height": 100,
-            "vy": 5,
+            "width": 20,
+            "height": 150,
+            "vy": 2,
         },
         "paddle2": {
-            "x": 1180,
+            "x": 1150,
             "y": 300,
-            "width": 10,
-            "height": 100,
-            "vy": 5,
+            "width": 20,
+            "height": 150,
+            "vy": 2,
         },
         "score1": 0,
         "score2": 0,
-        "speed": 4,
+        "speed": 6,
         "isPaused": True,
         "isGameOver": False,
         "winner": 0,
@@ -75,6 +75,8 @@ class GameManager():
         self.paddle_two = self.state["paddle2"]
         self.player_one = self.state["player1"]
         self.player_two = self.state["player2"]
+        
+        self.IA = False
 
         self.reset_ball()
 
@@ -87,7 +89,10 @@ class GameManager():
             paddle2 = self.paddle_two
             
             paddle1['y'] += paddle1['vy'] * self.player_one['input']
-            paddle2['y'] += paddle2['vy'] * self.player_two['input']
+            if (self.IA == False):
+                paddle2['y'] += paddle2['vy'] * self.player_two['input']
+            else:
+                paddle2['y'] += paddle2['vy'] * self.segfaultThink()
 
             ball['x'] += ball['vx']
             ball['y'] += ball['vy']
@@ -141,10 +146,18 @@ class GameManager():
 
                 ball['x'] = paddle2['x'] - ball['radius']
 
-            
-
     def reset_ball(self):
         self.ball['x'] = 600
         self.ball['y'] = 375
-        self.ball["vx"] = random.uniform(-3, 3)
+        self.ball["vx"] = 5
         self.ball["vy"] = random.uniform(-1, 1)
+        self.paddle_one['y'] = 300
+        self.paddle_two['y'] = 300
+
+    def setIA(self):
+        self.IA = True
+
+    def segfaultThink(self):
+        if (self.ball['y'] > self.paddle_two['y']):
+            return 1
+        return -1

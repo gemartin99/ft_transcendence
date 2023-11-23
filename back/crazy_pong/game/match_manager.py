@@ -16,3 +16,10 @@ class MatchManager:
         thread = cls.threads[game_name]["thread"]
         thread.daemon = True
         thread.start()
+
+    @classmethod
+    def looking_for_match(cls):
+        for match in cls.threads:
+            if cls.threads[match]['paddle_two'] == False:
+                return match
+        return False
