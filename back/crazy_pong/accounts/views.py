@@ -14,30 +14,34 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
 from django.db import IntegrityError
 
-def encrypt_data(data, key):
-    cipher_suite = Fernet(key)
-    cipher_text = cipher_suite.encrypt(data.encode())
-    return cipher_text
+# def encrypt_data(data, key):
+#     cipher_suite = key
+#     cipher_text = cipher_suite.encrypt(data.encode())
+#     return cipher_text
 
-def compare_encrypted_data(encrypted_data, user_input, key):
-    cipher_suite = Fernet(key)
-    decrypted_data = cipher_suite.decrypt(encrypted_data).decode()
-    decrypted_user = cipher_suite.decrypt(encrypted_data).decode()
-    print('decrypted_data::::::::::::', decrypted_data)
-    return decrypted_data == decrypted_user
+# def compare_encrypted_data(encrypted_data, user_input, key):
+#     cipher_suite = key
+#     # decrypted_data = cipher_suite.decrypt(encrypted_data).decode()
+#     user_encrypted = encrypt_data(user_input, key)
+#     print(encrypted_data)
+#     print(user_encrypted)
+#     user_encrypted = encrypt_data(user_input, key)
+#     print(user_encrypted)
+#     # print('decrypted_data::::::::::::', decrypted_data)
+#     return encrypted_data == user_encrypted
 
 
-# Generate a key using PBKDF2HMAC for added security
-salt = salt_123  # You should use a unique salt for each user
-kdf = PBKDF2HMAC(
-    algorithm=hashes.SHA256(),
-    iterations=100000,  # Adjust this according to your security requirements
-    salt=salt,
-    length=32
-)
+# # Generate a key using PBKDF2HMAC for added security
+# salt = b'salt_123'  # You should use a unique salt for each user
+# kdf = PBKDF2HMAC(
+#     algorithm=hashes.SHA256(),
+#     iterations=100000,  # Adjust this according to your security requirements
+#     salt=salt,
+#     length=32
+# )
 
-key = base64.urlsafe_b64encode(kdf.derive("Crazy_pong".encode())).decode()
-
+# key = base64.urlsafe_b64encode(kdf.derive("Crazy_pong".encode())).decode()
+# key = Fernet(key)
 # # Encrypt the password before saving it to the database
 # encrypted_password = encrypt_data(user_input_password, key)
 
@@ -49,6 +53,33 @@ key = base64.urlsafe_b64encode(kdf.derive("Crazy_pong".encode())).decode()
 
 # #TEST ENCRIPTACION PASSWORD
 
+
+
+
+import bcrypt
+
+# Function to hash a password
+def hash_password(password):
+    # Generate a random salt
+    salt = bcrypt.gensalt()
+    # Hash the password with the salt
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password
+# Function to verify a password
+def verify_password(input_password, hashed_password):
+    # Verify the input password against the hashed password
+    return bcrypt.checkpw(input_password.encode('utf-8'), hashed_password.encode('utf-8'))
+# Example usage:
+# if __name__ == "__main__":
+#     # User registration: Hash the user's password and store it in the database
+#     user_password = "my_secure_password"
+#     hashed_password = hash_password(user_password)
+#     # Simulate a login attempt: Verify the provided password
+#     login_attempt_password = "my_secure_password"
+#     if verify_password(login_attempt_password, hashed_password):
+#         print("Login successful!")
+#     else:
+#         print("Login failed. Invalid password.")
 
 
 
@@ -80,8 +111,11 @@ def request_login(request):
             data_input_value = data.get('dataInput')
             print('dataInput value:', data_input_value)
             if (data_input_value):
-                encrypted_pwd = encrypt_data(data_input_value, key)
-                user = User(password=encrypted_pwd, email=data_input_value+"@"+data_input_value+".com", active=True)
+                encrypted_pwd = hash_password(data_input_value)
+                print('encoded:', encrypted_pwd)
+                decode_pwd = encrypted_pwd.decode('utf-8')
+                print('decoded:', decode_pwd)
+                user = User(password=decode_pwd, email=data_input_value+"@"+data_input_value+".com", active=True)
                 user.save()
                 print('hola')
                 response_data = {'message': 'Data received successfully'}
@@ -94,15 +128,18 @@ def request_login(request):
             return JsonResponse(response_data)
         except IntegrityError as e:
             all_users = User.objects.all()
-            encrypted_pwd = encrypt_data(data_input_value, key)
             print('dataInput:::::::::', data_input_value)
             for user in all_users:
-                if compare_encrypted_data(user.password, encrypted_pwd, key):
+                # user.password = user.password.decode('utf-8')
+                print(data_input_value)
+                print(user.password)
+                if verify_password(data_input_value, user.password):
                     print('FOUND A COINCIDENCE!!!!!')
+                    response_data = {'message': 'FOUND COINCIDENCE!!'}
                 else:
-                    print('NO COINCIDENCE YET....', user.password, data_input_value)
+                    print('NO COINCIDENCE YET....')
+                    response_data = {'message': 'No coincidence stupid'}
             print(f"Email {data_input_value} already exists. Error: {e}")
-            response_data = {'error': 'Email already exists'}
             return JsonResponse(response_data)
         except json.JSONDecodeError as e:
             return JsonResponse({'error': str(e) + 'gracias si muy bueno'}, status=400)
