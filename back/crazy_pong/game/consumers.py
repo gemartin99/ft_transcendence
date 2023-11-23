@@ -1,5 +1,6 @@
 import json
-
+import random
+import string
 
 from .match import MatchInfo, PlayerManager, GameManager
 from .match_manager import MatchManager
@@ -16,7 +17,16 @@ class gameConnection(WebsocketConsumer):
         super().__init__(*args, **kwargs)
 
     def connect(self):
-        self.game = "game1"
+        print(self.scope['query_string'])
+
+        self.user = self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1]
+        self.mode = self.scope['query_string'].decode('UTF-8').split('&')[1].split('=')[1]
+
+        self.game = MatchManager.looking_for_match()
+        if (self.game == False):
+            self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+
+        print(self.game)
 
         if self.game not in MatchManager.threads:
             MatchManager.add_game(self.game, self)
@@ -28,6 +38,10 @@ class gameConnection(WebsocketConsumer):
         if not self.thread["paddle_one"]:
             self.paddle_controller = PlayerManager("player1")
             self.thread["paddle_one"] = True
+            if (self.mode == 'IA'):
+                self.game_ctrl.setIA()
+                self.thread['active'] = True
+                self.thread['paddle_two'] = True
 
         elif not self.thread["paddle_two"]:
             self.paddle_controller = PlayerManager("player2")
