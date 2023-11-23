@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const backend = document.getElementById('backend'); // Get the app div
     current_match = 0
     player = 0
+    socket = null
     
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    const socket = new WebSocket('ws://localhost:8000/ws/game/');
 
     function updateUrl(path) {
         const newPath = baseurl + path;
@@ -90,12 +90,15 @@ document.addEventListener('DOMContentLoaded', function () {
     backend.addEventListener('click', function () {
              heading.textContent = 'noo';
 
+             socket = new WebSocket('ws://localhost:8000/ws/game/');
+
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);
             };
             
             socket.onmessage = (event) => {
                 const jsonData = JSON.parse(event.data.toString());
+                console.log(jsonData)
                 if (jsonData['cmd'] == 'matchmaking') {
                     heading.textContent = jsonData['ball'];
                 }
@@ -121,11 +124,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
     document.addEventListener('keydown', function(event) {
+        if (socket != null) {
         if (event.key === 'ArrowUp') {
             const message = { cmd: 'update',
                                 id: current_match,
                                 pl: player,
-                                key: -1 };
+                                key: "up" };
             socket.send(JSON.stringify(message));
             console.log(JSON.stringify(message));
         } else if (event.key === 'ArrowDown') {
@@ -133,20 +137,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 const message = { cmd: 'update',
                                     id: current_match,
                                     pl: player,
-                                    key: 1 };
+                                    key: "down" };
                 socket.send(JSON.stringify(message));
                 console.log(JSON.stringify(message));
             }
-        }
+        }}
         
         });
     
         document.addEventListener('keyup', function(event) {
+            if (socket != null){
             const message = { cmd: 'update',
                                 id: current_match,
                                 pl: player,
-                                key: 0 };
-            socket.send(JSON.stringify(message));
+                                key: "rest" };
+            socket.send(JSON.stringify(message));}
         });
     
     function drawBall(ball) {
