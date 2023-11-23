@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     player = jsonData['pl']
                 }
                 else if (jsonData['cmd'] == 'update') {
-                    heading.textContent =  "Posicio x: " + jsonData.ball.x + " Posicio y: " + jsonData.ball.y;
+                    heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
                     printMap(jsonData);
                 }
                 //console.log('WebSocket message received:', event.data);
@@ -175,4 +175,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     console.log('Hello, World! from JavaScript!');
 });
-
