@@ -1,5 +1,6 @@
 import random
 import time
+import math
 
 class MatchInfo():
     state = {
@@ -39,7 +40,7 @@ class MatchInfo():
         },
         "score1": 0,
         "score2": 0,
-        "speed": 5.83,
+        "speed": 4,
         "isPaused": True,
         "isGameOver": False,
         "winner": 0,
@@ -80,8 +81,13 @@ class GameManager():
         self.time = time.time()
 
     def updateGame(self):
-        if time.time() - self.time > 0.01:
+        if time.time() - self.time > 1/60:
             ball = self.ball
+            paddle1 = self.paddle_one
+            paddle2 = self.paddle_two
+            
+            paddle1['y'] += paddle1['vy'] * self.player_one['input']
+            paddle2['y'] += paddle2['vy'] * self.player_two['input']
 
             ball['x'] += ball['vx']
             ball['y'] += ball['vy']
@@ -96,18 +102,49 @@ class GameManager():
             
 
             if (ball['x'] - ball['radius'] < 0):
-                ball['x'] = ball['radius']
-                ball['vx'] = -ball['vx']
+                self.state['score1'] += 1
+                self.reset_ball()
         
             elif (ball['x'] + ball['radius'] > 1200):
-                ball['x'] = 1200 - ball['radius']
-                ball['vx'] = -ball['vx']
+                self.state['score2'] += 1
+                self.reset_ball()
 
-            self.paddle_one['y'] += self.paddle_one['vy'] * self.player_one['input']
-            self.paddle_two['y'] += self.paddle_two['vy'] * self.player_two['input']
+            if (ball['x'] - ball['radius'] <= paddle1['x'] + paddle1['width'] and
+                ball['y'] + ball['radius'] >= paddle1['y'] and
+                ball['y'] - ball['radius'] <= paddle1['y'] + paddle1['height'] and
+                ball['vx'] < 0
+                ):
+
+                self.state['speed'] += 0.01
+                relativeIntersectY = (paddle1['y'] + paddle1['height'] / 2) - ball['y']
+                normalizedRelativeIntersectionY = relativeIntersectY / (paddle1['height'] / 2)
+                bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
+
+                ball['vx'] = (self.state['speed'] * math.copysign(1, ball['vx']) * math.cos(bounceAngle)) * -1
+                ball['vy'] = -self.state['speed'] * math.sin(bounceAngle)
+
+                ball['x'] = paddle1['x'] + paddle1['width'] + ball['radius']
+
+            if (ball['x'] + ball['radius'] >= paddle2['x'] + paddle2['width'] and
+                ball['y'] + ball['radius'] >= paddle2['y'] and
+                ball['y'] - ball['radius'] <= paddle2['y'] + paddle2['height'] and
+                ball['vx'] > 0
+                ):
+
+                self.state['speed'] += 0.01
+                relativeIntersectY = (paddle2['y'] + paddle2['height'] / 2) - ball['y']
+                normalizedRelativeIntersectionY = relativeIntersectY / (paddle2['height'] / 2)
+                bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
+
+                ball['vx'] = -self.state['speed'] * math.cos(bounceAngle)
+                ball['vy'] = -self.state['speed'] * math.sin(bounceAngle)
+
+                ball['x'] = paddle2['x'] - ball['radius']
+
+            
 
     def reset_ball(self):
         self.ball['x'] = 600
         self.ball['y'] = 375
-        self.ball["vx"] = random.choice([-5, 5])
-        self.ball["vy"] = random.choice([-3, 3])
+        self.ball["vx"] = random.uniform(-3, 3)
+        self.ball["vy"] = random.uniform(-1, 1)
