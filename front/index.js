@@ -155,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     userDiv.innerHTML = `<p>User ID: ${user.id}, Email: ${user.email}, Active: ${user.active}, Pass: ${user.password}</p>`;
                     userDataDisplay.appendChild(userDiv);
                 });
+                heading.textContent = 'here you have your stupid users';
             })
             .catch(error => {
                 console.error('Error fetching user data:', error);
