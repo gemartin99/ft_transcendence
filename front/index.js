@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
 
+    // DOS BOTONES PARA GUARDAR Y RECIBIR DATA DE DB
 
     logbutton.addEventListener('click', function () {
                 const dataInputValue = document.getElementById('dataInput').value;
@@ -119,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
 
                 fetch('http://localhost:8000/accounts/request1/', {
+                    // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -146,10 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(jsonData => {
-                // Clear existing content
                 userDataDisplay.innerHTML = '';
 
-                // Iterate over the users and create HTML elements to display the data
                 jsonData.users.forEach(user => {
                     const userDiv = document.createElement('div');
                     userDiv.innerHTML = `<p>User ID: ${user.id}, Email: ${user.email}, Active: ${user.active}, Pass: ${user.password}</p>`;
@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
+    // END DOS BOTONES PARA GUARDAR Y RECIBIR DATA DE DB
 
 
 

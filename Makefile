@@ -1,5 +1,6 @@
 all:
 	@docker-compose up -d --build
+	@docker exec -it back python /app/crazy_pong/manage.py migrate
 down:
 	@docker-compose down
 clean:

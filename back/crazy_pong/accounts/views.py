@@ -8,53 +8,16 @@ from .models import User
 #TEST ENCRIPTACION PASSWORD
 
 import base64
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.fernet import Fernet
+# from cryptography.hazmat.backends import default_backend
+# from cryptography.hazmat.primitives import hashes
+# from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+# from cryptography.fernet import Fernet
 from django.db import IntegrityError
 
-# def encrypt_data(data, key):
-#     cipher_suite = key
-#     cipher_text = cipher_suite.encrypt(data.encode())
-#     return cipher_text
-
-# def compare_encrypted_data(encrypted_data, user_input, key):
-#     cipher_suite = key
-#     # decrypted_data = cipher_suite.decrypt(encrypted_data).decode()
-#     user_encrypted = encrypt_data(user_input, key)
-#     print(encrypted_data)
-#     print(user_encrypted)
-#     user_encrypted = encrypt_data(user_input, key)
-#     print(user_encrypted)
-#     # print('decrypted_data::::::::::::', decrypted_data)
-#     return encrypted_data == user_encrypted
-
-
-# # Generate a key using PBKDF2HMAC for added security
-# salt = b'salt_123'  # You should use a unique salt for each user
-# kdf = PBKDF2HMAC(
-#     algorithm=hashes.SHA256(),
-#     iterations=100000,  # Adjust this according to your security requirements
-#     salt=salt,
-#     length=32
-# )
-
-# key = base64.urlsafe_b64encode(kdf.derive("Crazy_pong".encode())).decode()
-# key = Fernet(key)
-# # Encrypt the password before saving it to the database
-# encrypted_password = encrypt_data(user_input_password, key)
-
-# # Later, when comparing user input with the stored encrypted password
-# if compare_encrypted_data(encrypted_password, user_input_password, key):
-#     print("Passwords match!")
-# else:
-#     print("Passwords do not match.")
-
-# #TEST ENCRIPTACION PASSWORD
 
 
 
+#FUNCIONES PARA ENCRIPTAR STRINGS
 
 import bcrypt
 
@@ -81,6 +44,7 @@ def verify_password(input_password, hashed_password):
 #     else:
 #         print("Login failed. Invalid password.")
 
+#END FUNCIONES PARA ENCRIPTAR STRINGS
 
 
 
@@ -103,22 +67,30 @@ def verify_password(input_password, hashed_password):
 @csrf_exempt  # Use this decorator for simplicity in this example. 
 #In production, handle CSRF properly.
 def request_login(request):
+    #tengo gestionados dos metodos para esta request, POST y GET
     if request.method == 'POST':
         try:
+            #esto no hace nada (creo)
             if not request.body:
                 raise json.JSONDecodeError("Empty request body", request.body, 0)
+            #Aqui recibo la data que me llega con el POST
             data = json.loads(request.body)
             data_input_value = data.get('dataInput')
             print('dataInput value:', data_input_value)
+
+            #si me llega algo desde el cuadro de texto intento guardar el usuario
             if (data_input_value):
                 encrypted_pwd = hash_password(data_input_value)
                 print('encoded:', encrypted_pwd)
                 decode_pwd = encrypted_pwd.decode('utf-8')
                 print('decoded:', decode_pwd)
+                #aqui instancio el user que viene del import de arriba
                 user = User(password=decode_pwd, email=data_input_value+"@"+data_input_value+".com", active=True)
+                #con esto guardo en la db
                 user.save()
                 print('hola')
                 response_data = {'message': 'Data received successfully'}
+            #si no me llega nada entonces no hago nada
             else:
                 view_to_check_data(request)
                 all_users = User.objects.all()
@@ -126,13 +98,16 @@ def request_login(request):
                 response_data = {'message': 'wrong data stupid'}
                 return JsonResponse({'users': users_data})
             return JsonResponse(response_data)
+        #si al hacer user.save() da error, salta esta excepcion:
+        #en esta excepcion lo que estoy hacciendo es enviar un 
+        #objeto con todos los user
         except IntegrityError as e:
             all_users = User.objects.all()
             print('dataInput:::::::::', data_input_value)
             for user in all_users:
-                # user.password = user.password.decode('utf-8')
                 print(data_input_value)
                 print(user.password)
+                #aqui verifico las passwords y envio mensaje segun si coincide o no
                 if verify_password(data_input_value, user.password):
                     print('FOUND A COINCIDENCE!!!!!')
                     response_data = {'message': 'FOUND COINCIDENCE!!'}
@@ -141,12 +116,16 @@ def request_login(request):
                     response_data = {'message': 'No coincidence stupid'}
             print(f"Email {data_input_value} already exists. Error: {e}")
             return JsonResponse(response_data)
+        #este error ya ni me acuerdo cuando se da
         except json.JSONDecodeError as e:
             return JsonResponse({'error': str(e) + 'gracias si muy bueno'}, status=400)
+    #aqui esta el request de GET
     elif request.method == 'GET':
         try:
             print("method GET")
+            #aqui recibo todos los users de la base de datos
             all_users = User.objects.all()
+            #los meto en una lista para enviarlos
             users_data = list(all_users.values())
             response_data = {'message': 'wrong data stupid'}
             return JsonResponse({'users': users_data})
@@ -180,6 +159,8 @@ def view_to_check_data(request):
 #CONSULTAR USERS EN DB
 
 
+
+#ESTO DE AQUI ABAJO NO HACE NADA (CREO)
 
 def get_login_form_page(request):
     context = {
