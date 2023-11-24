@@ -24,7 +24,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redisdata:/data
+      - ./.redisdata:/data
 
   db_postgres:
     image: postgres:alpine3.18
