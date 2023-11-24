@@ -1,5 +1,6 @@
 import threading
 from .match import GameManager
+import asyncio
 
 class MatchManager:
 
@@ -33,24 +34,24 @@ class MatchManager:
                 "y": 300,
                 "width": 20,
                 "height": 150,
-                "vy": 2,
+                "vy": 7,
             },
             "paddle2": {
                 "x": 1150,
                 "y": 300,
                 "width": 20,
                 "height": 150,
-                "vy": 2,
+                "vy": 7,
             },
             "score1": 0,
             "score2": 0,
-            "speed": 6,
+            "speed": 15,
             "isPaused": True,
             "isGameOver": False,
             "winner": 0,
         }
         cls.threads[game_name] = {
-            "thread": threading.Thread(target=consumer_instance.propagate_state, args=(cls.matches[game_name],)),
+            "thread": threading.Thread(target=MatchManager.before_thread, args=(consumer_instance, game_name,)),
             "paddle_one": False,
             "paddle_two": False,
             "player_one": None,
@@ -67,3 +68,11 @@ class MatchManager:
             if cls.threads[match]['paddle_two'] == False:
                 return match
         return False
+    
+    @classmethod
+    def before_thread(cls, consumer_instance, game_name):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        loop.run_until_complete(consumer_instance.propagate_state(cls.matches[game_name]))
+        loop.close()

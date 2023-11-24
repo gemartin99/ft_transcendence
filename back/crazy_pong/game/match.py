@@ -38,6 +38,7 @@ class GameManager():
 
         self.time = time.time()
 
+
     def updateGame(self):
         #if time.time() - self.time > 1/60:
             ball = self.ball
@@ -105,8 +106,8 @@ class GameManager():
     def reset_ball(self):
         self.ball['x'] = 600
         self.ball['y'] = 375
-        self.ball["vx"] = 5
-        self.ball["vy"] = random.uniform(-1, 1)
+        self.ball["vx"] = 10
+        self.ball["vy"] = random.uniform(-2, 2)
         self.paddle_one['y'] = 300
         self.paddle_two['y'] = 300
 
@@ -114,6 +115,8 @@ class GameManager():
         self.IA = True
 
     def segfaultThink(self):
+        if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.ball['y'] < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
+            return 0
         if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
             return 1
         return -1
