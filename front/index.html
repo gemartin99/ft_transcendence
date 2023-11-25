@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
     <title>CrazyPong</title>
   </head>
 
@@ -57,7 +58,6 @@
            <!-- enlaces redes sociales -->
 
           <ul class="navbar-nav  flex-row flex-wrap text-light">
-
             <li class="nav-item col-6 col-md-auto p-3">
               <i class="bi bi-github fs-5"></i>
               <small class="d-md-none ms-2">GitHub</small> 
@@ -70,11 +70,14 @@
 
           </ul>
           
+          <hr class="d-md-none text-white-50">
          <!--boton Cuenta -->
 
-          <form class="d-flex">
-            <button class="btn btn-outline-warning d-none d-md-inline-block " type="submit">Account</button>
-          </form>
+         <form class="d-flex justify-content-center">
+          <button class="btn btn-outline-warning d-md-inline-block" type="submit">Account</button>
+        </form>
+        
+        
           
           
         </div>
@@ -83,21 +86,48 @@
       </nav>
 
     </div>
-
     <div class="container-fluid">
-      <div class="row">
-          <div class="col-md-6 bg-gray p-4">
+      <div class="row align-items-start">
+          <div class="col-md-6 bg-gray d-flex flex-column justify-content-center">
               <!-- Contenedor de texto a la izquierda -->
-              <h3>Texto a la izquierda</h3>
-              <p>Contenido a la izquierda...</p>
+              <div class="text-center mt-md-4">
+                  <h1 class="mt-0">Rules</h1>
+                  <div class="d-flex align-items-center justify-content-center mt-2">
+                    <div style="max-width: 750px; overflow-x: auto;">
+                      <p class="mb-0">◦ Gana el primero en llegar a 11 puntos</p>
+                      <p class="mb-0"> ◦ Esta prohibido tener multicuenta</p>
+                      <p class="mb-0"> ◦ Prohibido utilizar software de terceros</p>
+                      <p class="mb-0"> ◦ No se que mas inventarme para probar estos textos xddd vamos a hacer una larguito lelele</p>
+                      <p class="mb-0"> ◦ No respetar estar reglas supondra la suspesion de la cuenta</p>
+                      <p class="mb-0"> ◦ Jaime perro</p>
+                    </div>
+                    </div>
+              </div>
           </div>
-          <div class="col-md-6 bg-gray p-4">
+          <div class="col-md-6 bg-gray d-flex flex-column align-items-center justify-content-center">
               <!-- Contenedor de texto a la derecha -->
-              <h3>Texto a la derecha</h3>
-              <p>Contenido a la derecha...</p>
+              <div class="text-center mt-md-4">
+                  <h1 class="mt-0">Game</h1>
+                  <img src="/img/game.jpeg" alt="Game" style="max-width: 1200px; width: 100%; height: auto;" class="img-fluid mt-2">
+                  <h1>Controls</h1>
+                  <div class="d-flex align-items-center justify-content-center mt-2">
+                    <i class="bi-arrow-up-square" style="font-size: 2em;"></i>
+                    <p class="mb-0 ms-2">Para subir las palas</p>
+                  </div>
+              </div>
           </div>
       </div>
   </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
