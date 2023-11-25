@@ -1,1 +1,4 @@
 Django==3.2.10
+channels~=3.0
+django-cors-headers
+psycopg2

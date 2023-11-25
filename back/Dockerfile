@@ -33,4 +33,6 @@ RUN pip install django-cors-headers
 EXPOSE 8000
 
 # Define command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "crazy_pong.crazy_pong.wsgi:application", "--env", "DJANGO_SETTINGS_MODULE=crazy_pong.crazy_pong.settings"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "crazy_pong.crazy_pong.wsgi:application", "--env", "DJANGO_SETTINGS_MODULE=crazy_pong.crazy_pong.settings"]
+
+CMD ["python", "/app/crazy_pong/manage.py", "runserver", "0.0.0.0:8000"]
