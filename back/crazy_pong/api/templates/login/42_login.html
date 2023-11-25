@@ -1,0 +1,44 @@
+<section class="section">
+    <div class="container">
+        <div style="text-align:center">
+            <h1>Logging whit 42 account</h1>
+        </div>
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title">Edit Profile</p>
+            </header>
+            <div class="card-content">
+                <form action="#" method="post" class="form" style="width: 100%; padding: 5px;">
+
+                    <div class="form-group">
+                        <label for="name" class="label">Username:</label>
+                        <input type="text" name="name" id="name" placeholder="Enter your username" class="form-control" required>
+                        <!-- Validation messages -->
+                        <div class="invalid-feedback">
+                            <p class="help is-danger">Username is required</p>
+                            <p class="help is-danger">Username can't be longer than 30 characters</p>
+                            <p class="help is-danger">Username can only contain letters and digits</p>
+                        </div>
+                        <p class="help is-danger">Username already in use.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar" class="label">Avatar (optional):</label>
+                        <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
+                        <!-- Validation message -->
+                        <p class="help is-danger">Incorrect file type. Only .jpg or .png are allowed.</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" disabled>Save Changes</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-content">
+                <div class="alert alert-success">
+                    User Profile info updated correctly<br>
+                    <button class="btn btn-info" onclick="returnProfile()">Return to Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
