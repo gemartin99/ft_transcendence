@@ -9,6 +9,16 @@ services:
     networks:
        - crazynet
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.redisdata:/data
+    networks:
+       - crazynet
+
+
   db_postgres:
     image: postgres:alpine3.18
     container_name: database_postgre

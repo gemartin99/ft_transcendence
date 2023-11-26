@@ -22,7 +22,7 @@ function handleNavLinkClick(event) {
         hrefValue = hrefValue + "/"
     }
     updateUrl(hrefValue);
-    fetch(baseUrl + ':8000/api' + hrefValue) // Adjusted fetch URL
+    fetch(baseUrl + ':8000' + hrefValue) // Adjusted fetch URL
         .then(response => response.json())
         .then(data => {
             console.log('Response from backend:', data);
@@ -31,11 +31,6 @@ function handleNavLinkClick(event) {
                 content.innerHTML = data.content;
             } else {
                 console.log('Invalid response from backend 1');
-            }
-            if (data.content.content) {
-                content.innerHTML = data.content.content;
-            } else {
-                console.log('Invalid response from backend');
             }
             
             handleNavLinks()
