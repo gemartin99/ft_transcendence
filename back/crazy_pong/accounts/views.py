@@ -49,6 +49,19 @@ def get_login42_form_page(request):
     }
     return JsonResponse(data)
 
+def get_register_new_account_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('login/register_account.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonRe
+
 def change_view(request):
     # Your view logic here
     context = {
