@@ -16,6 +16,15 @@
     max-height: 100%;
   }
   
+  .qr-area {
+    border: 2px dashed #f5c344;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+  }
 
 .container-login {
     --color-primary: #FFA000;
@@ -35,7 +44,6 @@
 } 
 
 .container1 {
-    width: 100%;
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem auto;
@@ -43,11 +51,9 @@
     border-radius: var(--border-radius);
     background: var(--color-background);
     align-items: center;
-    margin-left: 2%;
   }
   
   .container2 {
-    width: 100%;
     max-width: 2000px;
     margin: 2rem auto;
     padding: 2rem auto;
