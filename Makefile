@@ -10,3 +10,8 @@ clean:
 	@docker volume rm $$(docker volume ls -q);
 	@docker network rm transcenduns_default;
 	@docker system prune -af;
+
+migrations:
+	@docker exec -it back python /app/crazy_pong/manage.py makemigrations
+	@docker exec -it back python /app/crazy_pong/manage.py migrate
+
