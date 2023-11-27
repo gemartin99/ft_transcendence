@@ -5,7 +5,7 @@ class Usermine(models.Model):
     name = models.CharField(max_length=128, unique=True, default='username')
     password = models.CharField(max_length=128, verbose_name='password')
     email = models.EmailField(max_length=255, unique=True)
-    active = models.BooleanField(default=False)
+    playing = models.BooleanField(default=False)
     online = models.BooleanField(default=False)
     id42 = models.IntegerField(default=42)
     wins = models.IntegerField(default=0)

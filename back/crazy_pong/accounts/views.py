@@ -14,6 +14,8 @@ import base64
 # from cryptography.fernet import Fernet
 from django.db import IntegrityError
 
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 
 
@@ -47,6 +49,13 @@ def verify_password(input_password, hashed_password):
 #END FUNCIONES PARA ENCRIPTAR STRINGS
 
 
+def check_pwd_security(password):
+    try:
+        # Use validate_password to check if the password meets requirements
+        validate_password(password)
+        return True, None  # Password is secure
+    except ValidationError as e:
+        return False, e.messages
 
 @csrf_exempt 
 def create_account(request):
@@ -69,11 +78,20 @@ def create_account(request):
             print('password: ', password)
             print('confirm_password: ', confirm_password)
 
+            is_secure, error_messages = check_pwd_security(password)
+            if is_secure == False:
+                print(error_messages)
+                # response_data = {'errors': {}}
+                # for error_message in error_messages
+                response_data = {'errors': error_messages}
+                return JsonResponse(response_data)
+
+            print('holaestoyllegandohastaaqui')
             encrypted_pwd = hash_password(password)
             print('encrypted_pwd: ', encrypted_pwd)
             pwd_str = encrypted_pwd.decode('utf-8')
 
-            user = Usermine(name=username, password=pwd_str, email=email,  active=True)
+            user = Usermine(name=username, password=pwd_str, email=email)
             user.save()
             response_data = {'message': 'User saved successfully'}
             return JsonResponse(response_data)
@@ -111,7 +129,6 @@ def login(request):
   # Retrieve the user with the specified username
             user = get_object_or_404(Usermine, name=username)
             print(user)
-            user.active = True
             user.online = True
             user.save()
             # Example: Return user information as JSON response
@@ -119,7 +136,7 @@ def login(request):
                 'id': user.id,
                 'name': user.name,
                 'email': user.email,
-                'active': user.active,
+                'active': user.playing,
                 'online': user.online,
                 'id42': user.id42,
                 'wins': user.wins,
