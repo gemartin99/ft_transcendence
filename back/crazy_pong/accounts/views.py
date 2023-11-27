@@ -5,19 +5,11 @@ from django.shortcuts import render
 from .models import Usermine
 from django.shortcuts import get_object_or_404
 
-#TEST ENCRIPTACION PASSWORD
-
 import base64
-# from cryptography.hazmat.backends import default_backend
-# from cryptography.hazmat.primitives import hashes
-# from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-# from cryptography.fernet import Fernet
 from django.db import IntegrityError
 
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-
-
 
 #FUNCIONES PARA ENCRIPTAR STRINGS
 
@@ -25,35 +17,19 @@ import bcrypt
 
 # Function to hash a password
 def hash_password(password):
-    # Generate a random salt
     salt = bcrypt.gensalt()
-    # Hash the password with the salt
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password
-# Function to verify a password
+
 def verify_password(input_password, hashed_password):
-    # Verify the input password against the hashed password
     return bcrypt.checkpw(input_password.encode('utf-8'), hashed_password.encode('utf-8'))
-# Example usage:
-# if __name__ == "__main__":
-#     # User registration: Hash the user's password and store it in the database
-#     user_password = "my_secure_password"
-#     hashed_password = hash_password(user_password)
-#     # Simulate a login attempt: Verify the provided password
-#     login_attempt_password = "my_secure_password"
-#     if verify_password(login_attempt_password, hashed_password):
-#         print("Login successful!")
-#     else:
-#         print("Login failed. Invalid password.")
 
 #END FUNCIONES PARA ENCRIPTAR STRINGS
 
-
 def check_pwd_security(password):
     try:
-        # Use validate_password to check if the password meets requirements
         validate_password(password)
-        return True, None  # Password is secure
+        return True, None
     except ValidationError as e:
         return False, e.messages
 
@@ -61,40 +37,30 @@ def check_pwd_security(password):
 def create_account(request):
     if request.method == 'POST':
         try:
-
-            # Parse JSON data from request body
             data = json.loads(request.body.decode('utf-8'))
-
-            # Access form data from JSON data
             username = data.get('signupUsername')
             email = data.get('email')
             password = data.get('password')
             confirm_password = data.get('confirm_password')
 
-
+            # prints to check
             print(data)
             print('username: ', username)
             print('email: ', email)
             print('password: ', password)
             print('confirm_password: ', confirm_password)
+            # prints to check
 
             is_secure, error_messages = check_pwd_security(password)
             if is_secure == False:
                 print(error_messages)
-                # response_data = {'errors': {}}
-                # for error_message in error_messages
-                response_data = {'errors': error_messages}
-                return JsonResponse(response_data)
-
-            print('holaestoyllegandohastaaqui')
+                return JsonResponse({'errors': error_messages})
             encrypted_pwd = hash_password(password)
             print('encrypted_pwd: ', encrypted_pwd)
             pwd_str = encrypted_pwd.decode('utf-8')
-
             user = Usermine(name=username, password=pwd_str, email=email)
             user.save()
-            response_data = {'message': 'User saved successfully'}
-            return JsonResponse(response_data)
+            return JsonResponse({'message': 'User saved successfully'})
 
         except IntegrityError as e:
             # all_users = User.objects.all()
