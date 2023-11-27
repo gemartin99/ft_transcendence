@@ -4,28 +4,33 @@
 baseurl = "http://localhost";
 
 document.addEventListener('DOMContentLoaded', function () {
-    const heading = document.getElementById('helloHeading');
-    const home = document.getElementById('home');
-    const login = document.getElementById('login');
-    const hola = document.getElementById('hola');
-    const app = document.getElementById('app'); // Get the app div
-    const backend = document.getElementById('backend'); // Get the app div
-    const logbutton = document.getElementById('logbutton'); // Get the app div
-    const userDataDisplay = document.getElementById('userDataDisplay');
-    const displayUsers = document.getElementById('displayUsers');
 
     const socket = new WebSocket('ws://localhost:8000/ws/game/');
 
 
 
-    function updateUrl(path) {
-        const newPath = baseurl + path;
-        window.history.pushState({ path: newPath }, '', newPath);
-    }
+    // function updateUrl(path) {
+    //     const newPath = baseurl + path;
+    //     window.history.pushState({ path: newPath }, '', newPath);
+    // }
 
 
 
 // GEMALOGIN
+    const loginForm = document.querySelector("#login");
+    const createAccountForm = document.querySelector("#createAccount");
+
+
+
+    HTMLFormElement.prototype.clearForm = function() {
+      // Get all input elements within the form
+      const formInputs = this.querySelectorAll('input');
+
+      // Iterate over the input elements and set their values to an empty string
+      formInputs.forEach(input => {
+        input.value = '';
+      });
+    };
 
     function setFormMessage(formElement, type, message) {
         const messageElement = formElement.querySelector(".form__message");
@@ -43,11 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
         inputElement.classList.remove("form__input--error");
         inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
     }
-
-
-
-    const loginForm = document.querySelector("#login");
-    const createAccountForm = document.querySelector("#createAccount");
 
     document.querySelector("#linkCreateAccount").addEventListener("click", e => {
         e.preventDefault();
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.message == 'logueao pum')
-                    setFormMessage(loginForm, "Congratulations", "you have nice memory");
+                    setFormMessage(loginForm, "success", "Congratulations you have nice memory");
                 else
                     setFormMessage(loginForm, "error", "Invalid username/password combination");
 
@@ -91,11 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch((error) => {
                 console.error('Error:', error);
+                setFormMessage(loginForm, "error", "Invalid username/password combination");
             });
-
-
-
-        setFormMessage(loginForm, "error", "Invalid username/password combination");
     });
 
     createAccountForm.addEventListener("submit", e => {
@@ -110,26 +107,36 @@ document.addEventListener('DOMContentLoaded', function () {
             formDataObject[key] = value;
         });
         console.log('FormDataObject:', formDataObject);
-            fetch('http://localhost:8000/accounts/register/', {
-                // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formDataObject),
-            })
-            .then(response => response.json())
-            .then(data => {
+        fetch('http://localhost:8000/accounts/register/', {
+            // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formDataObject),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message == "User saved successfully") {
+                setFormMessage(createAccountForm, "success", "Account created successfully");
+            // Simulación de redireccionamiento o cambio de vista después del registro
+                createAccountForm.classList.add("form--hidden");
+                loginForm.classList.remove("form--hidden");
                 console.log('Response:', "ha funciunat");
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        setFormMessage(createAccountForm, "success", "Account created successfully");
+                createAccountForm.clearForm();
+            }
+            else {
+                error_message = data.errors;
+                console.error('Error:', error_message);
+                setFormMessage(createAccountForm, "error", error_message);
+                createAccountForm.querySelector('[name="password"]').value = '';
+                createAccountForm.querySelector('[name="confirm_password"]').value = '';
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
-        // Simulación de redireccionamiento o cambio de vista después del registro
-        createAccountForm.classList.add("form--hidden");
-        loginForm.classList.remove("form--hidden");
     });
 
     document.querySelectorAll(".form__input").forEach(inputElement => {
@@ -145,155 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 // GEMALOGIN
-
-    // DOS BOTONES PARA GUARDAR Y RECIBIR DATA DE DB
-
-    logbutton.addEventListener('click', function () {
-                const dataInputValue = document.getElementById('dataInput').value;
-                const formData = {
-                    dataInput: dataInputValue
-                };
-
-                fetch('http://localhost:8000/accounts/request1/', {
-                    // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    heading.textContent = data.message;
-                    console.log('Response:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            });
-
-    displayUsers.addEventListener('click', function() {
-        userDataDisplay.innerHTML = '';
-
-        fetch('http://localhost:8000/accounts/request1/')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
-                }
-                return response.json();
-            })
-            .then(jsonData => {
-                userDataDisplay.innerHTML = '';
-
-                jsonData.users.forEach(user => {
-                    const userDiv = document.createElement('div');
-                    userDiv.innerHTML = `<p>User ID: ${user.id}, Email: ${user.email}, Active: ${user.active}, Pass: ${user.password}</p>`;
-                    userDataDisplay.appendChild(userDiv);
-                });
-                heading.textContent = 'here you have your stupid users';
-            })
-            .catch(error => {
-                console.error('Error fetching user data:', error);
-            });
-    });
-
-    // END DOS BOTONES PARA GUARDAR Y RECIBIR DATA DE DB
-
-
-
-
-
-
-
-
-    home.addEventListener('click', function () {
-        heading.textContent = 'Loading...';
-         // updateUrl('/home');
-         
-        fetch(baseurl + ':8000/api/')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response from backend:', data);
-
-                if (data) {
-                    // Update different parts of your HTML based on the data
-                    app.innerHTML = data.content;
-                } else {
-                    heading.textContent = 'Error: Invalid response from backend';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                heading.textContent = 'Error: Failed to fetch data from the backend';
-            });
-    });
-
-
-
-
-    // login.addEventListener('click', function () {
-    //     heading.textContent = 'Loading...';
-    //      // updateUrl('/login');
-
-    //     fetch(baseurl + ':8000/api/login/')
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log('Response from backend:', data);
-
-    //             if (data.title && data.content && data.additionalInfo) {
-    //                 heading.textContent = data.title;
-    //                 app.innerHTML = data.content + '<br>' + data.additionalInfo;
-    //             } else {
-    //                 heading.textContent = 'Error: Invalid response from backend';
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //             heading.textContent = 'Error: Failed to fetch data from the backend';
-    //         });
-    // });
-
-
-
-    // hola.addEventListener('click', function () {
-    //     heading.textContent = 'dasdasdasda';
-    //      // updateUrl('/template1');
-
-    //     fetch(baseurl + ':8000/api/template1/')
-    //         .then(response => response.text())
-    //         .then(html => {
-    //             app.innerHTML = html;
-    //         })
-    //         .catch(error => console.error('Error fetching HTML:', error));
-    //         });
-
-
-    // backend.addEventListener('click', function () {
-    //          heading.textContent = 'noo';
-
-    //         socket.onopen = (event) => {
-    //             console.log('WebSocket connection opened:', event);
-    //         };
-            
-    //         socket.onmessage = (event) => {
-    //             heading.textContent = event.data;
-    //             console.log('WebSocket message received:', event.data);
-        
-    //         };
-            
-    //         socket.onclose = (event) => {
-    //             console.log('WebSocket connection closed:', event);
-    //         };
-            
-    //         //const message = { message: 'buscar' };
-    //         //socket.send(JSON.stringify(message));
-    //         socket.send('buscar')
-            
-    //         });
-
-
-
-
 
     console.log('Hello, World! from JavaScript!');
 });
