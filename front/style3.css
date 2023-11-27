@@ -34,13 +34,10 @@
     background-size: cover;
 } 
 
-/* Estilos comunes */
-/* ... */
-
 .container1 {
-    width: 100%; /* Ancho máximo del contenedor */
-    max-width: 800px; /* Máximo ancho del contenedor */
-    margin: 2rem auto; /* Márgenes superior e inferior y centrado horizontal por defecto */
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
     padding: 2rem auto;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius);
@@ -50,22 +47,15 @@
   }
   
   .container2 {
-    width: 100%; /* Ancho máximo del contenedor */
-    max-width: 2000px; /* Máximo ancho del contenedor */
-    margin: 2rem auto; /* Márgenes superior e inferior y centrado horizontal por defecto */
+    width: 100%;
+    max-width: 2000px;
+    margin: 2rem auto;
     padding: 2rem auto;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius);
     background: var(--color-background);
   }
 
-  /* Alineación a la izquierda por defecto */
-  @media (min-width: 768px) {
-    .container1 {
-      margin: 2rem 0; /* Margen superior e inferior y alineación a la izquierda en pantallas más grandes */
-      margin-left: 2%;
-    }
-  }
   
 
   
