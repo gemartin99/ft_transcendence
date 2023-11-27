@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arrastrar y cargar imagen</title>
+  <style>
+    .drop-area {
+      border: 2px dashed #ccc;
+      width: 300px;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px auto;
+      cursor: pointer;
+    }
+
+    .drop-area img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="drop-area" id="dropArea" onclick="handleClick()">
+    Arrastra y suelta una imagen aquí o haz clic para seleccionar una imagen
+  </div>
+
+  <script>
+    function handleClick() {
+      document.getElementById('fileInput').click();
+    }
+
+    function handleFileSelect(event) {
+      const dropArea = document.getElementById('dropArea');
+      const file = event.target.files[0];
+      const imageType = /^image\//;
+
+      if (file.type.match(imageType)) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          dropArea.innerHTML = `<img src="${e.target.result}" alt="Imagen cargada" />`;
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        dropArea.textContent = 'Por favor, selecciona un archivo de imagen válido.';
+      }
+    }
+  </script>
+
+  <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
+</body>
+</html>
