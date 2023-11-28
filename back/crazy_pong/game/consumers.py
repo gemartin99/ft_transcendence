@@ -16,6 +16,7 @@ class gameConnection(AsyncWebsocketConsumer):
         self.game_ctrl = None
         super().__init__(*args, **kwargs)
         self.time = time.time()
+        self.paddle_controller = None
 
     async def connect(self):
         print(self.scope['query_string'])
@@ -23,11 +24,19 @@ class gameConnection(AsyncWebsocketConsumer):
         self.user = self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1]
         self.mode = self.scope['query_string'].decode('UTF-8').split('&')[1].split('=')[1]
 
-        self.game = MatchManager.looking_for_match()
-        if (self.game == False):
-            self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
 
-        print(self.game)
+        if (self.mode == 'obs'):
+             self.game = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
+             await self.channel_layer.group_add(self.game, self.channel_name)
+             await self.accept()
+             return 
+
+        if self.mode == 'sala':
+                self.game = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
+        else:
+            self.game = MatchManager.looking_for_match()
+            if (self.game == False):
+                    self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
 
         if self.game not in MatchManager.threads:
             MatchManager.add_game(self.game, self)
@@ -37,6 +46,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
         await self.channel_layer.group_add(self.game, self.channel_name)
 
+        
         if not self.thread["paddle_one"]:
             self.paddle_controller = PlayerManager("player1", MatchManager.matches[self.game])
             self.thread["paddle_one"] = True
@@ -70,24 +80,24 @@ class gameConnection(AsyncWebsocketConsumer):
         print(data)
                 
         if data['cmd'] == "update":
+            if self.paddle_controller:
                 self.paddle_controller.move(data['key'])
         else:
             await self.send("Unknown command")
 
     async def propagate_state(self, state):
-        time_act = 0
+        time_act = time.time()
         while True:
+            time_act = time.time()
             if self.thread:
-                time_act = time.time()
                 if self.thread["active"]:
-                    self.time = time.time()
                     self.game_ctrl.updateGame()
-                    self.time = time.time()
+                    if self.game_ctrl.ended():
+                        return
                     await self.channel_layer.group_send(
                         self.game,
                         {"type": "stream_state", "state": state},
                     )
-            print("Time: " + str(time.time() - time_act))
             await asyncio.sleep(1/60 - (time.time() - time_act))
 
     async def stream_state(self, event):
