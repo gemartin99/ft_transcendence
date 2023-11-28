@@ -5,10 +5,8 @@ baseurl = "http://localhost";
 
 document.addEventListener('DOMContentLoaded', function () {
     const heading = document.getElementById('helloHeading');
-    const obs = document.getElementById('obs');
-    const search = document.getElementById('search');
-    const sala = document.getElementById('sala');
-    const searchIA = document.getElementById('searchIA'); // Get the app div
+    const ct = document.getElementById('ct');
+    const join = document.getElementById('join');
     current_match = 0
     player = 0
     socket = null
@@ -24,10 +22,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    obs.addEventListener('click', function () {
+    ct.addEventListener('click', function () {
         heading.textContent = 'noo';
+        
+        const message = { name: document.getElementById("textbox").value,
+                                    n: 4,
+                                    user: "Usuari 1"
+                                };
+        fetch('http://localhost:8000/tournament/create/', {
+            // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message),
+        })
+        .then(response => response.json())
+        .then(data => {
+            heading.textContent = document.getElementById("textbox").value + ' ' + data.id
+            console.log('Response:', data.message);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+       
+       });
 
-        socket = new WebSocket('ws://localhost:8000/ws/game/?user=hola&mode=obs&sala=1');
+    join.addEventListener('click', function () {
+        heading.textContent = 'noo';
+        
+        var sala = document.getElementById("textbox").value;
+        socket = new WebSocket('ws://localhost:8000/ws/tournament/?user=hola&sala=' + sala);
 
        socket.onopen = (event) => {
            console.log('WebSocket connection opened:', event);
@@ -35,10 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
        
        socket.onmessage = (event) => {
            const jsonData = JSON.parse(event.data.toString());
-           if (jsonData['cmd'] == 'update') {
-               heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-               printMap(jsonData);
-           }
+           console.log(jsonData);
        };
        
        socket.onclose = (event) => {
@@ -50,82 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-    search.addEventListener('click', function () {
-        heading.textContent = 'noo';
-
-        socket = new WebSocket('ws://localhost:8000/ws/game/?user=hola&mode=search');
-
-       socket.onopen = (event) => {
-           console.log('WebSocket connection opened:', event);
-       };
-       
-       socket.onmessage = (event) => {
-           const jsonData = JSON.parse(event.data.toString());
-           if (jsonData['cmd'] == 'update') {
-               heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-               printMap(jsonData);
-           }
-       };
-       
-       socket.onclose = (event) => {
-           console.log('WebSocket connection closed:', event);
-       };
-       
-       
-       });
-
-
-
-    sala.addEventListener('click', function () {
-        heading.textContent = 'noo';
-
-        socket = new WebSocket('ws://localhost:8000/ws/game/?user=hola&mode=sala&sala=1');
-
-       socket.onopen = (event) => {
-           console.log('WebSocket connection opened:', event);
-       };
-       
-       socket.onmessage = (event) => {
-           const jsonData = JSON.parse(event.data.toString());
-           if (jsonData['cmd'] == 'update') {
-               heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-               printMap(jsonData);
-           }
-       };
-       
-       socket.onclose = (event) => {
-           console.log('WebSocket connection closed:', event);
-       };
-       
-       
-       });
-
-
-    searchIA.addEventListener('click', function () {
-             heading.textContent = 'noo';
-
-             socket = new WebSocket('ws://localhost:8000/ws/game/?user=hola&mode=IA');
-
-            socket.onopen = (event) => {
-                console.log('WebSocket connection opened:', event);
-            };
-            
-            socket.onmessage = (event) => {
-                const jsonData = JSON.parse(event.data.toString());
-                if (jsonData['cmd'] == 'update') {
-                    heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                    printMap(jsonData);
-                }
-            };
-            
-            socket.onclose = (event) => {
-                console.log('WebSocket connection closed:', event);
-            };
-            
-            
-            });
-
+    
     document.addEventListener('keydown', function(event) {
         if (socket != null) {
         if (event.key === 'ArrowUp') {

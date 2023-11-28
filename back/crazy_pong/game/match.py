@@ -120,3 +120,8 @@ class GameManager():
         if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
             return 1
         return -1
+    
+    def ended(self):
+        if (self.state['score1'] >= 11 or self.state['score2'] >= 11):
+            return True
+        return False
