@@ -5,6 +5,7 @@ down:
 list:
 	sudo docker volume ls
 migrate:
+	sudo docker exec -it back python /app/crazy_pong/manage.py makemigrations
 	sudo docker exec -it back python /app/crazy_pong/manage.py migrate
 clean:
 #   sudo docker stop $$(sudo docker ps -qa);
@@ -12,4 +13,4 @@ clean:
 # 	sudo docker rmi -f $$(sudo docker images -qa);
 	sudo docker volume rm $(sudo docker volume ls -q)
 	sudo docker network rm $(sudo docker network ls -q);
-	sudo docker system prune -a;
+	sudo docker system prune -af;
