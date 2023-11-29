@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 createAccountForm.classList.add("form--hidden");
                 loginForm.classList.remove("form--hidden");
                 console.log('Response:', "ha funciunat");
+                console.log(data.jwt);
                 createAccountForm.clearForm();
             }
             else {
@@ -136,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch((error) => {
             console.error('Error:', error);
         });
-
     });
 
     document.querySelectorAll(".form__input").forEach(inputElement => {
@@ -153,7 +153,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // GEMALOGIN
 
+    const sendmail = document.getElementById("sendmail");
+
+    sendmail.addEventListener('click', function() {
+        fetch(baseurl + ":8000/twoFA/mail/")
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data.message);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            setFormMessage(loginForm, "error", "Invalid username/password combination");
+        });
+
+    });
+
+
+
+
+
 
     console.log('Hello, World! from JavaScript!');
 });
+
+
+
+
+
+
+
+
 

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import get_home_page, create_account, login, bieltest
+from .views import get_home_page, create_account, login
 
 
 app_name = 'accounts'
