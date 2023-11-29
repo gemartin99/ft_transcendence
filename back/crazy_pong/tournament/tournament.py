@@ -1,5 +1,6 @@
 import random
 import string
+import json
 
 class Match():
 
@@ -46,7 +47,12 @@ class Tournament:
             self.createBracket()
 
     def get(self):
-        return self.bracket
+        ret = {}
+        i = 0
+        for match in self.bracket:
+            ret[i] = match.get()
+            i += 1
+        return json.dumps(ret)
 
     def update(self, u1, u2, p1, p2):
         for i in range(len(self.bracket())):
@@ -72,9 +78,8 @@ class Tournament:
         return False
 
     def createBracket(self):
-        for i in range(self.n/2 -1):
+        for i in range(int(self.n/2) -1):
             self.bracket.append(Match("undefined", "undefined", 0, 0))
         for i in range(self.n):
             if (i %2 == 0):
-                self.bracket.append(Match(self.players[i], self.players[i+1], 0, 0))
-        
+                self.bracket.append(Match(self.players[i], self.players[i+1], 0, 0))        

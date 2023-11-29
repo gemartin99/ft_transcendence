@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const heading = document.getElementById('helloHeading');
     const ct = document.getElementById('ct');
     const join = document.getElementById('join');
+    const add = document.getElementById('add');
+
     current_match = 0
     player = 0
     socket = null
@@ -39,36 +41,64 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            heading.textContent = document.getElementById("textbox").value + ' ' + data.id
-            console.log('Response:', data.message);
+            heading.textContent = document.getElementById("textbox").value + ' ' + data.code
+            console.log('Response:', data);
         })
         .catch((error) => {
             console.error('Error:', error);
         });
        
        });
-
-    join.addEventListener('click', function () {
+       
+    
+       join.addEventListener('click', function () {
         heading.textContent = 'noo';
         
-        var sala = document.getElementById("textbox").value;
-        socket = new WebSocket('ws://localhost:8000/ws/tournament/?user=hola&sala=' + sala);
+        const message = { id: document.getElementById("textbox").value,
+                                    user: document.getElementById("textbox2").value,
+                                };
+        fetch('http://localhost:8000/tournament/add/', {
+            // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message),
+        })
+        .then(response => response.json())
+        .then(data => {
+            heading.textContent = document.getElementById("textbox").value + ' ' + data.code
+            console.log('Response:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
 
-       socket.onopen = (event) => {
-           console.log('WebSocket connection opened:', event);
-       };
-       
-       socket.onmessage = (event) => {
-           const jsonData = JSON.parse(event.data.toString());
-           console.log(jsonData);
-       };
-       
-       socket.onclose = (event) => {
-           console.log('WebSocket connection closed:', event);
-       };
-       
-       
-       });
+       get.addEventListener('click', function () {
+        heading.textContent = 'noo';
+        
+        const message = { id: document.getElementById("textbox").value,
+                                };
+        fetch('http://localhost:8000/tournament/get/', {
+            // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message),
+        })
+        .then(response => response.json())
+        .then(data => {
+            heading.textContent = document.getElementById("textbox").value + ' ' + data.code
+            console.log('Response:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+   
+   
+   });
 
 
 
