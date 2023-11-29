@@ -153,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // GEMALOGIN
 
+
     console.log('Hello, World! from JavaScript!');
 });
 
