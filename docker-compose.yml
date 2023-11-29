@@ -72,12 +72,12 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /Users/marza-ga/Correcciones/trancendance/back
+      device: ./back
       o: bind
 
   front_workdir:
     driver: local
     driver_opts:
       type: none
-      device: /Users/marza-ga/Correcciones/trancendance/front
+      device: ./front/src
       o: bind
