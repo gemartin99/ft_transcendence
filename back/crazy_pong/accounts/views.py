@@ -10,6 +10,7 @@ import base64
 from django.db import IntegrityError
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+import bcrypt
 
 def get_home_page(request):
     data = {

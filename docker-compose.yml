@@ -8,6 +8,8 @@ services:
       - "80:80"
     networks:
        - crazynet
+    volumes:
+      - front_workdir:/usr/share/nginx/html/
 
   redis:
     image: redis:latest
@@ -42,6 +44,7 @@ services:
     volumes:
       - backend_data:/usr/src/app/static #aqui deben ir archivos estaticos img o cosas asi que no se carguen/actualicen etc
       - backend_data:/usr/src/app/media #aqui archivos que se puedan cargar en tiempo de ejecucuion ejemplo : imagenes de foto perfil
+      - back_workdir:/app
     networks:
        - crazynet
 
@@ -64,3 +67,17 @@ networks:
 volumes:
   backend_data:
   postgres_data:
+
+  back_workdir:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/marza-ga/Correcciones/trancendance/back
+      o: bind
+
+  front_workdir:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/marza-ga/Correcciones/trancendance/front
+      o: bind
