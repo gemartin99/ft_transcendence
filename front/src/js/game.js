@@ -1,5 +1,5 @@
-const domain = "crazy-pong.com";
-
+//const domain = "crazy-pong.com";
+const domain = "http://localhost";
 
 current_match = 0
 player = 0

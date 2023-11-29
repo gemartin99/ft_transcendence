@@ -1,16 +1,13 @@
 all:
-	sudo docker compose up -d --build
+	@docker-compose up -d --build
 down:
-	sudo docker compose down
-list:
-	sudo docker volume ls
+	@docker-compose down
 migrate:
-	sudo docker exec -it back python /app/crazy_pong/manage.py makemigrations
-	sudo docker exec -it back python /app/crazy_pong/manage.py migrate
+	docker exec -it back python /app/crazy_pong/manage.py migrate
 clean:
-#   sudo docker stop $$(sudo docker ps -qa);
-# 	sudo docker rm $$(sudo docker ps -qa);
-# 	sudo docker rmi -f $$(sudo docker images -qa);
-	sudo docker volume rm $(sudo docker volume ls -q)
-	sudo docker network rm $(sudo docker network ls -q);
-	sudo docker system prune -af;
+	@docker stop $$(docker ps -qa);
+	@docker rm $$(docker ps -qa);
+	@docker rmi -f $$(docker images -qa);
+	@docker volume rm $$(docker volume ls -q);
+	@docker network rm $$(docker network ls -q);
+	@docker system prune -a;

@@ -1,7 +1,7 @@
 // index.js
 
-baseurl = "http://crazy-pong.com"
-//baseurl = "http://localhost";
+//baseurl = "http://crazy-pong.com"
+baseurl = "http://localhost";
 
 
 
@@ -64,6 +64,21 @@ function send_form_new_account(e) {
     formData.forEach((value, key) => {
         formDataObject[key] = value;
     });
+
+    const check_inputs = Object.values(formDataObject).every((value) => check_form_inputs(value));
+
+    if (!check_inputs) {
+        setFormMessage(createAccountForm, "error", "Hay caracteres especiales en los campos.");
+        return;
+    }
+
+    const equalPasswords = comparePass(formDataObject['password'], formDataObject['confirm_password']);
+
+    if (!equalPasswords) {
+        setFormMessage(createAccountForm, "error", "Las contraseñas no coinciden.");
+        return;
+    }
+
     console.log('FormDataObject:', formDataObject);
     fetch(baseurl + ':8000/users/register/new/', {
         method: 'POST',

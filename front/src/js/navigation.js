@@ -1,4 +1,6 @@
-const baseUrl = "http://crazy-pong.com";
+//const baseUrl = "http://crazy-pong.com";
+
+const baseUrl = "http://localhost";
 
 function updateUrl(path) {
     const newPath = baseUrl + path;
