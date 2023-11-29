@@ -6,6 +6,8 @@ services:
     container_name: front
     ports:
       - "80:80"
+    volumes:
+      - front_workdir:/usr/share/nginx/html/
 
   backend_django:
     build:
@@ -18,7 +20,8 @@ services:
     volumes:
       - backend_data:/usr/src/app/static #aqui deben ir archivos estaticos img o cosas asi que no se carguen/actualicen etc
       - backend_data:/usr/src/app/media #aqui archivos que se puedan cargar en tiempo de ejecucuion ejemplo : imagenes de foto perfil
-    
+      - back_workdir:/app
+
   redis:
     image: redis:latest
     ports:
@@ -51,3 +54,18 @@ services:
 volumes:
   backend_data:
   postgres_data:
+
+
+  back_workdir:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/baltes-g/Documents/ft_transcendence/back
+      o: bind
+
+  front_workdir:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/baltes-g/Documents/ft_transcendence/front
+      o: bind
