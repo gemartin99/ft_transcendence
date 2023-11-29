@@ -33,6 +33,59 @@ def check_pwd_security(password):
     except ValidationError as e:
         return False, e.messages
 
+
+#test
+
+import jwt
+from datetime import datetime, timedelta
+from django.conf import settings
+
+def generate_jwt_token(user_id):
+    # Set the expiration time for the token
+    expiration_time = datetime.utcnow() + timedelta(days=1)
+
+    # Create the payload with user information
+    payload = {
+        'user_id': user_id,
+        'exp': expiration_time,
+    }
+
+    # Generate the JWT token
+    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+
+    return token
+
+#buscar jwt decode
+
+import jwt
+from django.conf import settings
+
+
+import jwt
+from django.conf import settings
+
+def decode_jwt_token(token):
+    # try:
+        # Decode the JWT token
+        decoded_payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        
+        # Retrieve the user_id from the payload
+        user_id = decoded_payload['user_id']
+        
+        return user_id
+    # except jwt.ExpiredSignatureError:
+        #
+
+
+
+
+
+
+
+#test
+
+
+
 @csrf_exempt 
 def create_account(request):
     if request.method == 'POST':
@@ -58,9 +111,14 @@ def create_account(request):
             encrypted_pwd = hash_password(password)
             print('encrypted_pwd: ', encrypted_pwd)
             pwd_str = encrypted_pwd.decode('utf-8')
-            user = Usermine(name=username, password=pwd_str, email=email)
+            jsonwt = generate_jwt_token(username)
+            print('jsonwt : | ', jsonwt, ' |')
+            user_id = decode_jwt_token(jsonwt)
+            print('user_id: |', user_id, '|', 'hola')
+            user = Usermine(name=username, password=pwd_str, email=email, jwt=jsonwt)
             user.save()
-            return JsonResponse({'message': 'User saved successfully'})
+            return JsonResponse({'message': 'User saved successfully',
+                                'jwt': jsonwt})
 
         except IntegrityError as e:
             # all_users = User.objects.all()
@@ -84,6 +142,8 @@ def create_account(request):
 @csrf_exempt 
 def login(request):
     if request.method == 'POST':
+
+
         try:
             data = json.loads(request.body.decode('utf-8'))
 
@@ -91,6 +151,8 @@ def login(request):
             username = data.get('Username or email')
             password = data.get('password')
             all_users = Usermine.objects.all()
+            # validate_data
+
 
   # Retrieve the user with the specified username
             user = get_object_or_404(Usermine, name=username)
