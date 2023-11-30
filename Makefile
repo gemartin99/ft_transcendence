@@ -6,9 +6,8 @@ clean:
 	@docker stop $$(docker ps -qa);
 	@docker rm $$(docker ps -qa);
 	@docker rmi -f $$(docker images -qa);
-	@docker volume rm transcenduns_backend_data;
-	@docker volume rm transcenduns_postgres_data;
-	@docker network rm transcenduns_default;
+	@docker volume rm $$(docker volume ls -q);
+	@docker network rm transcenduns_crazynet;
 	@docker system prune -af;
 
 migrations:

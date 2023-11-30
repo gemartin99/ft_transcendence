@@ -77,9 +77,6 @@ volumes:
     driver_opts:
       type: none
       device: ./back
-
-
-
       o: bind
 
   front_workdir:
