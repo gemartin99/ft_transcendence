@@ -74,6 +74,37 @@
 	<!-- FOOTER -->
     <footer class="footer fixed-bottom bg-dark text-white text-center">
 		<div class="container">
+            <button  id="showonline">ShowOnlineUsers</button>
+
+			<script>
+			  const showonline = document.getElementById('showonline');
+
+			  showonline.addEventListener('click', function() {
+			    console.log('Trying to print online users.');
+
+			    fetch("http://localhost:8000/users/showonline/")
+			      .then(response => response.json())
+			      .then(data => {
+			        console.log('Response from backend:', data);
+
+			        if (data.content) {
+			          console.log(data.content);
+			          // Update your DOM with the online user information as needed
+			        } else {
+			          console.log('Invalid response from backend');
+			        }
+			      })
+			      .catch(error => {
+			        console.error('Error:', error);
+			      });
+			  });
+			</script>
+
+
+
+
+
+
 			<p>&copy; 2023 CrazyPong. All rights reserved.</p>
 		</div>
  	</footer>

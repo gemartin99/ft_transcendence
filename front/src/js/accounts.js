@@ -41,8 +41,9 @@ function send_login_form(e)  {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.message == 'logueao pum')
+            if (data.message == 'loguin ok')
                 setFormMessage(loginForm, "success", "Congratulations you have nice memory");
+                // aqui hay que irse a otra vista
             else
                 setFormMessage(loginForm, "error", "Invalid username/password combination");
 

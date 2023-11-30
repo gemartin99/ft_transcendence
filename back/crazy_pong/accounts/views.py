@@ -133,7 +133,7 @@ def create_account(request):
             encrypted_pwd = hash_password(password)
             print('encrypted_pwd: ', encrypted_pwd)
             pwd_str = encrypted_pwd.decode('utf-8')
-            user = Usermine(name=username, password=pwd_str, email=email)
+            user = Usermine(name=username.lower(), password=pwd_str, email=email.lower())
             user.save()
             return JsonResponse({'message': 'User saved successfully'})
 
@@ -164,11 +164,9 @@ def do_login(request):
             all_users = Usermine.objects.all()
             print('try 1!!!!')
             
-            user = Usermine.objects.get(name=username)
+            user = Usermine.objects.get(name=username.lower())
             print('try 1.2!!!!')
             print(user)
-            user.online = True
-            user.save()
 
             user_info = {
                 'id': user.id,
@@ -183,7 +181,9 @@ def do_login(request):
             print('try 2!!!!')
 
             if verify_password(password, user.password):
-                response_data = {'message': 'logueao pum', 'user_info': user_info}
+                response_data = {'message': 'loguin ok', 'user_info': user_info}
+                user.online = True
+                user.save()
                 return JsonResponse(response_data)
             else:
                 response_data = {'message': 'eres tontito'}
@@ -196,4 +196,16 @@ def do_login(request):
     # Return a JsonResponse indicating that the request method is not allowed
     print('try 5!!!!')
     return JsonResponse({'error': 'Method not allowed'}, status=200)
+
+
+
+
+
+
+def show_online(request):
+    all_users = Usermine.objects.all()
+    for user in all_users:
+        print(f"User: {user.name}, Online: {user.online}")
+    return JsonResponse({'content': 'users printed'})
+
 
