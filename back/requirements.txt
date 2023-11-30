@@ -1,5 +1,10 @@
 Django==3.2.10
 channels~=3.0
+bcrypt
 django-cors-headers
 psycopg2
+<<<<<<< HEAD
 channels-redis
+=======
+channels-redis
+>>>>>>> 56542229cb4731aab9cfc3d9e63755727713d13f
