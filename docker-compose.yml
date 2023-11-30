@@ -8,6 +8,8 @@ services:
       - "80:80"
     networks:
        - crazynet
+
+
     volumes:
       - front_workdir:/usr/share/nginx/html/
 
@@ -17,9 +19,11 @@ services:
       - "6379:6379"
     volumes:
       - ./.redisdata:/data
+      - backend_data:/usr/src/app/static #aqui deben ir archivos estaticos img o cosas asi que no se carguen/actualicen etc
+      - backend_data:/usr/src/app/media #aqui archivos que se puedan cargar en tiempo de ejecucuion ejemplo : imagenes de foto perfil
+      - back_workdir:/app
     networks:
        - crazynet
-
 
   db_postgres:
     image: postgres:alpine3.18
@@ -73,6 +77,9 @@ volumes:
     driver_opts:
       type: none
       device: ./back
+
+
+
       o: bind
 
   front_workdir:
@@ -81,3 +88,5 @@ volumes:
       type: none
       device: ./front/src
       o: bind
+
+
