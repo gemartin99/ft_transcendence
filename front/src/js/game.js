@@ -44,7 +44,7 @@ function join_match() {
     const heading = document.getElementById('helloHeading');
     heading.textContent = 'noo';
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=IA');
+    socket = new WebSocket('ws://'+ 'localhost' +':8000/ws/game/?user=hola&mode=IA');
 
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
