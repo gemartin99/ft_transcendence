@@ -54,23 +54,24 @@ document.addEventListener('DOMContentLoaded', function () {
         heading.textContent = 'Loading...';
          // updateUrl('/login');
 
-        fetch(baseurl + ':8000/api/login/')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response from backend:', data);
-
-                if (data.title && data.content && data.additionalInfo) {
-                    heading.textContent = data.title;
-                    app.innerHTML = data.content + '<br>' + data.additionalInfo;
-                } else {
-                    heading.textContent = 'Error: Invalid response from backend';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                heading.textContent = 'Error: Failed to fetch data from the backend';
-            });
-    });
+       socket.onopen = (event) => {
+           console.log('WebSocket connection opened:', event);
+       };
+       
+       socket.onmessage = (event) => {
+           const jsonData = JSON.parse(event.data.toString());
+           if (jsonData['cmd'] == 'update') {
+               heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+               printMap(jsonData);
+           }
+       };
+       
+       socket.onclose = (event) => {
+           console.log('WebSocket connection closed:', event);
+       };
+       
+       
+       });
 
 
 
@@ -87,26 +88,27 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
 
-    backend.addEventListener('click', function () {
+    searchIA.addEventListener('click', function () {
              heading.textContent = 'noo';
+
+             socket = new WebSocket('ws://localhost:8000/ws/game/?user=hola&mode=IA');
 
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);
             };
             
             socket.onmessage = (event) => {
-                heading.textContent = event.data;
-                console.log('WebSocket message received:', event.data);
-        
+                const jsonData = JSON.parse(event.data.toString());
+                if (jsonData['cmd'] == 'update') {
+                    heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                    printMap(jsonData);
+                }
             };
             
             socket.onclose = (event) => {
                 console.log('WebSocket connection closed:', event);
             };
             
-            //const message = { message: 'buscar' };
-            //socket.send(JSON.stringify(message));
-            socket.send('buscar')
             
             });
 
@@ -168,4 +170,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log('Hello, World! from JavaScript!');
 });
-
