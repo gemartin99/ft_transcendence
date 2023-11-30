@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+from django.template.loader import render_to_string
+##Jareste limpiar
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
@@ -7,13 +9,79 @@ from django.shortcuts import get_object_or_404
 
 import base64
 from django.db import IntegrityError
-
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-
-#FUNCIONES PARA ENCRIPTAR STRINGS
-
 import bcrypt
+
+def get_home_page(request):
+    data = {
+        'title': 'Login Page',
+        'content': '<strong>Hello,holadsfa World!</strong>',
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+
+def get_login_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('login/select_login.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+def get_login_form_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('login/normal_login.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+def get_login42_form_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('login/42_login.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+def get_register_new_account_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('login/register_account.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+def change_view(request):
+    # Your view logic here
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+        # Add other variables as needed
+    }
+    return render(request, 'home/index.html', context)
 
 # Function to hash a password
 def hash_password(password):
@@ -33,63 +101,13 @@ def check_pwd_security(password):
     except ValidationError as e:
         return False, e.messages
 
-
-#test
-
-import jwt
-from datetime import datetime, timedelta
-from django.conf import settings
-
-def generate_jwt_token(user_id):
-    # Set the expiration time for the token
-    expiration_time = datetime.utcnow() + timedelta(days=1)
-
-    # Create the payload with user information
-    payload = {
-        'user_id': user_id,
-        'exp': expiration_time,
-    }
-
-    # Generate the JWT token
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-
-    return token
-
-#buscar jwt decode
-
-import jwt
-from django.conf import settings
-
-
-import jwt
-from django.conf import settings
-
-def decode_jwt_token(token):
-    # try:
-        # Decode the JWT token
-        decoded_payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-        
-        # Retrieve the user_id from the payload
-        user_id = decoded_payload['user_id']
-        
-        return user_id
-    # except jwt.ExpiredSignatureError:
-        #
-
-
-
-
-
-
-
-#test
-
-
-
 @csrf_exempt 
 def create_account(request):
+    print('in create account!!!!')
     if request.method == 'POST':
+        print('request methos is POST!!!!')
         try:
+            print('try 0!!!!')
             data = json.loads(request.body.decode('utf-8'))
             username = data.get('signupUsername')
             email = data.get('email')
@@ -97,6 +115,7 @@ def create_account(request):
             confirm_password = data.get('confirm_password')
 
             # prints to check
+            print('try 1!!!!')
             print(data)
             print('username: ', username)
             print('email: ', email)
@@ -104,62 +123,53 @@ def create_account(request):
             print('confirm_password: ', confirm_password)
             # prints to check
 
+            print('try 2!!!!')
             is_secure, error_messages = check_pwd_security(password)
+            print('try 3!!!!')
             if is_secure == False:
                 print(error_messages)
                 return JsonResponse({'errors': error_messages})
+            print('try 4!!!!')
             encrypted_pwd = hash_password(password)
             print('encrypted_pwd: ', encrypted_pwd)
             pwd_str = encrypted_pwd.decode('utf-8')
-            jsonwt = generate_jwt_token(username)
-            print('jsonwt : | ', jsonwt, ' |')
-            user_id = decode_jwt_token(jsonwt)
-            print('user_id: |', user_id, '|', 'hola')
-            user = Usermine(name=username, password=pwd_str, email=email, jwt=jsonwt)
+            user = Usermine(name=username, password=pwd_str, email=email)
             user.save()
-            return JsonResponse({'message': 'User saved successfully',
-                                'jwt': jsonwt})
+            return JsonResponse({'message': 'User saved successfully'})
 
         except IntegrityError as e:
-            # all_users = User.objects.all()
-            # print('dataInput:::::::::', data_input_value)
-            # for user in all_users:
-            #     print(data_input_value)
-            #     print(user.password)
-                #aqui verifico las passwords y envio mensaje segun si coincide o no
-                # if verify_password(data_input_value, user.password):
-                #     print('FOUND A COINCIDENCE!!!!!')
-                #     response_data = {'message': 'FOUND COINCIDENCE!!'}
-                # else:
-                #     print('NO COINCIDENCE YET....')
-            response_data = {'message': 'No coincidence stupid'}
+            print('try 5!!!!')
+            response_data = {'message': 'Email already exists'}
             print(f"Email already exists. Error: {e}")
-            return JsonResponse(response_data)
-        #este error ya ni me acuerdo cuando se da
+            return JsonResponse(response_data, status=200)
+
         except json.JSONDecodeError as e:
-            return JsonResponse({'error': str(e) + 'gracias si muy bueno'}, status=400)
+            print('try 6!!!!')
+            response_data = {'error': str(e) + 'gracias si muy bueno'}
+            return JsonResponse(response_data, status=200)
 
-@csrf_exempt 
-def login(request):
+    # Return a default response if the request method is not POST
+    return JsonResponse({'error': 'Invalid request method'}, status=200)
+
+@csrf_exempt
+def do_login(request):
+    print('in do_login!!!!')
     if request.method == 'POST':
-
-
+        print('request methos is POST!!!!')
         try:
+            print('try 0!!!!')
             data = json.loads(request.body.decode('utf-8'))
-
-            # Access form data from JSON data
             username = data.get('Username or email')
             password = data.get('password')
             all_users = Usermine.objects.all()
-            # validate_data
-
-
-  # Retrieve the user with the specified username
-            user = get_object_or_404(Usermine, name=username)
+            print('try 1!!!!')
+            
+            user = Usermine.objects.get(name=username)
+            print('try 1.2!!!!')
             print(user)
             user.online = True
             user.save()
-            # Example: Return user information as JSON response
+
             user_info = {
                 'id': user.id,
                 'name': user.name,
@@ -170,142 +180,20 @@ def login(request):
                 'wins': user.wins,
                 'losses': user.losses,
             }
+            print('try 2!!!!')
 
             if verify_password(password, user.password):
-                response_data = {'message': 'logueao pum'}
+                response_data = {'message': 'logueao pum', 'user_info': user_info}
+                return JsonResponse(response_data)
             else:
                 response_data = {'message': 'eres tontito'}
-            print(response_data)
-            return JsonResponse(response_data)
-
+                return JsonResponse(response_data)
+            print('try 3!!!!')
         except Usermine.DoesNotExist:
-            return JsonResponse({'error': 'User with username does not exist'}, status=404)
-
-
-
-
-#GUARDAR USERS EN DB
-
-
-# @csrf_exempt  # Use this decorator for simplicity in this example. 
-# #In production, handle CSRF properly.
-# def request_login(request):
-#     #tengo gestionados dos metodos para esta request, POST y GET
-#     if request.method == 'POST':
-#         try:
-#             #esto no hace nada (creo)
-#             if not request.body:
-#                 raise json.JSONDecodeError("Empty request body", request.body, 0)
-#             #Aqui recibo la data que me llega con el POST
-#             data = json.loads(request.body)
-#             data_input_value = data.get('dataInput')
-#             print('dataInput value:', data_input_value)
-
-#             #si me llega algo desde el cuadro de texto intento guardar el usuario
-#             if (data_input_value):
-#                 encrypted_pwd = hash_password(data_input_value)
-#                 print('encoded:', encrypted_pwd)
-#                 decode_pwd = encrypted_pwd.decode('utf-8')
-#                 print('decoded:', decode_pwd)
-#                 #aqui instancio el user que viene del import de arriba
-#                 user = User(password=decode_pwd, email=data_input_value+"@"+data_input_value+".com", active=True)
-#                 #con esto guardo en la db
-#                 user.save()
-#                 print('hola')
-#                 response_data = {'message': 'Data received successfully'}
-#             #si no me llega nada entonces no hago nada
-#             else:
-#                 view_to_check_data(request)
-#                 all_users = User.objects.all()
-#                 users_data = list(all_users.values())
-#                 response_data = {'message': 'wrong data stupid'}
-#                 return JsonResponse({'users': users_data})
-#             return JsonResponse(response_data)
-#         #si al hacer user.save() da error, salta esta excepcion:
-#         #en esta excepcion lo que estoy hacciendo es enviar un 
-#         #objeto con todos los user
-#         except IntegrityError as e:
-#             all_users = User.objects.all()
-#             print('dataInput:::::::::', data_input_value)
-#             for user in all_users:
-#                 print(data_input_value)
-#                 print(user.password)
-#                 #aqui verifico las passwords y envio mensaje segun si coincide o no
-#                 if verify_password(data_input_value, user.password):
-#                     print('FOUND A COINCIDENCE!!!!!')
-#                     response_data = {'message': 'FOUND COINCIDENCE!!'}
-#                 else:
-#                     print('NO COINCIDENCE YET....')
-#                     response_data = {'message': 'No coincidence stupid'}
-#             print(f"Email {data_input_value} already exists. Error: {e}")
-#             return JsonResponse(response_data)
-#         #este error ya ni me acuerdo cuando se da
-#         except json.JSONDecodeError as e:
-#             return JsonResponse({'error': str(e) + 'gracias si muy bueno'}, status=400)
-#     #aqui esta el request de GET
-#     elif request.method == 'GET':
-#         try:
-#             print("method GET")
-#             #aqui recibo todos los users de la base de datos
-#             all_users = User.objects.all()
-#             #los meto en una lista para enviarlos
-#             users_data = list(all_users.values())
-#             response_data = {'message': 'wrong data stupid'}
-#             return JsonResponse({'users': users_data})
-
-#         except json.JSONDecodeError as e:
-#             return JsonResponse({'error': str(e) + 'gracias si muy bueno'}, status=400)
-#     return JsonResponse({'message': 'Invalid method'})
-
-# #GUARDAR USERS EN DB
-
-
-# #CONSULTAR USERS EN DB
-
-# def view_to_check_data(request):
-#     # Retrieve all User objects from the database
-#     all_users = User.objects.all()
-
-#     # Do something with the retrieved data, e.g., print it
-#     for user in all_users:
-#         print(f"User ID: {user.id}, Email: {user.email}, Active: {user.active}")
-
-#     # You can also filter data based on certain conditions
-#     # For example, retrieve active users
-#     active_users = User.objects.filter(active=True)
-#     for active_user in active_users:
-#         print(f"Active User ID: {active_user.id}, Email: {active_user.email}")
-
-#     # Return a response, render a template, or do other things with the data
-#     return JsonResponse({'message': 'Data checked successfully'})
-
-# #CONSULTAR USERS EN DB
-
-
-
-#ESTO DE AQUI ABAJO NO HACE NADA (CREO)
-
-def get_login_form_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
-    content_html = render_to_string('login/normal_login.html', context)
-    data = {
-        'title': 'Select Logging Mode',
-        'content': content_html,
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
-
-
-def get_home_page(request):
-    data = {
-        'title': 'Login Page',
-        'content': '<strong>Hello,holadsfa World!</strong>',
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
-
-
+            print('try 4!!!!')
+            return JsonResponse({'error': 'User with username does not exist'}, status=200)
+    
+    # Return a JsonResponse indicating that the request method is not allowed
+    print('try 5!!!!')
+    return JsonResponse({'error': 'Method not allowed'}, status=200)
 
