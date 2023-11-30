@@ -18,21 +18,26 @@ RUN pip install --upgrade pip && \
 # Install gunicorn
 RUN pip install gunicorn
 
-# Install PostgreSQL client and update package index
-RUN apt-get update && \
-    apt-get install -y postgresql-client
+# Install psycopg2 (PostgreSQL adapter for Python)
+RUN pip install psycopg2-binary
 
 # Install django-cors-headers
 RUN pip install django-cors-headers
 
+# Download and copy the wait-for-it.sh script into the image
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
+
 # Set up Django and PostgreSQL environment variables
-# ENV DJANGO_SETTINGS_MODULE=myproject.settings
-# ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
+ENV DJANGO_SETTINGS_MODULE=crazy_pong.settings
+ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-# Define command to run the application
-#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "crazy_pong.crazy_pong.wsgi:application", "--env", "DJANGO_SETTINGS_MODULE=crazy_pong.crazy_pong.settings"]
-
 CMD ["python", "/app/crazy_pong/manage.py", "runserver", "0.0.0.0:8000"]
+
+# Apply migrations using wait-for-it.sh to wait for the database to be ready
+#CMD ["./wait-for-it.sh", "db_host:5432", "--", "python", "/app/crazy_pong/manage.py", "migrate"]
+
+

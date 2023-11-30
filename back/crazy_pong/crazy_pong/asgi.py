@@ -4,7 +4,7 @@ ASGI config for crazy_pong project.
 It exposes the ASGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
+https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
 import os
@@ -17,7 +17,6 @@ application = get_asgi_application()
 
 
 ##added
-
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 import game.routing
@@ -30,5 +29,3 @@ application = ProtocolTypeRouter({
         )
      )
  })
-
-

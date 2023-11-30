@@ -6,8 +6,32 @@ services:
     container_name: front
     ports:
       - "80:80"
+    networks:
+       - crazynet
     volumes:
       - front_workdir:/usr/share/nginx/html/
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.redisdata:/data
+    networks:
+       - crazynet
+
+
+  db_postgres:
+    image: postgres:alpine3.18
+    container_name: database_postgre
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: transcendence
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+       - crazynet
 
   backend_django:
     build:
@@ -21,51 +45,39 @@ services:
       - backend_data:/usr/src/app/static #aqui deben ir archivos estaticos img o cosas asi que no se carguen/actualicen etc
       - backend_data:/usr/src/app/media #aqui archivos que se puedan cargar en tiempo de ejecucuion ejemplo : imagenes de foto perfil
       - back_workdir:/app
+    networks:
+       - crazynet
 
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./.redisdata:/data
+  postgres_admin2: #In some moment we 
+     image: dpage/pgadmin4:6.16
+     depends_on: 
+       - db_postgres
+     environment:
+       PGADMIN_DEFAULT_EMAIL: marc@arza.com
+       PGADMIN_DEFAULT_PASSWORD: 12345
+     ports:
+       - 5050:80
+     networks:
+       - crazynet
 
-  db_postgres:
-    image: postgres:alpine3.18
-    container_name: database_postgre
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: transcendence
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  # postgres_admin2: #In some moment we 
-  #    image: dpage/pgadmin4:6.16
-  #    depends_on: 
-  #      - postgres
-  #    environment:
-  #      PGADMIN_DEFAULT_EMAIL: xxxxx
-  #      PGADMIN_DEFAULT_PASSWORD: xxxx
-  #    ports:
-  #      - 5050:80
-  #    networks:
-  #      - backend
+networks:
+  crazynet:
+    driver: bridge
 
 volumes:
   backend_data:
   postgres_data:
 
-
   back_workdir:
     driver: local
     driver_opts:
       type: none
-      device: /Users/baltes-g/Documents/ft_transcendence/back
+      device: ./back
       o: bind
 
   front_workdir:
     driver: local
     driver_opts:
       type: none
-      device: /Users/baltes-g/Documents/ft_transcendence/front
+      device: ./front/src
       o: bind
