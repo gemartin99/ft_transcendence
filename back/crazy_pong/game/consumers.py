@@ -87,7 +87,7 @@ class gameConnection(AsyncWebsocketConsumer):
                         self.game,
                         {"type": "stream_state", "state": state},
                     )
-            print("Time: " + str(time.time() - time_act))
+            # print("Time: " + str(time.time() - time_act))
             await asyncio.sleep(1/60 - (time.time() - time_act))
 
     async def stream_state(self, event):

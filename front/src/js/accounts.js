@@ -41,13 +41,17 @@ function send_login_form(e)  {
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Response:', data.message);
             if (data.message == 'loguin ok')
+            {
                 setFormMessage(loginForm, "success", "Congratulations you have nice memory");
-                // aqui hay que irse a otra vista
+                // window.location.pathname = '/';
+                // handleNavLinks();
+                const socket = new WebSocket('ws://'+ 'localhost' +':8000/ws/login/?user=' + data.user);
+            }
             else
                 setFormMessage(loginForm, "error", "Invalid username/password combination");
 
-            console.log('Response:', data.message);
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -90,6 +94,8 @@ function send_form_new_account(e) {
     .then(data => {
         if (data.message == "User saved successfully") {
             setFormMessage(createAccountForm, "success", "Account created successfully");
+            // history.pushState(null, null, '/users/login')
+            // handleNavLinks();
             console.log('Response:', "ha funciunat");
         }
         else {

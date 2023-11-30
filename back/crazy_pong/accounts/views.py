@@ -131,7 +131,6 @@ def create_account(request):
                 return JsonResponse({'errors': error_messages})
             print('try 4!!!!')
             encrypted_pwd = hash_password(password)
-            print('encrypted_pwd: ', encrypted_pwd)
             pwd_str = encrypted_pwd.decode('utf-8')
             user = Usermine(name=username.lower(), password=pwd_str, email=email.lower())
             user.save()
@@ -168,20 +167,10 @@ def do_login(request):
             print('try 1.2!!!!')
             print(user)
 
-            user_info = {
-                'id': user.id,
-                'name': user.name,
-                'email': user.email,
-                'active': user.playing,
-                'online': user.online,
-                'id42': user.id42,
-                'wins': user.wins,
-                'losses': user.losses,
-            }
             print('try 2!!!!')
 
             if verify_password(password, user.password):
-                response_data = {'message': 'loguin ok', 'user_info': user_info}
+                response_data = {'message': 'loguin ok', 'user': username}
                 user.online = True
                 user.save()
                 return JsonResponse(response_data)
@@ -201,7 +190,7 @@ def do_login(request):
 
 
 
-
+##debug functions
 def show_online(request):
     all_users = Usermine.objects.all()
     for user in all_users:
