@@ -35,7 +35,9 @@ ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
+CMD ["python", "/app/crazy_pong/manage.py", "runserver", "0.0.0.0:8000"]
+
 # Apply migrations using wait-for-it.sh to wait for the database to be ready
 #CMD ["./wait-for-it.sh", "db_host:5432", "--", "python", "/app/crazy_pong/manage.py", "migrate"]
 
-CMD ["python", "/app/crazy_pong/manage.py", "runserver", "0.0.0.0:8000"]
+
