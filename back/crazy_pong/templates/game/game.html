@@ -1,9 +1,11 @@
     <div id="header">
         <h1 id="helloHeading">Loading...</h1>
-        <button id="home">Home </button>
-        <button id="hola">Hola </button>
-        <button id="login">Log in</button>
-        <button id="backend" onclick="join_match()">Backend</button>
+        <button id="search" onclick="join_match()">Search game</button>
+        <button id="sala" onclick="join_match_sala()">Search in a sala</button>
+        <button id="searchIA" onclick="join_IA()">Play with IA</button>
+        <button id="obs" onclick="obs_match()">Observate a match</button>
+        <label for="textbox">Enter sala:</label>
+        <input type="text" id="textbox" name="textbox">
     </div>
     <div id="app">
         <section>
