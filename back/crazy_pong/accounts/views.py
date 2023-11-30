@@ -6,6 +6,7 @@ import json
 from django.shortcuts import render
 from .models import Usermine
 from django.shortcuts import get_object_or_404
+
 import base64
 from django.db import IntegrityError
 from django.contrib.auth.password_validation import validate_password
@@ -19,6 +20,7 @@ def get_home_page(request):
         'additionalInfo': 'Some additional information here',
     }
     return JsonResponse(data)
+
 
 def get_login_page(request):
     context = {

@@ -10,6 +10,7 @@ class Usermine(models.Model):
     id42 = models.IntegerField(default=42)
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
+    jwt = models.CharField(max_length=255, default='')
 
     class Meta:
         abstract = False
