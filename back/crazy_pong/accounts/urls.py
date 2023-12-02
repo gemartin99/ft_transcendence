@@ -14,7 +14,3 @@ urlpatterns = [
      path('showonline/', show_online, name='show_online'),
 
 ]
-
-
-
-printf("holaquetal%i", 45)
