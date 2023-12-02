@@ -7,4 +7,3 @@ channels-redis
 bcrypt
 pyotp
 PyJWT
-
