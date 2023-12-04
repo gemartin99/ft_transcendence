@@ -11,7 +11,8 @@ class Usermine(models.Model):
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
     jwt = models.CharField(max_length=255, default='')
-
+    totp = models.CharField(max_length=255, default='')
+    
     class Meta:
         abstract = False
 
