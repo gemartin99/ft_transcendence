@@ -107,12 +107,12 @@
 		</div>
  	
 	  <h2>Enable Two-Factor Authentication</h2>
-	    <button id="getQR">getQR</button>
+	    <button id="getQR"  onclick="getQR()">getQR</button>
 	    <p>Scan the QR code below using the Google Authenticator app:</p>
 	    <canvas id="QRimg"></canvas>
 	    <!-- <img id ="QRimg" alt="QR Code"> -->
 	    <p>Or enter the following key manually: {{ request.user.totp_secret }}</p>
-		 <form id="textForm">
+		 <form id="textForm" onsubmit="checkAuthCode()">
 	        <label for="textInput">Enter Text:</label>
 	        <input type="text" id="textInput" name="text" required>
 	        <button type="button" id="sendButton">check code</button>
@@ -122,90 +122,17 @@
 	        <p id="responseMessage"></p>
 	    </div>
 
-		<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-
-		<script>
-			const getQR = document.getElementById('getQR');
-			const QRimg = document.getElementById('QRimg');
-
-
-			const textForm = document.getElementById('textForm');
-	        const textInput = document.getElementById('textInput');
-	        const sendButton = document.getElementById('sendButton');
-	        const responseMessage = document.getElementById('responseMessage');
-
-
-	        sendButton.addEventListener('click', function() {
-	            // Get the text from the input
-	            const textValue = textInput.value.trim();
-	            console.log('textValue:', textValue);
-	            // Make an AJAX request to the backend
-	            const formData = new FormData();
-				formData.append('totp_code', textValue);
-
-	            fetch("http://localhost:8000/twoFA/checkQR/", {
-				    method: 'POST',
-				    body: formData,
-	            })
-	            .then(response => response.json())
-	            .then(data => {
-	                console.log('Response from backend:', data);
-
-	                // Display the response message
-	                responseMessage.textContent = data.message;
-
-	                // If you want to update the QR code based on the response, you can add that logic here
-	            })
-	            .catch(error => {
-	                console.error('Error:', error);
-	            });
-	        });
-
-
-
-
-
-
-			getQR.addEventListener('click', function() {
-				console.log('Trying to print online users.');
-
-			    fetch("http://localhost:8000/twoFA/getQR/", {
-		            method: 'POST',
-		            headers: {'Content-Type': 'application/json',},
-		        })
-			      .then(response => response.json())
-			      .then(data => {
-			        console.log('Response from backend:', data);
-			        if (QRimg) {
-			            // Generate the QR code using qrious
-			            const qr = new QRious({
-			                element: QRimg,
-			                value: data.provisioning_url,
-			                size: 300, // Adjust the size as needed
-			            });
-
-				        if (data.provisioning_url) {
-				          console.log(data.provisioning_url);
-				        } else {
-				          console.log('Invalid response from backend');
-				        }
-				    }
-			      })
-			      .catch(error => {
-			        console.error('Error:', error);
-			      });
-			  });
-			</script>
-
 
  	</footer>
 	<!-- END FOOTER -->
+	<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 	<script src="index.js"></script>
 	<script src="/js/navigation.js"></script>
 	<script src="/js/game.js"></script>
 	<script src="/js/accounts.js"></script>
 	<script src="/js/validations.js"></script>
+	<script src="/js/twoFA.js"></script>
 </html>
 
 
