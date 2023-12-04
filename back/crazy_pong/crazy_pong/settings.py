@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'crazy_pong',
     'channels',
     'accounts',
+    'FT_OAuth',
+    'twoFA',
 ]
 
 MIDDLEWARE = [
