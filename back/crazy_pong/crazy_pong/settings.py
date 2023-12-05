@@ -59,6 +59,9 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 ROOT_URLCONF = 'crazy_pong.urls'
 
 TEMPLATES = [
@@ -140,6 +143,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://crazy-pong.com",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -163,6 +167,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://crazy-pong.com",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'

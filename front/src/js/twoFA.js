@@ -9,6 +9,7 @@
 	            fetch("http://localhost:8000/twoFA/checkQR/", {
 				    method: 'POST',
 				    body: formData,
+				    credentials: 'include',
 	            })
 	            .then(response => response.json())
 	            .then(data => {
@@ -34,6 +35,7 @@ function	getQR() {
     fetch("http://localhost:8000/twoFA/getQR/", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
+        credentials: 'include',
     })
 	.then(response => response.json())
 	.then(data => {
