@@ -255,15 +255,34 @@ def do_login(request):
     print('try 5!!!!')
     return JsonResponse({'error': 'Method not allowed'}, status=200)
 
+def logout(request):
+    print('logout')
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = decode_jwt_token(jwt_token)
+    print(user_id)
+    user = Usermine.objects.get(name=user_id)
+    user.online = False
+    user.save()
+    response = JsonResponse({'message': 'Hello, world!'})
+    response.delete_cookie('jwttoken')
+    return response
+    # return JsonResponse({'message': 'User passed to offline'})
 
 
+from django.http import HttpResponse
 
+def my_view(request):
+    response = HttpResponse("Hello, world!")
+    response.set_cookie('cookiename', 'cookievalue')
+    return response
 
 ##debug functions
 @csrf_exempt
 def show_online(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = decode_jwt_token(jwt_token)
     print('onlinejwt:',jwt_token)
+    print('uid:', user_id)
     all_users = Usermine.objects.all()
     for user in all_users:
         print(f"User: {user.name}, Online: {user.online}")
