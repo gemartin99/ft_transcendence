@@ -70,6 +70,7 @@ function	checkAuthCode() {
 	fetch("http://localhost:8000/twoFA/checkQR/", {
 	    method: 'POST',
 	    body: formData,
+	    credentials: 'include',
 	})
 	.then(response => response.json())
 	.then(data => {
