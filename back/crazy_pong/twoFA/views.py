@@ -55,10 +55,11 @@ def generate_totp_secret():
 def enable_totp(request):
     if request.method == 'POST':
         totp_secret = generate_totp_secret()
+        
         # username = ''
         # tendremos que coger el username a traves del JWT
-        holasa = 'holasa'
-        user = Usermine.objects.get(name=holasa)
+        userid = 'holasa'
+        user = Usermine.objects.get(name=userid)
         user.totp = totp_secret;
 
         user.save()
@@ -77,8 +78,8 @@ def verify_totp(request):
         totp_code = str(request.POST.get('totp_code'))
         # username = ''
         # tendremos que coger el username a traves del JWT
-        holasa = 'holasa'
-        totp_secret = Usermine.objects.get(name=holasa).totp
+        userid = 'holasa'
+        totp_secret = Usermine.objects.get(name=userid).totp
 
 
         totp = pyotp.TOTP(totp_secret)
