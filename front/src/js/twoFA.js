@@ -1,32 +1,3 @@
-	        sendButton.addEventListener('click', function() {
-	            // Get the text from the input
-	            const textValue = textInput.value.trim();
-	            console.log('textValue:', textValue);
-	            // Make an AJAX request to the backend
-	            const formData = new FormData();
-				formData.append('totp_code', textValue);
-
-	            fetch("http://localhost:8000/twoFA/checkQR/", {
-				    method: 'POST',
-				    body: formData,
-				    credentials: 'include',
-	            })
-	            .then(response => response.json())
-	            .then(data => {
-	                console.log('Response from backend:', data);
-
-	                // Display the response message
-	                responseMessage.textContent = data.message;
-
-	                // If you want to update the QR code based on the response, you can add that logic here
-	            })
-	            .catch(error => {
-	                console.error('Error:', error);
-	            });
-	        });
-
-
-
 function	getQR() {
 
 	console.log('Trying to print online users.');

@@ -22,6 +22,12 @@ function clearInputError(inputElement) {
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
 
+// logout cookie:
+function logoutTest(){
+    console.log('he entrado');
+    document.cookie = "jwttoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+}
+
 function send_login_form(e)  {
     e.preventDefault();
     // Lógica para el inicio de sesión mediante AJAX/Fetch
