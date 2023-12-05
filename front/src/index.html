@@ -81,10 +81,14 @@
 			  showonline.addEventListener('click', function() {
 			    console.log('Trying to print online users.');
 
-			    fetch("http://localhost:8000/users/showonline/")
+			    fetch("http://localhost:8000/users/showonline/", {
+			    	credentials: 'include',
+			    })
 			      .then(response => response.json())
 			      .then(data => {
 			        console.log('Response from backend:', data);
+			        const username = document.cookie.split('; ').find(row => row.startsWith('jwttoken=')).split('=')[1];
+					console.log(username);
 
 			        if (data.content) {
 			          console.log(data.content);

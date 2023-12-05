@@ -34,29 +34,36 @@ function send_login_form(e)  {
         formDataObject[key] = value;
     });
     console.log('FormDataObject:', formDataObject);
-        fetch(baseurl +':8000/users/login/action/', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',},
-            body: JSON.stringify(formDataObject),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Response:', data.message);
-            if (data.message == 'loguin ok')
-            {
-                setFormMessage(loginForm, "success", "Congratulations you have nice memory");
-                // window.location.pathname = '/';
-                // handleNavLinks();
-                const socket = new WebSocket('ws://'+ 'localhost' +':8000/ws/login/?user=' + data.user);
-            }
-            else
-                setFormMessage(loginForm, "error", "Invalid username/password combination");
+    fetch(baseurl +':8000/users/login/action/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',},
+        credentials: 'include',
+        body: JSON.stringify(formDataObject),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data.message);
+        // Set the JWT token as an HttpOnly Secure Cookie
+        document.cookie = `jwttoken=${data.jwttoken}; Secure; SameSite=None; path=/;`;
+        console.log('jwttoken:', data.jwttoken);
 
-        })
-        .catch((error) => {
-            console.error('Error:', error);
+
+        if (data.message == 'loguin ok')
+        {
+            setFormMessage(loginForm, "success", "Congratulations you have nice memory");
+            // window.location.pathname = '/';
+            // handleNavLinks();
+
+            //response with cookie here
+            const socket = new WebSocket('ws://'+ 'localhost' +':8000/ws/login/?user=' + data.user);
+        }
+        else
             setFormMessage(loginForm, "error", "Invalid username/password combination");
-        });
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        setFormMessage(loginForm, "error", "Invalid username/password combination");
+    });
 }
 
 function send_form_new_account(e) {
@@ -88,6 +95,7 @@ function send_form_new_account(e) {
     fetch(baseurl + ':8000/users/register/new/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
+        credentials: 'include',
         body: JSON.stringify(formDataObject),
     })
     .then(response => response.json())

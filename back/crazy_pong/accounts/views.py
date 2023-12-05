@@ -101,6 +101,74 @@ def check_pwd_security(password):
     except ValidationError as e:
         return False, e.messages
 
+
+
+
+
+import jwt
+from datetime import datetime, timedelta
+from django.conf import settings
+
+def generate_jwt_token(user_id):
+    # Set the expiration time for the token
+    expiration_time = datetime.utcnow() + timedelta(days=1)
+
+    # Create the payload with user information
+    payload = {
+        'user_id': user_id,
+        'exp': expiration_time,
+    }
+
+    # Generate the JWT token
+    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+
+    return token
+
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+# from .utils import generate_jwt_token
+
+@login_required
+def generate_jwt_view(request):
+    user_id = request.user.id
+    jwt_token = generate_jwt_token(user_id)
+
+    return JsonResponse({'token': jwt_token})
+
+
+
+
+import jwt
+from django.conf import settings
+
+def decode_jwt_token(token):
+    try:
+        # Decode the JWT token
+        decoded_payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        
+        # Retrieve the user_id from the payload
+        user_id = decoded_payload['user_id']
+        
+        return user_id
+    except jwt.ExpiredSignatureError:
+        # Handle token expiration
+        print("Token has expired.")
+        return None
+    except jwt.InvalidTokenError:
+        # Handle invalid token
+        print("Invalid token.")
+        return None
+
+
+
+
+
+
+
+
+
+
 @csrf_exempt 
 def create_account(request):
     print('in create account!!!!')
@@ -166,11 +234,12 @@ def do_login(request):
             user = Usermine.objects.get(name=username.lower())
             print('try 1.2!!!!')
             print(user)
-
+            jwttoken = generate_jwt_token(username.lower())
             print('try 2!!!!')
-
+            print('jwttoken:', jwttoken)
             if verify_password(password, user.password):
-                response_data = {'message': 'loguin ok', 'user': username}
+                response_data = {'message': 'loguin ok', 'user': username,
+                                'jwttoken': jwttoken}
                 user.online = True
                 user.save()
                 return JsonResponse(response_data)
@@ -191,7 +260,10 @@ def do_login(request):
 
 
 ##debug functions
+@csrf_exempt
 def show_online(request):
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    print('onlinejwt:',jwt_token)
     all_users = Usermine.objects.all()
     for user in all_users:
         print(f"User: {user.name}, Online: {user.online}")

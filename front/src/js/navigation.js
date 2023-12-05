@@ -24,22 +24,24 @@ function handleNavLinkClick(event) {
         hrefValue = hrefValue + "/"
     }
     updateUrl(hrefValue);
-    fetch(baseUrl + ':8000' + hrefValue) // Adjusted fetch URL
-        .then(response => response.json())
-        .then(data => {
-            console.log('Response from backend:', data);
+    fetch(baseUrl + ':8000' + hrefValue, {
+        credentials: 'include',
+    }) // Adjusted fetch URL
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response from backend:', data);
 
-            if (data.content) {
-                content.innerHTML = data.content;
-            } else {
-                console.log('Invalid response from backend 1');
-            }
-            
-            handleNavLinks()
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        if (data.content) {
+            content.innerHTML = data.content;
+        } else {
+            console.log('Invalid response from backend 1');
+        }
+        
+        handleNavLinks()
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 
