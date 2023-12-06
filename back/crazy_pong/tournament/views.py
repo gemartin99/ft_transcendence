@@ -8,6 +8,20 @@ from .tournament_manager import TournamentManager
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+def get_tournament_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('tournament/tournament.html', context)
+    data = {
+        'title': 'Home',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+
 @csrf_exempt 
 def createTournament(request):
     if request.method == 'POST':
@@ -21,6 +35,7 @@ def createTournament(request):
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 @csrf_exempt 
 def addPlayer(request):
     if request.method == 'POST':

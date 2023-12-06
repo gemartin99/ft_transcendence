@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'channels',
     'accounts',
     'tournament',
+    'authentification',
 ]
 
 MIDDLEWARE = [
