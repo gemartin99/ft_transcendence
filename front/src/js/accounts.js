@@ -3,8 +3,6 @@
 //baseurl = "http://crazy-pong.com"
 baseurl = "http://localhost";
 
-
-
 function setFormMessage(formElement, type, message) {
     const messageElement = formElement.querySelector(".form__message");
     messageElement.textContent = message;
@@ -22,7 +20,7 @@ function clearInputError(inputElement) {
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
 
-// logout cookie:
+// logout cookie remove (works):
 function logoutTest(){
     console.log('he entrado');
     document.cookie = "jwttoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
@@ -50,7 +48,10 @@ function send_login_form(e)  {
     .then(data => {
         console.log('Response:', data.message);
         // Set the JWT token as an HttpOnly Secure Cookie
-        document.cookie = `jwttoken=${data.jwttoken}; Secure; SameSite=None; path=/;`;
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + (23 * 60 * 60 * 1000));
+
+        document.cookie = `jwttoken=${data.jwttoken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
         console.log('jwttoken:', data.jwttoken);
 
 
@@ -108,8 +109,9 @@ function send_form_new_account(e) {
     .then(data => {
         if (data.message == "User saved successfully") {
             setFormMessage(createAccountForm, "success", "Account created successfully");
-            // history.pushState(null, null, '/users/login')
-            // handleNavLinks();
+            history.pushState(null, null, '/users/login')
+            handleNavLinkAction('/users/login')
+
             console.log('Response:', "ha funciunat");
         }
         else {
@@ -123,6 +125,4 @@ function send_form_new_account(e) {
     .catch((error) => {
         console.error('Error:', error);
     });
-
 }
-
