@@ -44,6 +44,34 @@ function handleNavLinkClick(event) {
     });
 }
 
+function handleNavLinkAction(hrefValue) {
+    // Common logic for handling nav link actions
+    // ...
+    // hrefValue.preventDefault(); // Prevents the default behavior (e.g., navigating to a new page)
+    console.log("NavLink clicked!");
+    if (hrefValue != "/"){
+        hrefValue = hrefValue + "/"
+    }
+    updateUrl(hrefValue);
+    fetch(baseUrl + ':8000' + hrefValue, {
+        credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response from backend:', data);
+
+        if (data.content) {
+            content.innerHTML = data.content;
+        } else {
+            console.log('Invalid response from backend 1');
+        }
+
+        handleNavLinks();  // This line might not be necessary; it depends on your requirements
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
 handleNavLinks()
 var initialpath = window.location.pathname;

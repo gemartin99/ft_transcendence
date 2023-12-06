@@ -43,7 +43,7 @@
 				<!--boton Cuenta -->
 				<a href="/users/profile" class="navlink btn btn-sm btn-outline-warning d-md-inline-block">Profile</a>
 				<a href="/users/logout" class="navlink btn btn-sm btn-outline-warning d-md-inline-block">Logout</a>
-				<a href="/users/login" class="navlink btn btn-sm btn-warning d-md-inline-block">Login</a>
+				<a href="/users/login" class="navlink btn btn-sm btn-warning d-md-inline-block" >Login</a>
 			</div>
 		</div>  
 	</nav>
@@ -102,6 +102,35 @@
 			  });
 			</script>
 
+
+			<script>
+		        document.addEventListener('keydown', function(event) {
+		            if (event.key === 'ArrowLeft' && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+		                // Handle left arrow key press (previous page)
+		                goPrevPage();
+		            } else if (event.key === 'ArrowRight' && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+		                // Handle right arrow key press (next page)
+		                goNextPage();
+		            }
+		        });
+
+		        function goPrevPage() {
+		            // Get the href value of the previous link and navigate to it
+		            const prevLink = document.querySelector('a[rel=prev]');
+		            if (prevLink) {
+		                window.location.href = prevLink.href;
+		            }
+		        }
+
+		        function goNextPage() {
+		            // Get the href value of the next link and navigate to it
+		            const nextLink = document.querySelector('a[rel=next]');
+		            if (nextLink) {
+		                window.location.href = nextLink.href;
+		            }
+		        }
+		    </script>
+
 			<p>&copy; 2023 CrazyPong. All rights reserved.</p>
 		</div>
  	
@@ -111,17 +140,16 @@
 	    <canvas id="QRimg"></canvas>
 	    <!-- <img id ="QRimg" alt="QR Code"> -->
 	    <p>Or enter the following key manually: {{ request.user.totp_secret }}</p>
-		 <form id="textForm" onsubmit="checkAuthCode()">
-	        <label for="textInput">Enter Text:</label>
-	        <input type="text" id="textInput" name="text" required>
-	        <button type="button" id="sendButton">check code</button>
-	    </form>
-	    <div>
+		<form id="textForm" onsubmit="checkAuthCode(event)">
+		    <label for="textInput">Enter Text:</label>
+		    <input type="text" id="textInput" name="text" required>
+		    <button type="submit">check code</button>
+		</form>
+		<div>
 	        <!-- Container to display response from the backend -->
 	        <p id="responseMessage"></p>
 	    </div>
-
-
+	    
  	</footer>
 	<!-- END FOOTER -->
 	<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>

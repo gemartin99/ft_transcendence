@@ -23,17 +23,16 @@ function	getQR() {
 		    } else {
 		      console.log('Invalid response from backend');
 		    }
-	}
+		}
 	})
 	.catch(error => {
 	console.error('Error:', error);
 	});
 }
 
-function	checkAuthCode() {
+function	checkAuthCode(event) {
+	event.preventDefault();
     const textInput = document.getElementById('textInput');
-    const responseMessage = document.getElementById('responseMessage');
-	
 	const textValue = textInput.value.trim();
 	console.log('textValue:', textValue);
 	const formData = new FormData();
@@ -46,7 +45,6 @@ function	checkAuthCode() {
 	.then(response => response.json())
 	.then(data => {
 	    console.log('Response from backend:', data);
-	    responseMessage.textContent = data.message;
 	})
 	.catch(error => {
 	    console.error('Error:', error);
