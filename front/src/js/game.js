@@ -1,15 +1,15 @@
 //const domain = "crazy-pong.com";
-const domain = "http://localhost";
+const domain = "localhost";
 
 current_match = 0
 player = 0
 socket = null
-
+in_match = false
 
 
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function(event) {
-        if (socket != null) {
+        if (in_match == true) {
         if (event.key === 'ArrowUp') {
             const message = { cmd: 'update',
                                 id: current_match,
@@ -44,22 +44,18 @@ function join_match() {
     const heading = document.getElementById('helloHeading');
     heading.textContent = 'noo';
 
-    socket = new WebSocket('ws://'+ 'localhost' +':8000/ws/game/?user=hola&mode=IA');
 
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=search');
+    
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
+        
     };
     socket.onmessage = (event) => {
+        in_match = true
         const jsonData = JSON.parse(event.data.toString());
         console.log(jsonData)
-        if (jsonData['cmd'] == 'matchmaking') {
-            heading.textContent = jsonData['ball'];
-        }
-        if (jsonData['cmd'] == 'connection') {
-            current_match = jsonData['id']
-            player = jsonData['pl']
-        }
-        else if (jsonData['cmd'] == 'update') {
+        if (jsonData['cmd'] == 'update') {
             heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             printMap(jsonData);
         }
@@ -72,9 +68,98 @@ function join_match() {
     };
     socket.onclose = (event) => {
         console.log('WebSocket connection closed:', event);
+        in_match = false
+    };        
+}
+
+function join_match_sala() {
+    const heading = document.getElementById('helloHeading');
+    heading.textContent = 'noo';
+
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=sala&sala=' + document.getElementById("textbox").value);
+    
+    socket.onopen = (event) => {
+        console.log('WebSocket connection opened:', event);
+        
     };
-    const message = { cmd: 'search' };
-    socket.send(JSON.stringify(message));           
+    socket.onmessage = (event) => {
+        in_match = true
+        const jsonData = JSON.parse(event.data.toString());
+        console.log(jsonData)
+        if (jsonData['cmd'] == 'update') {
+            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            printMap(jsonData);
+        }
+
+        //console.log('WebSocket message received:', event.data);
+
+    };
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+    socket.onclose = (event) => {
+        console.log('WebSocket connection closed:', event);
+        in_match = false
+    };        
+}
+
+function join_IA() {
+    const heading = document.getElementById('helloHeading');
+    heading.textContent = 'noo';
+
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=IA');
+    
+    socket.onopen = (event) => {
+        console.log('WebSocket connection opened:', event);
+        
+    };
+    socket.onmessage = (event) => {
+        in_match = true
+        const jsonData = JSON.parse(event.data.toString());
+        console.log(jsonData)
+        if (jsonData['cmd'] == 'update') {
+            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            printMap(jsonData);
+        }
+
+        //console.log('WebSocket message received:', event.data);
+
+    };
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+    socket.onclose = (event) => {
+        console.log('WebSocket connection closed:', event);
+        in_match = false
+    };        
+}
+
+function obs_match() {
+    const heading = document.getElementById('helloHeading');
+    heading.textContent = 'noo';
+
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=obs&sala=' + document.getElementById("textbox").value);
+
+    socket.onopen = (event) => {
+        console.log('WebSocket connection opened:', event);
+    };
+    socket.onmessage = (event) => {
+        const jsonData = JSON.parse(event.data.toString());
+        console.log(jsonData)
+        if (jsonData['cmd'] == 'update') {
+            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            printMap(jsonData);
+        }
+
+        //console.log('WebSocket message received:', event.data);
+
+    };
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+    socket.onclose = (event) => {
+        console.log('WebSocket connection closed:', event);
+    };          
 }
 
 function drawBall(ball) {
