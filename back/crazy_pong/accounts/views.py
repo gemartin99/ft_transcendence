@@ -222,35 +222,41 @@ def create_account(request):
 def do_login(request):
     print('in do_login!!!!')
     if request.method == 'POST':
-        print('request methos is POST!!!!')
-        try:
-            print('try 0!!!!')
-            data = json.loads(request.body.decode('utf-8'))
-            username = data.get('Username or email')
-            password = data.get('password')
-            all_users = Usermine.objects.all()
-            print('try 1!!!!')
-            
-            user = Usermine.objects.get(name=username.lower())
-            print('try 1.2!!!!')
-            print(user)
-            jwttoken = generate_jwt_token(username.lower())
-            print('try 2!!!!')
-            print('jwttoken:', jwttoken)
-            if verify_password(password, user.password):
-                response_data = {'message': 'loguin ok', 'user': username,
-                                'jwttoken': jwttoken}
-                user.online = True
-                user.save()
-                return JsonResponse(response_data)
-            else:
-                response_data = {'message': 'eres tontito'}
-                return JsonResponse(response_data)
-            print('try 3!!!!')
-        except Usermine.DoesNotExist:
-            print('try 4!!!!')
-            return JsonResponse({'error': 'User with username does not exist'}, status=200)
-    
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            print('request methos is POST!!!!')
+            try:
+                print('try 0!!!!')
+                data = json.loads(request.body.decode('utf-8'))
+                username = data.get('Username or email')
+                password = data.get('password')
+                all_users = Usermine.objects.all()
+                print('try 1!!!!')
+                
+                user = Usermine.objects.get(name=username.lower())
+                print('try 1.2!!!!')
+                print(user)
+                jwttoken = generate_jwt_token(username.lower())
+                print('try 2!!!!')
+                print('jwttoken:', jwttoken)
+                if verify_password(password, user.password):
+                    response_data = {'message': 'loguin ok', 'user': username,
+                                    'jwttoken': jwttoken}
+                    user.online = True
+                    user.save()
+                    return JsonResponse(response_data)
+                else:
+                    response_data = {'message': 'eres tontito'}
+                    return JsonResponse(response_data)
+                print('try 3!!!!')
+            except Usermine.DoesNotExist:
+                print('try 4!!!!')
+                return JsonResponse({'error': 'User with username does not exist'}, status=200)
+        else:
+            return JsonResponse({'error': 'Invalid form data'}, status=400)
+
     # Return a JsonResponse indicating that the request method is not allowed
     print('try 5!!!!')
     return JsonResponse({'error': 'Method not allowed'}, status=200)
