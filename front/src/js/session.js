@@ -2,6 +2,8 @@
 // It will respond true or false, dependly if we have valid ot not valid session.
 function have_valid_session()
 {
+	if (getCookie('jwttoken'))
+		return true;
 	return false
 }
 

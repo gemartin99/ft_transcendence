@@ -47,25 +47,29 @@ function send_login_form(e)  {
     .then(response => response.json())
     .then(data => {
         console.log('Response:', data.message);
-        // Set the JWT token as an HttpOnly Secure Cookie
+        console.log('jwttoken:', data.jwtToken)
         const expirationDate = new Date();
         expirationDate.setTime(expirationDate.getTime() + (23 * 60 * 60 * 1000));
 
-        document.cookie = `jwttoken=${data.jwttoken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
-        console.log('jwttoken:', data.jwttoken);
+        if (data.jwtToken)
+            document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
+        console.log('jwttoken:', data.jwtToken);
 
 
-        if (data.message == 'loguin ok')
-        {
+        if (getCookie('jwttoken')) {
+            set_logged_in_view();
             setFormMessage(loginForm, "success", "Congratulations you have nice memory");
-            // window.location.pathname = '/';
-            // handleNavLinks();
+            history.pushState(null, null, '/');
+            handleNavLinkAction('/');
 
             //response with cookie here
             const socket = new WebSocket('ws://'+ 'localhost' +':8000/ws/login/?user=' + data.user);
+        
         }
-        else
+        else {
+            set_logged_out_view();
             setFormMessage(loginForm, "error", "Invalid username/password combination");
+        }
     })
     .catch((error) => {
         console.error('Error:', error);

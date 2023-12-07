@@ -9,6 +9,7 @@ class Authentification:
         # Set the expiration time for the token
         expiration_time = datetime.utcnow() + timedelta(days=1)
 
+        print('generate_jwt_token userid:', user_id)
         # Create the payload with user information
         payload = {
             'user_id': user_id,
