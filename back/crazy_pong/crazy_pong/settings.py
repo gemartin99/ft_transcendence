@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'crazy_pong',
     'channels',
     'accounts',
+    'FT_OAuth',
+    'twoFA',
     'tournament',
     'authentification',
 ]
@@ -58,6 +60,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'crazy_pong.urls'
 
@@ -140,6 +145,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://crazy-pong.com",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -149,10 +155,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ASGI_APPLICATION = 'crazy_pong.asgi.application'
 
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {"hosts": [("redis", 6379)],},
     },
 }
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://crazy-pong.com",
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'crazypongreal@hotmail.com'
+EMAIL_HOST_PASSWORD = '125@conBonus'
+
 

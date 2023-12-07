@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +57,7 @@
 				</ul>
 				<hr class="d-md-none text-white-50">
 				<!--boton Cuenta -->
+
 				<a href="/users/profile" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block">Profile</a>
 				<a href="/users/logout" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" onclick="set_logged_out_view()">Logout</a>
 				<a href="/users/register" class="navlink lo btn btn-sm btn-warning d-md-inline-block" >Register</a>
@@ -91,16 +91,93 @@
 	<!-- FOOTER -->
     <footer class="footer fixed-bottom bg-dark text-white text-center">
 		<div class="container">
+            <button  id="showonline">ShowOnlineUsers</button>
+
+			<script>
+			  const showonline = document.getElementById('showonline');
+
+			  showonline.addEventListener('click', function() {
+			    console.log('Trying to print online users.');
+
+			    fetch("http://localhost:8000/users/showonline/", {
+			    	credentials: 'include',
+			    })
+			      .then(response => response.json())
+			      .then(data => {
+			        console.log('Response from backend:', data);
+			        const username = document.cookie.split('; ').find(row => row.startsWith('jwttoken=')).split('=')[1];
+					console.log(username);
+
+			        if (data.content) {
+			          console.log(data.content);
+			        } else {
+			          console.log('Invalid response from backend');
+			        }
+			      })
+			      .catch(error => {
+			        console.error('Error:', error);
+			      });
+			  });
+			</script>
+
+
+			<script>
+		        document.addEventListener('keydown', function(event) {
+		            if (event.key === 'ArrowLeft' && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+		                // Handle left arrow key press (previous page)
+		                goPrevPage();
+		            } else if (event.key === 'ArrowRight' && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+		                // Handle right arrow key press (next page)
+		                goNextPage();
+		            }
+		        });
+
+		        function goPrevPage() {
+		            // Get the href value of the previous link and navigate to it
+		            const prevLink = document.querySelector('a[rel=prev]');
+		            if (prevLink) {
+		                window.location.href = prevLink.href;
+		            }
+		        }
+
+		        function goNextPage() {
+		            // Get the href value of the next link and navigate to it
+		            const nextLink = document.querySelector('a[rel=next]');
+		            if (nextLink) {
+		                window.location.href = nextLink.href;
+		            }
+		        }
+		    </script>
+
 			<p>&copy; 2023 CrazyPong. All rights reserved.</p>
 			<button onclick="set_logged_in_view()">test login</button>
 		</div>
+ 	
+	  <h2>Enable Two-Factor Authentication</h2>
+	    <button id="getQR"  onclick="getQR()">getQR</button>
+	    <p>Scan the QR code below using the Google Authenticator app:</p>
+	    <canvas id="QRimg"></canvas>
+	    <!-- <img id ="QRimg" alt="QR Code"> -->
+	    <p>Or enter the following key manually: {{ request.user.totp_secret }}</p>
+		<form id="textForm" onsubmit="checkAuthCode(event)">
+		    <label for="textInput">Enter Text:</label>
+		    <input type="text" id="textInput" name="text" required>
+		    <button type="submit">check code</button>
+		</form>
+		<div>
+	        <!-- Container to display response from the backend -->
+	        <p id="responseMessage"></p>
+	    </div>
+	    
  	</footer>
 	<!-- END FOOTER -->
+	<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 	<script src="/js/navigation.js"></script>
 	<script src="/js/game.js"></script>
 	<script src="/js/accounts.js"></script>
 	<script src="/js/validations.js"></script>
+	<script src="/js/twoFA.js"></script>
 	<script src="/js/session.js"></script>
 </html>
 
