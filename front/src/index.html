@@ -89,6 +89,15 @@
 	</div>
 	<!-- END CONTENT -->
 	<!-- FOOTER -->
+
+	<footer class="footer fixed-bottom bg-dark text-white text-center">
+        <div class="container text-warning">
+            <p>&copy; 2023 CrazyPong. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+	<!--
     <footer class="footer fixed-bottom bg-dark text-white text-center">
 		<div class="container">
             <button  id="showonline">ShowOnlineUsers</button>
@@ -157,7 +166,7 @@
 	    <button id="getQR"  onclick="getQR()">getQR</button>
 	    <p>Scan the QR code below using the Google Authenticator app:</p>
 	    <canvas id="QRimg"></canvas>
-	    <!-- <img id ="QRimg" alt="QR Code"> -->
+	    <img id ="QRimg" alt="QR Code">
 	    <p>Or enter the following key manually: {{ request.user.totp_secret }}</p>
 		<form id="textForm" onsubmit="checkAuthCode(event)">
 		    <label for="textInput">Enter Text:</label>
@@ -165,11 +174,11 @@
 		    <button type="submit">check code</button>
 		</form>
 		<div>
-	        <!-- Container to display response from the backend -->
 	        <p id="responseMessage"></p>
 	    </div>
 	    
  	</footer>
+-->
 	<!-- END FOOTER -->
 	<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
