@@ -23,6 +23,8 @@ function handleNavLinkClick(event) {
     if (hrefValue != "/"){
         hrefValue = hrefValue + "/"
     }
+    else
+        hrefValue = ""
     updateUrl(hrefValue);
     fetch(baseUrl + ':8000' + hrefValue, {
         credentials: 'include',
