@@ -100,7 +100,8 @@ class Accounts:
     def process_new_login_request(request):
         #Check request method
         if request.method != 'POST':
-            return False, 'Invalid request method'
+            response_data = {'error': 'Invalid request method'}
+            return response_data
         try:
             res, errMsg = Accounts.validate_inputdata_for_login_request(request)
             if errMsg:
