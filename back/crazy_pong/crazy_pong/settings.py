@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'accounts',
     'tournament',
     'authentification',
+    'profile',
+    'twoFA',
+
 ]
 
 MIDDLEWARE = [

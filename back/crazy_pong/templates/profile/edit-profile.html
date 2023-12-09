@@ -1,0 +1,38 @@
+<section class="section">
+  <div class="container">
+    <div style="text-align:center">
+      <h1>Edit Profile Information</h1>
+    </div>
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">Edit Profile</p>
+      </header>
+      <div class="card-body">
+        <form method="post" action="" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;">
+          <div class="form-group">
+            <label for="username" class="label">Username:</label>
+            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>
+            <!-- Add Django validation error messages if needed -->
+          </div>
+          <div class="form-group">
+            <label for="avatar" class="label">Avatar (optional):</label>
+            <input type="file" id="avatar" name="avatar" class="form-control-file">
+            <!-- Add Django validation error messages if needed -->
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+          </div>
+          {% csrf_token %}
+        </form>
+      </div>
+      <div class="card-body">
+        {% if profileUpdated %}
+          <div class="alert alert-success">
+            User Profile info updated correctly<br>
+            <a href="{% url 'profile' %}" class="btn btn-info">Return to Profile</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
