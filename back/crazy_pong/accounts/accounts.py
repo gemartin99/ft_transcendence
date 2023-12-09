@@ -65,11 +65,9 @@ class Accounts:
     @staticmethod 
     @csrf_exempt 
     def process_new_account_request(request):
-        #Check request method
         if request.method != 'POST':
             return False, 'Invalid request method'
         try:
-            # Check input data is valid one
             res, errMsg = Accounts.validate_inputdata_for_new_account_request(request)
             if errMsg:
                 return False, errMsg
@@ -98,7 +96,6 @@ class Accounts:
     @staticmethod 
     @csrf_exempt
     def process_new_login_request(request):
-        #Check request method
         if request.method != 'POST':
             response_data = {'error': 'Invalid request method'}
             return response_data
@@ -109,29 +106,15 @@ class Accounts:
             data = json.loads(request.body.decode('utf-8'))
             username = data.get('Username or email')
             password = data.get('password')
-            all_users = Usermine.objects.all()
             user = Usermine.objects.get(name=username)
-            print(user)
-            user.online = True
-            user.save()
-            user_info = {
-                'id': user.id,
-                'name': user.name,
-                'email': user.email,
-                'active': user.playing,
-                'online': user.online,
-                'id42': user.id42,
-                'wins': user.wins,
-                'losses': user.losses,
-            }
             if Security.verify_password(password, user.password):
-                # Generate the jwt token
+                user.online = True
+                user.save()
                 jwtToken = Authentification.generate_jwt_token(user.id)
-                print("Token is:")
-                print(jwtToken)
-                response_data = {'message': 'logueao pum', 'user_info': user_info, 'jwtToken': jwtToken}
+                response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken}
                 return response_data, None
             else:
+                user.save()
                 response_data = {'error': 'Invalid password'}
                 return response_data, None
         except Usermine.DoesNotExist:

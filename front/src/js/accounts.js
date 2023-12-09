@@ -1,5 +1,8 @@
 // index.js
 
+// url = "crazy-pong.com"
+url = "localhost"
+
 //baseurl = "http://crazy-pong.com"
 baseurl = "http://localhost";
 
@@ -61,10 +64,7 @@ function send_login_form(e)  {
             setFormMessage(loginForm, "success", "Congratulations you have nice memory");
             history.pushState(null, null, '/');
             handleNavLinkAction('/');
-
-            //response with cookie here
-            const socket = new WebSocket('ws://'+ 'localhost' +':8000/ws/login/?user=' + data.user);
-        
+            const socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
             set_logged_out_view();

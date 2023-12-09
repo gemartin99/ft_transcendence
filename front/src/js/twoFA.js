@@ -50,3 +50,43 @@ function	checkAuthCode(event) {
 	    console.error('Error:', error);
 	});
 }
+
+function	activateGoogle2FA(event) {
+	fetch("http://localhost:8000/twoFA/enable_google2FA/", {
+	    method: 'POST',
+	    // body: formData,
+	    credentials: 'include',
+	})
+	.then(response => response.json())
+	.then(data => {
+	    console.log('Response from backend:', data);
+	})
+	.catch(error => {
+	    console.error('Error:', error);
+	});
+}
+
+function	activateMail2FA(event) {
+	fetch("http://localhost:8000/twoFA/enable_mail2FA/", {
+	    method: 'POST',
+	    // body: formData,
+	    credentials: 'include',
+	})
+	.then(response => response.json())
+	.then(data => {
+	    console.log('Response from backend:', data);
+	    if (data.message == 'activateGoogle2FA ok')
+	    {
+	    	
+	    }
+	})
+	.catch(error => {
+	    console.error('Error:', error);
+	});
+}
+
+
+
+
+
+
