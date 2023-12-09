@@ -12,7 +12,9 @@ class Usermine(models.Model):
     losses = models.IntegerField(default=0)
     jwt = models.CharField(max_length=255, default='')
     totp = models.CharField(max_length=255, default='')
-    
+    mail2FA = models.BooleanField(default=False)
+    google2FA = models.BooleanField(default=False)
+
     class Meta:
         abstract = False
 

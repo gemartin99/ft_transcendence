@@ -13,10 +13,8 @@ import bcrypt
 # from security.security import Security
 from .accounts import Accounts
 from django.contrib.auth.decorators import login_required
-import jwt
-from datetime import datetime, timedelta
-from django.conf import settings
-from django.http import HttpResponse
+from authentification.authentification import Authentification
+from twoFA.twoFA import TwoFA
 
 def get_home_page(request):
     data = {
@@ -87,36 +85,6 @@ def change_view(request):
     }
     return render(request, 'home/index.html', context)
 
-def generate_jwt_token(user_id):
-    # Set the expiration time for the token
-    expiration_time = datetime.utcnow() + timedelta(days=1)
-    payload = {
-        'user_id': user_id,
-        'exp': expiration_time,
-    }
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-    return token
-
-@login_required
-def generate_jwt_view(request):
-    user_id = request.user.id
-    jwt_token = generate_jwt_token(user_id)
-
-    return JsonResponse({'token': jwt_token})
-
-def decode_jwt_token(token):
-    try:
-        decoded_payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-        user_id = decoded_payload['user_id']
-        
-        return user_id
-    except jwt.ExpiredSignatureError:
-        print("Token has expired.")
-        return None
-    except jwt.InvalidTokenError:
-        print("Invalid token.")
-        return None
-
 @csrf_exempt 
 def create_account(request): 
     res, msg = Accounts.process_new_account_request(request)
@@ -133,7 +101,7 @@ def do_login(request):
 
 def logout(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = decode_jwt_token(jwt_token)
+    user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
     user.online = False
     user.save()
@@ -145,7 +113,7 @@ def logout(request):
 @csrf_exempt
 def show_online(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = decode_jwt_token(jwt_token)
+    user_id = Authentification.decode_jwt_token(jwt_token)
     print('onlinejwt:',jwt_token)
     print('uid:', user_id)
     all_users = Usermine.objects.all()
