@@ -16,7 +16,11 @@ def activateGoogle2FA(request):
     user.save()
     return get_verification_page() 
 
-# def verifyGoogle2FA(request):
+def verifyGoogle2FA(request):
+    if (TwoFA.verify_totp(request)):
+        return JsonResponse({'message': 'ok'})
+    else:
+        return JsonResponse({'message': 'bad one'})
 
 def get_verification_page(request):
     context = {
@@ -39,8 +43,19 @@ def activateMail2FA(request):
     user.save()
     return get_verification_page() 
 
-# def verifyMail2FA(request):
-
+def verifyMail2FA(request):
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = decode_jwt_token(jwt_token)
+    # totp_code = str(request.POST.get('totp_code'))
+    user = Usermine.objects.get(id=user_id)
+    if (user.mail2FACode == -1):
+        TwoFA.send_mailUser(user)
+        return JsonResponse({'message': 'mail sent'})
+    else:
+        if (TwoFA.verify_mail(user)):
+            return JsonResponse({'message': 'ok'})
+        else:
+            return JsonResponse({'message': 'bad one'})
 
 # def mail(request):
 #     try:
