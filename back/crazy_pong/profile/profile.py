@@ -12,7 +12,7 @@ import bcrypt
 from security.security import Security
 from authentification.authentification import Authentification
 
-class Accounts:
+class Profile:
     @staticmethod
     def username_or_email_is_in_use(username, email):
         # Check if the username is already in use
@@ -111,7 +111,7 @@ class Accounts:
                 user.online = True
                 user.save()
                 jwtToken = Authentification.generate_jwt_token(user.id)
-                response_data = {'message': 'logued', 'jwtToken': jwtToken}
+                response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken}
                 return response_data, None
             else:
                 user.save()

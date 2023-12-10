@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'twoFA',
     'tournament',
     'authentification',
+    'profile',
     'social_django',
 ]
 

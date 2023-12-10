@@ -10,5 +10,5 @@ clean:
 	@docker system prune -af;
 
 migrations:
-	@docker exec -it back python /app/crazy_pong/manage.py makemigrations
+#	@docker exec -it back python /app/crazy_pong/manage.py makemigrations
 	@docker exec -it back python /app/crazy_pong/manage.py migrate
