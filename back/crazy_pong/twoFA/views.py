@@ -46,7 +46,6 @@ def activateMail2FA(request):
 def verifyMail2FA(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = decode_jwt_token(jwt_token)
-    # totp_code = str(request.POST.get('totp_code'))
     user = Usermine.objects.get(id=user_id)
     if (user.mail2FACode == -1):
         TwoFA.send_mailUser(user)

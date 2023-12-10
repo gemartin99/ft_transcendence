@@ -7,3 +7,5 @@ channels-redis
 bcrypt
 pyotp
 PyJWT
+social-auth-app-django
+requests
