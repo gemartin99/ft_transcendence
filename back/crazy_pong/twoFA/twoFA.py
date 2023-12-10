@@ -63,3 +63,24 @@ class TwoFA:
             return JsonResponse({'message': 'messageSent'})
         except Exception as e:
             return JsonResponse({'message': f'Error: {str(e)}'})
+
+    @staticmethod
+    def verify_mail(userid, request):
+        if (request == userid.mail2FACode):
+            return True
+        return False
+
+
+    @staticmethod
+    def send_mailUser(user):
+        try:
+            send_mail(
+                "Jaime a ver si curras un rato",
+                "Biel tontu",
+                "crazypongreal@hotmail.com",
+                ["jareste2000@gmail.com"],
+                fail_silently=False,
+            )
+            return JsonResponse({'message': 'messageSent'})
+        except Exception as e:
+            return JsonResponse({'message': f'Error: {str(e)}'})
