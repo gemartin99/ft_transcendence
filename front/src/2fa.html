@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>CrazyPong</title>
+    <style>
+      .auth-content {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+      }
+
+      .auth-container {
+          max-width: 80%;
+          width: 80%;
+          padding: 3vw;
+          background-color: #343a40;
+          border-radius: 10px;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .code-input {
+          width: 8vw;
+          height: 8vw;
+          text-align: center;
+          margin: 1vw;
+          font-size: 3.5vw;
+          border: 1px solid #ffc107;
+          border-radius: 5px;
+          color: #000;
+      }
+
+      .code-input:focus {
+          outline: none;
+          border-color: #ffc107;
+          box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
+      }
+
+      .button-center {
+          display: flex;
+          justify-content: center;
+          margin-top: 3vw;
+      }
+
+      .btn-warning {
+          padding: 2vw 4vw;
+          font-size: 3vw;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          background-color: #ffc107;
+          color: #fff;
+      }
+
+      .btn-warning:hover {
+          background-color: #e0a800;
+      }
+
+      .input-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1vw;
+          margin-bottom: 2vw;
+      }
+      @media (min-width: 1200px) {
+    .auth-container {
+        max-width: 1200px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .code-input {
+        width: 100px;
+        height: 100px;
+        font-size: 20px;
+    }
+
+    .btn-warning {
+        padding: 20px 20px;
+        font-size: 35px; 
+    }
+}
+
+  </style>
+  </head>
+
+  <body class="bg-secondary">
+
+    <!-- Inicio del menu -->
+    
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+        <!-- icono y nombre -->
+
+        <a class="navbar-brand" href="#">
+
+            <i class="fa-solid fa-table-tennis-paddle-ball" style="color: #f5c344;"></i>
+            <span class="text-warning">CrazyPong</span>
+        </a>
+            
+        <!-- boton del menu -->
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+          <!-- elementos del menu colapsable -->
+
+        <div class="collapse navbar-collapse" id="menu">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Game</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Information</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About us</a>
+            </li>
+          </ul>
+
+          <hr class="d-md-none text-white-50">
+
+           <!-- enlaces redes sociales -->
+
+          <ul class="navbar-nav  flex-row flex-wrap text-light">
+            <li class="nav-item col-6 col-md-auto p-3">
+              <i class="bi bi-github fs-5"></i>
+              <small class="d-md-none ms-2">GitHub</small> 
+            </li>
+
+            <li class="nav-item col-6 col-md-auto p-3">
+              <i class="bi bi-instagram fs-5"></i>
+              <small class="d-md-none ms-2">Instagram</small>
+            </li>
+
+          </ul>
+          
+          <hr class="d-md-none text-white-50">
+         <!--boton Cuenta -->
+
+         <form class="d-flex justify-content-center">
+          <button class="btn btn-outline-warning d-md-inline-block" type="submit">Account</button>
+        </form>
+        
+        </div>
+     
+        </div>  
+      </nav>
+
+    </div>
+
+    <div class="auth-content">
+      <div class="auth-container bg-dark">
+          <form id="twoFactorAuthForm">
+            <h1 style="color: #f5c344;">Enter the code you have received by email</h1>
+              <div class="input-row">
+                  <input class="code-input" type="text" maxlength="1" required autofocus>
+                  <input class="code-input" type="text" maxlength="1" required>
+                  <input class="code-input" type="text" maxlength="1" required>
+                  <input class="code-input" type="text" maxlength="1" required>
+                  <input class="code-input" type="text" maxlength="1" required>
+                  <input class="code-input" type="text" maxlength="1" required>
+              </div>
+              <div class="button-center">
+                  <button class="btn-warning" type="submit">Submit</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  
+  <script>
+      const form = document.getElementById('twoFactorAuthForm');
+  
+      form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          const inputs = document.getElementsByClassName('code-input');
+          let code = '';
+          for (let i = 0; i < inputs.length; i++) {
+              code += inputs[i].value;
+          }
+          alert('Código ingresado: ' + code);
+          // Aquí deberías enviar el código a tu backend para verificar la autenticación
+      });
+  
+      const inputs = document.getElementsByClassName('code-input'); //funcion para que se puedan poner todos los inputs seguidos sin tener que hacer tab
+      for (let i = 0; i < inputs.length; i++) {
+          inputs[i].addEventListener('input', function (event) {
+              if (this.value.length >= 1) {
+                  if (i < inputs.length - 1) {
+                      inputs[i + 1].focus();
+                  } else {
+                      form.submit();
+                  }
+              }
+          });
+      }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <footer class="footer fixed-bottom bg-dark text-white text-center">
+    <div class="container text-warning">
+        <p>&copy; 2023 CrazyPong. All rights reserved.</p>
+    </div>
+</footer>
+  </body>
+</html>

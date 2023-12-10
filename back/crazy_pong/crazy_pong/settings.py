@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'twoFA',
     'tournament',
     'authentification',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 SESSION_COOKIE_SECURE = True
@@ -178,4 +180,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'crazypongreal@hotmail.com'
 EMAIL_HOST_PASSWORD = '125@conBonus'
 
+SOCIAL_AUTH_42_KEY = 'your-42-client-id'
+SOCIAL_AUTH_42_SECRET = 'your-42-client-secret'
+SOCIAL_AUTH_42_SCOPE = ['profile']
 
