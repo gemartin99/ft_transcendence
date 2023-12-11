@@ -14,7 +14,7 @@ class Usermine(models.Model):
     totp = models.CharField(max_length=255, default='')
     mail2FA = models.BooleanField(default=False)
     google2FA = models.BooleanField(default=False)
-    mail2FACode = models.IntegerField(max_length=6, default=-1)
+    mail2FACode = models.CharField(max_length=6, default=-1)
 
     class Meta:
         abstract = False
