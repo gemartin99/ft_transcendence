@@ -7,5 +7,6 @@ channels-redis
 bcrypt
 pyotp
 PyJWT
-social-auth-app-django
+requests_oauthlib
 requests
+python-dotenv

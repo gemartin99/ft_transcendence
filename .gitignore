@@ -13,3 +13,4 @@ uncrustify-targets.txt
 coverage.info
 rep/
 *.swp
+.env
