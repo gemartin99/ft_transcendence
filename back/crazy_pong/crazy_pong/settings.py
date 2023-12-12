@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'twoFA',
     'tournament',
     'authentification',
-    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +62,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
@@ -172,6 +170,7 @@ CHANNEL_LAYERS = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
+    "https://localhost:8080"
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -185,19 +184,24 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 # NO VA
 
-SOCIAL_AUTH_42_KEY = 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0'
-SOCIAL_AUTH_42_SECRET = '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'
-SOCIAL_AUTH_42_SCOPE = ['public', 'profile', 'email']
-SOCIAL_AUTH_42_AUTH_EXTRA_ARGUMENTS = {'response_type': 'code'}
-
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+# OAUTH2_CLIENT_ID = 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0'
+# OAUTH2_CLIENT_SECRET = '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'
+# OAUTH2_REDIRECT_URI = 'http://localhost'
 
 
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.oauth.OAuthAuth',
-)
+# SOCIAL_AUTH_42_KEY = 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0'
+# SOCIAL_AUTH_42_SECRET = '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'
+# SOCIAL_AUTH_42_SCOPE = ['public', 'profile', 'email']
+# SOCIAL_AUTH_42_AUTH_EXTRA_ARGUMENTS = {'response_type': 'code'}
+
+# LOGIN_URL = 'login'
+# LOGOUT_URL = 'logout'
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/'
+
+
+# AUTHENTICATION_BACKENDS = (
+#     'social_core.backends.oauth.OAuthAuth',
+# )
 # NO VA
 
