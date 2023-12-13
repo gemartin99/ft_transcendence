@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="/css/profile.css">
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mb-4 d-flex align-items-center justify-content-center">
+            <div class="profile-info bg-dark p-4" style="color: #f5c344; box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);">
+                <img src="/imgs/profile_pic.jpg" alt="Profile pic" class="img-fluid rounded-circle" style="border: 2px dashed #f5c344;">
+                <h4 style="text-align: center; padding: 5px;">Username</h4>
+                <div class="row">
+                    <div class="col-sm-4 mb-2 mb-sm-0">
+                        <a href="/users/profile/settings" class="navlink">
+                        <button type="button" class="btn btn-warning w-100">
+                            <i class="bi bi-gear"></i> Settings
+                        </button>
+                        </a>
+                    </div>
+                    <div class="col-sm-4 mb-2 mb-sm-0">
+                        <button type="button" class="btn btn-warning w-100">
+                            <i class="bi bi-shield-lock"></i> 2FA
+                        </button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-warning w-100">
+                            <i class="bi bi-palette"></i> Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <h2 style="text-align: center;">Last Matches</h2>
+            <table class="table table-bordered table-warning">
+                <thead>
+                    <tr>
+                        <th scope="col">Your points</th>
+                        <th scope="col">Opponent points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>11</td> <!----Todos estos datos hay que cargarlos desde el back--->
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                      <td>-</td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>-</td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>-</td>
+                      <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <h2 style="text-align: center;">Total Stats</h2>
+            <table class="table table-bordered table-warning">
+                <thead>
+                    <tr>
+                        <th scope="col">Games</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Loses</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Win Ratio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>20</td> <!----Todos estos datos hay que cargarlos desde el back--->
+                        <td>15</td>
+                        <td>5</td>
+                        <td>145</td>
+                        <td>75%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
