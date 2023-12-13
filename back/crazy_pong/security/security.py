@@ -1,6 +1,7 @@
 import bcrypt
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+import re
 
 class Security:
     @staticmethod
@@ -20,3 +21,11 @@ class Security:
             return True, None
         except ValidationError as e:
             return False, e.messages
+
+    @staticmethod
+    def is_valid_username(username):
+        # Define a regular expression for allowed characters in the username
+        allowed_characters = re.compile(r'^[a-zA-Z0-9_\-]+$')
+        print('here:', allowed_characters)
+        # Check if the username matches the pattern
+        return bool(allowed_characters.match(username))

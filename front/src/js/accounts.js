@@ -116,7 +116,7 @@ function send_form_new_account(e) {
             history.pushState(null, null, '/users/login')
             handleNavLinkAction('/users/login')
 
-            console.log('Response:', "ha funciunat");
+            console.log('Response:', data.message);
         }
         else{
             error_message = data.error;

@@ -186,9 +186,23 @@
 		            .then(data => {
 		                console.log('Response:', data.message);
 		                console.log('jwttoken:', data.jwtToken)
+				        const expirationDate = new Date();
+				        expirationDate.setTime(expirationDate.getTime() + (23 * 60 * 60 * 1000));
 
-		                // Rest of your code handling the response
-		                // ...
+				        if (data.jwtToken)
+				            document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
+				        console.log('jwttoken:', data.jwtToken);
+
+
+				        if (getCookie('jwttoken')) {
+				            set_logged_in_view();
+				            history.pushState(null, null, '/');
+				            handleNavLinkAction('/');
+				            const socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
+				        }
+				        else {
+				            set_logged_out_view();
+				        }
 
 		            })
 		            .catch((error) => {
