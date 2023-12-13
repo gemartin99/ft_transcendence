@@ -28,3 +28,16 @@ def get_play_page(request):
         'additionalInfo': 'Some additional information here',
     }
     return JsonResponse(data)
+
+def get_view_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('game/view_game.html', context)
+    data = {
+        'title': 'View Game',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)

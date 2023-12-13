@@ -10,5 +10,6 @@ urlpatterns = [
     path('tournament/', include('tournament.urls')),
     path('about-us/', get_aboutus_page, name='get_aboutus_page'),
     path('information/', get_information_page, name='get_information_page'),
+    path('friends/', include('friends.urls')),
     path('', get_home_page, name='get_home_page'),
 ]

@@ -1,0 +1,105 @@
+    <style>
+
+        .header {
+            color: #f5c344;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+			margin-top: 12px;
+        }
+
+        .friend {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .friend img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: auto;
+        }
+
+        .online {
+            background-color: greenyellow;
+        }
+
+        .offline {
+            background-color: red;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 82px);
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+    </style>
+    <div class="container-header" style="padding: 20px;">
+		<div class="header bg-dark" style="box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);">
+			<h1 class="text-warning">ADD FRIENDS</h1>
+			<form>
+				<input type="text" placeholder="Search friends">
+				<input class="btn btn-warning" value="Search" style="font-size: 18px;"> <!--Cambiar botón para que no recargue la página-->
+			</form>
+			<div class="search-result">
+				<div class="friend">
+					<img src="/imgs/tac.jpg" alt="Foto de perfil">
+					<div class="user-details flex-row flex-wrap" style="margin-top: 10px;">
+						<p style="margin-right: 10px;">Username</p>
+						<button class="add-friend-btn" style="margin-bottom: 10px;"><i class="fas fa-user-plus"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+    <div class="container">
+		<h1 style="text-align: center;" class="text-warning">YOUR FRIENDS LIST</h1>
+        <div class="friend">
+            <img src="/imgs/tac.jpg" alt="Foto de perfil">
+            <div class="user-details flex-row flex-wrap">
+                <p style="margin-right: 5px;">Username</p>
+                <div class="status-indicator online" style="margin-top: 9px;"></div>
+            </div>
+        </div>
+
+        <div class="friend">
+            <img src="/imgs/tac.jpg" alt="Foto de perfil">
+            <div class="user-details flex-row flex-wrap">
+                <p style="margin-right: 5px;">Username</p>
+                <div class="status-indicator offline" style="margin-top: 9px;"></div>
+            </div>
+        </div>
+</html>
