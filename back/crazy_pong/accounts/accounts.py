@@ -44,6 +44,9 @@ class Accounts:
         if is_secure == False:
             print(error_messages)
             return False, error_messages
+        valid_username = Security.is_valid_username(username)
+        if valid_username == False:
+            return False, 'Invalid characters in username'
         return True, None
 
     @staticmethod
@@ -58,6 +61,7 @@ class Accounts:
         print('username: ', username)
         print('password: ', password)
         is_secure, error_messages = Security.check_pwd_security(password)
+        print('holaaaaaaaaa')
         if is_secure == False:
             return False, error_messages
         return True, None
@@ -69,7 +73,8 @@ class Accounts:
             return False, 'Invalid request method'
         try:
             res, errMsg = Accounts.validate_inputdata_for_new_account_request(request)
-            if errMsg:
+            print('res:',res,'errMsg:', errMsg)
+            if errMsg or res == False:
                 return False, errMsg
             # Get the vars
             data = json.loads(request.body.decode('utf-8'))

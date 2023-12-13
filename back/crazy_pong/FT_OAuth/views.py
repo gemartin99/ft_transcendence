@@ -5,7 +5,8 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 from django.http import HttpResponse
-
+from accounts.models import Usermine
+from authentification.authentification import Authentification
 # Create your views here.
 
 @csrf_exempt 
@@ -36,10 +37,49 @@ def check_42(request):
 		user_info_response = requests.get(user_info_url, headers=headers)
 		user_info = user_info_response.json()
 
-		# print(user_info)
-		print(user_info.get('id'))
-		print(user_info.get('login'))
-		return JsonResponse({'message': 'working'})
+		user_id = user_info.get('id')
+		user_login = user_info.get('login')
+
+		if user_id:
+			# Check if the user with this ID already exists in the database
+			existing_user = Usermine.objects.filter(id42=user_id).first()
+
+			if existing_user:
+				# User with this ID already exists, proceed
+				user = existing_user
+			else:
+				# User with this ID does not exist, create a new user
+				user = Usermine(
+				name='42@' + user_login,
+				email=user_info.get('email'),
+				id42=user_id,
+				wins=0,
+				losses=0,
+				)
+				user.save()
+
+			print(user.name)
+			jwtToken = Authentification.generate_jwt_token(user.id)
+			response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken}
+			return JsonResponse(response_data)
+
+
+		# # print(user_info)
+		# print(user_info.get('id'))
+		# print(user_info.get('login'))
+		# if user_info.get('id') 
+		# 	user = Usermine(
+		# 		name='42@'+user_info.get('login'),
+		# 		email=user_info.get('email'),
+		# 		id42=user_info.get('id'),
+		# 		wins=0,
+		# 		losses=0,
+		# 		)
+		# print(user.name)
+		# user.save()
+		# jwtToken = Authentification.generate_jwt_token(user.id)
+		# response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken}
+		# return JsonResponse(response_data)
 
 	except requests.exceptions.RequestException as e:
 		print(f"Error making token request: {e}")
