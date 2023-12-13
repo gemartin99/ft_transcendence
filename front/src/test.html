@@ -1,55 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropdown Button</title>
-    <style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CRAZY PONG</title>
+	<!-- <link rel="stylesheet" href="/css/styles.css"> -->
+	<link rel="stylesheet" href="/css/gstyles.css">
+	<link rel="stylesheet" href="/css/gstyles2.css">
+	<link rel="stylesheet" href="/css/game.css">
+	<link rel="stylesheet" href="/css/login.css">
+	<link rel="stylesheet" href="/css/aboutus.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<!-- Bootstrap CSS Link -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	<style>
         .dropdown {
             position: relative;
             display: inline-block;
+            padding: 10px;
         }
 
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f9f9f9;
+            background-color: #343a40;
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
+            border-radius: 4px;
         }
 
         .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
+            color: white;
+            padding: 8px 16px;
             text-decoration: none;
             display: block;
         }
 
-		.dropdown-content a img {
+        .dropdown-content a img {
             max-width: 20px;
             margin-right: 10px;
+            vertical-align: middle;
         }
 
         .dropdown-content a:hover {
-            background-color: #f1f1f1;
+            background-color: #454d55;
         }
 
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
     </style>
 </head>
-<body>
 
-<div class="dropdown">
-    <button class="dropbtn">Language <i class="fas fa-caret-down"></i></button>
-    <div class="dropdown-content">
-        <a href="#"><img src="/imgs/esp.png" alt="Spain">Spanish</a>
-        <a href="#"><img src="/imgs/en.png" alt="United Kingdom">English</a>
-        <a href="#"><img src="/imgs/por.png" alt="Portugal">Portuguese</a>
-    </div>
+<body class="bg-secondary">
+	<!-- HEADER -->
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<div class="container-fluid">
+			<!-- icono y nombre -->
+			<a class="navlink navbar-brand" href="/">
+				<i class="fa-solid fa-table-tennis-paddle-ball" style="color: #f5c344;"></i>
+				<span class="text-warning">CrazyPong</span>
+			</a>  
+			<!-- boton del menu -->
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<!-- elementos del menu colapsable -->
+			<div class="collapse navbar-collapse" id="menu">
+				<ul class="navbar-nav me-auto">
+					<li class="nav-item"><a class="navlink nav-link active" aria-current="page" href="/">Home</a></li>
+					<li class="nav-item"><a class="navlink li nav-link" href="/game">Game</a></li>
+					<li class="nav-item"><a class="navlink li nav-link" href="/tournament">Tournament</a></li>
+					<li class="nav-item"><a class="navlink li nav-link" href="/friends">Friends</a></li>
+					<li class="nav-item"><a class="navlink nav-link" href="/information">Information</a></li>
+					<li class="nav-item"><a class="navlink nav-link" href="/about-us">About us</a></li>
+				</ul>
+				<hr class="d-md-none text-white-50">
+				<!-- enlaces redes sociales -->
+				<ul class="navbar-nav  flex-row flex-wrap text-light">
+					<li class="nav-item col-6 col-md-auto p-3">
+						<a href="https://www.github.com/gemartin99/ft_transcendence" target="_blank" class="text-light text-decoration-none">
+						<i class="fab fa-github fs-5"></i>
+						<small class="d-md-none ms-2">GitHub</small>
+						</a> 
+					</li>
+					<li class="nav-item col-6 col-md-auto p-3">
+						<a href="https://www.instagram.com/crazypong" target="_blank" class="text-light text-decoration-none">
+						<i class="fab fa-instagram fs-5"></i>
+						<small class="d-md-none ms-2">Instagram</small>
+						</a>
+					</li>
+				</ul>
+				<hr class="d-md-none text-white-50">
+				<!--boton Cuenta -->
+
+				<div class="dropdown">
+					<button class="btn btn-warning  btn-sm dropbtn">Language <i class="fas fa-caret-down"></i></button>
+					<div class="dropdown-content">
+						<a href="#"><img src="/imgs/en.png" alt="United Kingdom" style="max-width: 20px;margin-right: 10px;">English</a>
+						<a href="#"><img src="/imgs/esp.png" alt="Spain" style="max-width: 20px;margin-right: 10px;">Spanish</a>
+						<a href="#"><img src="/imgs/por.png" alt="Portugal" style="max-width: 20px;margin-right: 10px;">Portuguese</a>
+					</div>
+				</div>
+
+
+				<hr class="d-md-none text-white-50">
+
+				<a href="/users/profile" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block">Profile</a>
+				<a href="/users/logout" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" onclick="set_logged_out_view()">Logout</a>
+				<a href="/users/register" class="navlink lo btn btn-sm btn-warning d-md-inline-block" >Register</a>
+				<a href="/users/login" class="navlink lo btn btn-sm btn-warning d-md-inline-block" >Login</a>
+			</div>
+		</div>  
+	</nav>
+	<!-- END HEADER -->
+	<!-- CONTENT -->
+	<!-- ... (código previo) ... -->
+
+<!-- CONTENIDO DEL TORNEO -->
+<style>
+    .switch 
+    {
+    width: 62px;
+    height: 32px;
+    background: #E5E5E5;
+    z-index: 0;
+    margin: 0;
+    padding: 0;
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    border-radius:16px;
+    }
+    
+    .switch:before 
+    {
+    content: ' ';
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 60px;
+    height: 30px;
+    background: #FFFFFF;
+    z-index: 1;
+    border-radius:16px
+    }
+    
+    .switch:after 
+    {
+    content: ' ';
+    height: 29px;
+    width: 29px;
+    border-radius: 28px;
+    z-index: 2;
+    background: #FFFFFF;
+    position: absolute;
+    -webkit-transition-duration: 300ms;
+    transition-duration: 300ms;
+    top: 1px;
+    left: 1px;
+    -webkit-box-shadow: 0 2px 5px #999999;
+    box-shadow: 0 2px 5px #999999;
+    }
+    
+    .switchOn , .switchOn:before
+    {
+    background: #4cd964 !important;
+    }
+    .switchOn:after
+    {
+    left: 32px !important;
+    }
+    
+    .pum {
+        font-size: 20px;
+    }
+    
+    </style>
+    
+    <link rel="stylesheet" href="/css/tournament.css">
+<div id="video-container">
+    <video autoplay muted loop id="video-background">
+      <source src="/imgs/game_video.mov" type="video/mp4">
+      Tu navegador no soporta el elemento de video.
+    </video>
 </div>
+<div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 100px;border-radius: 10px;padding: 30px;">
+    <h2 class="text-center mb-4">JOIN TOURNAMENT</h2>
+    <form>
+        <div class="row mb-3">
+            <label for="lobbYCode" class="col-sm-4 col-form-label pum">Lobby code:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="lobbYCode" name="lobbYCode" placeholder="Enter Lobby code">
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-warning">Ready</button>
+        </div>
+    </form>
+</div>
+    
+    
+    
+	<!-- END CONTENT -->
+	<!-- FOOTER -->
 
-</body>
+	<footer class="footer fixed-bottom bg-dark text-white text-center">
+        <div class="container text-warning">
+            <p>&copy; 2023 CrazyPong. All rights reserved.</p>
+        </div>
+    </footer>
+
+	<!-- END FOOTER -->
+	<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+	<script src="/js/navigation.js"></script>
+	<script src="/js/game.js"></script>
+	<script src="/js/accounts.js"></script>
+	<script src="/js/validations.js"></script>
+	<script src="/js/twoFA.js"></script>
+	<script src="/js/session.js"></script>
 </html>
+
+

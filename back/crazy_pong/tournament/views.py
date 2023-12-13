@@ -21,6 +21,44 @@ def get_tournament_page(request):
     }
     return JsonResponse(data)
 
+def get_create_tournament_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('tournament/create_tournament.html', context)
+    data = {
+        'title': 'Create Tournament',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+def get_join_tournament_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('tournament/join_tournament.html', context)
+    data = {
+        'title': 'Join Tournament',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+def get_lobby_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('tournament/wait_lobby.html', context)
+    data = {
+        'title': 'Tournament lobby',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
 
 @csrf_exempt 
 def createTournament(request):
