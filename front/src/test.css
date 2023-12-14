@@ -1,0 +1,133 @@
+/* Estilos para el torneo */
+
+.container-father {
+    margin: 10px 10px;
+}
+
+.container-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100vw;
+     /*height: 100vh; ESTO CAMBIARA LA ALTURA DE LOS CUADRANTES*/
+  }
+  
+
+.tournament1 {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    /*height: 100vh; ESTO CAMBIARA LA ALTURA DE LOS CUADRANTES*/
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.separate {
+    margin-top: 124px;
+}
+
+.quart {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    border: 1px solid red;
+    padding: 10px;
+    max-width: 200px;
+}
+
+.semis {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    border: 1px solid blue;
+    padding: 10px;
+    max-width: 200px;
+    margin-top: 110px;
+}
+
+.final {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    border: 1px solid green;
+    padding: 10px;
+    max-width: 200px;
+    margin-top: 141px;
+}
+
+.champion {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    border: 1px solid orange;
+    padding: 10px;
+    max-width: 200px;
+    margin-top: 141px;
+}
+
+.player {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid black;
+    width: 120px;
+    text-align: center;
+}
+
+
+
+
+
+.tournament2 {
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    /*height: 100vh; ESTO CAMBIARA LA ALTURA DE LOS CUADRANTES*/
+}
+
+
+.quart2 {
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    justify-content: center;
+    border: 1px solid red;
+    padding: 10px;
+    max-width: 200px;
+}
+
+.semis2 {
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    justify-content: center;
+    border: 1px solid blue;
+    padding: 10px;
+    max-width: 200px;
+    margin-top: 110px;
+}
+
+
+/* Estilos para el nuevo contenedor entre las clases 'final' */
+.centered-container {
+    position: relative;
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    margin-top: 20px; /* Espacio entre 'final' y el nuevo contenedor */
+  }
+  
+  .centered-content {
+    position: absolute;
+    top: -225px; /* Ajusta esta cantidad para alinear con 'final' */
+    padding: 20px;
+    border: 1px solid black; /* Añade un borde para visualización */
+    /* Otros estilos según tu diseño */
+  }
+  
