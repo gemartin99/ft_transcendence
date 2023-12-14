@@ -72,15 +72,20 @@ class TwoFA:
 
 
     @staticmethod
-    def send_mailUser(user):
+    def send_mailUser(mail, code):
         try:
+            subject = "Your Authentication Code"
+            message = f"Your authentication code is: {code}. Use this code to verify your account."
+
             send_mail(
-                "Jaime a ver si curras un rato",
-                "Biel tontu",
+                subject,
+                message,
                 "crazypongreal@hotmail.com",
-                ["jareste2000@gmail.com"],
+                [mail],
                 fail_silently=False,
             )
+            print('mail sent', code, mail)
             return JsonResponse({'message': 'messageSent'})
         except Exception as e:
+            print('mail not sent', e)
             return JsonResponse({'message': f'Error: {str(e)}'})

@@ -7,6 +7,8 @@ from accounts.models import Usermine
 from django.contrib import messages
 import pyotp
 from authentification.authentification import Authentification
+from django.views.decorators.csrf import csrf_exempt
+from .twoFA import TwoFA
 
 def activateGoogle2FA(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
@@ -27,7 +29,7 @@ def get_verification_page(request):
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
     }
-    content_html = render_to_string('login/verify.html', context)
+    content_html = render_to_string('login/2fa.html', context)
     data = {
         'title': 'Select Logging Mode',
         'content': content_html,
@@ -35,26 +37,34 @@ def get_verification_page(request):
     }
     return JsonResponse(data)
 
+@csrf_exempt
 def activateMail2FA(request):
+    # print("random_numbers:", generate_random_numbers())
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
-    user.mail2FA = True
+    # user.mail2FA = True
+    user.generate_mail2fa_code()
+    TwoFA.send_mailUser(user.email, user.mail2FACode)
+    print("numbers:", user.mail2FACode)
     user.save()
-    return get_verification_page() 
+    return get_verification_page(None) 
 
 def verifyMail2FA(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
     if (user.mail2FACode == -1):
-        TwoFA.send_mailUser(user)
+        TwoFA.send_mailUser(user.email, user.mail2FACode)
         return JsonResponse({'message': 'mail sent'})
     else:
         if (TwoFA.verify_mail(user)):
             return JsonResponse({'message': 'ok'})
         else:
             return JsonResponse({'message': 'bad one'})
+
+def verifyMailCode(request):
+    return None
 
 # def mail(request):
 #     try:
