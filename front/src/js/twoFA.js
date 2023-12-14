@@ -52,7 +52,7 @@ function	checkAuthCode(event) {
 }
 
 function	activateGoogle2FA(event) {
-	fetch("http://localhost:8000/twoFA/enable_google2FA/", {
+	fetch("http://localhost:8000/twoFA/google2FA/", {
 	    method: 'POST',
 	    // body: formData,
 	    credentials: 'include',
@@ -67,7 +67,7 @@ function	activateGoogle2FA(event) {
 }
 
 function	activateMail2FA(event) {
-	fetch("http://localhost:8000/twoFA/enable_mail2FA/", {
+	fetch("http://localhost:8000/twoFA/mail2FA/", {
 	    method: 'POST',
 	    // body: formData,
 	    credentials: 'include',
@@ -75,9 +75,9 @@ function	activateMail2FA(event) {
 	.then(response => response.json())
 	.then(data => {
 	    console.log('Response from backend:', data);
-	    if (data.message == 'activateGoogle2FA ok')
+	    if (data.content)
 	    {
-	    	
+            content.innerHTML = data.content;
 	    }
 	})
 	.catch(error => {
@@ -85,7 +85,26 @@ function	activateMail2FA(event) {
 	});
 }
 
-
+function	checkAuthCode(event) {
+	event.preventDefault();
+    const textInput = document.getElementById('textInput');
+	const textValue = textInput.value.trim();
+	console.log('textValue:', textValue);
+	const formData = new FormData();
+	formData.append('totp_code', textValue);
+	fetch("http://localhost:8000/twoFA/verifyMailCode/", {
+	    method: 'POST',
+	    body: formData,
+	    credentials: 'include',
+	})
+	.then(response => response.json())
+	.then(data => {
+	    console.log('Response from backend:', data);
+	})
+	.catch(error => {
+	    console.error('Error:', error);
+	});
+}
 
 
 

@@ -150,6 +150,9 @@
 
     <footer class="footer fixed-bottom bg-dark text-white text-center">
 		<div class="container">
+
+			<!-- DEBUGING SHOW ONLINE -->
+
             <button  id="showonline">ShowOnlineUsers</button>
 
 			<script>
@@ -178,35 +181,9 @@
 			      });
 			  });
 			</script>
+			<!-- END DEBUGING SHOW ONLINE -->
 
-
-			<script>
-		        document.addEventListener('keydown', function(event) {
-		            if (event.key === 'ArrowLeft' && !event.ctrlKey && !event.shiftKey && !event.altKey) {
-		                // Handle left arrow key press (previous page)
-		                goPrevPage();
-		            } else if (event.key === 'ArrowRight' && !event.ctrlKey && !event.shiftKey && !event.altKey) {
-		                // Handle right arrow key press (next page)
-		                goNextPage();
-		            }
-		        });
-
-		        function goPrevPage() {
-		            // Get the href value of the previous link and navigate to it
-		            const prevLink = document.querySelector('a[rel=prev]');
-		            if (prevLink) {
-		                window.location.href = prevLink.href;
-		            }
-		        }
-
-		        function goNextPage() {
-		            // Get the href value of the next link and navigate to it
-		            const nextLink = document.querySelector('a[rel=next]');
-		            if (nextLink) {
-		                window.location.href = nextLink.href;
-		            }
-		        }
-		    </script>
+			<!-- 42 OAUTH2 -->
 
 		    <script>
 		        // Function to get the value of a URL parameter
@@ -271,12 +248,21 @@
 		            console.log('No code parameter found in the URL.');
 		        }
 		    </script>
+			<!-- END 42 OAUTH2 -->
+
+
+			<!-- ENABLE GOOGLE/MAIL 2FA -->
+
+            <button  id="actMail" onclick="activateMail2FA()">activate mail</button>
+            <button  id="actGoogle" onclick="activateGoogle2FA()">activate Google</button>
+			<!-- END ENABLE GOOGLE/MAIL 2FA -->
+
 
 			<p>&copy; 2023 CrazyPong. All rights reserved.</p>
-			<button onclick="set_logged_in_view()">test login</button>
 		</div>
  	
-	  <h2>Enable Two-Factor Authentication</h2>
+	 	<!-- 2FA GOOGLE QR -->
+<!-- 	  <h2>Enable Two-Factor Authentication</h2>
 	    <button id="getQR"  onclick="getQR()">getQR</button>
 	    <p>Scan the QR code below using the Google Authenticator app:</p>
 	    <canvas id="QRimg"></canvas>
@@ -289,7 +275,8 @@
 		</form>
 		<div>
 	        <p id="responseMessage"></p>
-	    </div>
+	    </div> -->
+	 	<!-- 2FA GOOGLE QR -->
 	    
  	</footer>
 
