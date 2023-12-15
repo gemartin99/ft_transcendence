@@ -32,6 +32,7 @@ def check_42(request):
 		headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
 		user_info_response = requests.get(user_info_url, headers=headers)
 		user_info = user_info_response.json()
+		print(user_info)
 		user_id = user_info.get('id')
 		user_login = user_info.get('login')
 		if user_id:

@@ -64,6 +64,7 @@ def verifyMail2FA(request):
             return JsonResponse({'message': 'bad one'})
 
 def verifyMailCode(request):
+    
     return None
 
 # def mail(request):
