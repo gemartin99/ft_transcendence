@@ -20,13 +20,11 @@ class Usermine(models.Model):
     mail2FACode_timestamp = models.DateTimeField(null=True, blank=True)
 
     def generate_mail2fa_code(self):
-        # Generate a new mail2FACode and update the timestamp
         self.mail2FACode = ''.join([str(random.randint(0, 9)) for _ in range(6)])
         self.mail2FACode_timestamp = timezone.now()
         self.save()
 
     def is_mail2fa_code_valid(self):
-        # Check if mail2FACode is not empty and the timestamp is within the valid time window (5 minutes)
         if self.mail2FACode and self.mail2FACode_timestamp:
             valid_duration = timezone.now() - self.mail2FACode_timestamp
             return valid_duration.total_seconds() <= 300  # 5 minutes in seconds
