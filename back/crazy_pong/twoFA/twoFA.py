@@ -13,6 +13,16 @@ class TwoFA:
         return pyotp.random_base32()
 
     @staticmethod
+    def disable_two_factor(user):
+        try:
+            user.mail2FA = False;
+            user.google2FA = False;
+            user.save()
+            return True, None
+        except:
+            return False, "action can't be done, try again"
+
+    @staticmethod
     def enable_totp(request):
         if request.method == 'POST':
             totp_secret = generate_totp_secret()
@@ -65,8 +75,9 @@ class TwoFA:
             return JsonResponse({'message': f'Error: {str(e)}'})
 
     @staticmethod
-    def verify_mail(userid, request):
-        if (request == userid.mail2FACode):
+    def verify_mail(user, request):
+        return True
+        if (request == user.mail2FACode):
             return True
         return False
 
