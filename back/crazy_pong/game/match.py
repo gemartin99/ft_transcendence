@@ -1,6 +1,7 @@
 import random
 import time
 import math
+import os
 
 class PlayerManager():
     def __init__(self, player, state):
@@ -32,7 +33,10 @@ class GameManager():
         self.player_one = self.state["player1"]
         self.player_two = self.state["player2"]
         
+        self.fr = int(os.getenv("FRAMERATE"))
+
         self.IA = False
+        self.IAcount = self.fr
 
         self.reset_ball()
 
@@ -40,7 +44,6 @@ class GameManager():
 
 
     def updateGame(self):
-        #if time.time() - self.time > 1/60:
             ball = self.ball
             paddle1 = self.paddle_one
             paddle2 = self.paddle_two
@@ -49,7 +52,12 @@ class GameManager():
             if (self.IA == False):
                 paddle2['y'] += paddle2['vy'] * self.player_two['input']
             else:
-                paddle2['y'] += paddle2['vy'] * self.segfaultThink()
+                if self.IAcount == self.fr:
+                    self.lastMove = self.segfaultThink_v2()
+                    self.IAcount = 0
+                paddle2['y'] += paddle2['vy'] * self.lastMove
+                self.IAcount += 1
+                
 
             ball['x'] += ball['vx']
             ball['y'] += ball['vy']
@@ -68,8 +76,10 @@ class GameManager():
                 self.reset_ball()
         
             elif (ball['x'] + ball['radius'] > 1200):
+                print("Colision final: " + str(ball['y']))
                 self.state['score2'] += 1
                 self.reset_ball()
+                
 
             if (ball['x'] - ball['radius'] <= paddle1['x'] + paddle1['width'] and
                 ball['y'] + ball['radius'] >= paddle1['y'] and
@@ -110,11 +120,24 @@ class GameManager():
         self.ball["vy"] = random.uniform(-2, 2)
         self.paddle_one['y'] = 300
         self.paddle_two['y'] = 300
+        self.IAcount = int(os.getenv("FRAMERATE"))
 
     def setIA(self):
         self.IA = True
 
-    def segfaultThink(self):
+    def segfaultThink_v1(self):
+        print("Updating movement")
+        if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.ball['y'] < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
+            return 0
+        if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
+            return 1
+        return -1
+    
+    def segfaultThink_v2(self):
+        
+        colision = (self.ball['y'] + self.ball['vy'] * self.ball['x']) % 750
+        print("Updating movement collision: " + str(colision))
+
         if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.ball['y'] < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
             return 0
         if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
