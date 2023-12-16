@@ -53,9 +53,10 @@ class GameManager():
                 paddle2['y'] += paddle2['vy'] * self.player_two['input']
             else:
                 if self.IAcount == self.fr:
-                    self.lastMove = self.segfaultThink_v2()
+                    paddle2['y'] += paddle2['vy'] * self.segfaultThink_v2(True)
                     self.IAcount = 0
-                paddle2['y'] += paddle2['vy'] * self.lastMove
+                else:
+                    paddle2['y'] += paddle2['vy'] * self.segfaultThink_v2(False)
                 self.IAcount += 1
                 
 
@@ -117,7 +118,7 @@ class GameManager():
         self.ball['x'] = 600
         self.ball['y'] = 375
         self.ball["vx"] = 10
-        self.ball["vy"] = random.uniform(-2, 2)
+        self.ball["vy"] = random.uniform(-4, 4)
         self.paddle_one['y'] = 300
         self.paddle_two['y'] = 300
         self.IAcount = int(os.getenv("FRAMERATE"))
@@ -133,16 +134,27 @@ class GameManager():
             return 1
         return -1
     
-    def segfaultThink_v2(self):
+    def segfaultThink_v2(self, update):
         
-        colision = (self.ball['y'] + self.ball['vy'] * self.ball['x']) % 750
-        print("Updating movement collision: " + str(colision))
+        if (self.ball['vx'] < 0):
 
-        if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.ball['y'] < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
-            return 0
-        if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
-            return 1
-        return -1
+            if (375 > self.paddle_two['y'] + self.paddle_two['height'] /4 and 375 < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
+                return 0
+            if (375 > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
+                return 1
+            return -1
+
+        else:
+            if (update):
+                timeToCollision  = (1200-self.ball['x']) /self.ball['vx']
+                self.colision  = (self.ball['y'] + self.ball['vy'] * timeToCollision)
+                print("Updating movement collision: " + str(self.colision))
+
+            if (self.colision > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.colision < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
+                return 0
+            if (self.colision > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
+                return 1
+            return -1
     
     def ended(self):
         if (self.state['score1'] >= 11 or self.state['score2'] >= 11):
