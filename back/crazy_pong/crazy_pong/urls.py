@@ -8,8 +8,9 @@ urlpatterns = [
     path('FT_OAuth/', include('FT_OAuth.urls')),
     path('api/', include('api.urls')),
     path('tournament/', include('tournament.urls')),
+    path('friends/', include('friends.urls')),
+    path('profile/', include('profile.urls')),
+    path('', get_home_page, name='get_home_page'),
     path('about-us/', get_aboutus_page, name='get_aboutus_page'),
     path('information/', get_information_page, name='get_information_page'),
-    path('friends/', include('friends.urls')),
-    path('', get_home_page, name='get_home_page'),
 ]
