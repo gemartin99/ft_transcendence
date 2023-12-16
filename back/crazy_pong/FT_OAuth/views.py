@@ -39,6 +39,9 @@ def check_42(request):
 			existing_user = Usermine.objects.filter(id42=user_id).first()
 			if existing_user:
 				user = existing_user
+				user.validated2FA = False
+				user.save()
+				# return gestionar 2fa
 			else:
 				user = Usermine(
 				name='42@' + user_login,
