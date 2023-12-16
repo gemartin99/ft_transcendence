@@ -24,32 +24,6 @@ def get_home_page(request):
     }
     return JsonResponse(data)
 
-def get_profile_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
-    content_html = render_to_string('profile/profile.html', context)
-    data = {
-        'title': 'Select Logging Mode',
-        'content': content_html,
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
-
-def get_profile_settings_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
-    content_html = render_to_string('profile/profile_settings.html', context)
-    data = {
-        'title': 'Profile Settings',
-        'content': content_html,
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
-
 def get_login_page(request):
     context = {
         'variable1': 'template variable 1',
@@ -67,6 +41,7 @@ def get_login_form_page(request):
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
+        'new': request.GET.get('s', False)
     }
     content_html = render_to_string('login/normal_login.html', context)
     data = {
