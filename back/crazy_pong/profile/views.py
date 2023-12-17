@@ -18,6 +18,7 @@ from authentification.authentification import Authentification
 
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
+    print("estoy aqui holaaa")
     if not user:
         return JsonResponse({'redirect': redirect})
     context = {
