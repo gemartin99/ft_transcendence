@@ -4,7 +4,7 @@
             <p align="center">Two factor deactivated</p>
             {% if not user.mail2FA and not user.google2FA %}
             <div class="form__buttons-container">
-              <a href="/twoFA/google2FA" class="navlink form__button">Set Google 2Factor</a>
+              <a href="/twoFA/set-google2FA" class="navlink form__button">Set Google 2Factor</a>
               <a href="/twoFA/set-mail2FA" class="navlink form__button">Set Email 2Factor</a>
             </div>
             {% else %}
