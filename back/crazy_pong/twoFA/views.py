@@ -66,7 +66,6 @@ def activateMail2FA(request):
     else:
         return JsonResponse({'message': 'bad one'})
 
-<<<<<<< HEAD
 @csrf_exempt
 def verifyMail2FA(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
@@ -97,36 +96,6 @@ def disableTwoFactor(request):
         return JsonResponse({'error': error})
     else:
         return JsonResponse({'message': 'ok'})
-=======
-# def verifyMail2FA(request):
-#     jwt_token = request.COOKIES.get('jwttoken', None)
-#     user_id = decode_jwt_token(jwt_token)
-#     user = Usermine.objects.get(id=user_id)
-#     if (user.mail2FACode == -1):
-#         TwoFA.send_mailUser(user.email, user.mail2FACode)
-#         return JsonResponse({'message': 'mail sent'})
-#     else:
-#         if (TwoFA.verify_mail(user)):
-#             return JsonResponse({'message': 'ok'})
-#         else:
-#             return JsonResponse({'message': 'bad one'})
-
-@csrf_exempt
-def verifyMailCode(request):
-    jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = Authentification.decode_jwt_token(jwt_token)
-    user = Usermine.objects.get(id=user_id)
-    print("holaaaa")
-    if user.is_mail2fa_code_valid():
-        totp_code = request.POST.get('totp_code')
-        print(user.mail2FACode)
-        print(totp_code)
-        if totp_code == user.mail2FACode:
-            user.mail2FA = True
-            user.save()
-            return JsonResponse({'message': '2fa activated ok'})
-    return JsonResponse({'message': 'notok'})
->>>>>>> 4e43c515b9bd6d408a04e1b18854c766074d0d02
 
 # def mail(request):
 #     try:
