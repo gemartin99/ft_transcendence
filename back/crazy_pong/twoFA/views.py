@@ -85,7 +85,8 @@ def verifyMailCode(request):
         return JsonResponse({'redirect': redirect})
     print("holaaaa")
     if user.is_mail2fa_code_valid():
-        totp_code = request.POST.get('totp_code')
+        totp_code = request.POST.get('concatenatedValue')
+        print('request:', request.POST)
         print(user.mail2FACode)
         print(totp_code)
         if totp_code == user.mail2FACode:
@@ -114,12 +115,14 @@ def verifyMailCode(request):
 #     return JsonResponse({'error': 'bad one'})
 #     return JsonResponse({'message': 'ok'})
 
+@csrf_exempt
 def disableTwoFactor(request):
-    user = Authentification.get_auth_user(request)
+    user, redirect = Authentification.get_auth_user(request)
     if not user:
-        return JsonResponse({'redirect': '/users/login/'})
+        return JsonResponse({'redirect': redirect})
     if request.method != 'POST':
         return JsonResponse({'message': 'bad method!'})
+    print('user:', user)
     res, error = TwoFA.disable_two_factor(user)
     if error:
         return JsonResponse({'error': error})
