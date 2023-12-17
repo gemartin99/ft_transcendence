@@ -18,7 +18,6 @@ class Usermine(models.Model):
     google2FA = models.BooleanField(default=False)
     mail2FACode = models.CharField(max_length=6, default=-1)
     mail2FACode_timestamp = models.DateTimeField(null=True, blank=True)
-    validated2FA = models.BooleanField(default=False)
 
     def generate_mail2fa_code(self):
         self.mail2FACode = ''.join([str(random.randint(0, 9)) for _ in range(6)])
