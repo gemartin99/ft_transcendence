@@ -56,19 +56,6 @@ def activateMail2FA(request):
     user.save()
     return get_verification_page(None) 
 
-# def verifyMail2FA(request):
-#     jwt_token = request.COOKIES.get('jwttoken', None)
-#     user_id = decode_jwt_token(jwt_token)
-#     user = Usermine.objects.get(id=user_id)
-#     if (user.mail2FACode == -1):
-#         TwoFA.send_mailUser(user.email, user.mail2FACode)
-#         return JsonResponse({'message': 'mail sent'})
-#     else:
-#         if (TwoFA.verify_mail(user)):
-#             return JsonResponse({'message': 'ok'})
-#         else:
-#             return JsonResponse({'message': 'bad one'})
-
 @csrf_exempt
 def verifyMailCode(request):
     # jwt_token = request.COOKIES.get('jwttoken', None)
@@ -84,9 +71,23 @@ def verifyMailCode(request):
         print(totp_code)
         if totp_code == user.mail2FACode:
             user.mail2FA = True
+            user.validated2FA = True
             user.save()
             return JsonResponse({'message': '2fa activated ok'})
     return JsonResponse({'message': 'notok'})
+
+# def verifyMail2FA(request):
+#     jwt_token = request.COOKIES.get('jwttoken', None)
+#     user_id = decode_jwt_token(jwt_token)
+#     user = Usermine.objects.get(id=user_id)
+#     if (user.mail2FACode == -1):
+#         TwoFA.send_mailUser(user.email, user.mail2FACode)
+#         return JsonResponse({'message': 'mail sent'})
+#     else:
+#         if (TwoFA.verify_mail(user)):
+#             return JsonResponse({'message': 'ok'})
+#         else:
+#             return JsonResponse({'message': 'bad one'})
 
 # def mail(request):
 #     try:
@@ -101,27 +102,6 @@ def verifyMailCode(request):
 #     except Exception as e:
 #         return JsonResponse({'message': f'Error: {str(e)}'})
 
-
-# ##NO VA
-# from django.core.mail import send_mail
-# from django.views.decorators.csrf import csrf_exempt
-
-# def send_sms_via_email(to, body):
-#     # Replace '@txt.att.net' with the actual gateway address for the recipient's carrier (e.g., '@vtext.com' for Verizon)
-#     email_address = f'{to}@messaging.sprintpcs.com'
-#     print(email_address)
-#     subject = ''  # The subject is often ignored in SMS messages
-
-#     send_mail(subject, body, 'crazypongreal@hotmail.com', [email_address], fail_silently=False)
-
-# def send_sms_view(request):
-#     to_phone_number = '+34654508192'  # Replace with the recipient's phone number, without the plus sign and with the country code
-#     message_body = 'gestioname el front'
-
-#     send_sms_via_email(to_phone_number, message_body)
-#     print('hola')
-#     return JsonResponse({'message': 'messageSent'})
-# ##NO VA
 
 # #2FA con google funcional:::
 # def generate_totp_secret():

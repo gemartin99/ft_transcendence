@@ -118,7 +118,7 @@ def show_online(request):
     print('uid:', user_id)
     all_users = Usermine.objects.all()
     for user in all_users:
-        print(f"User: {user.name}, Online: {user.online}")
+        print(f"User: {user.name}, Online: {user.online}, valid2fa: {user.validated2FA}")
     return JsonResponse({'content': 'users printed'})
 
 
