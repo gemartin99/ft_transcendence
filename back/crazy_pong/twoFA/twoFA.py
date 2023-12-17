@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from accounts.models import Usermine
 from django.contrib import messages
 import pyotp
+from authentification.authentification import Authentification
 
 class TwoFA:
     @staticmethod
@@ -17,9 +18,9 @@ class TwoFA:
         if request.method == 'POST':
             totp_secret = generate_totp_secret()
             
-
+            # aqui no deberia de revisar el user, deberia de tenerlo ya
             jwt_token = request.COOKIES.get('jwttoken', None)
-            user_id = decode_jwt_token(jwt_token)
+            user_id = Authentification.decode_jwt_token(jwt_token)
             totp_code = str(request.POST.get('totp_code'))
             userid = user_id
             
@@ -39,8 +40,9 @@ class TwoFA:
     @staticmethod
     def verify_totp(request):
         if request.method == 'POST':
+            # aqui no deberia de revisar el user, deberia de tenerlo ya
             jwt_token = request.COOKIES.get('jwttoken', None)
-            user_id = decode_jwt_token(jwt_token)
+            user_id = Authentification.decode_jwt_token(jwt_token)
             totp_code = str(request.POST.get('totp_code'))
             userid = user_id
             totp_secret = Usermine.objects.get(id=userid).totp
@@ -50,7 +52,7 @@ class TwoFA:
             else:
                 return False
 
-    @staticmethod
+    @staticmethod #este creo que no es valido
     def mail(request):
         try:
             send_mail(
@@ -64,7 +66,7 @@ class TwoFA:
         except Exception as e:
             return JsonResponse({'message': f'Error: {str(e)}'})
 
-    @staticmethod
+    @staticmethod #este creo que no es valido
     def verify_mail(userid, request):
         if (request == userid.mail2FACode):
             return True
