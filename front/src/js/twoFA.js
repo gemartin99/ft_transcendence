@@ -59,6 +59,13 @@ function	activateGoogle2FA(event) {
 	})
 	.then(response => response.json())
 	.then(data => {
+		if (data.message == "ok")   
+		{
+			var element = document.getElementById('steep1');	
+			element.style.display = 'none';
+			element = document.getElementById('steep2');	
+			element.style.display = 'block';
+		}
 	    console.log('Response from backend:', data);
 	})
 	.catch(error => {
@@ -66,7 +73,7 @@ function	activateGoogle2FA(event) {
 	});
 }
 
-function	activateMail2FA(event) {
+function	activateMail2FA() {
 	fetch("http://localhost:8000/twoFA/mail2FA/", {
 	    method: 'POST',
 	    // body: formData,
@@ -75,9 +82,12 @@ function	activateMail2FA(event) {
 	.then(response => response.json())
 	.then(data => {
 	    console.log('Response from backend:', data);
-	    if (data.content)
+	    if (data.message == "ok")   
 	    {
-            content.innerHTML = data.content;
+	    	var element = document.getElementById('steep1');	
+	    	element.style.display = 'none';
+	    	element = document.getElementById('steep2');	
+	    	element.style.display = 'block';
 	    }
 	})
 	.catch(error => {
@@ -85,21 +95,27 @@ function	activateMail2FA(event) {
 	});
 }
 
-function	checkAuthCode(event) {
-	event.preventDefault();
-	console.log('hola');
-	const codeInputs = document.querySelectorAll('#twoFactorAuthForm .code-input');
+// function	checkAuthCode(event) { //esto en principio ya no es valido
+// 	event.preventDefault();
+// 	console.log('hola');
+// 	const codeInputs = document.querySelectorAll('#twoFactorAuthForm .code-input');
 
-	// Extract values from each input and concatenate them into a single string
-	const textValue = Array.from(codeInputs)
-		.map(input => input.value.trim())
-		.join('');
-	console.log('textValue:', textValue);
-	const formData = new FormData();
-	formData.append('totp_code', textValue);
+// 	// Extract values from each input and concatenate them into a single string
+// 	const textValue = Array.from(codeInputs)
+// 		.map(input => input.value.trim())
+// 		.join('');
+// 	console.log('textValue:', textValue);
+// 	const formData = new FormData();
+// 	formData.append('totp_code', textValue);
+function	checkMailCode(event) {
+    var concatenatedValue = "";
+    var inputs = document.getElementsByClassName('code-input');
+    for (var i = 0; i < inputs.length; i++) {
+        concatenatedValue += inputs[i].value;
+    }
 	fetch("http://localhost:8000/twoFA/verifyMailCode/", {
 	    method: 'POST',
-	    body: formData,
+	    body: concatenatedValue,
 	    credentials: 'include',
 	})
 	.then(response => response.json())
@@ -110,6 +126,19 @@ function	checkAuthCode(event) {
 			handleRedirect(data.redirect)
 		}
 	    console.log('Response from backend:', data);
+	   	if (data.message == "ok")   
+	    {
+	    	var element = document.getElementById('steep1');	
+	    	element.style.display = 'none';
+	    	element = document.getElementById('steep2');	
+	    	element.style.display = 'none';
+	    	element = document.getElementById('steep3');	
+	    	element.style.display = 'block';
+	    }
+	   	else if (data.error)
+	    {
+	    	 document.getElementById('error-message').innerHTML = data.error;
+	    }
 	})
 	.catch(error => {
 	    console.error('Error:', error);

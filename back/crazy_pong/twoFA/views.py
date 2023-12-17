@@ -40,6 +40,20 @@ def get_verification_page(request):
     }
     return JsonResponse(data)
 
+
+def get_set_mail2FA_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('twofactor/set-email2factor.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
 @csrf_exempt
 def activateMail2FA(request):
     # print("random_numbers:", generate_random_numbers())
@@ -50,11 +64,16 @@ def activateMail2FA(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
+    if request.method != 'POST':
+        return JsonResponse({'message': 'bad method!'})
     user.generate_mail2fa_code()
-    TwoFA.send_mailUser(user.email, user.mail2FACode)
-    print("numbers:", user.mail2FACode)
     user.save()
-    return get_verification_page(None) 
+    print("numbers:", user.mail2FACode)
+    if (TwoFA.send_mailUser(user.email, user.mail2FACode)):
+        return JsonResponse({'message': 'ok'})
+    else:
+        return JsonResponse({'message': 'bad one'})
+    # return get_verification_page(None) 
 
 @csrf_exempt
 def verifyMailCode(request):
@@ -75,6 +94,37 @@ def verifyMailCode(request):
             user.save()
             return JsonResponse({'message': '2fa activated ok'})
     return JsonResponse({'message': 'notok'})
+
+# @csrf_exempt
+# def verifyMail2FA(request):
+#     jwt_token = request.COOKIES.get('jwttoken', None)
+#     user_id = decode_jwt_token(jwt_token)
+#     user = Usermine.objects.get(id=user_id)
+#     if (user.mail2FACode == -1):
+#         TwoFA.send_mailUser(user.email, user.mail2FACode)
+#         return JsonResponse({'message': 'mail sent'})
+#     else:
+#         if (TwoFA.verify_mail(user)):
+#             return JsonResponse({'message': 'ok'})
+#         else:
+#             return JsonResponse({'message': 'bad one'})
+
+# @csrf_exempt
+# def verifyMailCode(request):
+#     return JsonResponse({'error': 'bad one'})
+#     return JsonResponse({'message': 'ok'})
+
+def disableTwoFactor(request):
+    user = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': '/users/login/'})
+    if request.method != 'POST':
+        return JsonResponse({'message': 'bad method!'})
+    res, error = TwoFA.disable_two_factor(user)
+    if error:
+        return JsonResponse({'error': error})
+    else:
+        return JsonResponse({'message': 'ok'})
 
 # def verifyMail2FA(request):
 #     jwt_token = request.COOKIES.get('jwttoken', None)
