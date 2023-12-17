@@ -142,6 +142,10 @@ function	checkMailCode(event) {
 	    {
 	    	 document.getElementById('error-message').innerHTML = data.error;
 	    }
+	    if (data.message == '2fa activated ok')
+	    {
+	    	handleRedirect('/');
+	    }
 	})
 	.catch(error => {
 	    console.error('Error:', error);

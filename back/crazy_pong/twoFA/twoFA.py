@@ -9,9 +9,6 @@ import pyotp
 from authentification.authentification import Authentification
 
 class TwoFA:
-    @staticmethod
-    def generate_totp_secret():
-        return pyotp.random_base32()
 
     @staticmethod
     def disable_two_factor(user):
@@ -26,6 +23,10 @@ class TwoFA:
             return True, None
         except Exception as e:
             return False, "action can't be done, try again"
+
+    @staticmethod
+    def generate_totp_secret():
+        return pyotp.random_base32()
 
     @staticmethod
     def enable_totp(request):

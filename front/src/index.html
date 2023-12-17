@@ -228,12 +228,17 @@
 				        if (data.jwtToken)
 				            document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
 				        console.log('jwttoken:', data.jwtToken);
-
+				        console.log('datalog42:', data);
 
 				        if (getCookie('jwttoken')) {
-				            set_logged_in_view();
-				            history.pushState(null, null, '/');
-				            handleNavLinkAction('/');
+				        	if (data.mail2FA == true)
+				        		handleRedirect('/twoFA/MailVerification/');
+				        	else
+				        	{
+					            set_logged_in_view();
+					            history.pushState(null, null, '/');
+					            handleNavLinkAction('/');
+				        	}
 				            const socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
 				        }
 				        else {
