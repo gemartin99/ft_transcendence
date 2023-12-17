@@ -53,6 +53,8 @@ class Authentification:
         try:
             user = Usermine.objects.get(id=user_id)
             print(f"User: {user.name}, Online: {user.online}")
-            return user
+            if ((user.mail2FA or user.google2FA) and user.validated2FA):
+                return False, '/users/login' #aqui hay que redirigir al verificar 2fa
+            return user, None
         except Usermine.DoesNotExist:
-            return False
+            return False, '/users/login/'

@@ -11,9 +11,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .twoFA import TwoFA
 
 def activateGoogle2FA(request):
-    jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = Authentification.decode_jwt_token(jwt_token)
-    user = Usermine.objects.get(id=user_id)
+    # jwt_token = request.COOKIES.get('jwttoken', None)
+    # user_id = Authentification.decode_jwt_token(jwt_token)
+    # user = Usermine.objects.get(id=user_id)    
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     user.google2FA = True
     user.save()
     return get_verification_page() 
@@ -40,10 +43,13 @@ def get_verification_page(request):
 @csrf_exempt
 def activateMail2FA(request):
     # print("random_numbers:", generate_random_numbers())
-    jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = Authentification.decode_jwt_token(jwt_token)
-    user = Usermine.objects.get(id=user_id)
+    # jwt_token = request.COOKIES.get('jwttoken', None)
+    # user_id = Authentification.decode_jwt_token(jwt_token)
+    # user = Usermine.objects.get(id=user_id)
     # user.mail2FA = True
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     user.generate_mail2fa_code()
     TwoFA.send_mailUser(user.email, user.mail2FACode)
     print("numbers:", user.mail2FACode)
@@ -65,9 +71,12 @@ def activateMail2FA(request):
 
 @csrf_exempt
 def verifyMailCode(request):
-    jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = Authentification.decode_jwt_token(jwt_token)
-    user = Usermine.objects.get(id=user_id)
+    # jwt_token = request.COOKIES.get('jwttoken', None)
+    # user_id = Authentification.decode_jwt_token(jwt_token)
+    # user = Usermine.objects.get(id=user_id)
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     print("holaaaa")
     if user.is_mail2fa_code_valid():
         totp_code = request.POST.get('totp_code')

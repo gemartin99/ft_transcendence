@@ -17,9 +17,9 @@ from authentification.authentification import Authentification
 
 
 def get_profile_page(request):
-    user = Authentification.get_auth_user(request)
+    user, redirect = Authentification.get_auth_user(request)
     if not user:
-        return JsonResponse({'redirect': '/users/login/'})
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -34,9 +34,9 @@ def get_profile_page(request):
     return JsonResponse(data)
 
 def get_edit_profile_page(request):
-    user = Authentification.get_auth_user(request)
+    user, redirect = Authentification.get_auth_user(request)
     if not user:
-        return JsonResponse({'redirect': '/users/login/'})
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -51,9 +51,9 @@ def get_edit_profile_page(request):
     return JsonResponse(data)
 
 def get_twofactor_profile_page(request):
-    user = Authentification.get_auth_user(request)
+    user, redirect = Authentification.get_auth_user(request)
     if not user:
-        return JsonResponse({'redirect': '/users/login/'})
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',

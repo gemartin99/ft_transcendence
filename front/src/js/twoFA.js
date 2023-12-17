@@ -112,6 +112,11 @@ function	checkAuthCode(event) {
 	})
 	.then(response => response.json())
 	.then(data => {
+		if (data.redirect)
+		{
+		    console.log('Redirect:', data.redirect);
+			handleRedirect(data.redirect)
+		}
 	    console.log('Response from backend:', data);
 	})
 	.catch(error => {
