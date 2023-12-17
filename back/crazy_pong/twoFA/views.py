@@ -54,6 +54,20 @@ def get_set_mail2FA_page(request):
     }
     return JsonResponse(data)
 
+
+def get_set_google2FA_page(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('twofactor/set-google2factor.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
 @csrf_exempt
 def activateMail2FA(request):
     # print("random_numbers:", generate_random_numbers())
@@ -160,46 +174,49 @@ def disableTwoFactor(request):
 #         return JsonResponse({'message': f'Error: {str(e)}'})
 
 
-# #2FA con google funcional:::
-# def generate_totp_secret():
-#     return pyotp.random_base32()
+#2FA con google funcional:::
+def generate_totp_secret():
+    return pyotp.random_base32()
 
-# @csrf_exempt 
-# def enable_totp(request):
-#     if request.method == 'POST':
-#         totp_secret = generate_totp_secret()
+@csrf_exempt 
+def enable_totp(request):
+    if request.method == 'POST':
+        totp_secret = generate_totp_secret()
         
 
-#         jwt_token = request.COOKIES.get('jwttoken', None)
-#         user_id = Authentification.decode_jwt_token(jwt_token)
-#         totp_code = str(request.POST.get('totp_code'))
-#         userid = user_id
+        jwt_token = request.COOKIES.get('jwttoken', None)
+        user_id = Authentification.decode_jwt_token(jwt_token)
+        totp_code = str(request.POST.get('totp_code'))
+        userid = user_id
         
-#         # username = ''
-#         # tendremos que coger el username a traves del JWT
-#         user = Usermine.objects.get(id=userid)
-#         user.totp = totp_secret;
-#         user.save()
+        # username = ''
+        # tendremos que coger el username a traves del JWT
+        user = Usermine.objects.get(id=userid)
+        user.totp = totp_secret;
+        user.save()
 
-#         # Generate the provisioning URL to be used by the Google Authenticator app
-#         totp = pyotp.TOTP(totp_secret)
-#         provisioning_url = totp.provisioning_uri(name=user.name.encode('utf-8'), issuer_name='crazy-pong')
+        # Generate the provisioning URL to be used by the Google Authenticator app
+        totp = pyotp.TOTP(totp_secret)
+        provisioning_url = totp.provisioning_uri(name=user.name.encode('utf-8'), issuer_name='crazy-pong')
 
-#         print('hola')
-#         return JsonResponse({'provisioning_url': provisioning_url})
+        print('hola')
+        return JsonResponse({'provisioning_url': provisioning_url})
 
-# @csrf_exempt 
-# def verify_totp(request):
-#     if request.method == 'POST':
-#         jwt_token = request.COOKIES.get('jwttoken', None)
-#         user_id = Authentification.decode_jwt_token(jwt_token)
-#         totp_code = str(request.POST.get('totp_code'))
-#         userid = user_id
-#         totp_secret = Usermine.objects.get(id=userid).totp
-
-
-#         totp = pyotp.TOTP(totp_secret)
-#         if totp.verify(totp_code):
-#             return JsonResponse({'message': 'good job'})
-#         else:
-#             return JsonResponse({'message': 'Wrong one hehe'})
+@csrf_exempt 
+def verify_totp(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
+    if request.method != 'POST':
+        return JsonResponse({'message': 'bad method!'})
+    totp_code = str(request.POST.get('totp_code'))
+    totp_secret = user.totp
+    totp = pyotp.TOTP(totp_secret)
+    if totp.verify(totp_code):
+        user.mail2FA = False
+        user.google2FA = True
+        user.validated2FA = True
+        user.save()
+        return JsonResponse({'message': 'ok'})
+    else:
+        return JsonResponse({'error': 'Wrong one hehe'})
