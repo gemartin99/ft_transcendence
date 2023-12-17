@@ -32,7 +32,7 @@ def get_verification_page(request):
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
     }
-    content_html = render_to_string('login/2fa.html', context)
+    content_html = render_to_string('twofactor/check-email2factor.html', context)
     data = {
         'title': 'Select Logging Mode',
         'content': content_html,
@@ -77,12 +77,12 @@ def activateMail2FA(request):
 
 @csrf_exempt
 def verifyMailCode(request):
-    # jwt_token = request.COOKIES.get('jwttoken', None)
-    # user_id = Authentification.decode_jwt_token(jwt_token)
-    # user = Usermine.objects.get(id=user_id)
-    user, redirect = Authentification.get_auth_user(request)
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = Authentification.decode_jwt_token(jwt_token)
+    user = Usermine.objects.get(id=user_id)
+    # user, redirect = Authentification.get_auth_user(request)
     if not user:
-        return JsonResponse({'redirect': redirect})
+        return JsonResponse({'redirect': '/users/login/'})
     print("holaaaa")
     if user.is_mail2fa_code_valid():
         totp_code = request.POST.get('concatenatedValue')
@@ -94,7 +94,11 @@ def verifyMailCode(request):
             user.validated2FA = True
             user.save()
             return JsonResponse({'message': '2fa activated ok'})
-    return JsonResponse({'message': 'notok'})
+    else:
+        user.generate_mail2fa_code()
+        user.save()    
+        TwoFA.send_mailUser(user.email, user.mail2FACode)
+    return JsonResponse({'message': 'notok new one sent'})
 
 # @csrf_exempt
 # def verifyMail2FA(request):

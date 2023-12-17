@@ -48,6 +48,7 @@ def check_42(request):
 				losses=0,
 				)
 			user.online = True
+			user.validated2FA = False
 			user.save()
 			print(user.name)
 			jwtToken = Authentification.generate_jwt_token(user.id)

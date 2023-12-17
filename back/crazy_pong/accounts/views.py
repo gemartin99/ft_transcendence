@@ -105,9 +105,13 @@ def logout(request):
     user = Usermine.objects.get(id=user_id)
     user.online = False
     user.save()
-    response = JsonResponse({'message': 'Hello, world!'})
+    response = JsonResponse({'redirect': '/'})
     response.delete_cookie('jwttoken')
     return response
+
+
+
+
 
 ##debug functions
 @csrf_exempt
