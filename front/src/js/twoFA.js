@@ -95,12 +95,35 @@ function	activateMail2FA() {
 	});
 }
 
+<<<<<<< HEAD
 function	checkMailCode(event) {
     var concatenatedValue = "";
     var inputs = document.getElementsByClassName('code-input');
     for (var i = 0; i < inputs.length; i++) {
         concatenatedValue += inputs[i].value;
     }
+=======
+function	checkAuthCode(event) {
+	event.preventDefault();
+	console.log('hola');
+	const codeInputs = document.querySelectorAll('#twoFactorAuthForm .code-input');
+
+	// Extract values from each input and concatenate them into a single string
+	const textValue = Array.from(codeInputs)
+		.map(input => input.value.trim())
+		.join('');
+
+	console.log('textValue:', textValue);
+
+	const formData = new FormData();
+	formData.append('totp_code', textValue);
+
+    // const textInput = document.getElementById('textInput');
+	// const textValue = textInput.value.trim();
+	// console.log('textValue:', textValue);
+	// const formData = new FormData();
+	// formData.append('totp_code', textValue);
+>>>>>>> 4e43c515b9bd6d408a04e1b18854c766074d0d02
 	fetch("http://localhost:8000/twoFA/verifyMailCode/", {
 	    method: 'POST',
 	    body: concatenatedValue,

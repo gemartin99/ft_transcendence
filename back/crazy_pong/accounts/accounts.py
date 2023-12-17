@@ -119,7 +119,6 @@ class Accounts:
                 response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken}
                 return response_data, None
             else:
-                user.save()
                 response_data = {'error': 'Invalid password'}
                 return response_data, None
         except Usermine.DoesNotExist:
