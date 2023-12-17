@@ -15,12 +15,16 @@ class TwoFA:
 
     @staticmethod
     def disable_two_factor(user):
+        print("hola")
         try:
-            user.mail2FA = False;
-            user.google2FA = False;
+            # user = Usermine.objects.userid
+            print(user.name)
+            user.mail2FA = False
+            user.google2FA = False
+            user.validated2FA = False
             user.save()
             return True, None
-        except:
+        except Exception as e:
             return False, "action can't be done, try again"
 
     @staticmethod

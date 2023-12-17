@@ -107,15 +107,18 @@ function	activateMail2FA() {
 // 	console.log('textValue:', textValue);
 // 	const formData = new FormData();
 // 	formData.append('totp_code', textValue);
+
 function	checkMailCode(event) {
     var concatenatedValue = "";
     var inputs = document.getElementsByClassName('code-input');
     for (var i = 0; i < inputs.length; i++) {
         concatenatedValue += inputs[i].value;
     }
+    const formData = new FormData();
+	formData.append('concatenatedValue', concatenatedValue);
 	fetch("http://localhost:8000/twoFA/verifyMailCode/", {
 	    method: 'POST',
-	    body: concatenatedValue,
+	    body: formData,
 	    credentials: 'include',
 	})
 	.then(response => response.json())
@@ -145,6 +148,27 @@ function	checkMailCode(event) {
 	});
 }
 
-
+function	unsetTwoFactor(event) {
+	fetch("http://localhost:8000/twoFA/disable/", {
+	    method: 'POST',
+	    credentials: 'include',
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.redirect)
+		{
+		    console.log('Redirect:', data.redirect);
+			handleRedirect(data.redirect)
+		}
+	    console.log('Response from backend:', data);
+		if (data.error)
+	    {
+	    	 document.getElementById('error-message').innerHTML = data.error;
+	    }
+	})
+	.catch(error => {
+	    console.error('Error:', error);
+	});
+}
 
 
