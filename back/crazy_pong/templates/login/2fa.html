@@ -87,7 +87,7 @@
 
     <div class="auth-content">
       <div class="auth-container bg-dark">
-          <form id="twoFactorAuthForm" onsubmit="checkAuthCode(event)">
+          <form id="twoFactorAuthForm">
             <h1 style="color: #f5c344;">Enter the code you have received by email</h1>
               <div class="input-row">
                   <input class="code-input" type="text" maxlength="1" required autofocus>
@@ -98,7 +98,7 @@
                   <input class="code-input" type="text" maxlength="1" required>
               </div>
               <div class="button-center">
-                  <button class="btn-warning" type="submit" o>Submit</button>
+                  <button class="btn-warning" type="submit" onclick="checkAuthCode()">Submit</button>
               </div>
           </form>
       </div>
