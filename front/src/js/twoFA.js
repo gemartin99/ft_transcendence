@@ -161,6 +161,7 @@ function	checkMailCode(event) {
 	    }
 	    if (data.message == '2fa activated ok')
 	    {
+	    	set_logged_in_view();
 	    	handleRedirect('/');
 	    }
 	})
