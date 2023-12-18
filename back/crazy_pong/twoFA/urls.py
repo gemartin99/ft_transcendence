@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import activateGoogle2FA, activateMail2FA, verifyMailCode, disableTwoFactor, get_set_mail2FA_page, get_set_google2FA_page, verify_totp, enable_totp
+from .views import activateGoogle2FA, activateMail2FA, verifyMailCode, disableTwoFactor, get_set_mail2FA_page, get_set_google2FA_page, verify_totp, enable_totp, get_verification_page
 
 app_name = 'twoFA'
 urlpatterns = [
@@ -16,6 +16,7 @@ urlpatterns = [
     path('verifyMailCode/', verifyMailCode, name='verifyMailCode'),
     path('MailVerification/', get_verification_page, name='get_verification_page'),
     path('verifyGoogleCode/', verify_totp, name='verify_totp'),
+    # path('QRverification/')
     path('disable/', disableTwoFactor, name='disableTwoFactor'),
     path('getQR/', enable_totp, name='enable_totp'),
 ]
