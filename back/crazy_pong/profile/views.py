@@ -44,6 +44,7 @@ def get_edit_profile_page(request):
         'user': user,
     }
     content_html = render_to_string('profile/edit-profile.html', context)
+    print("estoy aqui holaaaaaaaaaaaaa")
     data = {
         'title': 'Select Logging Mode',
         'content': content_html,
@@ -67,3 +68,25 @@ def get_twofactor_profile_page(request):
         'additionalInfo': 'Some additional information here',
     }
     return JsonResponse(data)
+
+
+def editEvent(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
+
+    username = request.POST.get('name')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    confirm_password = request.POST.get('confirm_password')
+
+    # Access uploaded files
+    avatar = request.FILES.get('avatar')
+
+    print(username)
+    print(email)
+    print(password)
+    print(confirm_password)
+
+    return JsonResponse({'message': 'boooo'})
+
