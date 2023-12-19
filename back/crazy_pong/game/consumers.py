@@ -102,6 +102,7 @@ class gameConnection(AsyncWebsocketConsumer):
                 if self.thread["active"]:
                     self.game_ctrl.updateGame()
                     if self.game_ctrl.ended():
+                        await self.game_ctrl.saveMatch()
                         return
                     await self.channel_layer.group_send(
                         self.game,
@@ -115,3 +116,11 @@ class gameConnection(AsyncWebsocketConsumer):
         state = event["state"]
         
         await self.send(text_data=json.dumps(state))
+
+    async def endConnection(self):
+
+        await self.channel_layer.group_send(
+            self.game,
+            {"type": "end_match"},
+        )
+        await self.disconnect(1000)
