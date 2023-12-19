@@ -70,23 +70,27 @@ def get_twofactor_profile_page(request):
     return JsonResponse(data)
 
 
-def editEvent(request):
+@csrf_exempt
+def UpdateInfo(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
 
-    username = request.POST.get('name')
-    email = request.POST.get('email')
-    password = request.POST.get('password')
-    confirm_password = request.POST.get('confirm_password')
+    json_data = json.loads(request.body.decode('utf-8'))
+    print(json_data)
+    username = json_data.get('name')
+    email = json_data.get('email')
+    password = json_data.get('password')
+    confirm_password = json_data.get('confirm_password')
 
     # Access uploaded files
     avatar = request.FILES.get('avatar')
-
+    print('avatar:',avatar)
     print(username)
     print(email)
-    print(password)
-    print(confirm_password)
+    if password == None:
+        print('hola:',password)
+        print(confirm_password)
 
     return JsonResponse({'message': 'boooo'})
 

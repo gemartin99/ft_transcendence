@@ -5,31 +5,31 @@ url = "localhost"
 baseurl = "http://localhost";
 
 function submitForm(e) {
-    // Your custom JavaScript logic goes here
-    // const form = document.getElementById('updateUserForm');
-    // const formData = new FormData(form);
+    e.preventDefault();
     const loginForm = document.querySelector("#updateUserForm");
     const formData = new FormData(e.target);
 
     // Convert form data to a JSON object
     const formDataObject = {};
-    formData.forEach((value, key) => {
-        formDataObject[key] = value;
-    });
-    // You can now use the formData to send the data using fetch or another AJAX method
-    // For example:
-    fetch("baseurl +':8000/users/profile/editEvent/'", {
+    for (const [key, value] of formData.entries()) {
+        // If the value is empty, set it to null
+        formDataObject[key] = value || null;
+    }
+
+    console.log('formDataObject:', formDataObject);
+
+    // You can now use the formDataObject to send the data using fetch or another AJAX method
+    fetch(baseurl + ':8000/profile/UpdateInfo/', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json',},
+        headers: {'Content-Type': 'application/json'},
         credentials: 'include',
         body: JSON.stringify(formDataObject),
     })
     .then(response => response.json())
     .then(data => {
         console.log('Response:', data.message);
-
     })
-    .catch((error) => {
+    .catch(error => {
         console.error('Error:', error);
         setFormMessage(loginForm, "error", "Invalid username/password combination");
     });
