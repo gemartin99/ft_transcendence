@@ -14,13 +14,18 @@ function	checkGoogleAuthCode(event) {
 	.then(response => response.json())
 	.then(data => {
 	    console.log('Response from backend:', data);
-	    if (data.message == "ok")   
+	    if (data.message == "2fa activated ok")
+	    {
+	    	set_logged_in_view();
+	    	handleRedirect('/');
+	    }
+	    else if (data.message == "ok")   
 	    {
 	    	var element = document.getElementById('steep2');
 	    	if (element != null){
 	    		element.style.display = 'none';
 	    		element = document.getElementById('steep3');	
-	    		lement.style.display = 'block';
+	    		element.style.display = 'block';
 	    	}
 	    }
 	    else if (data.error)
@@ -193,4 +198,22 @@ function	unsetTwoFactor(event) {
 	});
 }
 
+function moveToNextInput(currentInput) {
+    const maxLength = parseInt(currentInput.getAttribute('maxlength'), 10);
+    const currentLength = currentInput.value.length;
 
+    if (currentLength === maxLength) {
+        const nextInput = currentInput.nextElementSibling;
+
+        if (nextInput && nextInput.tagName.toLowerCase() === 'input') {
+            // Check if the next input is non-empty
+            if (nextInput.value.trim() !== '') {
+                // Clear the content of the next input
+                nextInput.value = '';
+            }
+
+            // Focus on the next input
+            nextInput.focus();
+        }
+    }
+}

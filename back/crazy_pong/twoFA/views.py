@@ -27,12 +27,25 @@ def verifyGoogle2FA(request):
     else:
         return JsonResponse({'message': 'bad one'})
 
-def get_verification_page(request):
+def getMailVerificationPage(request):
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
     }
     content_html = render_to_string('twofactor/check-email2factor.html', context)
+    data = {
+        'title': 'Select Logging Mode',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
+def getGoogleVerificationPage(request):
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
+    content_html = render_to_string('twofactor/check-google2factor.html', context)
     data = {
         'title': 'Select Logging Mode',
         'content': content_html,
@@ -70,11 +83,6 @@ def get_set_google2FA_page(request):
 
 @csrf_exempt
 def activateMail2FA(request):
-    # print("random_numbers:", generate_random_numbers())
-    # jwt_token = request.COOKIES.get('jwttoken', None)
-    # user_id = Authentification.decode_jwt_token(jwt_token)
-    # user = Usermine.objects.get(id=user_id)
-    # user.mail2FA = True
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
@@ -145,7 +153,7 @@ def disableTwoFactor(request):
     if error:
         return JsonResponse({'error': error})
     else:
-        return JsonResponse({'message': 'ok'})
+        return JsonResponse({'redirect': '/profile/'})
 
 # def verifyMail2FA(request):
 #     jwt_token = request.COOKIES.get('jwttoken', None)
@@ -204,14 +212,22 @@ def enable_totp(request):
 
 @csrf_exempt 
 def verify_totp(request):
-    user, redirect = Authentification.get_auth_user(request)
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = Authentification.decode_jwt_token(jwt_token)
+    user = Usermine.objects.get(id=user_id)
+    # user, redirect = Authentification.get_auth_user(request)
     if not user:
-        return JsonResponse({'redirect': redirect})
+        return JsonResponse({'redirect': '/users/login/'})
     if request.method != 'POST':
         return JsonResponse({'message': 'bad method!'})
     totp_code = str(request.POST.get('totp_code'))
     totp_secret = user.totp
     totp = pyotp.TOTP(totp_secret)
+    if user.google2FA == True:
+        if totp.verify(totp_code):
+            user.validated2FA = True
+            user.save()
+            return JsonResponse({'message': '2fa activated ok'})
     if totp.verify(totp_code):
         user.mail2FA = False
         user.google2FA = True

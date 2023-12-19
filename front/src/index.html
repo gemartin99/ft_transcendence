@@ -233,6 +233,8 @@
 				        if (getCookie('jwttoken')) {
 				        	if (data.mail2FA == true)
 				        		handleRedirect('/twoFA/MailVerification/');
+				        	if (data.google2FA == true)
+				        		handleRedirect('/twoFA/GoogleVerification/');
 				        	else
 				        	{
 					            set_logged_in_view();
@@ -294,6 +296,7 @@
 	<script src="/js/accounts.js"></script>
 	<script src="/js/validations.js"></script>
 	<script src="/js/session.js"></script>
+	<script src="/js/profile.js"></script>
 </html>
 
 

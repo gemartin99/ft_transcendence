@@ -15,7 +15,62 @@
     </div>
     <div class="card">
       <div class="card-body bg-dark">
-        <form method="post" action="% url 'update_user' %" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;">
+        <form id="updateUserForm" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;" onsubmit="return submitForm(event)">
+    <div class="form-group">
+        <label for="username" class="label">Username:</label>
+        <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email" class="label">Email:</label>
+        <input type="text" id="email" name="email" placeholder="Enter your email" class="form-control" value="{{ user.email }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="label">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="confirm_password" class="label">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="avatar" class="label">Avatar (optional):</label>
+        <input type="file" id="avatar" name="avatar" class="form-control-file">
+    </div>
+
+    <div class="card-footer">
+        <button class="btn btn-warning" type="button" >Save Changes</button>
+    </div>
+
+    {% csrf_token %}
+</form>
+
+<!-- <script>
+    function submitForm() {
+        // Your custom JavaScript logic goes here
+        const form = document.getElementById('updateUserForm');
+        const formData = new FormData(form);
+
+        // You can now use the formData to send the data using fetch or another AJAX method
+        // For example:
+        fetch("{% url 'update_user' %}", {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the server
+            console.log('Response:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script> -->
+<!--         <form method="post" action="% url 'update_user' %" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;">
           <div class="form-group">
             <label for="username" class="label">Username:</label>
             <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>
@@ -43,7 +98,7 @@
 
           {% csrf_token %}
 
-        </form>
+        </form> -->
       </div>
       {% if profileUpdated %}
       <div class="card-body">

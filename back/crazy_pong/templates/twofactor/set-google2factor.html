@@ -114,12 +114,12 @@
           <canvas id="QRimg"></canvas>
           <div id="error-message"></div>
           <div class="input-row">
-              <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus>
-              <input name="digit2"class="code-input" type="text" maxlength="1" required>
-              <input name="digit3"class="code-input" type="text" maxlength="1" required>
-              <input name="digit4"class="code-input" type="text" maxlength="1" required>
-              <input name="digit5"class="code-input" type="text" maxlength="1" required>
-              <input name="digit6"class="code-input" type="text" maxlength="1" required>
+              <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)">
+              <input name="digit2"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit3"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit4"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit5"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit6"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
           </div>
           <div class="button-center">
               <button class="btn-warning" onclick="checkGoogleAuthCode()">Submit</button>
