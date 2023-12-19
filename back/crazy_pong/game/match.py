@@ -2,6 +2,9 @@ import random
 import time
 import math
 import os
+from .models import Usermine, Match
+from asgiref.sync import sync_to_async
+
 
 class PlayerManager():
     def __init__(self, player, state):
@@ -148,7 +151,13 @@ class GameManager():
             if (update):
                 timeToCollision  = (1200-self.ball['x']) /self.ball['vx']
                 self.colision  = (self.ball['y'] + self.ball['vy'] * timeToCollision)
-                print("Updating movement collision: " + str(self.colision))
+
+                if (self.colision > 0 and self.colision < 750):
+                    self.colision = self.colision
+                elif ((self.colision % 750)%2 == 0):
+                    self.colision %= 750
+                else:
+                    self.colision = 750 - (self.colision % 750)
 
             if (self.colision > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.colision < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
                 return 0
@@ -157,6 +166,23 @@ class GameManager():
             return -1
     
     def ended(self):
-        if (self.state['score1'] >= 11 or self.state['score2'] >= 11):
+        if (self.state['score1'] >= 3 or self.state['score2'] >= 3):
+            
             return True
         return False
+
+    @sync_to_async
+    def saveMatch(self):
+        player1 = Usermine.objects.get(name='42@baltes-g')
+        player2 = Usermine.objects.get(name='42@baltes-g')
+
+        match = Match.objects.create(
+            player1=player1,
+            player2=player2,
+            player1_score=self.state['score1'],
+            player2_score=self.state['score2'],
+            match_id=self.state['idMatch'],
+        )
+        all_matches = Match.objects.all()
+        for m in all_matches:
+            print(f"Player1: {m.player1.name} - Player2: {m.player2.name} - Score1: {m.player1_score} - Score2: {m.player2_score} - MatchID: {m.match_id}")
