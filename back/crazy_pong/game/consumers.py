@@ -9,6 +9,7 @@ from .match_manager import MatchManager
 import random
 import string
 import time
+import os
 
 from .match import PlayerManager, GameManager
 from .match_manager import MatchManager
@@ -24,6 +25,7 @@ class gameConnection(AsyncWebsocketConsumer):
         super().__init__(*args, **kwargs)
         self.time = time.time()
         self.paddle_controller = None
+        self.fr = int(os.getenv("FRAMERATE"))
 
     async def connect(self):
         print(self.scope['query_string'])
@@ -100,16 +102,25 @@ class gameConnection(AsyncWebsocketConsumer):
                 if self.thread["active"]:
                     self.game_ctrl.updateGame()
                     if self.game_ctrl.ended():
+                        await self.game_ctrl.saveMatch()
                         return
                     await self.channel_layer.group_send(
                         self.game,
                         {"type": "stream_state", "state": state},
                     )
             # print("Time: " + str(time.time() - time_act))
-            await asyncio.sleep(1/60 - (time.time() - time_act))
+            await asyncio.sleep(1/self.fr - (time.time() - time_act))
 
     async def stream_state(self, event):
         time2 =  time.time()
         state = event["state"]
         
         await self.send(text_data=json.dumps(state))
+
+    async def endConnection(self):
+
+        await self.channel_layer.group_send(
+            self.game,
+            {"type": "end_match"},
+        )
+        await self.disconnect(1000)
