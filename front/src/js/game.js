@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     
     document.addEventListener('keyup', function(event) {
-        if (socket != null){
+        if (in_match == true){
         const message = { cmd: 'update',
                             id: current_match,
                             pl: player,
@@ -113,10 +113,13 @@ function join_IA() {
     socket.onmessage = (event) => {
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData)
         if (jsonData['cmd'] == 'update') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             printMap(jsonData);
+        }
+        if (jsonData['cmd'] == 'finish') {
+            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            printWinner(jsonData);
         }
 
         //console.log('WebSocket message received:', event.data);
@@ -194,6 +197,22 @@ function printMap(jsonData) {
     drawBall(jsonData.ball);
     drawPaddles(jsonData.paddle1, jsonData.paddle2);
     printResult(jsonData);
+}
+
+function printWinner(jsonData) {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "60px monospace";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    if (jsonData.score1 > jsonData.score2) {
+        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
+    }
+    else {
+        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
+    }
+    ctx.fillText(jsonData.score2 + "-" + jsonData.score1, canvas.width/2, canvas.height/2 + 60);
 }
 
 
