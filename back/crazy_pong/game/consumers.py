@@ -57,7 +57,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
         
         if not self.thread["paddle_one"]:
-            self.paddle_controller = PlayerManager("player1", MatchManager.matches[self.game])
+            self.paddle_controller = PlayerManager("player1", "paddle1", MatchManager.matches[self.game])
             self.thread["paddle_one"] = True
 
             if (self.mode == 'IA'):
@@ -66,7 +66,7 @@ class gameConnection(AsyncWebsocketConsumer):
                 self.thread['paddle_two'] = True
 
         elif not self.thread["paddle_two"]:
-            self.paddle_controller = PlayerManager("player2", MatchManager.matches[self.game])
+            self.paddle_controller = PlayerManager("player2", "paddle2", MatchManager.matches[self.game])
             self.thread["paddle_two"] = True
 
         if self.thread["paddle_one"] and self.thread["paddle_two"]:
@@ -80,6 +80,7 @@ class gameConnection(AsyncWebsocketConsumer):
         self.thread["active"] = False
 
         await self.channel_layer.group_discard(self.game, self.channel_name)
+        await self.close()
         print("disconnected") 
     
 
@@ -103,6 +104,7 @@ class gameConnection(AsyncWebsocketConsumer):
                     self.game_ctrl.updateGame()
                     if self.game_ctrl.ended():
                         await self.game_ctrl.saveMatch()
+                        await self.endConnection(state)
                         return
                     await self.channel_layer.group_send(
                         self.game,
@@ -117,10 +119,11 @@ class gameConnection(AsyncWebsocketConsumer):
         
         await self.send(text_data=json.dumps(state))
 
-    async def endConnection(self):
-
+    async def endConnection(self, state):
+        state['cmd'] = 'finish'
         await self.channel_layer.group_send(
             self.game,
-            {"type": "end_match"},
+            {"type": "stream_state", "state": state},
         )
+        await asyncio.sleep(1)
         await self.disconnect(1000)
