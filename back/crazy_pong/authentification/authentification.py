@@ -1,6 +1,7 @@
 #from .models import Usermine
 from datetime import datetime, timedelta
 from django.conf import settings
+from accounts.models import Usermine
 import jwt
 
 class Authentification:
@@ -44,3 +45,17 @@ class Authentification:
             # Handle invalid token
             print("Invalid token.")
             return None
+
+    @staticmethod
+    def get_auth_user(request):
+        jwt_token = request.COOKIES.get('jwttoken', None)
+        user_id = Authentification.decode_jwt_token(jwt_token)
+        try:
+            user = Usermine.objects.get(id=user_id)
+            print(f"User: {user.name}, Online: {user.online}")
+            if ((user.mail2FA or user.google2FA) and user.validated2FA == False):
+                print("soy false")
+                return False, '/twoFA/MailVerification/' #aqui hay que redirigir al verificar 2fa
+            return user, None
+        except Usermine.DoesNotExist:
+            return False, '/users/login/'

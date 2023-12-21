@@ -2,7 +2,8 @@ import random
 import time
 import math
 import os
-from .models import Usermine, Match
+from .models import Match
+from accounts.models import Usermine
 from asgiref.sync import sync_to_async
 
 

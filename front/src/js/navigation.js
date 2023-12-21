@@ -41,8 +41,33 @@ function handleNavLinks()
     });
 }
 
+function handleRedirect(redirect_url) {
+    updateUrl(redirect_url);
+    fetch(baseUrl + ':8000' + redirect_url, {
+        credentials: 'include',
+    }) // Adjusted fetch URL
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response from backend:', data);
+
+        if (data.content) {
+            content.innerHTML = data.content;
+        }
+        else if (data.redirect) {
+            console.log('Invalid response from backend 1');
+        } else {
+            console.log('Invalid response from backend 1');
+        }
+        
+        handleNavLinks()
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 function handleNavLinkClick(event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevents the default behavior (e.g., navigating to a new page)
     console.log("NavLink clicked!");
     var hrefValue = event.currentTarget.getAttribute('href');
     if (hrefValue != "/"){
@@ -60,6 +85,10 @@ function handleNavLinkClick(event) {
 
         if (data.content) {
             content.innerHTML = data.content;
+        }
+        else if (data.redirect) {
+            handleRedirect(data.redirect)
+            console.log('Response is a redirect');
         } else {
             console.log('Invalid response from backend 1');
         }
@@ -72,10 +101,6 @@ function handleNavLinkClick(event) {
 }
 
 function handleNavLinkAction(hrefValue) {
-    console.log("NavLink clicked!");
-    if (hrefValue != "/"){
-        hrefValue = hrefValue + "/"
-    }
     updateUrl(hrefValue);
     fetch(baseUrl + ':8000' + hrefValue, {
         credentials: 'include',
@@ -83,11 +108,13 @@ function handleNavLinkAction(hrefValue) {
     .then(response => response.json())
     .then(data => {
         console.log('Response from backend:', data);
+
         if (data.content) {
             content.innerHTML = data.content;
         } else {
             console.log('Invalid response from backend 1');
         }
+
         handleNavLinks();
     })
     .catch(error => {

@@ -24,32 +24,6 @@ def get_home_page(request):
     }
     return JsonResponse(data)
 
-def get_profile_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
-    content_html = render_to_string('profile/profile.html', context)
-    data = {
-        'title': 'Select Logging Mode',
-        'content': content_html,
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
-
-def get_profile_settings_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
-    content_html = render_to_string('profile/profile_settings.html', context)
-    data = {
-        'title': 'Profile Settings',
-        'content': content_html,
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
-
 def get_login_page(request):
     context = {
         'variable1': 'template variable 1',
@@ -67,6 +41,7 @@ def get_login_form_page(request):
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
+        'new': request.GET.get('s', False)
     }
     content_html = render_to_string('login/normal_login.html', context)
     data = {
@@ -130,9 +105,13 @@ def logout(request):
     user = Usermine.objects.get(id=user_id)
     user.online = False
     user.save()
-    response = JsonResponse({'message': 'Hello, world!'})
+    response = JsonResponse({'redirect': '/'})
     response.delete_cookie('jwttoken')
     return response
+
+
+
+
 
 ##debug functions
 @csrf_exempt
@@ -143,7 +122,7 @@ def show_online(request):
     print('uid:', user_id)
     all_users = Usermine.objects.all()
     for user in all_users:
-        print(f"User: {user.name}, Online: {user.online}")
+        print(f"User: {user.name}, Online: {user.online}, valid2fa: {user.validated2FA}, google: {user.google2FA}, mail: {user.mail2FA}")
     return JsonResponse({'content': 'users printed'})
 
 
