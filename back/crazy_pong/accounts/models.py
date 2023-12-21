@@ -1,6 +1,7 @@
 from django.db import models
 import random
 from django.utils import timezone
+from game.models import Match
 
 class Usermine(models.Model):
     id = models.AutoField(primary_key=True)
@@ -19,6 +20,7 @@ class Usermine(models.Model):
     mail2FACode = models.CharField(max_length=6, default=-1)
     mail2FACode_timestamp = models.DateTimeField(null=True, blank=True)
     validated2FA = models.BooleanField(default=False)
+    matches_played = models.ManyToManyField(Match, blank=True)
 
     def generate_mail2fa_code(self):
         self.mail2FACode = ''.join([str(random.randint(0, 9)) for _ in range(6)])
