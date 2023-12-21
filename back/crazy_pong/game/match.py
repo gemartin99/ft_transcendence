@@ -193,6 +193,8 @@ class GameManager():
             player2_score=self.state['score2'],
             match_id=self.state['idMatch'],
         )
+        
+        player1_profile.matches_played.add(match)
         all_matches = Match.objects.all()
         for m in all_matches:
             print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - MatchID: {m.match_id}")
