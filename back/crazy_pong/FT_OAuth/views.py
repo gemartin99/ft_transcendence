@@ -14,7 +14,6 @@ def check_42(request):
 	data = json.loads(request.body.decode('utf-8'))
 	code = data.get('code')
 	print(code)
-    
 	token_url = "https://api.intra.42.fr/oauth/token"
 	token_params = {
 		'grant_type': 'authorization_code',
@@ -23,7 +22,6 @@ def check_42(request):
 		'client_secret': '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',
 		'redirect_uri': 'http://localhost',
 	}
-
 	try:
 		response = requests.post(token_url, data=token_params)
 		response.raise_for_status()  # Check for HTTP errors
@@ -32,6 +30,7 @@ def check_42(request):
 		headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
 		user_info_response = requests.get(user_info_url, headers=headers)
 		user_info = user_info_response.json()
+		print(user_info)
 		user_id = user_info.get('id')
 		user_login = user_info.get('login')
 		if user_id:
@@ -47,6 +46,7 @@ def check_42(request):
 				losses=0,
 				)
 			user.online = True
+			user.validated2FA = False
 			user.save()
 			print(user.name)
 			jwtToken = Authentification.generate_jwt_token(user.id)
