@@ -9,6 +9,7 @@ import pyotp
 from authentification.authentification import Authentification
 from django.views.decorators.csrf import csrf_exempt
 from .twoFA import TwoFA
+from datetime import datetime, timezone
 
 def activateGoogle2FA(request):
     # jwt_token = request.COOKIES.get('jwttoken', None)
@@ -28,6 +29,12 @@ def verifyGoogle2FA(request):
         return JsonResponse({'message': 'bad one'})
 
 def getMailVerificationPage(request):
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = Authentification.decode_jwt_token(jwt_token)
+    user = Usermine.objects.get(id=user_id)
+    user.generate_mail2fa_code()
+    user.save()    
+    TwoFA.send_mailUser(user.email, user.mail2FACode)
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -38,6 +45,8 @@ def getMailVerificationPage(request):
         'content': content_html,
         'additionalInfo': 'Some additional information here',
     }
+    print('getemailtufactor')
+    print(data)
     return JsonResponse(data)
 
 def getGoogleVerificationPage(request):
@@ -114,6 +123,7 @@ def verifyMailCode(request):
         if totp_code == user.mail2FACode:
             user.mail2FA = True
             user.validated2FA = True
+            user.mail2FACode_timestamp = datetime(1970, 1, 1, tzinfo=timezone.utc)
             user.save()
             return JsonResponse({'message': '2fa activated ok'})
     else:
