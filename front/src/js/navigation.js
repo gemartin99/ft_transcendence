@@ -49,7 +49,7 @@ function handleRedirect(redirect_url) {
     .then(response => response.json())
     .then(data => {
         console.log('Response from backend:', data);
-
+        console.log('que si que estoy handleando esto');
         if (data.content) {
             content.innerHTML = data.content;
         }
@@ -108,7 +108,7 @@ function handleNavLinkAction(hrefValue) {
     .then(response => response.json())
     .then(data => {
         console.log('Response from backend:', data);
-
+        console.log('href::',hrefValue);
         if (data.content) {
             content.innerHTML = data.content;
         } else {

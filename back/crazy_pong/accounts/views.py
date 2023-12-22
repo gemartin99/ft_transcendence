@@ -123,6 +123,7 @@ def show_online(request):
     all_users = Usermine.objects.all()
     for user in all_users:
         print(f"User: {user.name}, Online: {user.online}, valid2fa: {user.validated2FA}, google: {user.google2FA}, mail: {user.mail2FA}")
+        # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})
 
 
