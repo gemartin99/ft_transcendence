@@ -1,3 +1,43 @@
+<style>
+
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.container-wait {
+  width: 100%;
+  height: 100%;
+}
+
+.loader {
+  /* Estilos del loader, puedes agregarlos aquí */
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #f5c344;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estilos adicionales para hacer el contenido responsive */
+@media screen and (max-width: 768px) {
+  .loader {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+</style>
+
 <link rel="stylesheet" href="/css/game.css">
 <div id="video-container">
     <video autoplay muted loop id="video-background">
@@ -41,3 +81,16 @@
       </div>
     </div>
   </div>
+
+  <!-- CONTENEDOR PARA CUANDO LE DES A PUBLIC GAME Y EN LO QUE NO TE EMPAREJA SALGA LA RUEDITA
+  <div class="container-wait">
+    <div class="loader-container">
+      <div class="loader"></div>
+      <h1 style="font-size: 50px">1/2 Waiting Players</h1>
+    </div>
+  </div>
+  -->
+
+
+
+
