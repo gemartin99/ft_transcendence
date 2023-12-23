@@ -58,6 +58,7 @@ class MatchManager:
             "player_two": None,
             "active": False,
         }
+        cls.matches[game_name]["idMatch"] = game_name
         thread = cls.threads[game_name]["thread"]
         thread.daemon = True
         thread.start()

@@ -1,0 +1,22 @@
+
+.container1 {
+    border: 2px dashed #f5c344;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    cursor: pointer;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+
+.table-warning {
+    --bs-table-bg: #f5c344 !important; 
+}
+
+.table {
+    border: 2px solid black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}

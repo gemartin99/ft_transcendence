@@ -41,11 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function join_match() {
-    const heading = document.getElementById('helloHeading');
-    heading.textContent = 'noo';
 
     socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=search');
-    
+    const puntuacio = getElementById("puntuacio");
+
+
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
         
@@ -55,7 +55,7 @@ function join_match() {
         const jsonData = JSON.parse(event.data.toString());
         console.log(jsonData)
         if (jsonData['cmd'] == 'update') {
-            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            puntuacio.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             printMap(jsonData);
         }
 
@@ -103,8 +103,6 @@ function join_match_sala() {
 }
 
 function join_IA() {
-    const heading = document.getElementById('helloHeading');
-    heading.textContent = 'noo';
 
     socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=IA');
     
@@ -117,7 +115,7 @@ function join_IA() {
         const jsonData = JSON.parse(event.data.toString());
         console.log(jsonData)
         if (jsonData['cmd'] == 'update') {
-            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             printMap(jsonData);
         }
 
@@ -178,14 +176,27 @@ function drawPaddles(paddle1, paddle2) {
     ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
     ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
 }
+
+function printResult(jsonData) {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.font = "60px monospace";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.fillText(jsonData.score2 + "-" + jsonData.score1, canvas.width/2, canvas.height/2);
+
+}
+
 function printMap(jsonData) {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall(jsonData.ball);
     drawPaddles(jsonData.paddle1, jsonData.paddle2);
-
+    printResult(jsonData);
 }
+
+
 
 // Function to be called from the HTML button onclick event
 function join_match_from_html() {

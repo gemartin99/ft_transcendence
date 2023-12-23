@@ -8,6 +8,8 @@ services:
       - "80:80"
     networks:
        - crazynet
+
+
     volumes:
       - front_workdir:/usr/share/nginx/html/
 
@@ -17,9 +19,11 @@ services:
       - "6379:6379"
     volumes:
       - ./.redisdata:/data
+      - backend_data:/usr/src/app/static #aqui deben ir archivos estaticos img o cosas asi que no se carguen/actualicen etc
+      - backend_data:/usr/src/app/media #aqui archivos que se puedan cargar en tiempo de ejecucuion ejemplo : imagenes de foto perfil
+      - back_workdir:/app
     networks:
        - crazynet
-
 
   db_postgres:
     image: postgres:alpine3.18
@@ -48,17 +52,17 @@ services:
     networks:
        - crazynet
 
-  postgres_admin2: #In some moment we 
-     image: dpage/pgadmin4:6.16
-     depends_on: 
-       - db_postgres
-     environment:
-       PGADMIN_DEFAULT_EMAIL: marc@arza.com
-       PGADMIN_DEFAULT_PASSWORD: 12345
-     ports:
-       - 5050:80
-     networks:
-       - crazynet
+  # postgres_admin2: #In some moment we 
+  #    image: dpage/pgadmin4:6.16
+  #    depends_on: 
+  #      - db_postgres
+  #    environment:
+  #      PGADMIN_DEFAULT_EMAIL: marc@arza.com
+  #      PGADMIN_DEFAULT_PASSWORD: 12345
+  #    ports:
+  #      - 5050:80
+  #    networks:
+  #      - crazynet
 
 networks:
   crazynet:
@@ -81,3 +85,5 @@ volumes:
       type: none
       device: ./front/src
       o: bind
+
+

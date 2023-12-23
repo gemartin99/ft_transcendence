@@ -1,9 +1,10 @@
 // index.js
 
+// url = "crazy-pong.com"
+url = "localhost"
+
 //baseurl = "http://crazy-pong.com"
 baseurl = "http://localhost";
-
-
 
 function setFormMessage(formElement, type, message) {
     const messageElement = formElement.querySelector(".form__message");
@@ -22,6 +23,12 @@ function clearInputError(inputElement) {
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
 
+// logout cookie remove (works):
+function logoutTest(){
+    console.log('he entrado');
+    document.cookie = "jwttoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+}
+
 function send_login_form(e)  {
     e.preventDefault();
     // Lógica para el inicio de sesión mediante AJAX/Fetch
@@ -34,24 +41,40 @@ function send_login_form(e)  {
         formDataObject[key] = value;
     });
     console.log('FormDataObject:', formDataObject);
-        fetch(baseurl +':8000/users/login/action/', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',},
-            body: JSON.stringify(formDataObject),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message == 'logueao pum')
-                setFormMessage(loginForm, "success", "Congratulations you have nice memory");
-            else
-                setFormMessage(loginForm, "error", "Invalid username/password combination");
+    fetch(baseurl +':8000/users/login/action/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',},
+        credentials: 'include',
+        body: JSON.stringify(formDataObject),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data.message);
+        console.log('jwttoken:', data.jwtToken)
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + (23 * 60 * 60 * 1000));
 
-            console.log('Response:', data.message);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
+        if (data.jwtToken)
+            document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
+        console.log('jwttoken:', data.jwtToken);
+
+
+        if (getCookie('jwttoken')) {
+            set_logged_in_view();
+            setFormMessage(loginForm, "success", "Congratulations you have nice memory");
+            history.pushState(null, null, '/');
+            handleNavLinkAction('/');
+            const socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
+        }
+        else {
+            set_logged_out_view();
             setFormMessage(loginForm, "error", "Invalid username/password combination");
-        });
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        setFormMessage(loginForm, "error", "Invalid username/password combination");
+    });
 }
 
 function send_form_new_account(e) {
@@ -83,25 +106,23 @@ function send_form_new_account(e) {
     fetch(baseurl + ':8000/users/register/new/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
+        credentials: 'include',
         body: JSON.stringify(formDataObject),
     })
     .then(response => response.json())
     .then(data => {
         if (data.message == "User saved successfully") {
             setFormMessage(createAccountForm, "success", "Account created successfully");
+            //history.pushState(null, null, '/users/login/identify')
+            handleNavLinkAction('/users/login/identify/?s=new')
             console.log('Response:', "ha funciunat");
         }
-        else {
-            error_message = data.errors;
-            console.error('Error:', error_message);
+        else{
+            error_message = data.error;
             setFormMessage(createAccountForm, "error", error_message);
-            createAccountForm.querySelector('[name="password"]').value = '';
-            createAccountForm.querySelector('[name="confirm_password"]').value = '';
         }
     })
     .catch((error) => {
         console.error('Error:', error);
     });
-
 }
-

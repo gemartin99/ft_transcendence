@@ -1,0 +1,139 @@
+    <style>
+      .auth-content {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+      }
+
+      .auth-container {
+          max-width: 80%;
+          width: 80%;
+          padding: 3vw;
+          background-color: #343a40;
+          border-radius: 10px;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .code-input {
+          width: 8vw;
+          height: 8vw;
+          text-align: center;
+          margin: 1vw;
+          font-size: 3.5vw;
+          border: 1px solid #ffc107;
+          border-radius: 5px;
+          color: #000;
+      }
+
+      .code-input:focus {
+          outline: none;
+          border-color: #ffc107;
+          box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
+      }
+
+      .button-center {
+          display: flex;
+          justify-content: center;
+          margin-top: 3vw;
+      }
+
+      .btn-warning {
+          padding: 2vw 4vw;
+          font-size: 3vw;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          background-color: #ffc107;
+          color: #fff;
+      }
+
+      .btn-warning:hover {
+          background-color: #e0a800;
+      }
+
+      #error-message
+      {
+        color: red;
+      }
+
+      .input-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1vw;
+          margin-bottom: 2vw;
+      }
+
+      #steep2, #steep3 {
+        display: none;
+      }
+          
+      @media (min-width: 1200px) {
+    .auth-container {
+        max-width: 1200px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .code-input {
+        width: 100px;
+        height: 100px;
+        font-size: 20px;
+    }
+
+    .btn-warning {
+        padding: 20px 20px;
+        font-size: 35px; 
+    }
+}
+
+  </style>
+    <div class="auth-content">
+      <div class="auth-container bg-dark" id="steep1">
+          <h1 style="color: #f5c344;">Setup Google 2Factor Auth</h1>
+            <div class="input-row">
+              <div class="alert alert-warning" role="alert">
+                  To can use, the two factor auth, you need to have/download Google Authentificator App. Scan the QR, and sumbit in the form the Code that Google Authentificator App will generate.
+              </div>
+            </div>
+            <div class="button-center">
+                <label class="label">Click to generate QR:</label>
+                <button class="btn-warning" onclick="getQR()">Generate QR</button>
+            </div>
+      </div>
+      <div class="auth-container bg-dark" id="steep2">
+          <h1 style="color: #f5c344;">Steep 2: Confirm the code:</h1>
+          <div class="alert alert-warning" role="alert">
+                  Scan this QR whit your googleAuth app, and insert the verification totp code.
+          </div>
+          <canvas id="QRimg"></canvas>
+          <div id="error-message"></div>
+          <div class="input-row">
+              <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)">
+              <input name="digit2"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit3"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit4"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit5"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+              <input name="digit6"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
+          </div>
+          <div class="button-center">
+              <button class="btn-warning" onclick="checkGoogleAuthCode()">Submit</button>
+          </div>
+      </div>
+      <div class="auth-container bg-dark" id="steep3">
+          <h1 style="color: #f5c344;">Google Two Factor set Succesful</h1>
+            <div class="input-row">
+              <div class="alert alert-warning" role="alert">
+                Sucesfuly seted up the Google two factor authentificator. Click button to return to profile.
+              </div>
+            </div>
+            <div class="button-center">
+                <a href="/profile" class="navlink btn-warning">Return to Profile</button>
+            </div>
+      </div>
+  </div>

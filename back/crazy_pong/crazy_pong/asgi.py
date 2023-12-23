@@ -19,13 +19,14 @@ application = get_asgi_application()
 ##added
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import game.routing
+import game.routing, accounts.routing
 
 application = ProtocolTypeRouter({
      'http': get_asgi_application(), 
      'websocket': AuthMiddlewareStack(
         URLRouter(
-            game.routing.websocket_urlpatterns
+            game.routing.websocket_urlpatterns +
+            accounts.routing.websocket_urlpatterns
         )
      )
  })

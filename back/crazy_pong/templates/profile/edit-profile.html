@@ -1,0 +1,100 @@
+<style type="text/css">
+.card {
+    border: 0px solid #000 !important;
+} 
+.card-body {
+    border: 1px solid #000 !important;
+    color: #f5c344 !important; 
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+} 
+</style>
+<section class="section">
+  <div class="container">
+    <div style="text-align:center">
+      <h1>Edit Profile Information</h1>
+    </div>
+    <div class="card">
+      <div class="card-body bg-dark">
+
+
+    <form id="updateUserForm" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;" onsubmit="return submitForm(event)">
+        <div class="form-group">
+            <label for="username" class="label">Username:</label>
+            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="label">Email:</label>
+            <input type="text" id="email" name="email" placeholder="Enter your email" class="form-control" value="{{ user.email }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="label">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password" class="label">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="avatar" class="label">Avatar (optional):</label>
+            <input type="file" id="avatar" name="avatar" class="form-control-file">
+        </div>
+
+        <div class="card-footer">
+            <button class="btn btn-warning" type="submit" >Save Changes</button>
+        </div>
+
+        {% csrf_token %}
+    </form>
+
+
+
+
+
+
+<!--         <form method="post" action="% url 'update_user' %" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;">
+          <div class="form-group">
+            <label for="username" class="label">Username:</label>
+            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>
+          </div>
+          <div class="form-group">
+            <label for="username" class="label">Email:</label>
+            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.email }}" required>
+          </div>
+          <div class="form-group">
+            <label for="username" class="label">Password:</label>
+            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="">
+          </div>
+          <div class="form-group">
+            <label for="username" class="label">Confirm Password:</label>
+            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="">
+          </div>
+          <div class="form-group">
+            <label for="avatar" class="label">Avatar (optional):</label>
+            <input type="file" id="avatar" name="avatar" class="form-control-file">
+          </div>
+
+          <div class="card-footer">
+            <button class="btn btn-warning" type="submit">Save Changes</button>
+          </div>
+
+          {% csrf_token %}
+
+        </form> -->
+
+<!--       </div>
+      {% if profileUpdated %}
+      <div class="card-body">
+          <div class="alert alert-success">
+            User Profile info updated correctly<br>
+            <a href="{% url 'profile' %}" class="btn btn-info">Return to Profile</a>
+          </div>
+      </div>
+      {% endif %} -->
+    </div>
+
+  </div>
+</section>
