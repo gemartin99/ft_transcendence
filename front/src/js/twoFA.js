@@ -137,6 +137,7 @@ function	checkMailCode(event) {
         concatenatedValue += inputs[i].value;
     }
     const formData = new FormData();
+    console.log('chekmailcodeuuuu');
 	formData.append('concatenatedValue', concatenatedValue);
 	fetch("http://localhost:8000/twoFA/verifyMailCode/", {
 	    method: 'POST',
