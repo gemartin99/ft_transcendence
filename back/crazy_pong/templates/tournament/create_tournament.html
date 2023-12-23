@@ -71,19 +71,6 @@ left: 32px !important;
                     <option value="5">5</option>
                     <option value="7">7</option>
                     <option value="11">11</option>
-                    <option value="15">15</option>
-                    <option value="21">21</option>
-                </select>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label for="time" class="col-sm-4 col-form-label pum">Game time:</label>
-            <div class="col-sm-8">
-                <select class="form-select" id="time" name="time">
-                    <option value="none">None</option>
-                    <option value="1min">1 min</option>
-                    <option value="3min">3 min</option>
-                    <option value="5min">5 min</option>
                 </select>
             </div>
         </div>
@@ -93,7 +80,6 @@ left: 32px !important;
                 <select class="form-select" id="players" name="players">
                     <option value="4">4</option>
                     <option value="8">8</option>
-                    <option value="16">16</option>
                 </select>
             </div>
         </div>
@@ -104,8 +90,7 @@ left: 32px !important;
             </div>
         </div>
         <div class="text-center">
-            <a class="navlink" href="/tournament/lobby">
-                <button class="btn btn-warning">Save</button>
+                <button class="btn btn-warning" onclick="create_tournament()">Save</button>
             </a>
         </div>
     </form>
