@@ -20,8 +20,14 @@ class Usermine(models.Model):
     mail2FACode = models.CharField(max_length=6, default=-1)
     mail2FACode_timestamp = models.DateTimeField(null=True, blank=True)
     validated2FA = models.BooleanField(default=False)
-    matches_played = models.ManyToManyField(Match, blank=True)
+    # matches_played = models.ManyToManyField(Match, blank=True)
 
+
+    # def get_last_5_matches(self):
+    #     # Get the last 5 matches sorted by timestamp in descending order
+    #     last_5_matches = self.matches_played.order_by('-created_at')[:5]
+    #     return last_5_matches
+        
     def generate_mail2fa_code(self):
         self.mail2FACode = ''.join([str(random.randint(0, 9)) for _ in range(6)])
         self.mail2FACode_timestamp = timezone.now()

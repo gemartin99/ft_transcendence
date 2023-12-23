@@ -232,9 +232,13 @@
 
 				        if (getCookie('jwttoken')) {
 				        	if (data.mail2FA == true)
+				        	{
 				        		handleRedirect('/twoFA/MailVerification/');
-				        	if (data.google2FA == true)
+				        	}
+				        	else if (data.google2FA == true)
+				        	{
 				        		handleRedirect('/twoFA/GoogleVerification/');
+				        	}
 				        	else
 				        	{
 					            set_logged_in_view();

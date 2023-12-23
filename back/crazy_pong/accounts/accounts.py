@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 import bcrypt
 from security.security import Security
 from authentification.authentification import Authentification
+import re
 
 class Accounts:
     @staticmethod
@@ -24,46 +25,65 @@ class Accounts:
         # Both are allowed to be used
         return False, None
 
+    @staticmethod
+    def is_valid_email(email):
+        # Regular expression for a basic email validation
+        email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
+        # Use re.match() to check if the email matches the pattern
+        match = re.match(email_regex, email)
+
+        return bool(match)
 
     @staticmethod
     def validate_inputdata_for_new_account_request(request):
+        # check for data
         data = json.loads(request.body.decode('utf-8'))
         if not data:
-            return False, 'invalid data send'
+            return False, 'Invalid data send.'
+        # getters for data
         username = data.get('signupUsername')
         email = data.get('email')
         password = data.get('password')
         confirm_password = data.get('confirm_password')
+        # check everything filled
         if not username or not email or not password or not confirm_password:
-            return False, 'fill all the form inputs'
-        print('username: ', username)
-        print('email: ', email)
-        print('password: ', password)
-        print('confirm_password: ', confirm_password)
+            return False, 'Fill all the form inputs.'
+        # parse username
+        valid_username = Security.is_valid_username(username)
+        if valid_username == False:
+            return False, 'Invalid characters in username'
+        #parse mail
+        check_mail = Accounts.is_valid_email(email)
+        if not check_mail:
+            return False, 'Introduce a valid email.'
+        #parse pwd
         is_secure, error_messages = Security.check_pwd_security(password)
         if is_secure == False:
             print(error_messages)
             return False, error_messages
-        valid_username = Security.is_valid_username(username)
-        if valid_username == False:
-            return False, 'Invalid characters in username'
+        #check pwd match
+        if password != confirm_password:
+            return False, 'Password missmatch.'
         return True, None
+
+
 
     @staticmethod
     def validate_inputdata_for_login_request(request):
         data = json.loads(request.body.decode('utf-8'))
         if not data:
             return False, 'invalid data send'
-        username = data.get('Username or email')
+        username = data.get('Username')
         password = data.get('password')
         if not username  or not password:
             return False, 'fill all the form inputs'
         print('username: ', username)
         print('password: ', password)
-        is_secure, error_messages = Security.check_pwd_security(password)
+        # is_secure, error_messages = Security.check_pwd_security(password)
         print('holaaaaaaaaa')
-        if is_secure == False:
-            return False, error_messages
+        # if is_secure == False:
+        #     return False, error_messages
         return True, None
 
     @staticmethod 
@@ -90,7 +110,7 @@ class Accounts:
             encrypted_pwd = Security.hash_password(password)
             pwd_str = encrypted_pwd.decode('utf-8')
             # Store the data
-            user = Usermine(name=username, password=pwd_str, email=email)
+            user = Usermine(name=username.lower(), password=pwd_str, email=email.lower())
             user.save()
             return True, 'User saved successfully'
         except IntegrityError as e:
@@ -109,9 +129,10 @@ class Accounts:
             if errMsg:
                 return False, errMsg
             data = json.loads(request.body.decode('utf-8'))
-            username = data.get('Username or email')
+            username = data.get('Username')
+            print('userlogin:', username.lower())
             password = data.get('password')
-            user = Usermine.objects.get(name=username)
+            user = Usermine.objects.get(name=username.lower()) 
             if Security.verify_password(password, user.password):
                 user.online = True
                 user.save()

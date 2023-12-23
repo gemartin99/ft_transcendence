@@ -58,6 +58,7 @@ class TwoFA:
             # aqui no deberia de revisar el user, deberia de tenerlo ya
             jwt_token = request.COOKIES.get('jwttoken', None)
             user_id = Authentification.decode_jwt_token(jwt_token)
+            
             totp_code = str(request.POST.get('totp_code'))
             userid = user_id
             totp_secret = Usermine.objects.get(id=userid).totp
