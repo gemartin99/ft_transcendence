@@ -42,7 +42,7 @@
           margin-top: 3vw;
       }
 
-      .btn-warning {
+      .toc1 {
           padding: 2vw 4vw;
           font-size: 3vw;
           border: none;
@@ -52,7 +52,7 @@
           color: #fff;
       }
 
-      .btn-warning:hover {
+      .toc1:hover {
           background-color: #e0a800;
       }
 
@@ -86,7 +86,25 @@
         font-size: 20px;
     }
 
-    .btn-warning {
+    .toc1 {
+        padding: 20px 20px;
+        font-size: 35px; 
+    }
+
+    .toc2 {
+          padding: 2vw 4vw;
+          font-size: 3vw;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          background-color: #ffc107;
+          color: #fff;
+      }
+
+      .toc2:hover {
+          background-color: #e0a800;
+      }
+      .toc2 {
         padding: 20px 20px;
         font-size: 35px; 
     }
@@ -102,7 +120,7 @@
               </div>
             </div>
             <div class="button-center">
-                <button class="btn-warning" onclick="activateMail2FA()">Sent me the email</button>
+                <button class="btn-warning toc1" onclick="activateMail2FA()">Sent me the email</button>
             </div>
       </div>
       <div class="auth-container bg-dark" id="steep2">
@@ -117,7 +135,7 @@
               <input name="digit6"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
           </div>
           <div class="button-center">
-              <button class="btn-warning" onclick="checkMailCode()">Submit</button>
+              <button class="btn-warning toc2" onclick="checkMailCode()">Submit</button>
           </div>
       </div>
       <div class="auth-container bg-dark" id="steep3">
@@ -128,7 +146,7 @@
               </div>
             </div>
             <div class="button-center">
-                <a href="/profile" class="btn-warning">Return to Profile</button>
+                <a href="/profile" class="btn-warning toc">Return to Profile</button>
             </div>
       </div>
   </div>

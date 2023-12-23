@@ -3,7 +3,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          height: 100vh;
+          height: 90vh;
           margin: 0;
       }
 
@@ -42,7 +42,7 @@
           margin-top: 3vw;
       }
 
-      .btn-warning {
+      .toc {
           padding: 2vw 4vw;
           font-size: 3vw;
           border: none;
@@ -52,7 +52,7 @@
           color: #fff;
       }
 
-      .btn-warning:hover {
+      .toc:hover {
           background-color: #e0a800;
       }
 
@@ -86,7 +86,7 @@
         font-size: 20px;
     }
 
-    .btn-warning {
+    .toc {
         padding: 20px 20px;
         font-size: 35px; 
     }
@@ -103,7 +103,7 @@
             </div>
             <div class="button-center">
                 <label class="label">Click to generate QR:</label>
-                <button class="btn-warning" onclick="getQR()">Generate QR</button>
+                <button class="btn-warning toc" onclick="getQR()">Generate QR</button>
             </div>
       </div>
       <div class="auth-container bg-dark" id="steep2">
@@ -122,7 +122,7 @@
               <input name="digit6"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
           </div>
           <div class="button-center">
-              <button class="btn-warning" onclick="checkGoogleAuthCode()">Submit</button>
+              <button class="btn-warning toc" onclick="checkGoogleAuthCode()">Submit</button>
           </div>
       </div>
       <div class="auth-container bg-dark" id="steep3">
