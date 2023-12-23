@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--=!#=6-=b1$xrc=$@7o1s#orkkuskzn+fsx(z&t_4377sisfze'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['localhost', '*.localhost', 'crazy-pong.com', '*.crazy-pong.com']
 
@@ -44,7 +47,11 @@ INSTALLED_APPS = [
     'crazy_pong',
     'channels',
     'accounts',
+    'FT_OAuth',
+    'twoFA',
     'tournament',
+    'authentification',
+    'profile',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +65,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-ROOT_URLCONF = 'crazy_pong.urls'
+SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
+CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
+
+ROOT_URLCONF = os.getenv('ROOT_URLCONF')
 
 TEMPLATES = [
     {
@@ -84,12 +94,12 @@ WSGI_APPLICATION = 'crazy_pong.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'transcendence', 
-        'USER': 'admin',
-        'PASSWORD': 'admin123',
-        'HOST': 'database_postgre', 
-        'PORT': '5432',
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'), 
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'), 
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -139,6 +149,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://crazy-pong.com",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -148,10 +159,50 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ASGI_APPLICATION = 'crazy_pong.asgi.application'
 
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {"hosts": [("redis", 6379)],},
     },
 }
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://crazy-pong.com",
+    "https://localhost:8080"
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'crazypongreal@hotmail.com'
+EMAIL_HOST_PASSWORD = '125@conBonus'
+
+# NO VA
+
+# OAUTH2_CLIENT_ID = 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0'
+# OAUTH2_CLIENT_SECRET = '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'
+# OAUTH2_REDIRECT_URI = 'http://localhost'
+
+
+# SOCIAL_AUTH_42_KEY = 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0'
+# SOCIAL_AUTH_42_SECRET = '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'
+# SOCIAL_AUTH_42_SCOPE = ['public', 'profile', 'email']
+# SOCIAL_AUTH_42_AUTH_EXTRA_ARGUMENTS = {'response_type': 'code'}
+
+# LOGIN_URL = 'login'
+# LOGOUT_URL = 'logout'
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/'
+
+
+# AUTHENTICATION_BACKENDS = (
+#     'social_core.backends.oauth.OAuthAuth',
+# )
+# NO VA
 

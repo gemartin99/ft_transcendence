@@ -1,19 +1,43 @@
-    <div id="header">
-        <h1 id="helloHeading">Loading...</h1>
-        <button id="search" onclick="join_match()">Search game</button>
-        <button id="sala" onclick="join_match_sala()">Search in a sala</button>
-        <button id="searchIA" onclick="join_IA()">Play with IA</button>
-        <button id="obs" onclick="obs_match()">Observate a match</button>
-        <label for="textbox">Enter sala:</label>
-        <input type="text" id="textbox" name="textbox">
+<link rel="stylesheet" href="/css/game.css">
+<div id="video-container">
+    <video autoplay muted loop id="video-background">
+      <source src="/imgs/game_video.mov" type="video/mp4">
+      Si ves este mensaje es que el navegador no carga el video
+    </video>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row align-items-start">
+      <div class="text-center" style="text-align: center;padding: 20px;">
+          <h1 style="font-size: 60px;">GAME</h1>
+      </div>
+      <div class="col-md-6 bg-gray d-flex flex-column justify-content-center">
+        <div class="text-center mt-md-4" style="padding: 50px;">
+          <a href="/game/play" class="navlink">
+            <button class="btn btn-warning more-size" style="width: 300px;"  onclick="join_match()">PUBLIC GAME</button>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 bg-gray d-flex flex-column align-items-center justify-content-center">
+        <div class="text-center mt-md-4" style="padding: 50px;">
+          <a href="/game/play" class="navlink">
+            <button class="btn btn-warning more-size" style="width: 300px;">PRIVATE GAME</button>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 bg-gray d-flex flex-column align-items-center justify-content-center">
+        <div class="text-center mt-md-4" style="padding: 50px;">
+          <a href="/game/view" class="navlink">
+            <button class="btn btn-warning more-size" style="width: 300px;">VIEW GAME</button>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-6 bg-gray d-flex flex-column align-items-center justify-content-center">
+        <div class="text-center mt-md-4" style="padding: 50px;">
+            <a href="/game/play" class="navlink">
+                <button class="btn btn-warning more-size" style="width: 300px;" onclick="join_IA()">PLAY VS IA</button>
+            </a>
+        </div>
+      </div>
     </div>
-    <div id="app">
-        <section>
-            <div class="container">
-              <div style="text-align: center;"><h1> Let's Fight</h1></div>
-              <div class="card" id="gameContainer" class="aspect-ratio-1200-750">
-                <canvas id="gameCanvas" width="1200" height="750", style="background-color: darkgray;", ali></canvas>
-              </div>
-            </div>
-        </section>
-    </div>
+  </div>

@@ -1,4 +1,5 @@
-function showPassword(e){
+
+function showPassword(e) {
   var input = document.getElementById('password')
   if(input.type === 'password'){
     input.type = "text"
@@ -8,3 +9,4 @@ function showPassword(e){
     e.target.className = "fas fa-eye-slash"
   }
 }
+
