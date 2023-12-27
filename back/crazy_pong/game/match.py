@@ -8,17 +8,24 @@ from asgiref.sync import sync_to_async
 
 
 class PlayerManager():
-    def __init__(self, player, state):
+    def __init__(self, player, paddle, state):
 
         self.state = state
+        self.paddle = self.state[paddle]
         self.player = self.state[player]
 
     def move(self, direction):
         if direction == "down":
-            self.player["input"] = 1
+            if(self.paddle["y"] + self.paddle["height"] < 750):
+                self.player["input"] = 1
+            else:
+                self.player["input"] = 0
 
         elif direction == "up":
-            self.player["input"] = -1
+            if(self.paddle["y"] > 0):
+                self.player["input"] = -1
+            else:
+                self.player["input"] = 0
         
         elif direction == "rest":
             self.player["input"] = 0
@@ -174,8 +181,11 @@ class GameManager():
 
     @sync_to_async
     def saveMatch(self):
-        player1 = Usermine.objects.get(name='42@baltes-g')
-        player2 = Usermine.objects.get(name='42@baltes-g')
+        player1 = '42@baltes-g'
+        if (self.IA):
+            player2 = 'IA'
+        else:
+            player2 = '42@baltes-g'
 
         match = Match.objects.create(
             player1=player1,
@@ -184,6 +194,8 @@ class GameManager():
             player2_score=self.state['score2'],
             match_id=self.state['idMatch'],
         )
+        
+        player1_profile.matches_played.add(match)
         all_matches = Match.objects.all()
         for m in all_matches:
-            print(f"Player1: {m.player1.name} - Player2: {m.player2.name} - Score1: {m.player1_score} - Score2: {m.player2_score} - MatchID: {m.match_id}")
+            print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - MatchID: {m.match_id}")
