@@ -8,6 +8,9 @@ from .tournament_manager import TournamentManager
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+from authentification.authentification import Authentification
+from accounts.models import Usermine
+
 def get_tournament_page(request):
     context = {
         'variable1': 'template variable 1',
@@ -65,8 +68,12 @@ def createTournament(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+
+            jwt_token = request.COOKIES.get('jwttoken', None)
+            user_id = Authentification.decode_jwt_token(jwt_token)
+            user = Usermine.objects.get(id=user_id)
             
-            tournament_code = TournamentManager.add_tournament(data['name'], data['n'], data['user'])
+            tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user.name)
             
             return JsonResponse({'code': tournament_code})
         except json.JSONDecodeError as e:
@@ -75,12 +82,16 @@ def createTournament(request):
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @csrf_exempt 
-def addPlayer(request):
+def joinPlayer(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            
-            TournamentManager.add_player(data['id'], data['user'])
+
+            jwt_token = request.COOKIES.get('jwttoken', None)
+            user_id = Authentification.decode_jwt_token(jwt_token)
+            user = Usermine.objects.get(id=user_id)
+
+            TournamentManager.add_player(data['id'], user.name)
             
             return JsonResponse({'code': '200'})
         except json.JSONDecodeError as e:
@@ -108,10 +119,10 @@ def updateTournament(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            print(data)
+            ret = TournamentManager.update(data['id'])
             
-            TournamentManager.update(data['player1'], data['player2'], data['points1'], data['points2'])
-            
-            return JsonResponse({'code': '200'})
+            return JsonResponse(ret)
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:

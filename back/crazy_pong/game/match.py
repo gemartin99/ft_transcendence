@@ -174,7 +174,7 @@ class GameManager():
             return -1
     
     def ended(self):
-        if (self.state['score1'] >= 3 or self.state['score2'] >= 3):
+        if (self.state['score1'] >= 11 or self.state['score2'] >= 11):
             
             return True
         return False
@@ -195,7 +195,8 @@ class GameManager():
             match_id=self.state['idMatch'],
         )
         
-        player1_profile.matches_played.add(match)
+        #player1_profile.matches_played.add(match)
+        
         all_matches = Match.objects.all()
         for m in all_matches:
             print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - MatchID: {m.match_id}")
