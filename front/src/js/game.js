@@ -105,7 +105,6 @@ function join_match_sala() {
 function join_IA() {
 
     socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=IA');
-    
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
         
@@ -115,10 +114,14 @@ function join_IA() {
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'update') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            var idMatch = document.getElementById("idMatch");
+            idMatch.textContent =  "Match ID: " + jsonData.idMatch;
             printMap(jsonData);
         }
         if (jsonData['cmd'] == 'finish') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            var idMatch = document.getElementById("idMatch");
+            idMatch.textContent = jsonData.idMatch;
             printWinner(jsonData);
         }
 
@@ -135,10 +138,8 @@ function join_IA() {
 }
 
 function obs_match() {
-    const heading = document.getElementById('helloHeading');
-    heading.textContent = 'noo';
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=obs&sala=' + document.getElementById("textbox").value);
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=obs&sala=' + document.getElementById("lobbYCode").value);
 
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -147,7 +148,7 @@ function obs_match() {
         const jsonData = JSON.parse(event.data.toString());
         console.log(jsonData)
         if (jsonData['cmd'] == 'update') {
-            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            //#endregio//heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             printMap(jsonData);
         }
 
