@@ -1,50 +1,78 @@
 
+in_tournament = 0;
+function createTournament() {
+    console.log("creant torneig");
 
-function create_tournament(e)  {
-    e.preventDefault();
-    console.log('creaopum');
-    // Lógica para el inicio de sesión mediante AJAX/Fetch
-    // const loginForm = document.querySelector("#login");
-    // const formData = new FormData(e.target);
+    const message = { name: document.getElementById("nameTournament").value,
+                                n: 4,
+                                user: "Usuari 1"
+                            };
+    fetch('http://localhost:8000/tournament/create/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data.code);
+        in_tournament = data.code;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 
-    // // Convert form data to a JSON object
-    // const formDataObject = {};
-    // formData.forEach((value, key) => {
-    //     formDataObject[key] = value;
-    // });
-    // console.log('FormDataObject:', formDataObject);
-    // fetch(baseurl +':8000/users/login/action/', {
-    //     method: 'POST',
-    //     headers: {'Content-Type': 'application/json',},
-    //     credentials: 'include',
-    //     body: JSON.stringify(formDataObject),
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     console.log('Response:', data.message);
-    //     console.log('jwttoken:', data.jwtToken)
-    //     const expirationDate = new Date();
-    //     expirationDate.setTime(expirationDate.getTime() + (23 * 60 * 60 * 1000));
+function updateTournament() {
+        
+    const message = { id: in_tournament,
+                            };
+    fetch('http://localhost:8000/tournament/update/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        //var code = document.getElementById("lobbyCode");
+        //code.textContent = "Lobby code: " + data.code;
+        var body = document.getElementById("bracket");
+        body.textContent = JSON.stringify(data);
+        console.log('Response:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 
-    //     if (data.jwtToken)
-    //         document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
-    //     console.log('jwttoken:', data.jwtToken);
+}
 
+function joinTournament() {
+    console.log("creant torneig");
 
-    //     if (getCookie('jwttoken')) {
-    //         set_logged_in_view();
-    //         setFormMessage(loginForm, "success", "Congratulations you have nice memory");
-    //         history.pushState(null, null, '/');
-    //         handleNavLinkAction('/');
-    //         const socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
-    //     }
-    //     else {
-    //         set_logged_out_view();
-    //         setFormMessage(loginForm, "error", "Invalid username/password combination");
-    //     }
-    // })
-    // .catch((error) => {
-    //     console.error('Error:', error);
-    //     setFormMessage(loginForm, "error", "Invalid username/password combination");
-    // });
+    const message = {id: document.getElementById("lobbyCode").value,
+                            };
+    fetch('http://localhost:8000/tournament/join/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data.code);
+        in_tournament = document.getElementById("lobbyCode").value;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }

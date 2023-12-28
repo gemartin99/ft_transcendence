@@ -2,6 +2,8 @@ import random
 import string
 import json
 
+from game.models import Match as MatchModel
+
 class Match():
 
     def __init__(self, u1, u2, p1, p2):
@@ -10,17 +12,18 @@ class Match():
             'u2': u2,
             'p1': p1,
             'p2': p2,
-            'id': ''.join(random.choices(string.ascii_letters + string.digits, k=10)),
+            'match_id': ''.join(random.choices(string.ascii_letters + string.digits, k=10)),
+            'played': False
         }
         
     def get(self):
         return self.res
     
     def setu1(self, u1):
-        self.res['p1'] = u1
+        self.res['u1'] = u1
     
     def setu2(self, u2):
-        self.res['p2'] = u2
+        self.res['u2'] = u2
     
     def setp1(self, p1):
         self.res['p1'] = p1
@@ -30,47 +33,58 @@ class Match():
 
 class Tournament:
     
-    def __init__(self, name, n):
+    def __init__(self, name, n, id):
         self.name = name
+        self.id = id
         self.players = []
         self.bracket = []
         self.n = n
         self.start = False
+        self.createBracket()
 
     def getName(self):
         return self.name
     
     def addPlayer(self, user):
+        if (len(self.players) % 2 == 0):
+            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu1(user)
+        else:
+            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu2(user)
         self.players.append(user)
         if len(self.players) == self.n:
             self.start = True
-            self.createBracket()
+            
 
     def get(self):
+        self.autoUpdate()
         ret = {}
         i = 0
+        ret['info'] = {'idTournament': self.id, 'tournamentName': self.name, 'started': self.start}
         for match in self.bracket:
-            ret[i] = match.get()
+            ret[str(i)] = match.get()
             i += 1
-        return json.dumps(ret)
+        return ret
+            
 
-    def update(self, u1, u2, p1, p2):
-        for i in range(len(self.bracket())):
-            match = self.bracket[i].get()
-            if match['u1'] == u1 and match['u2'] == u2:
-                self.bracket[i].setp1(p1)
-                self.bracket[i].setp2(p2)
-                if (p1 > p2):
-                    if (i % 2 == 1):
-                        self.bracket[(i-1) / 2 ].setu1(u1)
-                    else:
-                        self.bracket[(i-1) / 2 ].setu2(u1)
-                
-                if (p1 > p2):
-                    if (i % 2 == 1):
-                        self.bracket[(i-1) / 2 ].setu1(u2)
-                    else:
-                        self.bracket[(i-1) / 2 ].setu2(u2)
+    def autoUpdate(self):
+        if (self.start):
+            for i in range(len(self.bracket)):
+                match = self.bracket[i].get()
+                if match['played']  == False and MatchModel.objects.filter(match_id=match['match_id']).exists():
+                    m = Match.objects.get(match_id=match['match_id'])
+                    self.bracket[i].setp1(m.player1_score)
+                    self.bracket[i].setp2(m.player2_score)
+                    if (m.player1_score > m.player2_score):
+                        if (i % 2 == 1):
+                            self.bracket[(i-1) / 2 ].setu1(m.player1)
+                        else:
+                            self.bracket[(i-1) / 2 ].setu2(m.player1)
+                    
+                    if (p1 > p2):
+                        if (i % 2 == 1):
+                            self.bracket[(i-1) / 2 ].setu1(m.player2)
+                        else:
+                            self.bracket[(i-1) / 2 ].setu2(m.player2)
                 
     def hasPlayer(self, user):
         if user in self.players:
@@ -82,4 +96,4 @@ class Tournament:
             self.bracket.append(Match("undefined", "undefined", 0, 0))
         for i in range(self.n):
             if (i %2 == 0):
-                self.bracket.append(Match(self.players[i], self.players[i+1], 0, 0))        
+                self.bracket.append(Match("undefined", "undefined", 0, 0))        

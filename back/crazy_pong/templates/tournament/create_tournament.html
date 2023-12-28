@@ -64,6 +64,11 @@ left: 32px !important;
     <h2 class="text-center mb-4">CREATE TOURNAMENT</h2>
     <form>
         <div class="row mb-3">
+            <label for="points" class="col-sm-4 col-form-label pum">Name of the tournament:</label>
+            <div class="col-sm-8">
+                <input type="text" id="nameTournament" name="nameTournament">
+        </div>
+        <div class="row mb-3">
             <label for="points" class="col-sm-4 col-form-label pum">Points per game:</label>
             <div class="col-sm-8">
                 <select class="form-select" id="points" name="points">
@@ -90,7 +95,12 @@ left: 32px !important;
             </div>
         </div>
         <div class="text-center">
+<<<<<<< HEAD
                 <button class="btn btn-warning" onclick="create_tournament()">Save</button>
+=======
+            <a class="navlink" href="/tournament/lobbyPage">
+                <button class="btn btn-warning" onclick="createTournament()">Save</button>
+>>>>>>> game
             </a>
         </div>
     </form>
@@ -107,4 +117,3 @@ left: 32px !important;
     });
     });
 </script>
-

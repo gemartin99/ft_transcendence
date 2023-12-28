@@ -45,7 +45,7 @@ class gameConnection(AsyncWebsocketConsumer):
         else:
             self.game = MatchManager.looking_for_match()
             if (self.game == False):
-                    self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+                    self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
 
         if self.game not in MatchManager.threads:
             MatchManager.add_game(self.game, self)
