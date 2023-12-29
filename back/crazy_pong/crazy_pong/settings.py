@@ -68,6 +68,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
 

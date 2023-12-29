@@ -10,6 +10,10 @@ function handlePopState(event) {
 }
 
 function fetchContent(path) {
+    console.log('fetchContent');
+    if (path != "/"){
+        path = path + "/"
+    }
     fetch(baseUrl + ':8000' + path, {
         credentials: 'include',
     })
@@ -19,11 +23,17 @@ function fetchContent(path) {
 
         if (data.content) {
             content.innerHTML = data.content;
-        } else {
+        }
+        if (data.redirect){
+            console.log("yeeeeeeey");
+            handleRedirect(data.redirect);
+        }
+        else {
             console.log('Invalid response from backend');
         }
     })
     .catch(error => {
+        console.log('error que lo flipas');
         console.error('Error:', error);
     });
 }
@@ -35,6 +45,7 @@ function updateUrl(path) {
 
 function handleNavLinks()
 {
+    console.log('handleNavLinks');
     var navLinks = document.querySelectorAll('.navlink');
     navLinks.forEach(function (link) {
         link.addEventListener('click', handleNavLinkClick);
@@ -42,6 +53,7 @@ function handleNavLinks()
 }
 
 function handleRedirect(redirect_url) {
+    console.log('handleRedirect');
     updateUrl(redirect_url);
     fetch(baseUrl + ':8000' + redirect_url, {
         credentials: 'include',
@@ -54,9 +66,11 @@ function handleRedirect(redirect_url) {
             content.innerHTML = data.content;
         }
         else if (data.redirect) {
-            console.log('Invalid response from backend 1');
+            handleRedirect(data.redirect);
+            return ;
+            console.log('Invalid response from backend 1', data.redirect);
         } else {
-            console.log('Invalid response from backend 1');
+            console.log('Invalid response from backend 1', data);
         }
         
         handleNavLinks()
@@ -67,6 +81,7 @@ function handleRedirect(redirect_url) {
 }
 
 function handleNavLinkClick(event) {
+    console.log('handleNavLinkClick');
     event.preventDefault(); // Prevents the default behavior (e.g., navigating to a new page)
     console.log("NavLink clicked!");
     var hrefValue = event.currentTarget.getAttribute('href');
@@ -81,7 +96,7 @@ function handleNavLinkClick(event) {
     }) // Adjusted fetch URL
     .then(response => response.json())
     .then(data => {
-        console.log('Response from backend:', data);
+        console.log('Response from backend: here: ', data);
 
         if (data.content) {
             content.innerHTML = data.content;
@@ -90,7 +105,7 @@ function handleNavLinkClick(event) {
             handleRedirect(data.redirect)
             console.log('Response is a redirect');
         } else {
-            console.log('Invalid response from backend 1');
+            console.log('Invalid response from backend 1 oooooo');
         }
         
         handleNavLinks()
@@ -101,6 +116,7 @@ function handleNavLinkClick(event) {
 }
 
 function handleNavLinkAction(hrefValue) {
+    console.log('handleNavLinkAction');
     updateUrl(hrefValue);
     fetch(baseUrl + ':8000' + hrefValue, {
         credentials: 'include',
