@@ -19,7 +19,6 @@ from security.security import Security
 
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
-    print("estoy aqui holaaa")
     if not user:
         return JsonResponse({'redirect': redirect})
     context = {
@@ -45,7 +44,6 @@ def get_edit_profile_page(request):
         'user': user,
     }
     content_html = render_to_string('profile/edit-profile.html', context)
-    print("estoy aqui holaaaaaaaaaaaaa")
     data = {
         'title': 'Select Logging Mode',
         'content': content_html,
@@ -70,6 +68,51 @@ def get_twofactor_profile_page(request):
     }
     return JsonResponse(data)
 
+def UpdateUser(username, user, response_messages):
+    flag = False
+    if username is not None:
+        if username != user.name:
+            res, msg = Accounts.username_is_in_use(username)
+            if res:
+                response_messages.append(msg)
+                flag = True
+        if username != user.name and not Security.is_valid_username(username):
+            response_messages.append('Introduce a valid username.')
+            flag = True
+        print('flag:', flag)
+        if flag is False:
+            user.name = username
+    # user.save()
+    return response_messages
+
+def UpdateEmail(email, user, response_messages):
+    flag = False
+    if email is not None:
+        if email != user.email:
+            res, msg = Accounts.email_is_in_use(email)
+            if res:
+                response_messages.append(msg)
+                flag = True
+        if not Security.is_valid_email(email):
+            response_messages.append('Introduce a valid email.')
+            flag = True
+        if not flag:
+            user.email = email
+    return response_messages
+
+
+def UpdatePwd(password, confirm_password, user, response_messages):
+    if password is not None:
+        if password == confirm_password:
+            res, msg = Security.check_pwd_security(password)
+            if res:
+                user.password = password
+            else:
+                response_messages.extend(msg)
+        else:
+            response_messages.append('Paswords missmatch.')
+    return response_messages
+
 
 @csrf_exempt
 def UpdateInfo(request):
@@ -81,54 +124,11 @@ def UpdateInfo(request):
     email = json_data.get('email').lower()
     password = json_data.get('password')
     confirm_password = json_data.get('confirm_password')
-
-    #debug
-    # Access uploaded files
-    avatar = request.FILES.get('avatar')
-    print('avatar:',avatar)
-    print(username)
-    print(email)
-    print('|',username,'|', user.name,'|')
-    print(username == user.name)
-    print('|',email,'|', user.email,'|')
-    print(email == user.email)
-    #debug
-
-
-    response_messages = ''
-
-    if username is not None:
-        if username != user.name:
-            res, msg = Accounts.username_is_in_use(username)
-            if res:
-                response_messages += msg + ' '
-
-        elif username != user.name and not Security.is_valid_username(username):
-            response_messages += 'Introduce a valid username.' + ' '
-        else:
-            user.name = username
-
-    if email is not None:
-        if email != user.email:
-            res, msg = Accounts.email_is_in_use(email)
-            if res:
-                response_messages += msg + ' '
-        elif not Security.is_valid_email(email):
-            response_messages += 'Introduce a valid email.' + ' '
-        else:
-            user.email = email
-
-    if password is not None:
-        if password == confirm_password:
-            res, msg = check_pwd_security(password)
-            if res:
-                user.password = password
-            else:
-                response_messages += msg + ' '
-
+    response_messages = []
+    response_messages = UpdateUser(username, user, response_messages)
+    response_messages = UpdateEmail(email, user, response_messages)
+    response_messages = UpdatePwd(password, confirm_password, user, response_messages)
     user.save()
-
-    print(response_messages)
     if response_messages:
         return JsonResponse({'message': response_messages})
     else:
