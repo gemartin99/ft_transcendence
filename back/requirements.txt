@@ -2,6 +2,7 @@ Django==3.2.10
 channels~=3.0
 bcrypt
 django-cors-headers
+django-cors-middleware
 psycopg2
 channels-redis
 bcrypt

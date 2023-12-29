@@ -12,6 +12,9 @@ from authentification.authentification import Authentification
 from accounts.models import Usermine
 
 def get_tournament_page(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -25,6 +28,11 @@ def get_tournament_page(request):
     return JsonResponse(data)
 
 def get_create_tournament_page(request):
+    print(request)
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        print(redirect)
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -38,6 +46,10 @@ def get_create_tournament_page(request):
     return JsonResponse(data)
 
 def get_join_tournament_page(request):
+    print('boooo')
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -51,6 +63,9 @@ def get_join_tournament_page(request):
     return JsonResponse(data)
 
 def get_lobby_page(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -65,6 +80,9 @@ def get_lobby_page(request):
 
 @csrf_exempt 
 def createTournament(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -83,6 +101,9 @@ def createTournament(request):
 
 @csrf_exempt 
 def joinPlayer(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -101,7 +122,12 @@ def joinPlayer(request):
    
     
 @csrf_exempt 
-def getTournament(request):
+def getTournament(request): #ESTO DA ERROR QUE LO FLIIIIPAS
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        print('redirect')
+        return JsonResponse({'redirect': redirect})
+    print(user) 
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -116,6 +142,9 @@ def getTournament(request):
 
 @csrf_exempt  
 def updateTournament(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -130,6 +159,9 @@ def updateTournament(request):
     
 @csrf_exempt 
 def getTournaments(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
