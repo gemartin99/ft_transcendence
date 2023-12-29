@@ -38,7 +38,7 @@ class Tournament:
         self.id = id
         self.players = []
         self.bracket = []
-        self.n = n
+        self.n = int(n)
         self.start = False
         self.createBracket()
 

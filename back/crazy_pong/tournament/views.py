@@ -11,6 +11,8 @@ import json
 from authentification.authentification import Authentification
 from accounts.models import Usermine
 
+
+
 def get_tournament_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
@@ -86,11 +88,7 @@ def createTournament(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-
-            jwt_token = request.COOKIES.get('jwttoken', None)
-            user_id = Authentification.decode_jwt_token(jwt_token)
-            user = Usermine.objects.get(id=user_id)
-            
+            print('name:',data['ia'])
             tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user.name)
             
             return JsonResponse({'code': tournament_code})
