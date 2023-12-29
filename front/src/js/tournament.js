@@ -1,12 +1,14 @@
 
 in_tournament = 0;
-function createTournament() {
+function createTournament(e) {
     console.log("creant torneig");
-
+    e.preventDefault();
     const message = { name: document.getElementById("nameTournament").value,
-                                n: 4,
-                                user: "Usuari 1"
+                                n: document.getElementById("players").value,
+                                points: document.getElementById("points").value,
+                                ia: document.getElementById('fillAI').checked
                             };
+    console.log(message);
     fetch('http://localhost:8000/tournament/create/', {
         // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
         method: 'POST',
@@ -75,4 +77,13 @@ function joinTournament() {
     .catch((error) => {
         console.error('Error:', error);
     });
+}
+
+function handleSwitchClick() {
+    const switchElement = document.getElementById('fillAI');
+    const isChecked = switchElement.checked;
+
+    console.log('switch:',document.getElementById('fillAI').checked);
+    // Call your custom function with the switch state
+    // yourCustomFunction(isChecked);
 }

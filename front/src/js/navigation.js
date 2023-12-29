@@ -11,8 +11,8 @@ function handlePopState(event) {
 
 function fetchContent(path) {
     console.log('fetchContent');
-    if (path != "/"){
-        path = path + "/"
+    if (path && path.slice(-1) !== '/') {
+        path += '/';
     }
     fetch(baseUrl + ':8000' + path, {
         credentials: 'include',

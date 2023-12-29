@@ -62,7 +62,7 @@ left: 32px !important;
 
 <div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 40px;border-radius: 10px;padding: 30px;">
     <h2 class="text-center mb-4">CREATE TOURNAMENT</h2>
-    <form>
+    <form onsubmit="return createTournament(event)">
         <div class="row mb-3">
             <label for="points" class="col-sm-4 col-form-label pum">Name of the tournament:</label>
             <div class="col-sm-8">
@@ -91,12 +91,13 @@ left: 32px !important;
         <div class="row mb-3">
             <label for="fillAI" class="col-sm-4 col-form-label pum">Fill with AI's:</label>
             <div class="col-sm-8 d-flex align-items-center">
-                <div class="switch"></div>
+                <input type="checkbox" id="fillAI" class="switch-input" onclick="handleSwitchClick()">
+                <label for="fillAI" class="switch-label"></label>
             </div>
         </div>
         <div class="text-center">
-            <a class="navlink" href="/tournament/lobbyPage">
-                <button class="btn btn-warning" onclick="createTournament()">Save</button>
+            <!-- <a class="navlink" href="/tournament/lobbyPage"> -->
+                <button class="btn btn-warning" type="submit" >Save</button>
             </a>
         </div>
     </form>
