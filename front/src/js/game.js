@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function join_match() {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=search');
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search');
     const puntuacio = getElementById("puntuacio");
 
 
@@ -114,6 +114,7 @@ function join_IA() {
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'update') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            console.log(jsonData);
             var idMatch = document.getElementById("idMatch");
             idMatch.textContent =  "Match ID: " + jsonData.idMatch;
             printMap(jsonData);
@@ -124,7 +125,6 @@ function join_IA() {
             idMatch.textContent = jsonData.idMatch;
             printWinner(jsonData);
         }
-
         //console.log('WebSocket message received:', event.data);
 
     };
@@ -139,7 +139,7 @@ function join_IA() {
 
 function obs_match() {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=obs&sala=' + document.getElementById("lobbYCode").value);
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
 
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);

@@ -87,11 +87,13 @@ def createTournament(request):
         return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
+            #falta parsing del name
             data = json.loads(request.body)
             print('name:',data['ia'])
             tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user.name)
-            
-            return JsonResponse({'code': tournament_code})
+
+            return JsonResponse({'code': tournament_code,
+                'redirect': '/tournament/lobbyPage/'})
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
@@ -106,9 +108,9 @@ def joinPlayer(request):
         try:
             data = json.loads(request.body)
 
-            jwt_token = request.COOKIES.get('jwttoken', None)
-            user_id = Authentification.decode_jwt_token(jwt_token)
-            user = Usermine.objects.get(id=user_id)
+            # jwt_token = request.COOKIES.get('jwttoken', None)
+            # user_id = Authentification.decode_jwt_token(jwt_token)
+            # user = Usermine.objects.get(id=user_id)
 
             TournamentManager.add_player(data['id'], user.name)
             
