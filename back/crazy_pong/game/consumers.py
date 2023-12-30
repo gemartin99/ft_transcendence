@@ -36,10 +36,15 @@ class gameConnection(AsyncWebsocketConsumer):
 
         # self.user = self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1]
         self.mode = self.scope['query_string'].decode('UTF-8').split('&')[1].split('=')[1]
+        
+
+        #jareste
         self.user_id = Authentification.decode_jwt_token(self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1])
         self.user = await self.get_user(self.user_id)
         self.user_name = self.user.name
         print('user:',self.user)
+        #end jareste
+
 
         if (self.mode == 'obs'):
              self.game = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]

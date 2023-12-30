@@ -22,6 +22,8 @@ function createTournament(e) {
     .then(data => {
         console.log('Response:', data.code);
         in_tournament = data.code;
+        if (data.redirect)
+            handleRedirect(data.redirect);
     })
     .catch((error) => {
         console.error('Error:', error);
