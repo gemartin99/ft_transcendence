@@ -122,6 +122,15 @@ def show_online(request):
     print('uid:', user_id)
     all_users = Usermine.objects.all()
     for user in all_users:
+        last_5_matches = user.get_last_5_matches()
+        for match in last_5_matches:
+            print(f"Match ID: {match.match_id}")
+            print(f"you: {match.player1}")
+            print(f"Opponent: {match.player2}")
+            print(f"Result1: {match.player1_score}")
+            print(f"Result2: {match.player2_score}")
+            print(f"Timestamp: {match.timestamp}")
+            print("\n")
         print(f"User: {user.name}, Online: {user.online}, valid2fa: {user.validated2FA}, google: {user.google2FA}, mail: {user.mail2FA}, id: {user.id}")
         # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})

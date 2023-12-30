@@ -8,5 +8,6 @@ class Match(models.Model):
     player2 = models.IntegerField()
     player1_score = models.IntegerField()
     player2_score = models.IntegerField()
+    match_winner = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
     

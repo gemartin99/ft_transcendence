@@ -175,7 +175,7 @@ class GameManager():
             return -1
     
     def ended(self):
-        if (self.state['score1'] >= 11 or self.state['score2'] >= 11):
+        if (self.state['score1'] >= 3 or self.state['score2'] >= 3):
             
             return True
         return False
@@ -189,16 +189,39 @@ class GameManager():
         else:
             player2 = self.player_two
 
+        
+        if self.state['score1'] > self.state['score2']:
+            match_winner = player1
+        else:
+            match_winner = player2
+
+
         match = Match.objects.create(
             player1=player1,
             player2=player2,
             player1_score=self.state['score1'],
             player2_score=self.state['score2'],
             match_id=self.state['idMatch'],
+            match_winner=match_winner,
         )
         
-        #player1_profile.matches_played.add(match)
+        if player1 > 0:
+            user = Usermine.objects.get(id=player1)
+            if match.match_winner == player1:
+                user.wins += 1
+            else:
+                user.losses += 1
+            user.matches_played.add(match)
+            user.save()
+        if player2 > 0:
+            user2 = Usermine.objects.get(id=player2)
+            if match.match_winner == player2:
+                user2.wins += 1
+            else:
+                user2.losses += 1
+            user2.matches_played.add(match)
+            user2.save()
         
         all_matches = Match.objects.all()
         for m in all_matches:
-            print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - MatchID: {m.match_id}")
+            print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - Winner: {m.match_winner} - MatchID: {m.match_id}")
