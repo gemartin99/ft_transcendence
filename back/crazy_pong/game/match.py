@@ -213,6 +213,7 @@ class GameManager():
                 user.losses += 1
             user.matches_played.add(match)
             user.save()
+
         if player2 > 0:
             user2 = Usermine.objects.get(id=player2)
             if match.match_winner == player2:
@@ -222,6 +223,7 @@ class GameManager():
             user2.matches_played.add(match)
             user2.save()
         
+        #debug
         all_matches = Match.objects.all()
         for m in all_matches:
             print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - Winner: {m.match_winner} - MatchID: {m.match_id}")
