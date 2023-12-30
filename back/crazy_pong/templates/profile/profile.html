@@ -22,9 +22,7 @@
             </div>
             <h4 class="card-title text-center">{{user.name}}</h4>
             <div class="content">
-              <p> Rank Position: {{userRank}}</p>
-              <p>Player Score: {{user.score}}</p>
-              <p>Played Games: {{user.played}}</p>
+              <p>Played Games: {{total_played_games}}</p>
               <p>Total Wins: {{user.wins}}</p>
               <p>Total Losses: {{user.losses}}</p>
             </div>
@@ -48,12 +46,6 @@
             </div>
           </div>
         </div> -->
-        <div class="card">
-          <div class="card-body bg-dark">
-            <h5 class="card-title">Achievements</h5>
-            <p>No achievements won yet</p>
-          </div>
-        </div>
         <br><br>
         <div class="card">
           <div class="card-body bg-dark">
@@ -72,21 +64,19 @@
               </thead>
               <tbody>
                 <tr *ngFor="let match of userMatches">
-                  <td>{{match.id}}</td>
-                  <td>{{match.player1.name}}</td>
-                  <td>{{match.player2.name}}</td>
-                  <td>{{match.player1Score}}</td>
-                  <td>{{match.player2Score}}</td>
-                  <td>
-                    Murk
-                  </td>
-                  <td>
-                    <ng-container *ngIf="match.status === 0">
+                  <td>{{match.match_id}}</td>
+                  <td>{{match.player1}}</td>
+                  <td>{{match.player2}}</td>
+                  <td>{{match.player1_score}}</td>
+                  <td>{{match.player2_score}}</td>
+                  <td>{{match_winner}}</td>
+                  <td>Finished <!-- esto lo podemos hasta quitar -->
+                    <!-- <ng-container *ngIf="match.status === 0">
                       <a routerLink="/game/match/{{match.id}}">In play</a>
                     </ng-container>
                     <ng-container *ngIf="match.status === 1">
                       Finished
-                    </ng-container>
+                    </ng-container> -->
                   </td>
                 </tr>
                 <!-- Add more rows for the remaining matches -->

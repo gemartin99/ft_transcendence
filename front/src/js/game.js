@@ -75,7 +75,7 @@ function join_match_sala() {
     const heading = document.getElementById('helloHeading');
     heading.textContent = 'noo';
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=sala&sala=' + document.getElementById("textbox").value);
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&sala=' + document.getElementById("textbox").value);
     
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -104,7 +104,7 @@ function join_match_sala() {
 
 function join_IA() {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=IA');
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA');
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
         
