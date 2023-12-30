@@ -43,7 +43,8 @@ class GameManager():
         self.paddle_two = self.state["paddle2"]
         self.player_one = self.state["player1"]
         self.player_two = self.state["player2"]
-        
+        print("player_one", self.player_one)
+        print("player_two", self.player_two)
         self.fr = int(os.getenv("FRAMERATE"))
 
         self.IA = False
@@ -181,11 +182,12 @@ class GameManager():
 
     @sync_to_async
     def saveMatch(self):
-        player1 = '42@baltes-g'
+        player1 = self.player_one['id']
+        print(self.player_one['id'])
         if (self.IA):
-            player2 = 'IA'
+            player2 = -42
         else:
-            player2 = '42@baltes-g'
+            player2 = self.player_two
 
         match = Match.objects.create(
             player1=player1,

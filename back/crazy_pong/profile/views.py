@@ -15,16 +15,25 @@ from django.contrib.auth.decorators import login_required
 from authentification.authentification import Authentification
 from accounts.accounts import Accounts
 from security.security import Security
-
+from game.models import Match
 
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
+
+ #test
+    match = Match.objects.get(match_id='kkkkk')
+
+ #end test
+
+    print(match)
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
         'user': user,
+        'total_played_games': user.wins + user.losses,
+        'match': match,
     }
     content_html = render_to_string('profile/profile.html', context)
     data = {

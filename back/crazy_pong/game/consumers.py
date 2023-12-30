@@ -17,6 +17,10 @@ from .match_manager import MatchManager
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 
+from authentification.authentification import Authentification
+from accounts.models import Usermine
+from channels.db import database_sync_to_async
+
 class gameConnection(AsyncWebsocketConsumer):
     
     def __init__(self, *args, **kwargs):
@@ -30,9 +34,12 @@ class gameConnection(AsyncWebsocketConsumer):
     async def connect(self):
         print(self.scope['query_string'])
 
-        self.user = self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1]
+        # self.user = self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1]
         self.mode = self.scope['query_string'].decode('UTF-8').split('&')[1].split('=')[1]
-
+        self.user_id = Authentification.decode_jwt_token(self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1])
+        self.user = await self.get_user(self.user_id)
+        self.user_name = self.user.name
+        print('user:',self.user)
 
         if (self.mode == 'obs'):
              self.game = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
@@ -48,7 +55,7 @@ class gameConnection(AsyncWebsocketConsumer):
                     self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
 
         if self.game not in MatchManager.threads:
-            MatchManager.add_game(self.game, self)
+            MatchManager.add_game(self.game, self, self.user_id, self.user_name)
             self.game_ctrl = GameManager(MatchManager.matches[self.game])
 
         self.thread =MatchManager.threads[self.game]
@@ -112,6 +119,11 @@ class gameConnection(AsyncWebsocketConsumer):
                     )
             # print("Time: " + str(time.time() - time_act))
             await asyncio.sleep(1/self.fr - (time.time() - time_act))
+
+    #jareste
+    @database_sync_to_async
+    def get_user(self, user_id):
+        return Usermine.objects.get(id=user_id)
 
     async def stream_state(self, event):
         time2 =  time.time()
