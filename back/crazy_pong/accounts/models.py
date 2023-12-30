@@ -25,7 +25,7 @@ class Usermine(models.Model):
 
     def get_last_5_matches(self):
         # Get the last 5 matches sorted by timestamp in descending order
-        last_5_matches = self.matches_played.order_by('-created_at')[:5]
+        last_5_matches = self.matches_played.order_by('-timestamp')[:5]
         return last_5_matches
         
     def generate_mail2fa_code(self):

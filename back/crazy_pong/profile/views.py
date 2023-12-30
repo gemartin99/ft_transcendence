@@ -23,17 +23,17 @@ def get_profile_page(request):
         return JsonResponse({'redirect': redirect})
 
  #test
-    match = Match.objects.get(match_id='kkkkk')
+    last_5_matches = user.get_last_5_matches()
 
  #end test
 
-    print(match)
+    print(last_5_matches)
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
         'user': user,
         'total_played_games': user.wins + user.losses,
-        'match': match,
+        'last_5_matches': last_5_matches,
     }
     content_html = render_to_string('profile/profile.html', context)
     data = {

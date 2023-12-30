@@ -63,23 +63,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let match of userMatches">
-                  <td>{{match.match_id}}</td>
-                  <td>{{match.player1}}</td>
-                  <td>{{match.player2}}</td>
-                  <td>{{match.player1_score}}</td>
-                  <td>{{match.player2_score}}</td>
-                  <td>{{match_winner}}</td>
-                  <td>Finished <!-- esto lo podemos hasta quitar -->
-                    <!-- <ng-container *ngIf="match.status === 0">
-                      <a routerLink="/game/match/{{match.id}}">In play</a>
-                    </ng-container>
-                    <ng-container *ngIf="match.status === 1">
-                      Finished
-                    </ng-container> -->
-                  </td>
-                </tr>
-                <!-- Add more rows for the remaining matches -->
+                {% for match in last_5_matches %}
+                  <tr>
+                    <td>{{ match.match_id }}</td>
+                    <td>{{ match.player1 }}</td>
+                    <td>{{ match.player2 }}</td>
+                    <td>{{ match.player1_score }}</td>
+                    <td>{{ match.player2_score }}</td>
+                    <td>{{ match.match_winner }}</td>
+                    <td>Finished</td>
+                  </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
