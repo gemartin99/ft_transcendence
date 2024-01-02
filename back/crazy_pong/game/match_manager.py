@@ -7,19 +7,19 @@ class MatchManager:
     threads = {}
     matches = {}
     @classmethod
-    def add_game(cls, game_name, consumer_instance):
+    def add_game(cls, game_name, consumer_instance, userid, username):
         cls.matches[game_name] = {
             "cmd": "update",
             "idMatch": 0,
             "type": 1,
             "player1": {
-                "id": 'nouse',
-                "name": 'nouse',
+                "id": userid,
+                "name": username,
                 "input": 0,
             },
             "player2": {
-                "id": 'nouse2',
-                "name": 'nouse2',
+                "id": None,
+                "name": 'IA',
                 "input": 0,
             },
             "ball": {
