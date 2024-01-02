@@ -15,6 +15,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+# import sys
+# print('path:', sys.path)
+# print('DB_PORT:', os.getenv('DB_PORT'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -64,6 +67,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
