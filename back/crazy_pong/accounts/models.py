@@ -21,7 +21,7 @@ class Usermine(models.Model):
     mail2FACode_timestamp = models.DateTimeField(null=True, blank=True)
     validated2FA = models.BooleanField(default=False)
     matches_played = models.ManyToManyField(Match, blank=True)
-
+    friends = models.ManyToManyField('self', blank=True)
 
     def get_last_5_matches(self):
         # Get the last 5 matches sorted by timestamp in descending order
