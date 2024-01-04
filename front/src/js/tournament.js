@@ -1,4 +1,6 @@
 
+var baseUrl = window.location.origin;
+
 in_tournament = 0;
 function createTournament(e) {
     console.log("creant torneig");
@@ -9,7 +11,7 @@ function createTournament(e) {
                                 ia: document.getElementById('fillAI').checked
                             };
     console.log(message);
-    fetch('http://localhost:8000/tournament/create/', {
+    fetch(baseUrl + ':8000/tournament/create/', {
         // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
         method: 'POST',
         headers: {
@@ -34,7 +36,7 @@ function updateTournament() {
         
     const message = { id: in_tournament,
                             };
-    fetch('http://localhost:8000/tournament/update/', {
+    fetch(baseUrl + ':8000/tournament/update/', {
         // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
         method: 'POST',
         headers: {
@@ -65,7 +67,7 @@ function joinTournament() {
 
     const message = {id: document.getElementById("lobbyCode").value,
                             };
-    fetch('http://localhost:8000/tournament/join/', {
+    fetch(baseUrl + ':8000/tournament/join/', {
         // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
         method: 'POST',
         headers: {

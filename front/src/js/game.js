@@ -1,5 +1,6 @@
 //const domain = "crazy-pong.com";
-const domain = "localhost";
+// const domain = "localhost";
+var domain = window.location.hostname;
 
 current_match = 0
 player = 0
