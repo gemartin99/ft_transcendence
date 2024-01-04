@@ -55,10 +55,12 @@ class gameConnection(AsyncWebsocketConsumer):
         if self.mode == 'sala':
                 self.game = self.scope['query_string'].decode('UTF-8').split('&')[3].split('=')[1]
         else:
-            self.game = MatchManager.looking_for_match(self.user_id, self.user_name)
-            print(self.game)
-            if (self.game == False):
-                    self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
+            self.game = None
+
+        self.game = MatchManager.looking_for_match(self.user_id, self.user_name, self.game)
+        print(self.game)
+        if (self.game == False):
+                self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
 
         if self.game not in MatchManager.threads:
             self.points = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
