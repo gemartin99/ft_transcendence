@@ -95,7 +95,7 @@ body {
     border-radius: var(--border-radius);
     outline: none;
     cursor: pointer;
-    background: var(--color-primary);
+    background: var(--color-primary-dark);
 }
 
 .form__button:hover {
