@@ -59,15 +59,17 @@ function join_match() {
         socket.onmessage = (event) => {
             in_match = true
             const jsonData = JSON.parse(event.data.toString());
-            console.log(jsonData)
+            //console.log(jsonData)
             if (jsonData['cmd'] == 'update') {
-                console.log(jsonData);
+                
+                //console.log(jsonData);
                 var idMatch = document.getElementById("idMatch");
                 idMatch.textContent =  "Match ID: " + jsonData.idMatch;
                 printMap(jsonData);
             }
             if (jsonData['cmd'] == 'finish') {
                 printWinner(jsonData);
+                socket.close();
             }
 
             //console.log('WebSocket message received:', event.data);
