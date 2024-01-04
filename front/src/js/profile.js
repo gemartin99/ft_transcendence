@@ -28,6 +28,8 @@ function submitForm(e) {
     .then(response => response.json())
     .then(data => {
         console.log('Response:', data.message);
+        setFormMessage(loginForm, "error", data.message);
+
     })
     .catch(error => {
         console.error('Error:', error);

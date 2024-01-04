@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
-from .models import Usermine
+from accounts.models import Usermine
 import base64
 from django.db import IntegrityError
 from django.contrib.auth.password_validation import validate_password

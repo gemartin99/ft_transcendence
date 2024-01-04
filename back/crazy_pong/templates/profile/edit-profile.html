@@ -18,6 +18,11 @@
 
 
     <form id="updateUserForm" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;" onsubmit="return submitForm(event)">
+        {% if new %}
+            <div class="form__message form__message--success">Account successfully created!</div>
+        {% else %}
+            <div class="form__message form__message--error"></div>
+        {% endif %}
         <div class="form-group">
             <label for="username" class="label">Username:</label>
             <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>

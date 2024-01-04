@@ -15,10 +15,7 @@ import re
 
 class Accounts:
     @staticmethod
-    def username_or_email_is_in_use(username, email):
-        # Check if the username is already in use
-        if Usermine.objects.filter(name=username).exists():
-            return True, 'Username is already in use'
+    def email_is_in_use(email):
         # Check if the email is already in use
         if Usermine.objects.filter(email=email).exists():
             return True, 'Email is already in use'
@@ -26,14 +23,11 @@ class Accounts:
         return False, None
 
     @staticmethod
-    def is_valid_email(email):
-        # Regular expression for a basic email validation
-        email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-
-        # Use re.match() to check if the email matches the pattern
-        match = re.match(email_regex, email)
-
-        return bool(match)
+    def username_is_in_use(username):
+        # Check if the username is already in use
+        if Usermine.objects.filter(name=username).exists():
+            return True, 'Username is already in use'
+        return False, None
 
     @staticmethod
     def validate_inputdata_for_new_account_request(request):
@@ -54,7 +48,7 @@ class Accounts:
         if valid_username == False:
             return False, 'Invalid characters in username'
         #parse mail
-        check_mail = Accounts.is_valid_email(email)
+        check_mail = Security.is_valid_email(email)
         if not check_mail:
             return False, 'Introduce a valid email.'
         #parse pwd
@@ -103,7 +97,10 @@ class Accounts:
             password = data.get('password')
             confirm_password = data.get('confirm_password')
             # Check username and email are not in use
-            res, errMsg = Accounts.username_or_email_is_in_use(username, email)
+            res, errMsg = Accounts.username_is_in_use(username)
+            if errMsg:
+                return False, errMsg
+            res, errMsg = Accounts.email_is_in_use(email)
             if errMsg:
                 return False, errMsg
             # Encrypt and prepare the password

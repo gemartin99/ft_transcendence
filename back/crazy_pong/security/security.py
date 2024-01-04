@@ -29,3 +29,13 @@ class Security:
         print('here:', allowed_characters)
         # Check if the username matches the pattern
         return bool(allowed_characters.match(username))
+
+    @staticmethod
+    def is_valid_email(email):
+        # Regular expression for a basic email validation
+        email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
+        # Use re.match() to check if the email matches the pattern
+        match = re.match(email_regex, email)
+
+        return bool(match)
