@@ -20,6 +20,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from authentification.authentification import Authentification
 from accounts.models import Usermine
 from channels.db import database_sync_to_async
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 class gameConnection(AsyncWebsocketConsumer):
     
@@ -94,9 +96,6 @@ class gameConnection(AsyncWebsocketConsumer):
     async def disconnect(self, code):
         #self.thread["paddle_one"] = False
         self.thread["active"] = False
-
-        await self.channel_layer.group_discard(self.game, self.channel_name)
-        await self.close()
         print("disconnected") 
     
 
