@@ -47,8 +47,11 @@ function updateTournament() {
     .then(data => {
         //var code = document.getElementById("lobbyCode");
         //code.textContent = "Lobby code: " + data.code;
-        var body = document.getElementById("bracket");
-        body.textContent = JSON.stringify(data);
+        var bracketContent = document.getElementById("bracket-content");
+        bracketContent.innerHTML = data.content;
+        var tournament_id = document.getElementById("lobbyCode");
+        tournament_id.textContent = "LOBBY CODE: " + data.id;
+        console.log('id:', data.id);
         console.log('Response:', data);
     })
     .catch((error) => {
