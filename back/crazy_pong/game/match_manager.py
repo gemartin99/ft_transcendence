@@ -7,7 +7,7 @@ class MatchManager:
     threads = {}
     matches = {}
     @classmethod
-    def add_game(cls, game_name, consumer_instance, userid, username):
+    def add_game(cls, game_name, consumer_instance, userid, username, points):
         cls.matches[game_name] = {
             "cmd": "update",
             "idMatch": 0,
@@ -49,6 +49,7 @@ class MatchManager:
             "isPaused": True,
             "isGameOver": False,
             "winner": 0,
+            "points": points,
         }
         cls.threads[game_name] = {
             "thread": threading.Thread(target=MatchManager.before_thread, args=(consumer_instance, game_name,)),

@@ -36,7 +36,6 @@ class gameConnection(AsyncWebsocketConsumer):
 
         # self.user = self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1]
         self.mode = self.scope['query_string'].decode('UTF-8').split('&')[1].split('=')[1]
-        
 
         #jareste
         self.user_id = Authentification.decode_jwt_token(self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1])
@@ -52,8 +51,9 @@ class gameConnection(AsyncWebsocketConsumer):
              await self.accept()
              return 
 
+
         if self.mode == 'sala':
-                self.game = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
+                self.game = self.scope['query_string'].decode('UTF-8').split('&')[3].split('=')[1]
         else:
             self.game = MatchManager.looking_for_match(self.user_id, self.user_name)
             print(self.game)
@@ -61,7 +61,8 @@ class gameConnection(AsyncWebsocketConsumer):
                     self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
 
         if self.game not in MatchManager.threads:
-            MatchManager.add_game(self.game, self, self.user_id, self.user_name)
+            self.points = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
+            MatchManager.add_game(self.game, self, self.user_id, self.user_name, self.points)
             self.game_ctrl = GameManager(MatchManager.matches[self.game])
 
         self.thread =MatchManager.threads[self.game]
