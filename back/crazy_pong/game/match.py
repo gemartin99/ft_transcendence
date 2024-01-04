@@ -175,7 +175,7 @@ class GameManager():
             return -1
     
     def ended(self):
-        if (self.state['score1'] >= 3 or self.state['score2'] >= 3):
+        if (self.state['score1'] >= int(self.state['points']) or self.state['score2'] >= int(self.state['points'])):
             
             return True
         return False

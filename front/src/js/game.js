@@ -49,69 +49,85 @@ function handleGame(){
 
 function join_match() {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search');
+    if (in_match == false) {
+        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=4');
 
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        
-    };
-    socket.onmessage = (event) => {
-        in_match = true
-        const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData)
-        if (jsonData['cmd'] == 'update') {
-            console.log(jsonData);
-            var idMatch = document.getElementById("idMatch");
-            idMatch.textContent =  "Match ID: " + jsonData.idMatch;
-            printMap(jsonData);
-        }
+        socket.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+            
+        };
+        socket.onmessage = (event) => {
+            in_match = true
+            const jsonData = JSON.parse(event.data.toString());
+            console.log(jsonData)
+            if (jsonData['cmd'] == 'update') {
+                console.log(jsonData);
+                var idMatch = document.getElementById("idMatch");
+                idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+                printMap(jsonData);
+            }
+            if (jsonData['cmd'] == 'finish') {
+                printWinner(jsonData);
+            }
 
-        //console.log('WebSocket message received:', event.data);
+            //console.log('WebSocket message received:', event.data);
 
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };        
+        };
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+            in_match = false
+        };        
+    }
 }
+
+function create_match() {
+
+    if (in_match == false) {
+        handleRedirect('/game/play/');
+        code = generateRandomString(4)
+        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
+        //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
+        console.log(code)
+        socket.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+        };
+        socket.onmessage = (event) => {
+            in_match = true
+            const jsonData = JSON.parse(event.data.toString());
+            if (jsonData['cmd'] == 'update') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //console.log(jsonData);
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+                printMap(jsonData);
+            }
+            if (jsonData['cmd'] == 'finish') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent = jsonData.idMatch;
+                printWinner(jsonData);
+            }
+            //console.log('WebSocket message received:', event.data);
+
+        };
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+            in_match = false
+        };         
+    }
+}
+
 
 function join_match_sala() {
-    const heading = document.getElementById('helloHeading');
-    heading.textContent = 'noo';
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&sala=' + document.getElementById("textbox").value);
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
     
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        
-    };
-    socket.onmessage = (event) => {
-        in_match = true
-        const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData)
-        if (jsonData['cmd'] == 'update') {
-            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            printMap(jsonData);
-        }
-
-        //console.log('WebSocket message received:', event.data);
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };        
-}
-
-function join_IA() {
-
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA');
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
         
@@ -141,7 +157,43 @@ function join_IA() {
     socket.onclose = (event) => {
         console.log('WebSocket connection closed:', event);
         in_match = false
-    };        
+    };         
+}
+
+function join_IA() {
+    if (in_match == false) {
+        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
+        socket.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+            
+        };
+        socket.onmessage = (event) => {
+            in_match = true
+            const jsonData = JSON.parse(event.data.toString());
+            if (jsonData['cmd'] == 'update') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //console.log(jsonData);
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+                printMap(jsonData);
+            }
+            if (jsonData['cmd'] == 'finish') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent = jsonData.idMatch;
+                printWinner(jsonData);
+            }
+            //console.log('WebSocket message received:', event.data);
+
+        };
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+            in_match = false
+        };   
+    }    
 }
 
 function obs_match() {
@@ -229,3 +281,12 @@ function printWinner(jsonData) {
 function join_match_from_html() {
     join_match();
 }
+
+function generateRandomString(length) {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }

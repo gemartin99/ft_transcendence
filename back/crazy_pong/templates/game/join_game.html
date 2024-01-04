@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/css/tournament.css">
+<div id="video-container">
+    <video autoplay muted loop id="video-background">
+      <source src="/imgs/game_video.mov" type="video/mp4">
+      Tu navegador no soporta el elemento de video.
+    </video>
+</div>
+<div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 100px;border-radius: 10px;padding: 30px;">
+    <h2 class="text-center mb-4">JOIN GAME</h2>
+    <form>
+        <div class="row mb-3">
+            <label for="lobbYCode" style="font-size: 20px;" class="col-sm-4 col-form-label">Lobby code:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="lobbyCode" name="lobbyCode" placeholder="Enter Lobby code">
+            </div>
+        </div>
+        <div class="text-center">
+            <a class="navlink" href="/game/play">
+                <button type="submit" class="btn btn-warning" onclick="join_match_sala()">Ready</button>
+            </a>
+        </div>
+    </form>
+</div>
+
+
+
