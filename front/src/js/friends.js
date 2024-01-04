@@ -1,6 +1,7 @@
 
 //baseurl = "http://crazy-pong.com"
-baseurl = "http://localhost";
+// baseurl = "http://localhost";
+var baseurl = window.location.origin;
 
 function searchFriend(event) {
     event.preventDefault(); // Prevent the default form submission behavior

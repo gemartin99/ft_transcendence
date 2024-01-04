@@ -1,8 +1,10 @@
 // url = "crazy-pong.com"
-url = "localhost"
+// url = "localhost"
+var url = window.location.hostname;
 
 //baseurl = "http://crazy-pong.com"
-baseurl = "http://localhost";
+// baseurl = "http://localhost";
+var baseurl = window.location.origin;
 
 function submitForm(e) {
     e.preventDefault();

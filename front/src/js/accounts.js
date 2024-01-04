@@ -1,10 +1,11 @@
 // index.js
 
 // url = "crazy-pong.com"
-url = "localhost"
+var url = window.location.hostname;
 
 //baseurl = "http://crazy-pong.com"
-baseurl = "http://localhost";
+// baseurl = "http://localhost";
+var baseUrl = window.location.origin;
 
 function setFormMessage(formElement, type, message) {
     const messageElement = formElement.querySelector(".form__message");

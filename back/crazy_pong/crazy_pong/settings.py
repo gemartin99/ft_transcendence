@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure--=!#=6-=b1$xrc=$@7o1s#orkkuskzn+fsx(z&t_4377sisfze
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '*.localhost*', 'crazy-pong.com', '*.crazy-pong.com']
+ALLOWED_HOSTS = ['localhost', '*.localhost*', 'crazy-pong.com', '*.crazy-pong.com', '10.11.14.3', '*10.11.14.3']
 
 
 # Application definition
@@ -152,6 +152,7 @@ STATIC_URL = 'static/'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
+    "http://10.11.14.3",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -176,7 +177,8 @@ CHANNEL_LAYERS = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
-    "https://localhost:8080"
+    "https://localhost:8080",
+    "http://10.11.14.3",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
