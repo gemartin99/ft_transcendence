@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure--=!#=6-=b1$xrc=$@7o1s#orkkuskzn+fsx(z&t_4377sisfze
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '*.localhost', 'crazy-pong.com', '*.crazy-pong.com']
+ALLOWED_HOSTS = ['localhost', '*.localhost*', 'crazy-pong.com', '*.crazy-pong.com']
 
 
 # Application definition
