@@ -10,24 +10,24 @@ in_match = false
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function(event) {
         if (in_match == true) {
-        if (event.key === 'ArrowUp') {
-            const message = { cmd: 'update',
-                                id: current_match,
-                                pl: player,
-                                key: "up" };
-            socket.send(JSON.stringify(message));
-            console.log(JSON.stringify(message));
-        } else if (event.key === 'ArrowDown') {
-            if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
+            if (event.key === 'ArrowUp') {
                 const message = { cmd: 'update',
                                     id: current_match,
                                     pl: player,
-                                    key: "down" };
+                                    key: "up" };
                 socket.send(JSON.stringify(message));
                 console.log(JSON.stringify(message));
+            } else if (event.key === 'ArrowDown') {
+                if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
+                    const message = { cmd: 'update',
+                                        id: current_match,
+                                        pl: player,
+                                        key: "down" };
+                    socket.send(JSON.stringify(message));
+                    console.log(JSON.stringify(message));
+                }
             }
-        }}
-        
+        }
     });
     
     document.addEventListener('keyup', function(event) {
@@ -40,11 +40,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function handleGame(){
+    console.log('handleGame');
+    if (in_match == true) {
+        handleRedirect('/game/play/');
+    }
+}
+
 function join_match() {
 
     socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search');
-    const puntuacio = getElementById("puntuacio");
-
 
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -55,7 +60,9 @@ function join_match() {
         const jsonData = JSON.parse(event.data.toString());
         console.log(jsonData)
         if (jsonData['cmd'] == 'update') {
-            puntuacio.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            console.log(jsonData);
+            var idMatch = document.getElementById("idMatch");
+            idMatch.textContent =  "Match ID: " + jsonData.idMatch;
             printMap(jsonData);
         }
 
@@ -114,15 +121,15 @@ function join_IA() {
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'update') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            console.log(jsonData);
-            var idMatch = document.getElementById("idMatch");
-            idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+            //console.log(jsonData);
+            //var idMatch = document.getElementById("idMatch");
+            //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
             printMap(jsonData);
         }
         if (jsonData['cmd'] == 'finish') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            var idMatch = document.getElementById("idMatch");
-            idMatch.textContent = jsonData.idMatch;
+            //var idMatch = document.getElementById("idMatch");
+            //idMatch.textContent = jsonData.idMatch;
             printWinner(jsonData);
         }
         //console.log('WebSocket message received:', event.data);
@@ -208,10 +215,10 @@ function printWinner(jsonData) {
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
     if (jsonData.score1 > jsonData.score2) {
-        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
+        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
     }
     else {
-        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
+        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
     }
     ctx.fillText(jsonData.score2 + "-" + jsonData.score1, canvas.width/2, canvas.height/2 + 60);
 }

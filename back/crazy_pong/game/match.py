@@ -187,10 +187,10 @@ class GameManager():
         if (self.IA):
             player2 = -42
         else:
-            player2 = self.player_two
+            player2 = self.player_two['id']
 
         
-        if self.state['score1'] > self.state['score2']:
+        if self.state['score1'] < self.state['score2']:
             match_winner = player1
         else:
             match_winner = player2

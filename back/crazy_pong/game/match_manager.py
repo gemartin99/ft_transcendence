@@ -18,7 +18,7 @@ class MatchManager:
                 "input": 0,
             },
             "player2": {
-                "id": None,
+                "id": -42,
                 "name": 'IA',
                 "input": 0,
             },
@@ -64,9 +64,11 @@ class MatchManager:
         thread.start()
 
     @classmethod
-    def looking_for_match(cls):
+    def looking_for_match(cls, uid, name):
         for match in cls.threads:
             if cls.threads[match]['paddle_two'] == False:
+                cls.matches[match]["player2"]["id"] = uid
+                cls.matches[match]["player2"]["name"] = name
                 return match
         return False
     
