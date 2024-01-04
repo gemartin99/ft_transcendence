@@ -25,15 +25,15 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #343a40; /* Fondo oscuro similar a bg-dark */
+            background-color: #343a40;
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
-            border-radius: 4px; /* Añade bordes redondeados */
+            border-radius: 4px;
         }
 
         .dropdown-content a {
-            color: white; /* Texto en blanco para resaltar */
+            color: white;
             padding: 8px 16px;
             text-decoration: none;
             display: block;
@@ -42,11 +42,11 @@
         .dropdown-content a img {
             max-width: 20px;
             margin-right: 10px;
-            vertical-align: middle; /* Alinea verticalmente la imagen */
+            vertical-align: middle;
         }
 
         .dropdown-content a:hover {
-            background-color: #454d55; /* Color de fondo al pasar el ratón */
+            background-color: #454d55;
         }
 
         .dropdown:hover .dropdown-content {
@@ -164,8 +164,8 @@
 
 				<hr class="d-md-none text-white-50">
 
-				<a href="/profile" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block">Profile</a>
-				<a href="/users/logout" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" onclick="set_logged_out_view()">Logout</a>
+				<a href="/profile" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" style="margin: 5px 5px;">Profile</a>
+				<a href="/users/logout" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" onclick="set_logged_out_view()" style="margin: 5px 5px;">Logout</a>
 				<a href="/users/register" class="navlink lo btn btn-sm btn-warning d-md-inline-block" style="margin: 5px 5px;">Register</a>
 				<a href="/users/login" class="navlink lo btn btn-sm btn-warning d-md-inline-block" style="margin: 5px 5px;">Login</a>
 			</div>
