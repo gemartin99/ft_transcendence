@@ -65,13 +65,19 @@ class MatchManager:
         thread.start()
 
     @classmethod
-    def looking_for_match(cls, uid, name):
-        for match in cls.threads:
-            if cls.threads[match]['paddle_two'] == False:
-                cls.matches[match]["player2"]["id"] = uid
-                cls.matches[match]["player2"]["name"] = name
-                return match
-        return False
+    def looking_for_match(cls, uid, name, game):
+        if (game == None):
+            for match in cls.threads:
+                if cls.threads[match]['paddle_two'] == False:
+                    cls.matches[match]["player2"]["id"] = uid
+                    cls.matches[match]["player2"]["name"] = name
+                    return match
+            return False
+        else:
+            if (game in cls.threads):
+                cls.matches[game]["player2"]["id"] = uid
+                cls.matches[game]["player2"]["name"] = name
+            return game
     
     @classmethod
     def before_thread(cls, consumer_instance, game_name):
