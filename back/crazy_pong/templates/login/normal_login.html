@@ -1,7 +1,7 @@
     <div class="container-login">  
       <div class="container2">
         <form class="form" id="login" onsubmit="return send_login_form(event)">
-            <h1 class="form__title">Login</h1>
+            <h1 class="form__title" style="color: #FFB300;">Login</h1>
             {% if new %}
                 <div class="form__message form__message--success">Account successfully created!</div>
             {% else %}
@@ -15,9 +15,9 @@
                 <input type="password" name="password" class="form__input" autofocus placeholder="Password">
                 <div class="form__input-error-message"></div>
             </div>
-            <button class="form__button" type="submit">Continue</button>
+            <button class="form__button" type="submit" style="background-color: #FF8F00;">Continue</button>
             <p class="form__text">
-                <a class="navlink form__link" href="/users/register" id="linkCreateAccount">Don't have an account? Create account</a>
+                <a class="navlink form__link" href="/users/register" id="linkCreateAccount" style="color:#FFB300;">Don't have an account? Create account</a>
             </p>
         </form>
       </div>
