@@ -249,6 +249,8 @@
 
 		    <script>
 		        // Function to get the value of a URL parameter
+		        var baseUrl = window.location.origin;
+		        var url = window.location.hostname;
 		        function getParameterByName(name, url) {
 		            if (!url) url = window.location.href;
 		            name = name.replace(/[[]]/g, "\\$&");
@@ -272,7 +274,7 @@
 		            };
 
 		            // Fetch to the backend
-		            fetch('http://localhost:8000/FT_OAuth/42/', {
+		            fetch(baseUrl + ':8000/FT_OAuth/42/', {
 		                method: 'POST',
 		                headers: {
 		                    'Content-Type': 'application/json',
