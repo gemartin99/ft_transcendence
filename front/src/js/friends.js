@@ -27,7 +27,7 @@ function searchFriend(event) {
 			handleRedirect(data.redirect)
 		}
         console.log('Response:', data);
-
+        handleRedirect('/friends/');
     })
     .catch(error => {
         console.error('Error:', error);

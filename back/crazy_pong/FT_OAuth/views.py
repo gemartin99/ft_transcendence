@@ -19,7 +19,7 @@ def check_42(request):
 		'grant_type': 'authorization_code',
 		'code': code,
 		'client_id': 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0',
-		'client_secret': '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',
+		'client_secret': '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',
 		'redirect_uri': 'http://localhost',
 	}
 	try:

@@ -29,6 +29,7 @@ def addFriend(request):
     if not user:
         return JsonResponse({'redirect': redirect})
     json_data = json.loads(request.body.decode('utf-8'))
+    print('holaaaaaaaa')
     print(json_data)
     searchValue = json_data.lower()
     print(searchValue)
