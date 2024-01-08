@@ -10,8 +10,6 @@
 	<link rel="stylesheet" href="/css/game.css">
 	<link rel="stylesheet" href="/css/login.css">
 	<link rel="stylesheet" href="/css/aboutus.css">
-	<link rel="stylesheet" href="/css/tournament_table.css">
-	<link rel="stylesheet" href="/css/information.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<!-- Bootstrap CSS Link -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -26,15 +24,15 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #343a40;
+            background-color: #343a40; /* Fondo oscuro similar a bg-dark */
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
-            border-radius: 4px;
+            border-radius: 4px; /* Añade bordes redondeados */
         }
 
         .dropdown-content a {
-            color: white;
+            color: white; /* Texto en blanco para resaltar */
             padding: 8px 16px;
             text-decoration: none;
             display: block;
@@ -43,71 +41,16 @@
         .dropdown-content a img {
             max-width: 20px;
             margin-right: 10px;
-            vertical-align: middle;
+            vertical-align: middle; /* Alinea verticalmente la imagen */
         }
 
         .dropdown-content a:hover {
-            background-color: #454d55;
+            background-color: #454d55; /* Color de fondo al pasar el ratón */
         }
 
         .dropdown:hover .dropdown-content {
             display: block;
         }
-		.video-container {
-        position: relative;
-        width: 100%;
-        height: 100vh;
-        overflow: hidden;
-      }
-  
-      video {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        min-width: 100%;
-        min-height: 100%;
-        width: auto;
-        height: auto;
-        z-index: -1;
-      }
-  
-      .title {
-      font-family: 'Roboto', sans-serif;
-      color: #f5c344;
-      font-size: 3rem;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-  
-      .options {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-bottom: 20px;
-      font-size: 26px;
-    }
-  
-      .options a {
-        text-decoration: none;
-        color: white;
-        padding: 10px 20px;
-        border: 1px solid #f5c344;
-        border-radius: 5px;
-        transition: all 0.3s ease;
-      }
-  
-      .options a:hover {
-        background-color: #f5c344;
-        color: black;
-      }
-
-      .text-below {
-      text-align: center;
-      max-width: 500px;
-      margin: 0 auto;
-      color: #212529;
-    }
     </style>
 </head>
 
@@ -154,21 +97,22 @@
 				<!--boton Cuenta -->
 
 				<div class="dropdown">
-					<button class="btn btn-warning  btn-sm dropbtn">Language <i class="fas fa-caret-down"></i></button>
+					<button id="lang-selector" class="btn btn-warning  btn-sm dropbtn">Language <i class="fas fa-caret-down"></i></button>
 					<div class="dropdown-content">
-						<a href="#"><img src="/imgs/en.png" alt="United Kingdom" style="max-width: 20px;margin-right: 10px;">English</a>
-						<a href="#"><img src="/imgs/esp.png" alt="Spain" style="max-width: 20px;margin-right: 10px;">Spanish</a>
-						<a href="#"><img src="/imgs/por.png" alt="Portugal" style="max-width: 20px;margin-right: 10px;">Portuguese</a>
+						<a onclick="set_english_lang()"><img src="/imgs/en.png" alt="United Kingdom" style="color: white !important; max-width: 20px;margin-right: 10px;"><span id="lang-en">English</span></a>
+						<a onclick="set_spanish_lang()"><img src="/imgs/esp.png" alt="Spain" style="color: white !important; max-width: 20px;margin-right: 10px;"><span id="lang-es">Spanish</span></a>
+						<a onclick="set_portuguese_lang()"><img src="/imgs/por.png" alt="Portugal" style="color: white !important; max-width: 20px;margin-right: 10px;"><span id="lang-pt">Portuguese</span></a>
 					</div>
+					<input type="hidden" id="lang_selected" name="lang_selected" value="en">
 				</div>
 
 
 				<hr class="d-md-none text-white-50">
 
-				<a href="/profile" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" style="margin: 5px 5px;">Profile</a>
-				<a href="/users/logout" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" onclick="set_logged_out_view()" style="margin: 5px 5px;">Logout</a>
-				<a href="/users/register" class="navlink lo btn btn-sm btn-warning d-md-inline-block" style="margin: 5px 5px;">Register</a>
-				<a href="/users/login" class="navlink lo btn btn-sm btn-warning d-md-inline-block" style="margin: 5px 5px;">Login</a>
+				<a href="/profile" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block">Profile</a>
+				<a href="/users/logout" class="navlink li btn btn-sm btn-outline-warning d-md-inline-block" onclick="set_logged_out_view()">Logout</a>
+				<a href="/users/register" class="navlink lo btn btn-sm btn-warning d-md-inline-block" >Register</a>
+				<a href="/users/login" class="navlink lo btn btn-sm btn-warning d-md-inline-block" >Login</a>
 			</div>
 		</div>  
 	</nav>
@@ -176,27 +120,22 @@
 	<!-- CONTENT -->
 	<div id="content">
 		<section class="section pb-0">
-			<div class="video-container">
-				<div class="black-overlay">
-				  <video autoplay muted loop>
-					<source src="/imgs/game_video.mov" type="video/mp4">
-				  </video>
+			<div class="container">
+				<div class="row justify-content-between align-items-center">
+					<div class="col-7">
+						<h1 class="mb-4">Welcome to my final project for 42 school</h1>
+						<p class="mb-4">"Crazy Pong is a tribute to the classic Atari Pong game, This version takes the
+							original gameplay and adds a twist with new features such as power-ups, obstacles, and multiple
+							levels. The user interface has also been updated for a modern look and feel. Whether you're a
+							fan of the original Pong or just looking for a fun and challenging game, Crazy Pong is sure to
+							provide hours of entertainment. Try it out now and see if you have what it takes to beat the high
+							score!"</p>
+					</div>
+					<div class="col-4 d-none d-md-block">
+						<img src="/imgs/Pong.jpeg" alt="illustration" class="img-fluid">
+					</div>
 				</div>
-				<div class="content">
-				  <div class="title" style="margin-top: 30px;">
-					<i class="fa-solid fa-table-tennis-paddle-ball" style="color: #f5c344;"></i>
-					Crazy Pong
-					<i class="fa-solid fa-table-tennis-paddle-ball" style="color: #f5c344;"></i>
-				  </div>
-				  <p class="text-below" style="font-size: 25px;">Crazy Pong is a tribute to the classic Atari Pong game. This version takes the original game and adds new modes such as tournaments or multiplayer. The user interface has also been updated to give it a more modern look. Whether you are a fan of the original Pong or are looking for a fun and challenging game, Crazy Pong will provide you with hours of entertainment. Try it now and see if you have what it takes to beat the high score. Register or login and start playing!</p>
-				  <br>
-				  <div class="options">
-					<a href="#">Register</a>
-					<a href="#">Login</a>
-					<a href="#">42 Login</a>
-				  </div>
-				</div>
-			  </div>
+			</div>
 		</section>
 	</div>
 	<!-- END CONTENT -->
@@ -331,8 +270,25 @@
 			<!-- END ENABLE GOOGLE/MAIL 2FA -->
 
 
-			<p>&copy; 2023 CrazyPong. All rights reserved.</p>
+			<p id="copyright">&copy; 2023 CrazyPong. All rights reserved.</p>
 		</div>
+ 	
+	 	<!-- 2FA GOOGLE QR -->
+<!-- 	  <h2>Enable Two-Factor Authentication</h2>
+	    <button id="getQR"  onclick="getQR()">getQR</button>
+	    <p>Scan the QR code below using the Google Authenticator app:</p>
+	    <canvas id="QRimg"></canvas>
+	    <img id ="QRimg" alt="QR Code">
+	    <p>Or enter the following key manually: {{ request.user.totp_secret }}</p>
+		<form id="textForm" onsubmit="checkAuthCode(event)">
+		    <label for="textInput">Enter Text:</label>
+		    <input type="text" id="textInput" name="text" required>
+		    <button type="submit">check code</button>
+		</form>
+		<div>
+	        <p id="responseMessage"></p>
+	    </div> -->
+	 	<!-- 2FA GOOGLE QR -->
 	    
  	</footer>
 
@@ -340,6 +296,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 	<script src="/js/twoFA.js"></script>
+	<script src="/js/langs.js"></script>
 	<script src="/js/navigation.js"></script>
 	<script src="/js/game.js"></script>
 	<script src="/js/accounts.js"></script>
@@ -347,8 +304,6 @@
 	<script src="/js/session.js"></script>
 	<script src="/js/profile.js"></script>
 	<script src="/js/tournament.js"></script>
-	<script src="/js/friends.js"></script>
-	<script src="/js/information.js"></script>
 </html>
 
 
