@@ -9,7 +9,7 @@
 } 
 </style>
 <div class="text-center" style="text-align: center;padding: 20px;">
-          <h1 style="font-size: 60px;">{{user.name}} Profile</h1>
+          <h1 style="font-size: 60px;">{{user.name}} {{text1}}</h1>
 </div>
 <section class="section">
   <div class="container">
@@ -22,10 +22,9 @@
             </div>
             <h4 class="card-title text-center">{{user.name}}</h4>
             <div class="content">
-              <p>Played Games: {{user.played}}</p>
-              <p>Played Games: {{total_played_games}}</p> 
-              <p>Total Wins: {{user.wins}}</p>
-              <p>Total Losses: {{user.losses}}</p> 
+              <p>{{text2}}: {{user.played}}</p>
+              <p>{{text3}}: {{user.wins}}</p>
+              <p>{{text4}}: {{user.losses}}</p> 
             </div>
             <a class="navlink btn btn-primary" href="/profile/edit" title="Edit Profile"><i class="fas fa-user-gear"></i></a>
             <a class="navlink btn btn-danger" href="/profile/twofactor" title="Security"><i class="fas fa-user-lock"></i></a>
@@ -50,17 +49,17 @@
         <br><br>
         <div class="card">
           <div class="card-body bg-dark">
-            <h5 class="card-title">Played Matches History</h5>
+            <h5 class="card-title">{{text5}}</h5>
             <table class="table table-bordered table-warning">
               <thead>
                 <tr>
-                  <th>Match #</th>
-                  <th>Player1</th>
-                  <th>Player2</th>
-                  <th>Score 1</th>
-                  <th>Score 2</th>
-                  <th>Winner</th>
-                  <th>Status</th>
+                  <th>{{text6}}</th>
+                  <th>{{text7}}</th>
+                  <th>{{text8}}</th>
+                  <th>{{text9}}</th>
+                  <th>{{text10}}</th>
+                  <th>{{text11}}</th>
+                  <th>{{text12}}</th>
                 </tr>
               </thead>
               <tbody>
