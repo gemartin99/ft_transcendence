@@ -1,71 +1,71 @@
 <style>
 
-.full-width-input {
-        width: 100%;
+    .full-width-input {
+            width: 100%;
+        }
+    
+    .pum {
+        font-size: 20px;
     }
-
-.pum {
-    font-size: 20px;
-}
-
-</style>
-
-
-<div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 40px; border-radius: 10px; padding: 30px;">
-    <h2 class="text-center mb-4">CREATE TOURNAMENT</h2>
-    <form onsubmit="return createTournament(event)">
-        <div class="row mb-3 align-items-center"> <!-- Añadiendo la clase align-items-center aquí -->
-            <label for="points" class="col-sm-4 col-form-label pum">Name of the tournament:</label>
-            <div class="col-sm-8">
-                <input type="text" id="nameTournament" name="nameTournament" class="full-width-input">
+    
+    </style>
+    
+    
+    <div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 40px; border-radius: 10px; padding: 30px;">
+        <h2 class="text-center mb-4">CREATE TOURNAMENT</h2>
+        <form onsubmit="return createTournament(event)">
+            <div class="row mb-3 align-items-center"> <!-- Añadiendo la clase align-items-center aquí -->
+                <label for="points" class="col-sm-4 col-form-label pum">Name of the tournament:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="nameTournament" name="nameTournament" class="full-width-input">
+                </div>
             </div>
-        </div>
-        <div class="row mb-3">
-            <label for="points" class="col-sm-4 col-form-label pum">Points per game:</label>
-            <div class="col-sm-8">
-                <select class="form-select" id="points" name="points">
-                    <option value="3">3</option>
-                    <option value="5">5</option>
-                    <option value="7">7</option>
-                    <option value="11">11</option>
-                    <option value="15">15</option>
-                </select>
+            <div class="row mb-3">
+                <label for="points" class="col-sm-4 col-form-label pum">Points per game:</label>
+                <div class="col-sm-8">
+                    <select class="form-select" id="points" name="points">
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="7">7</option>
+                        <option value="11">11</option>
+                        <option value="15">15</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <!--
-        <div class="row mb-3">
-            <label for="time" class="col-sm-4 col-form-label pum">Game time:</label>
-            <div class="col-sm-8">
-                <select class="form-select" id="time" name="time">
-                    <option value="none">None</option>
-                    <option value="1min">1 min</option>
-                    <option value="3min">3 min</option>
-                    <option value="5min">5 min</option>
-                </select>
+            <!--
+            <div class="row mb-3">
+                <label for="time" class="col-sm-4 col-form-label pum">Game time:</label>
+                <div class="col-sm-8">
+                    <select class="form-select" id="time" name="time">
+                        <option value="none">None</option>
+                        <option value="1min">1 min</option>
+                        <option value="3min">3 min</option>
+                        <option value="5min">5 min</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        -->
-        <div class="row mb-3">
-            <label for="players" class="col-sm-4 col-form-label pum">Players:</label>
-            <div class="col-sm-8">
-                <select class="form-select" id="players" name="players">
-                    <option value="4">4</option>
-                    <option value="8">8</option>
-                </select>
+            -->
+            <div class="row mb-3">
+                <label for="players" class="col-sm-4 col-form-label pum">Players:</label>
+                <div class="col-sm-8">
+                    <select class="form-select" id="players" name="players">
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="row mb-3">
-            <label for="fillAI" class="col-sm-4 col-form-label pum">Fill with AI's:</label>
-            <div class="col-sm-8 d-flex align-items-center">
-                <input type="checkbox" id="fillAI" class="switch-input" onclick="handleSwitchClick()">
-                <label for="fillAI" class="switch-label"></label>
+            <div class="row mb-3">
+                <label for="fillAI" class="col-sm-4 col-form-label pum">Fill with AI's:</label>
+                <div class="col-sm-8 d-flex align-items-center">
+                    <input type="checkbox" id="fillAI" class="switch-input" onclick="handleSwitchClick()">
+                    <label for="fillAI" class="switch-label"></label>
+                </div>
             </div>
-        </div>
-        <div class="text-center">
-                <a class="navlink" href="/tournament/lobbyPage">
-                    <button class="btn btn-warning" type="submit" >Save</button>
-                </a>
-        </div>
-    </form>
-</div>
-</div>
+            <div class="text-center">
+                    <a class="navlink" href="/tournament/lobbyPage">
+                        <button class="btn btn-warning" type="submit" >Save</button>
+                    </a>
+            </div>
+        </form>
+    </div>
+    </div>
