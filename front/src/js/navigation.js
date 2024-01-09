@@ -1,7 +1,6 @@
-//const baseUrl = "http://crazy-pong.com";
 
-const baseUrl = "http://localhost";
-
+var baseUrl = window.location.origin;
+console.log('url:',baseUrl);
 window.addEventListener('popstate', handlePopState);
 
 function handlePopState(event) {
@@ -10,8 +9,16 @@ function handlePopState(event) {
 }
 
 function fetchContent(path) {
+    var lang = getLang()
+    console.log('fetchContent');
+    if (path && path.slice(-1) !== '/') {
+        path += '/';
+    }
     fetch(baseUrl + ':8000' + path, {
         credentials: 'include',
+         headers: {
+            'language': lang,
+        },
     })
     .then(response => response.json())
     .then(data => {
@@ -19,22 +26,30 @@ function fetchContent(path) {
 
         if (data.content) {
             content.innerHTML = data.content;
-        } else {
+        }
+        if (data.redirect){
+            console.log("yeeeeeeey");
+            handleRedirect(data.redirect);
+        }
+        else {
             console.log('Invalid response from backend');
         }
     })
     .catch(error => {
+        console.log('error que lo flipas');
         console.error('Error:', error);
     });
 }
 
 function updateUrl(path) {
+    console.log('path:', path);
     const newPath = baseUrl + path;
     window.history.pushState({ path: newPath }, '', newPath);
 }
 
 function handleNavLinks()
 {
+    console.log('handleNavLinks');
     var navLinks = document.querySelectorAll('.navlink');
     navLinks.forEach(function (link) {
         link.addEventListener('click', handleNavLinkClick);
@@ -42,9 +57,14 @@ function handleNavLinks()
 }
 
 function handleRedirect(redirect_url) {
+    console.log('handleRedirect');
     updateUrl(redirect_url);
+    var lang = getLang()
     fetch(baseUrl + ':8000' + redirect_url, {
         credentials: 'include',
+           headers: {
+            'language': lang,
+        },
     }) // Adjusted fetch URL
     .then(response => response.json())
     .then(data => {
@@ -54,9 +74,11 @@ function handleRedirect(redirect_url) {
             content.innerHTML = data.content;
         }
         else if (data.redirect) {
-            console.log('Invalid response from backend 1');
+            handleRedirect(data.redirect);
+            return ;
+            console.log('Invalid response from backend 1', data.redirect);
         } else {
-            console.log('Invalid response from backend 1');
+            console.log('Invalid response from backend 1', data);
         }
         
         handleNavLinks()
@@ -67,6 +89,7 @@ function handleRedirect(redirect_url) {
 }
 
 function handleNavLinkClick(event) {
+    console.log('handleNavLinkClick');
     event.preventDefault(); // Prevents the default behavior (e.g., navigating to a new page)
     console.log("NavLink clicked!");
     var hrefValue = event.currentTarget.getAttribute('href');
@@ -76,8 +99,51 @@ function handleNavLinkClick(event) {
     else
         hrefValue = ""
     updateUrl(hrefValue);
+    var lang = getLang()
     fetch(baseUrl + ':8000' + hrefValue, {
         credentials: 'include',
+           headers: {
+            'language': lang,
+        },
+    }) // Adjusted fetch URL
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response from backend: here: ', data);
+
+        if (data.content) {
+            content.innerHTML = data.content;
+        }
+        else if (data.redirect) {
+            handleRedirect(data.redirect)
+            console.log('Response is a redirect');
+        } else {
+            console.log('Invalid response from backend 1 oooooo');
+        }
+        
+        handleNavLinks()
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function handleNavRefresh() {
+    event.preventDefault(); // Prevents the default behavior (e.g., navigating to a new page)
+    console.log("Refresh required!");
+    var hrefValue = window.location.href;
+    hrefValue = hrefValue.substring(baseUrl.length, hrefValue.lenght);
+    if (hrefValue != "/"){
+        hrefValue = hrefValue + "/"
+    }
+    else
+        hrefValue = ""
+    //updateUrl(hrefValue);
+    var lang = getLang();
+    fetch(baseUrl + ':8000' + hrefValue, {
+        credentials: 'include',
+        headers: {
+            'language': lang,
+        },
     }) // Adjusted fetch URL
     .then(response => response.json())
     .then(data => {
@@ -100,10 +166,16 @@ function handleNavLinkClick(event) {
     });
 }
 
+
 function handleNavLinkAction(hrefValue) {
+    console.log('handleNavLinkAction');
     updateUrl(hrefValue);
+    var lang = getLang()
     fetch(baseUrl + ':8000' + hrefValue, {
         credentials: 'include',
+            headers: {
+            'language': lang,
+        },
     })
     .then(response => response.json())
     .then(data => {

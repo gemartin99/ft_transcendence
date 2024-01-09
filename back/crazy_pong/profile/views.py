@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
-from .models import Usermine
+from accounts.models import Usermine
 import base64
 from django.db import IntegrityError
 from django.contrib.auth.password_validation import validate_password
@@ -13,18 +13,27 @@ import bcrypt
 # from security.security import Security
 from django.contrib.auth.decorators import login_required
 from authentification.authentification import Authentification
-
-
+from accounts.accounts import Accounts
+from security.security import Security
+from game.models import Match
 
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
-    print("estoy aqui holaaa")
     if not user:
         return JsonResponse({'redirect': redirect})
+
+ #test
+    last_5_matches = user.get_last_5_matches()
+
+ #end test
+
+    print(last_5_matches)
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
         'user': user,
+        'total_played_games': user.wins + user.losses,
+        'last_5_matches': last_5_matches,
     }
     content_html = render_to_string('profile/profile.html', context)
     data = {
@@ -44,7 +53,6 @@ def get_edit_profile_page(request):
         'user': user,
     }
     content_html = render_to_string('profile/edit-profile.html', context)
-    print("estoy aqui holaaaaaaaaaaaaa")
     data = {
         'title': 'Select Logging Mode',
         'content': content_html,
@@ -69,28 +77,69 @@ def get_twofactor_profile_page(request):
     }
     return JsonResponse(data)
 
+def UpdateUser(username, user, response_messages):
+    flag = False
+    if username is not None:
+        if username != user.name:
+            res, msg = Accounts.username_is_in_use(username)
+            if res:
+                response_messages.append(msg)
+                flag = True
+        if username != user.name and not Security.is_valid_username(username):
+            response_messages.append('Introduce a valid username.')
+            flag = True
+        print('flag:', flag)
+        if flag is False:
+            user.name = username
+    # user.save()
+    return response_messages
+
+def UpdateEmail(email, user, response_messages):
+    flag = False
+    if email is not None:
+        if email != user.email:
+            res, msg = Accounts.email_is_in_use(email)
+            if res:
+                response_messages.append(msg)
+                flag = True
+        if not Security.is_valid_email(email):
+            response_messages.append('Introduce a valid email.')
+            flag = True
+        if not flag:
+            user.email = email
+    return response_messages
+
+
+def UpdatePwd(password, confirm_password, user, response_messages):
+    if password is not None:
+        if password == confirm_password:
+            res, msg = Security.check_pwd_security(password)
+            if res:
+                user.password = password
+            else:
+                response_messages.extend(msg)
+        else:
+            response_messages.append('Paswords missmatch.')
+    return response_messages
+
 
 @csrf_exempt
 def UpdateInfo(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-
     json_data = json.loads(request.body.decode('utf-8'))
-    print(json_data)
-    username = json_data.get('name')
-    email = json_data.get('email')
+    username = json_data.get('name').lower()
+    email = json_data.get('email').lower()
     password = json_data.get('password')
     confirm_password = json_data.get('confirm_password')
-
-    # Access uploaded files
-    avatar = request.FILES.get('avatar')
-    print('avatar:',avatar)
-    print(username)
-    print(email)
-    if password == None:
-        print('hola:',password)
-        print(confirm_password)
-
-    return JsonResponse({'message': 'boooo'})
+    response_messages = []
+    response_messages = UpdateUser(username, user, response_messages)
+    response_messages = UpdateEmail(email, user, response_messages)
+    response_messages = UpdatePwd(password, confirm_password, user, response_messages)
+    user.save()
+    if response_messages:
+        return JsonResponse({'message': response_messages})
+    else:
+        return JsonResponse({'message': 'boooo'})
 

@@ -22,7 +22,6 @@
 }
 
 </style>
-
 <link rel="stylesheet" href="/css/tournament.css">
 <div id="video-container">
     <video autoplay muted loop id="video-background">
@@ -38,8 +37,13 @@
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4" style="padding: 50px;">
-          <button class="btn btn-warning tac" style="width: 400px;">LOBBY CODE: x6Yk9</button>
+          <button class="btn btn-warning tac" style="width: 400px;" id="lobbyCode">LOBBY CODE: x6Yk9</button>
         </div>
+      </div>
+      <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
+          <div id="bracket-content" >
+            
+          </div>
       </div>
       <div class="text-center" style="text-align: center;padding: 20px; display: flex; align-items: center; justify-content: center;margin-top: 300px;">
         <div class="loader-container">
@@ -50,6 +54,8 @@
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4">
           <button class="btn btn-warning tac" style="width: 200px;">READY</button>
+          <button class="btn btn-warning tac" style="width: 200px;"onclick="updateTournament()">REFRESH</button>
+
         </div>
       </div>
     </div>

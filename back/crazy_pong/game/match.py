@@ -8,17 +8,24 @@ from asgiref.sync import sync_to_async
 
 
 class PlayerManager():
-    def __init__(self, player, state):
+    def __init__(self, player, paddle, state):
 
         self.state = state
+        self.paddle = self.state[paddle]
         self.player = self.state[player]
 
     def move(self, direction):
         if direction == "down":
-            self.player["input"] = 1
+            if(self.paddle["y"] + self.paddle["height"] < 750):
+                self.player["input"] = 1
+            else:
+                self.player["input"] = 0
 
         elif direction == "up":
-            self.player["input"] = -1
+            if(self.paddle["y"] > 0):
+                self.player["input"] = -1
+            else:
+                self.player["input"] = 0
         
         elif direction == "rest":
             self.player["input"] = 0
@@ -36,7 +43,8 @@ class GameManager():
         self.paddle_two = self.state["paddle2"]
         self.player_one = self.state["player1"]
         self.player_two = self.state["player2"]
-        
+        print("player_one", self.player_one)
+        print("player_two", self.player_two)
         self.fr = int(os.getenv("FRAMERATE"))
 
         self.IA = False
@@ -167,15 +175,26 @@ class GameManager():
             return -1
     
     def ended(self):
-        if (self.state['score1'] >= 3 or self.state['score2'] >= 3):
+        if (self.state['score1'] >= int(self.state['points']) or self.state['score2'] >= int(self.state['points'])):
             
             return True
         return False
 
     @sync_to_async
     def saveMatch(self):
-        player1 = Usermine.objects.get(name='42@baltes-g')
-        player2 = Usermine.objects.get(name='42@baltes-g')
+        player1 = self.player_one['id']
+        print(self.player_one['id'])
+        if (self.IA):
+            player2 = -42
+        else:
+            player2 = self.player_two['id']
+
+        
+        if self.state['score1'] < self.state['score2']:
+            match_winner = player1
+        else:
+            match_winner = player2
+
 
         match = Match.objects.create(
             player1=player1,
@@ -183,7 +202,28 @@ class GameManager():
             player1_score=self.state['score1'],
             player2_score=self.state['score2'],
             match_id=self.state['idMatch'],
+            match_winner=match_winner,
         )
+        
+        if player1 > 0:
+            user = Usermine.objects.get(id=player1)
+            if match.match_winner == player1:
+                user.wins += 1
+            else:
+                user.losses += 1
+            user.matches_played.add(match)
+            user.save()
+
+        if player2 > 0:
+            user2 = Usermine.objects.get(id=player2)
+            if match.match_winner == player2:
+                user2.wins += 1
+            else:
+                user2.losses += 1
+            user2.matches_played.add(match)
+            user2.save()
+        
+        #debug
         all_matches = Match.objects.all()
         for m in all_matches:
-            print(f"Player1: {m.player1.name} - Player2: {m.player2.name} - Score1: {m.player1_score} - Score2: {m.player2_score} - MatchID: {m.match_id}")
+            print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - Winner: {m.match_winner} - MatchID: {m.match_id}")

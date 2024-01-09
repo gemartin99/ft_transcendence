@@ -20,13 +20,33 @@ class Usermine(models.Model):
     mail2FACode = models.CharField(max_length=6, default=-1)
     mail2FACode_timestamp = models.DateTimeField(null=True, blank=True)
     validated2FA = models.BooleanField(default=False)
-    # matches_played = models.ManyToManyField(Match, blank=True)
+    matches_played = models.ManyToManyField(Match, blank=True)
+    friends = models.ManyToManyField('self', blank=True, symmetrical=False)
 
+    def get_last_5_matches(self):
+        # Get the last 5 matches sorted by timestamp in descending order
+        last_5_matches = self.matches_played.order_by('-timestamp')[:5]
+        matches_with_names = []
+        for match in last_5_matches:
+            if match.player1 > 0:
+                player1_name = Usermine.objects.get(id=match.player1).name
+            else:
+                player1_name = 'IA'
+            if match.player2 > 0:
+                player2_name = Usermine.objects.get(id=match.player2).name
+            else:
+                player2_name = 'IA'
+            matches_with_names.append({
+                'match_id': match.match_id,
+                'player1': player1_name,
+                'player2': player2_name,
+                'player1_score': match.player1_score,
+                'player2_score': match.player2_score,
+                'match_winner': match.match_winner,
+                'timestamp': match.timestamp,
+            })
 
-    # def get_last_5_matches(self):
-    #     # Get the last 5 matches sorted by timestamp in descending order
-    #     last_5_matches = self.matches_played.order_by('-created_at')[:5]
-    #     return last_5_matches
+        return matches_with_names
         
     def generate_mail2fa_code(self):
         self.mail2FACode = ''.join([str(random.randint(0, 9)) for _ in range(6)])

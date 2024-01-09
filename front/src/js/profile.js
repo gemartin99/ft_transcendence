@@ -1,8 +1,10 @@
 // url = "crazy-pong.com"
-url = "localhost"
+// url = "localhost"
+var url = window.location.hostname;
 
 //baseurl = "http://crazy-pong.com"
-baseurl = "http://localhost";
+// baseurl = "http://localhost";
+var baseurl = window.location.origin;
 
 function submitForm(e) {
     e.preventDefault();
@@ -28,6 +30,8 @@ function submitForm(e) {
     .then(response => response.json())
     .then(data => {
         console.log('Response:', data.message);
+        setFormMessage(loginForm, "error", data.message);
+
     })
     .catch(error => {
         console.error('Error:', error);
