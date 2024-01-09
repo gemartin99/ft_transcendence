@@ -8,25 +8,83 @@ def get_langs(lang):
 
 def get_lang_en():
     context = {
-        'text1': 'Crazy Pong is a tribute to the classic Atari Pong game. This version takes the original game and adds new modes such as tournaments or multiplayer. The user interface has also been updated to give it a more modern look. Whether you are a fan of the original Pong or are looking for a fun and challenging game, Crazy Pong will provide you with hours of entertainment. Try it now and see if you have what it takes to beat the high score. Register or login and start playing!',
-        'text2': 'Register',
-        'text3': 'Login',
+        #tournament.html
+        'text1': 'TOURNAMENT',
+        'text2': 'CREATE',
+        'text3': 'JOIN',
+        #create_tournament.html
+        'text4': 'CREATE TOURNAMENT',
+        'text5': 'Name of the tournament',
+        'text6': 'Points per game',
+        'text7': 'Players',
+        'text8': 'Fill with AI',
+        'text9': 'Save',
+        #join_tournament.html
+        'text10': 'JOIN TOURNAMENT',
+        'text11': 'Lobby code',
+        'text12': 'Enter Lobby code',
+        'text13': 'Ready',
+        #wait_lobby.html
+        'text14': 'TOURNAMENT',
+        'text15': 'LOBBY CODE',
+        'text16': 'Waiting Players',
+        'text17': 'READY',
+        'text18': 'REFRESH',
+
+
     }
     return context
 
 def get_lang_es():
     context = {
-        'text1': 'Crazy Pong es un homenaje al clásico juego Pong de Atari. Esta versión toma el juego original y le añade nuevos modos como torneos o multijugador. También se ha actualizado la interfaz de usuario para darle un aspecto más moderno. Tanto si eres fan del Pong original como si buscas un juego divertido y desafiante, Crazy Pong te proporcionará horas de entretenimiento. Pruébalo ahora y comprueba si tienes lo que hay que tener para batir la puntuación más alta. ¡Regístrate o inicia sesión y empieza a jugar!',
-        'text2': 'Regístrate',
-        'text3': 'Iniciar sesión',
+        #tournament.html
+        'text1': 'TORNEO',
+        'text2': 'CREAR',
+        'text3': 'UNIRME',
+        #create_tournament.html
+        'text4': 'CREATE TORNEO',
+        'text5': 'Nombre del torneo',
+        'text6': 'Puntos por partida',
+        'text7': 'Jugadores',
+        'text8': 'Rellenar con IA',
+        'text9': 'Guardar',
+        #join_tournament.html
+        'text10': 'UNIRME A TORNEO',
+        'text11': 'Código de sala',
+        'text12': 'Introducir código de sala',
+        'text13': 'Listo',
+        #wait_lobby.html
+        'text14': 'TORNEO',
+        'text15': 'CÓDIGO DE SALA',
+        'text16': 'Esperando jugadores',
+        'text17': 'LISTO',
+        'text18': 'RECARGAR',
     }
     return context
 
 def get_lang_pt():
     context = {
-        'text1': 'Crazy Pong é uma homenagem ao clássico jogo Pong da Atari. Esta versão pega no jogo original e acrescenta novos modos, como torneios ou multijogadores. A interface do utilizador também foi actualizada para lhe dar um aspeto mais moderno. Quer seja um fã do Pong original ou esteja à procura de um jogo divertido e desafiante, o Crazy Pong irá proporcionar-lhe horas de entretenimento. Experimenta-o agora e vê se tens o que é preciso para bater a pontuação mais alta. Regista-te ou inicia sessão e começa a jogar!',
-        'text2': 'Registo',
-        'text3': 'Iniciar sessão',
+        #tournament.html
+        'text1': 'TORNEIO',
+        'text2': 'CRIAR',
+        'text3': 'JUNTAR',
+        #create_tournament.html
+        'text4': 'CRIAR TORNEIO',
+        'text5': 'Nome do torneio',
+        'text6': 'Pontos por jogo',
+        'text7': 'Jogadores',
+        'text8': 'Preencher com IA',
+        'text9': 'Guardar',
+        #join_tournament.html
+        'text10': 'PARTICIPAR NO TORNEIO',
+        'text11': 'Código do lobby',
+        'text12': 'Introduzir o código do Lobby',
+        'text13': 'Pronto',
+        #wait_lobby.html
+        'text14': 'TORNEIO',
+        'text15': 'Código do lobby',
+        'text16': 'À espera de jogadores',
+        'text17': 'PRONTO',
+        'text18': 'RECARREGAR',
     }
     return context
-
