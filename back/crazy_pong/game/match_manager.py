@@ -7,19 +7,19 @@ class MatchManager:
     threads = {}
     matches = {}
     @classmethod
-    def add_game(cls, game_name, consumer_instance):
+    def add_game(cls, game_name, consumer_instance, userid, username, points):
         cls.matches[game_name] = {
             "cmd": "update",
             "idMatch": 0,
             "type": 1,
             "player1": {
-                "id": 'nouse',
-                "name": 'nouse',
+                "id": userid,
+                "name": username,
                 "input": 0,
             },
             "player2": {
-                "id": 'nouse2',
-                "name": 'nouse2',
+                "id": -42,
+                "name": 'IA',
                 "input": 0,
             },
             "ball": {
@@ -49,6 +49,7 @@ class MatchManager:
             "isPaused": True,
             "isGameOver": False,
             "winner": 0,
+            "points": points,
         }
         cls.threads[game_name] = {
             "thread": threading.Thread(target=MatchManager.before_thread, args=(consumer_instance, game_name,)),
@@ -64,11 +65,19 @@ class MatchManager:
         thread.start()
 
     @classmethod
-    def looking_for_match(cls):
-        for match in cls.threads:
-            if cls.threads[match]['paddle_two'] == False:
-                return match
-        return False
+    def looking_for_match(cls, uid, name, game):
+        if (game == None):
+            for match in cls.threads:
+                if cls.threads[match]['paddle_two'] == False:
+                    cls.matches[match]["player2"]["id"] = uid
+                    cls.matches[match]["player2"]["name"] = name
+                    return match
+            return False
+        else:
+            if (game in cls.threads):
+                cls.matches[game]["player2"]["id"] = uid
+                cls.matches[game]["player2"]["name"] = name
+            return game
     
     @classmethod
     def before_thread(cls, consumer_instance, game_name):

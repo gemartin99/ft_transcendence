@@ -1,3 +1,5 @@
+var baseUrl = window.location.origin;
+
 function	checkGoogleAuthCode(event) {
     var concatenatedValue = "";
     var inputs = document.getElementsByClassName('code-input');
@@ -6,7 +8,7 @@ function	checkGoogleAuthCode(event) {
     }
     const formData = new FormData();
 	formData.append('totp_code', concatenatedValue);
-	fetch("http://localhost:8000/twoFA/verifyGoogleCode/", {
+	fetch(baseUrl + ":8000/twoFA/verifyGoogleCode/", {
 	    method: 'POST',
 	    body: formData,
 	    credentials: 'include',
@@ -39,7 +41,7 @@ function	checkGoogleAuthCode(event) {
 }
 
 function	activateGoogle2FA(event) {
-	fetch("http://localhost:8000/twoFA/google2FA/", {
+	fetch(baseUrl + ":8000/twoFA/google2FA/", {
 	    method: 'POST',
 	    // body: formData,
 	    credentials: 'include',
@@ -61,7 +63,7 @@ function	activateGoogle2FA(event) {
 }
 
 function	activateMail2FA() {
-	fetch("http://localhost:8000/twoFA/mail2FA/", {
+	fetch(baseUrl + ":8000/twoFA/mail2FA/", {
 	    method: 'POST',
 	    // body: formData,
 	    credentials: 'include',
@@ -100,7 +102,7 @@ function	getQR() {
 	console.log('Trying to print online users.');
 	const QRimg = document.getElementById('QRimg');
 
-    fetch("http://localhost:8000/twoFA/getQR/", {
+    fetch(baseUrl + ":8000/twoFA/getQR/", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         credentials: 'include',
@@ -139,7 +141,7 @@ function	checkMailCode(event) {
     const formData = new FormData();
     console.log('chekmailcodeuuuu');
 	formData.append('concatenatedValue', concatenatedValue);
-	fetch("http://localhost:8000/twoFA/verifyMailCode/", {
+	fetch(baseUrl + ":8000/twoFA/verifyMailCode/", {
 	    method: 'POST',
 	    body: formData,
 	    credentials: 'include',
@@ -177,7 +179,7 @@ function	checkMailCode(event) {
 }
 
 function	unsetTwoFactor(event) {
-	fetch("http://localhost:8000/twoFA/disable/", {
+	fetch(baseUrl + ":8000/twoFA/disable/", {
 	    method: 'POST',
 	    credentials: 'include',
 	})

@@ -15,6 +15,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+# import sys
+# print('path:', sys.path)
+# print('DB_PORT:', os.getenv('DB_PORT'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +33,7 @@ SECRET_KEY = 'django-insecure--=!#=6-=b1$xrc=$@7o1s#orkkuskzn+fsx(z&t_4377sisfze
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '*.localhost', 'crazy-pong.com', '*.crazy-pong.com']
+ALLOWED_HOSTS = ['localhost', '*.localhost*', 'crazy-pong.com', '*.crazy-pong.com', '10.11.3.3', '*10.11.3.3']
 
 
 # Application definition
@@ -64,6 +67,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
@@ -147,7 +152,9 @@ STATIC_URL = 'static/'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
+    "https://10.11.3.3",
 ]
+    # "http://10.11.14.3",
 
 CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
@@ -171,8 +178,16 @@ CHANNEL_LAYERS = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
-    "https://localhost:8080"
+    "https://localhost:8080",
+    "https://10.11.3.3",
 ]
+    # "http://10.11.14.3",
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'language',
+]
+
 
 CORS_ALLOW_ALL_ORIGINS = True
 

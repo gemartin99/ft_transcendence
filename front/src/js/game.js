@@ -1,5 +1,6 @@
 //const domain = "crazy-pong.com";
-const domain = "localhost";
+// const domain = "localhost";
+var domain = window.location.hostname;
 
 current_match = 0
 player = 0
@@ -10,28 +11,28 @@ in_match = false
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function(event) {
         if (in_match == true) {
-        if (event.key === 'ArrowUp') {
-            const message = { cmd: 'update',
-                                id: current_match,
-                                pl: player,
-                                key: "up" };
-            socket.send(JSON.stringify(message));
-            console.log(JSON.stringify(message));
-        } else if (event.key === 'ArrowDown') {
-            if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
+            if (event.key === 'ArrowUp') {
                 const message = { cmd: 'update',
                                     id: current_match,
                                     pl: player,
-                                    key: "down" };
+                                    key: "up" };
                 socket.send(JSON.stringify(message));
                 console.log(JSON.stringify(message));
+            } else if (event.key === 'ArrowDown') {
+                if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
+                    const message = { cmd: 'update',
+                                        id: current_match,
+                                        pl: player,
+                                        key: "down" };
+                    socket.send(JSON.stringify(message));
+                    console.log(JSON.stringify(message));
+                }
             }
-        }}
-        
+        }
     });
     
     document.addEventListener('keyup', function(event) {
-        if (socket != null){
+        if (in_match == true){
         const message = { cmd: 'update',
                             id: current_match,
                             pl: player,
@@ -40,42 +41,95 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function join_match() {
-
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=search');
-    const puntuacio = getElementById("puntuacio");
-
-
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        
-    };
-    socket.onmessage = (event) => {
-        in_match = true
-        const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData)
-        if (jsonData['cmd'] == 'update') {
-            puntuacio.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            printMap(jsonData);
-        }
-
-        //console.log('WebSocket message received:', event.data);
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };        
+function handleGame(){
+    console.log('handleGame');
+    if (in_match == true) {
+        handleRedirect('/game/play/');
+    }
 }
 
-function join_match_sala() {
-    const heading = document.getElementById('helloHeading');
-    heading.textContent = 'noo';
+function join_match() {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=sala&sala=' + document.getElementById("textbox").value);
+    if (in_match == false) {
+        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=4');
+
+        socket.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+            
+        };
+        socket.onmessage = (event) => {
+            in_match = true
+            const jsonData = JSON.parse(event.data.toString());
+            //console.log(jsonData)
+            if (jsonData['cmd'] == 'update') {
+                
+                //console.log(jsonData);
+                var idMatch = document.getElementById("idMatch");
+                idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+                printMap(jsonData);
+            }
+            if (jsonData['cmd'] == 'finish') {
+                printWinner(jsonData);
+                socket.close();
+            }
+
+            //console.log('WebSocket message received:', event.data);
+
+        };
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+            in_match = false
+        };        
+    }
+}
+
+function create_match() {
+
+    if (in_match == false) {
+        handleRedirect('/game/play/');
+        code = generateRandomString(4)
+        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
+        //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
+        console.log(code)
+        socket.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+        };
+        socket.onmessage = (event) => {
+            in_match = true
+            const jsonData = JSON.parse(event.data.toString());
+            if (jsonData['cmd'] == 'update') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //console.log(jsonData);
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+                printMap(jsonData);
+            }
+            if (jsonData['cmd'] == 'finish') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent = jsonData.idMatch;
+                printWinner(jsonData);
+            }
+            //console.log('WebSocket message received:', event.data);
+
+        };
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+            in_match = false
+        };         
+    }
+}
+
+
+function join_match_sala() {
+
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
     
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -84,12 +138,19 @@ function join_match_sala() {
     socket.onmessage = (event) => {
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData)
         if (jsonData['cmd'] == 'update') {
-            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            //console.log(jsonData);
+            //var idMatch = document.getElementById("idMatch");
+            //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
             printMap(jsonData);
         }
-
+        if (jsonData['cmd'] == 'finish') {
+            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            //var idMatch = document.getElementById("idMatch");
+            //idMatch.textContent = jsonData.idMatch;
+            printWinner(jsonData);
+        }
         //console.log('WebSocket message received:', event.data);
 
     };
@@ -99,43 +160,48 @@ function join_match_sala() {
     socket.onclose = (event) => {
         console.log('WebSocket connection closed:', event);
         in_match = false
-    };        
+    };         
 }
 
 function join_IA() {
+    if (in_match == false) {
+        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
+        socket.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+            
+        };
+        socket.onmessage = (event) => {
+            in_match = true
+            const jsonData = JSON.parse(event.data.toString());
+            if (jsonData['cmd'] == 'update') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //console.log(jsonData);
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+                printMap(jsonData);
+            }
+            if (jsonData['cmd'] == 'finish') {
+                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+                //var idMatch = document.getElementById("idMatch");
+                //idMatch.textContent = jsonData.idMatch;
+                printWinner(jsonData);
+            }
+            //console.log('WebSocket message received:', event.data);
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=IA');
-    
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        
-    };
-    socket.onmessage = (event) => {
-        in_match = true
-        const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData)
-        if (jsonData['cmd'] == 'update') {
-            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            printMap(jsonData);
-        }
-
-        //console.log('WebSocket message received:', event.data);
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };        
+        };
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+            in_match = false
+        };   
+    }    
 }
 
 function obs_match() {
-    const heading = document.getElementById('helloHeading');
-    heading.textContent = 'noo';
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user=hola&mode=obs&sala=' + document.getElementById("textbox").value);
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
 
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -144,7 +210,7 @@ function obs_match() {
         const jsonData = JSON.parse(event.data.toString());
         console.log(jsonData)
         if (jsonData['cmd'] == 'update') {
-            heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
+            //#endregio//heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             printMap(jsonData);
         }
 
@@ -196,9 +262,34 @@ function printMap(jsonData) {
     printResult(jsonData);
 }
 
+function printWinner(jsonData) {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "60px monospace";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    if (jsonData.score1 > jsonData.score2) {
+        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
+    }
+    else {
+        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
+    }
+    ctx.fillText(jsonData.score2 + "-" + jsonData.score1, canvas.width/2, canvas.height/2 + 60);
+}
+
 
 
 // Function to be called from the HTML button onclick event
 function join_match_from_html() {
     join_match();
 }
+
+function generateRandomString(length) {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }

@@ -10,7 +10,7 @@ class TournamentManager:
     @classmethod
     def add_tournament(cls, tournament_name, n, user):
         id = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        cls.tournaments[id] = Tournament(tournament_name, n)
+        cls.tournaments[id] = Tournament(tournament_name, n, id)
         cls.tournaments[id].addPlayer(user)
         return id
 
@@ -24,8 +24,8 @@ class TournamentManager:
         return cls.tournaments[id].get()
     
     @classmethod
-    def update(cls, u1, u2, p1, p2):
-        cls.tournaments[id].update(u1, u2, p1 , p2)
+    def update(cls, id):
+        return cls.tournaments[id].get()
 
     @classmethod
     def getTournaments(cls, user):
