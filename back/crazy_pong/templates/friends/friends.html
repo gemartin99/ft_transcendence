@@ -67,18 +67,18 @@
     </style>
     <div class="container-header" style="padding: 20px;">
 		<div class="header bg-dark" style="box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);">
-			<h1 class="text-warning">ADD FRIENDS</h1>
+			<h1 class="text-warning">{{text1}}</h1>
 			<form onsubmit="return searchFriend(event)">
-				<input type="text" id="searchInput" placeholder="Search friends">
+				<input type="text" id="searchInput" placeholder="{{text2}}">
                 <br>
-                <button class="btn btn-warning" type="submit" >Add</button>
+                <button class="btn btn-warning" type="submit" >{{text3}}</button>
 			</form>
 		</div>
 	</div>
 	
 
     <div class="container">
-		<h1 style="text-align: center;" class="text-warning">YOUR FRIENDS LIST</h1>
+		<h1 style="text-align: center;" class="text-warning">{{text4}}</h1>
     {% for friend in friends %}
       <div class="friend">
         <img src="/imgs/tac.jpg" alt="Foto de perfil">
