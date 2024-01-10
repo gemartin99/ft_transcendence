@@ -10,6 +10,7 @@ from authentification.authentification import Authentification
 from django.views.decorators.csrf import csrf_exempt
 from .twoFA import TwoFA
 from datetime import datetime, timezone
+import twoFA.langs
 
 def activateGoogle2FA(request):
     # jwt_token = request.COOKIES.get('jwttoken', None)
@@ -64,10 +65,8 @@ def getGoogleVerificationPage(request):
 
 
 def get_set_mail2FA_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/set-email2factor.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -78,10 +77,8 @@ def get_set_mail2FA_page(request):
 
 
 def get_set_google2FA_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/set-google2factor.html', context)
     data = {
         'title': 'Select Logging Mode',

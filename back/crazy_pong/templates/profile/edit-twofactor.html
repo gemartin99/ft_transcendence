@@ -1,15 +1,15 @@
     <div class="container-login">  
       <div class="container2">
-            <h1 class="form__title">Security Settings</h1>
-            <p align="center">Two factor deactivated</p>
+            <h1 class="form__title">{{text24}}</h1>
+            <p align="center">{{text25}}</p>
             {% if not user.mail2FA and not user.google2FA %}
             <div class="form__buttons-container">
-              <a href="/twoFA/set-google2FA" class="navlink form__button">Set Google 2Factor</a>
-              <a href="/twoFA/set-mail2FA" class="navlink form__button">Set Email 2Factor</a>
+              <a href="/twoFA/set-google2FA" class="navlink form__button">{{text26}}</a>
+              <a href="/twoFA/set-mail2FA" class="navlink form__button">{{text27}}</a>
             </div>
             {% else %}
             <div class="form-group">
-              <button onclick="unsetTwoFactor()" class="btn btn-warning">Disable Two Factor Auth</button>
+              <button onclick="unsetTwoFactor()" class="btn btn-warning">{{text28}}</button>
              </div>
             {% endif %}
       </div>

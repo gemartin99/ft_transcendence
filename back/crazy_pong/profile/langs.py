@@ -33,6 +33,12 @@ def get_lang_en():
         'text21': 'Confirm your password',
         'text22': 'Avatar (optional)',
         'text23': 'Save Changes',
+        #edit-twofactor.html
+        'text24': 'Security Settings',
+        'text25': 'Two factor desactivated',
+        'text26': 'Set Google 2Factor',
+        'text27': 'Set Email 2Factor',
+        'text28': 'Disable Two Factor Auth',
     }
     return context
 
@@ -63,6 +69,12 @@ def get_lang_es():
         'text21': 'Confirma tu contraseña',
         'text22': 'Avatar (opcional)',
         'text23': 'Guardas cambios',
+        #edit-twofactor.html
+        'text24': 'Ajustes de seguridad',
+        'text25': 'Autenticacion en dos factores desactivada',
+        'text26': 'Establecer Google 2Factor',
+        'text27': 'Establecer Email 2Factor',
+        'text28': 'Desactivar la autenticación de dos factores',
     }
     return context
 
@@ -93,6 +105,12 @@ def get_lang_pt():
         'text21': 'Confirmar a sua palavra-passe',
         'text22': 'Avatar (opcional)',
         'text23': 'Guardar alteração',
+        #edit-twofactor.html
+        'text24': 'Definições de segurança',
+        'text25': 'Autenticação de dois factores desactivada',
+        'text26': 'Definir o Google 2Factor',
+        'text27': 'Definir o Mail 2Factor',
+        'text28': 'Desativar a autenticação de dois factores',
     }
     return context
 
