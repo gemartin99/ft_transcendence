@@ -63,10 +63,8 @@ def get_login42_form_page(request):
     return JsonResponse(data)
 
 def get_register_new_account_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = accounts.langs.get_langs(language)
     content_html = render_to_string('login/register_account.html', context)
     data = {
         'title': 'Select Logging Mode',

@@ -21,6 +21,18 @@ def get_lang_en():
         'text10': 'Score 2',
         'text11': 'Winner',
         'text12': 'Status',
+        #edit_profile.html
+        'text13': 'Edit Profile Information',
+        'text14': 'Username',
+        'text15': 'Enter your username',
+        'text16': 'Email',
+        'text17': 'Enter your email',
+        'text18': 'Password',
+        'text19': 'Enter your password',
+        'text20': 'Confirm password',
+        'text21': 'Confirm your password',
+        'text22': 'Avatar (optional)',
+        'text23': 'Save Changes',
     }
     return context
 
@@ -39,6 +51,18 @@ def get_lang_es():
         'text10': 'Puntuación 2',
         'text11': 'Ganador',
         'text12': 'Estado',
+        #edit_profile.html
+        'text13': 'Editar información del perfil',
+        'text14': 'Nombre de usuario',
+        'text15': 'Introduce tu nombre de usuario',
+        'text16': 'Correo eléctronico',
+        'text17': 'Introduce tu correo eléctronico',
+        'text18': 'Contraseña',
+        'text19': 'Introduce tu contraseña',
+        'text20': 'Confirmar contraseña',
+        'text21': 'Confirma tu contraseña',
+        'text22': 'Avatar (opcional)',
+        'text23': 'Guardas cambios',
     }
     return context
 
@@ -57,6 +81,18 @@ def get_lang_pt():
         'text10': 'Pontuação 2',
         'text11': 'Ganhador',
         'text12': 'Estado',
+        #edit_profile.html
+        'text13': 'Editar informações do perfil',
+        'text14': 'Nome de utilizador',
+        'text15': 'Introduza o seu nome de utilizador',
+        'text16': 'Correio eletrónico',
+        'text17': 'Introduza o seu e-mail',
+        'text18': 'Palavra-passe',
+        'text19': 'Introduza a sua palavra-passe',
+        'text20': 'Confirmar a palavra-passe',
+        'text21': 'Confirmar a sua palavra-passe',
+        'text22': 'Avatar (opcional)',
+        'text23': 'Guardar alteração',
     }
     return context
 
