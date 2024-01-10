@@ -61,11 +61,9 @@ def get_twofactor_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-        'user': user,
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = profile.langs.get_langs(language)
+    context['user'] = user
     content_html = render_to_string('profile/edit-twofactor.html', context)
     data = {
         'title': 'Select Logging Mode',

@@ -37,10 +37,9 @@
       }
 
       .button-center {
-          display: flex;
-          justify-content: center;
-          margin-top: 3vw;
-      }
+        justify-content: center;
+        align-items: center;
+    }
 
       .toc {
           padding: 2vw 4vw;
@@ -95,21 +94,20 @@
   </style>
     <div class="auth-content">
       <div class="auth-container bg-dark" id="steep1">
-          <h1 style="color: #f5c344;">Setup Google 2Factor Auth</h1>
+          <h1 style="color: #f5c344;">{{text1}}</h1>
             <div class="input-row">
               <div class="alert alert-warning" role="alert">
-                  To can use, the two factor auth, you need to have/download Google Authentificator App. Scan the QR, and sumbit in the form the Code that Google Authentificator App will generate.
+                  {{text2}}
               </div>
             </div>
             <div class="button-center">
-                <label class="label">Click to generate QR:</label>
-                <button class="btn-warning toc" onclick="getQR()">Generate QR</button>
+                <button class="btn-warning toc" onclick="getQR()">{{text3}}</button>
             </div>
       </div>
       <div class="auth-container bg-dark" id="steep2">
-          <h1 style="color: #f5c344;">Steep 2: Confirm the code:</h1>
+          <h1 style="color: #f5c344;">{{text4}}</h1>
           <div class="alert alert-warning" role="alert">
-                  Scan this QR whit your googleAuth app, and insert the verification totp code.
+                  {{text5}}
           </div>
           <canvas id="QRimg"></canvas>
           <div id="error-message"></div>
@@ -122,18 +120,18 @@
               <input name="digit6"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
           </div>
           <div class="button-center">
-              <button class="btn-warning toc" onclick="checkGoogleAuthCode()">Submit</button>
+              <button class="btn-warning toc" onclick="checkGoogleAuthCode()">{{text6}}</button>
           </div>
       </div>
       <div class="auth-container bg-dark" id="steep3">
-          <h1 style="color: #f5c344;">Google Two Factor set Succesful</h1>
+          <h1 style="color: #f5c344;">{{text7}}</h1>
             <div class="input-row">
               <div class="alert alert-warning" role="alert">
-                Sucesfuly seted up the Google two factor authentificator. Click button to return to profile.
+                {{text8}}
               </div>
             </div>
             <div class="button-center">
-                <a href="/profile" class="navlink btn-warning">Return to Profile</button>
+                <a href="/profile" class="navlink btn-warning">{{text9}}</button>
             </div>
       </div>
   </div>
