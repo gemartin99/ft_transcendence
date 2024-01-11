@@ -32,11 +32,12 @@ def get_information_page(request):
 
 
 def get_home_page(request):
+    print("aqui")
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = crazy_pong.langs.get_langs(language)
     content_html = render_to_string('home/index.html', context)
     data = {
-        'title': 'Home',
+        'title': 'Home2',
         'content': content_html,
         'additionalInfo': language,
     }

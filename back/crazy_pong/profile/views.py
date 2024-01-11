@@ -16,7 +16,9 @@ from authentification.authentification import Authentification
 from accounts.accounts import Accounts
 from security.security import Security
 from game.models import Match
-
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import os
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
@@ -125,21 +127,33 @@ def UpdatePwd(password, confirm_password, user, response_messages):
 
 @csrf_exempt
 def UpdateInfo(request):
+    print("Entereing!!!!")
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    json_data = json.loads(request.body.decode('utf-8'))
-    username = json_data.get('name').lower()
-    email = json_data.get('email').lower()
-    password = json_data.get('password')
-    confirm_password = json_data.get('confirm_password')
-    response_messages = []
-    response_messages = UpdateUser(username, user, response_messages)
-    response_messages = UpdateEmail(email, user, response_messages)
-    response_messages = UpdatePwd(password, confirm_password, user, response_messages)
-    user.save()
-    if response_messages:
-        return JsonResponse({'message': response_messages})
-    else:
-        return JsonResponse({'message': 'boooo'})
+
+    try:
+        username = request.POST.get('name').lower()
+        email = request.POST.get('email').lower()
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        avatar = request.FILES.get('avatar')  # Access the uploaded file
+        response_messages = []
+        response_messages = UpdateUser(username, user, response_messages)
+        response_messages = UpdateEmail(email, user, response_messages)
+        response_messages = UpdatePwd(password, confirm_password, user, response_messages)
+        if (avatar):
+            folder_path = os.path.join('media', 'avatars')  
+            file_path = default_storage.save(os.path.join(folder_path, avatar.name), ContentFile(avatar.read()))
+            user.avatar = file_path;
+            print(file_path)
+        else:
+            print("NOY  have avatar")
+        # ... rest of your code ...
+        user.save()
+        return JsonResponse({'redirect': '/profile/'})
+    except json.JSONDecodeError as e:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
