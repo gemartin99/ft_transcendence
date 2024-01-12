@@ -1,4 +1,5 @@
 
+//var baseUrl = "http://localhost";
 var baseUrl = window.location.origin;
 console.log('url:',baseUrl);
 window.addEventListener('popstate', handlePopState);
@@ -14,6 +15,7 @@ function fetchContent(path) {
     if (path && path.slice(-1) !== '/') {
         path += '/';
     }
+    console.log(baseUrl + ':8000' + path);
     fetch(baseUrl + ':8000' + path, {
         credentials: 'include',
          headers: {
@@ -99,6 +101,7 @@ function handleNavLinkClick(event) {
     else
         hrefValue = ""
     updateUrl(hrefValue);
+    console.log(baseUrl + ':8000' + hrefValue);
     var lang = getLang()
     fetch(baseUrl + ':8000' + hrefValue, {
         credentials: 'include',
@@ -132,11 +135,12 @@ function handleNavRefresh() {
     console.log("Refresh required!");
     var hrefValue = window.location.href;
     hrefValue = hrefValue.substring(baseUrl.length, hrefValue.lenght);
-    if (hrefValue != "/"){
+    if (hrefValue && hrefValue.slice(-1) !== '/'){
         hrefValue = hrefValue + "/"
     }
-    else
-        hrefValue = ""
+    // else
+    //     hrefValue = ""
+    console.log('href:', hrefValue);
     //updateUrl(hrefValue);
     var lang = getLang();
     fetch(baseUrl + ':8000' + hrefValue, {
