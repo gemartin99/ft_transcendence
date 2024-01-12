@@ -86,7 +86,7 @@
         font-size: 20px;
     }
 
-    .btn-warning {
+    .taacc{
         padding: 20px 20px;
         font-size: 35px; 
     }
@@ -94,7 +94,7 @@
 
   </style>
   <div class="auth-container bg-dark">
-      <h1 style="color: #f5c344;">Steep 2: Enter the code you have received by email</h1>
+      <h1 style="color: #f5c344;">{{text18}}</h1>
       <div id="error-message"></div>
       <div class="input-row">
           <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)">
@@ -105,6 +105,6 @@
           <input name="digit6"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
       </div>
       <div class="button-center">
-          <button class="btn-warning" onclick="checkMailCode()">Submit</button>
+          <button class="btn-warning taacc" onclick="checkMailCode()">{{text19}}</button>
       </div>
   </div>

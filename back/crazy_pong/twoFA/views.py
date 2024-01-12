@@ -34,10 +34,8 @@ def getMailVerificationPage(request):
         user.generate_mail2fa_code()
         user.save()    
         TwoFA.send_mailUser(user.email, user.mail2FACode)
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/check-email2factor.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -49,10 +47,8 @@ def getMailVerificationPage(request):
     return JsonResponse(data)
 
 def getGoogleVerificationPage(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/check-google2factor.html', context)
     data = {
         'title': 'Select Logging Mode',
