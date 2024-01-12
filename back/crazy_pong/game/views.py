@@ -9,6 +9,9 @@ def get_game_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
+    if user.playing:
+        print('hooooooadsdafsadfsdfa')
+        return JsonResponse({'redirect': '/game/play/'})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = game.langs.get_langs(language)
     content_html = render_to_string('game/game.html', context)

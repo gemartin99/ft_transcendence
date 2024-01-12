@@ -49,7 +49,7 @@ class GameManager():
 
         self.IA = False
         self.IAcount = self.fr
-
+        self.saved = False
         self.reset_ball()
 
         self.time = time.time()
@@ -85,12 +85,12 @@ class GameManager():
             
 
             if (ball['x'] - ball['radius'] < 0):
-                self.state['score1'] += 1
+                self.state['score2'] += 1
                 self.reset_ball()
         
             elif (ball['x'] + ball['radius'] > 1200):
                 print("Colision final: " + str(ball['y']))
-                self.state['score2'] += 1
+                self.state['score1'] += 1
                 self.reset_ball()
                 
 
@@ -182,48 +182,52 @@ class GameManager():
 
     @sync_to_async
     def saveMatch(self):
-        player1 = self.player_one['id']
-        print(self.player_one['id'])
-        if (self.IA):
-            player2 = -42
-        else:
-            player2 = self.player_two['id']
-
-        
-        if self.state['score1'] < self.state['score2']:
-            match_winner = player1
-        else:
-            match_winner = player2
-
-
-        match = Match.objects.create(
-            player1=player1,
-            player2=player2,
-            player1_score=self.state['score1'],
-            player2_score=self.state['score2'],
-            match_id=self.state['idMatch'],
-            match_winner=match_winner,
-        )
-        
-        if player1 > 0:
-            user = Usermine.objects.get(id=player1)
-            if match.match_winner == player1:
-                user.wins += 1
+        if (not self.saved):
+            self.saved = True
+            player1 = self.player_one['id']
+            print(self.player_one['id'])
+            if (self.IA):
+                player2 = -42
             else:
-                user.losses += 1
-            user.matches_played.add(match)
-            user.save()
+                player2 = self.player_two['id']
 
-        if player2 > 0:
-            user2 = Usermine.objects.get(id=player2)
-            if match.match_winner == player2:
-                user2.wins += 1
+            
+            if self.state['score1'] > self.state['score2']:
+                match_winner = player1
             else:
-                user2.losses += 1
-            user2.matches_played.add(match)
-            user2.save()
-        
-        #debug
-        all_matches = Match.objects.all()
-        for m in all_matches:
-            print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - Winner: {m.match_winner} - MatchID: {m.match_id}")
+                match_winner = player2
+
+
+            match = Match.objects.create(
+                player1=player1,
+                player2=player2,
+                player1_score=self.state['score1'],
+                player2_score=self.state['score2'],
+                match_id=self.state['idMatch'],
+                match_winner=match_winner,
+            )
+            
+            if player1 > 0:
+                user = Usermine.objects.get(id=player1)
+                if match.match_winner == player1:
+                    user.wins += 1
+                else:
+                    user.losses += 1
+                user.matches_played.add(match)
+                user.playing = False
+                user.save()
+
+            if player2 > 0:
+                user2 = Usermine.objects.get(id=player2)
+                if match.match_winner == player2:
+                    user2.wins += 1
+                else:
+                    user2.losses += 1
+                user2.matches_played.add(match)
+                user2.playing = False
+                user2.save()
+            
+            #debug
+            all_matches = Match.objects.all()
+            for m in all_matches:
+                print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - Winner: {m.match_winner} - MatchID: {m.match_id}")

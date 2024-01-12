@@ -106,7 +106,15 @@ def logout(request):
     return response
 
 
-
+@csrf_exempt
+def is_playing(request):
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = Authentification.decode_jwt_token(jwt_token)
+    user = Usermine.objects.get(id=user_id)
+    if user.playing:
+        return JsonResponse({'playing': True})
+    else:
+        return JsonResponse({'playing': False})
 
 
 ##debug functions
@@ -118,16 +126,19 @@ def show_online(request):
     print('uid:', user_id)
     all_users = Usermine.objects.all()
     for user in all_users:
-        last_5_matches = user.get_last_5_matches()
-        for match in last_5_matches:
-            print(f"Match ID: {match.match_id}")
-            print(f"you: {match.player1}")
-            print(f"Opponent: {match.player2}")
-            print(f"Result1: {match.player1_score}")
-            print(f"Result2: {match.player2_score}")
-            print(f"Timestamp: {match.timestamp}")
-            print("\n")
-        print(f"User: {user.name}, Online: {user.online}, valid2fa: {user.validated2FA}, google: {user.google2FA}, mail: {user.mail2FA}, id: {user.id}")
+    #     last_5_matches = user.get_last_5_matches()
+    #     for match in last_5_matches:
+    #         print(f"Match ID: {match.match_id}")
+    #         print(f"you: {match.player1}")
+    #         print(f"Opponent: {match.player2}")
+    #         print(f"Result1: {match.player1_score}")
+    #         print(f"Result2: {match.player2_score}")
+    #         print(f"Timestamp: {match.timestamp}")
+    #         print("\n")
+        # print(f"User: {user.name}, Online: {user.online}, valid2fa: {user.validated2FA}, google: {user.google2FA}, mail: {user.mail2FA}, id: {user.id}")
+        print(f"User: {user.name}, Playing: {user.playing}, id: {user.id}")
+        user.playing = False
+        user.save()
         # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})
 
