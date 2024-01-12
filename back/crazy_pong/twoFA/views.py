@@ -10,11 +10,9 @@ from authentification.authentification import Authentification
 from django.views.decorators.csrf import csrf_exempt
 from .twoFA import TwoFA
 from datetime import datetime, timezone
+import twoFA.langs
 
 def activateGoogle2FA(request):
-    # jwt_token = request.COOKIES.get('jwttoken', None)
-    # user_id = Authentification.decode_jwt_token(jwt_token)
-    # user = Usermine.objects.get(id=user_id)    
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
@@ -32,9 +30,10 @@ def getMailVerificationPage(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
-    user.generate_mail2fa_code()
-    user.save()    
-    TwoFA.send_mailUser(user.email, user.mail2FACode)
+    if not user.is_mail2fa_code_valid():
+        user.generate_mail2fa_code()
+        user.save()    
+        TwoFA.send_mailUser(user.email, user.mail2FACode)
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -64,10 +63,8 @@ def getGoogleVerificationPage(request):
 
 
 def get_set_mail2FA_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/set-email2factor.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -78,10 +75,8 @@ def get_set_mail2FA_page(request):
 
 
 def get_set_google2FA_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/set-google2factor.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -97,13 +92,15 @@ def activateMail2FA(request):
         return JsonResponse({'redirect': redirect})
     if request.method != 'POST':
         return JsonResponse({'message': 'bad method!'})
-    user.generate_mail2fa_code()
-    user.save()
-    print("numbers:", user.mail2FACode)
-    if (TwoFA.send_mailUser(user.email, user.mail2FACode)):
-        return JsonResponse({'message': 'ok'})
-    else:
-        return JsonResponse({'message': 'bad one'})
+    if not user.is_mail2fa_code_valid():
+        user.generate_mail2fa_code()
+        user.save()
+        print("numbers:", user.mail2FACode)
+        if (TwoFA.send_mailUser(user.email, user.mail2FACode)):
+            return JsonResponse({'message': 'ok'})
+        else:
+            return JsonResponse({'message': 'bad one'})
+    return JsonResponse({'message': 'ok'})
     # return get_verification_page(None) 
 
 @csrf_exempt
@@ -111,10 +108,8 @@ def verifyMailCode(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
-    # user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': '/users/login/'})
-    print("holaaaa")
     if user.is_mail2fa_code_valid():
         totp_code = request.POST.get('concatenatedValue')
         print('request:', request.POST)
