@@ -80,6 +80,14 @@ class MatchManager:
             return game
     
     @classmethod
+    def reconnect(cls, uid, name):
+        for match in cls.threads:
+            if cls.matches[match]['player1']["id"] == uid or cls.matches[match]['player2']["id"] == uid:
+                if cls.threads[match]["active"] == True:
+                    return match
+        return False
+    
+    @classmethod
     def before_thread(cls, consumer_instance, game_name):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
