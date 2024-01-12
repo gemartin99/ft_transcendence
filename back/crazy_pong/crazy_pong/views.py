@@ -30,9 +30,14 @@ def get_information_page(request):
 
 
 def get_home_page(request):
-    print("aqui")
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = crazy_pong.langs.get_langs(language)
+    jwtToken = request.COOKIES.get('jwttoken', None)
+    if jwtToken:
+        context.update({'loggued': True})
+    # else:
+    #     context.update({'loggued': False})
+    print(jwtToken)
     content_html = render_to_string('home/index.html', context)
     data = {
         'title': 'Home2',
