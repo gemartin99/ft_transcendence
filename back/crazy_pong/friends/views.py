@@ -13,7 +13,11 @@ def get_friends_page(request):
     if not user:
         return JsonResponse({'redirect': redirect})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = friends.langs.get_langs(language)
+    context = {
+        'friends': user.friends.all(),
+    }
+    context.update(friends.langs.get_langs(language))
+    print(context)
     content_html = render_to_string('friends/friends.html', context)
     data = {
         'title': 'Friends Page',
