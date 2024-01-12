@@ -21,7 +21,7 @@ def get_lang_en():
         #set-email2factor.html
         'text10': 'Steep 1: Confirm your email',
         'text11': 'To set twofactor email method first you need to confirmate that your email is valid. Click the button, and we will sent you a confirmation code. One time you have the code you just have to place it to enable the method.',
-        'text12': 'Sent me the email',
+        'text12': 'Send email',
         'text13': 'Steep 2: Enter the code you have received by email',
         'text14': 'Submit',
         'text15': 'Two Factor set Succesful',
