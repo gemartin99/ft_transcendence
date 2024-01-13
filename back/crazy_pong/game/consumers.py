@@ -64,9 +64,12 @@ class gameConnection(AsyncWebsocketConsumer):
              return 
         
         if (self.mode == 'reconnect' and MatchManager.reconnect(self.user_id, self.user_name)):
-            self.game = MatchManager.reconnect(self.user_id, self.user_name)
+            self.game, paddle = MatchManager.reconnect(self.user_id, self.user_name)
             await self.channel_layer.group_add(self.game, self.channel_name)
-            self.paddle_controller = PlayerManager("player2", "paddle2", MatchManager.matches[self.game])
+            if paddle == 1:
+                self.paddle_controller = PlayerManager("player1", "paddle1", MatchManager.matches[self.game])
+            else:
+                self.paddle_controller = PlayerManager("player2", "paddle2", MatchManager.matches[self.game])
             await self.accept()
             return 
 
