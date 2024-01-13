@@ -19,6 +19,12 @@ class Match():
     def get(self):
         return self.res
     
+    def getu1(self):
+        return self.res['u1']
+    
+    def getu2(self):
+        return self.res['u2']
+    
     def setu1(self, u1):
         self.res['u1'] = u1
     
@@ -33,13 +39,14 @@ class Match():
 
 class Tournament:
     
-    def __init__(self, name, n, id):
+    def __init__(self, name, n, id, IA):
         self.name = name
         self.id = id
         self.players = []
         self.bracket = []
         self.n = int(n)
         self.start = False
+        self.IA = IA
         self.createBracket()
 
     def getName(self):
@@ -47,12 +54,18 @@ class Tournament:
     
     def addPlayer(self, user):
         if (len(self.players) % 2 == 0):
-            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu1(user)
+            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu1(user.name)
         else:
-            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu2(user)
+            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu2(user.name)
         self.players.append(user)
         if len(self.players) == self.n:
             self.start = True
+            for user in self.players:
+                user.inTournament = 2
+                user.save()
+
+        user.inTournament = 1
+        user.save()
             
 
     def get(self):
@@ -79,8 +92,7 @@ class Tournament:
                             self.bracket[(i-1) / 2 ].setu1(m.player1)
                         else:
                             self.bracket[(i-1) / 2 ].setu2(m.player1)
-                    
-                    if (p1 > p2):
+                    else:
                         if (i % 2 == 1):
                             self.bracket[(i-1) / 2 ].setu1(m.player2)
                         else:
@@ -93,7 +105,11 @@ class Tournament:
 
     def createBracket(self):
         for i in range(int(self.n/2) -1):
-            self.bracket.append(Match("undefined", "undefined", 0, 0))
+            self.bracket.append(Match("IA", "IA", 0, 0))
         for i in range(self.n):
             if (i %2 == 0):
-                self.bracket.append(Match("undefined", "undefined", 0, 0))        
+                self.bracket.append(Match("IA", "IA", 0, 0))        
+
+    def canStart(self):
+        self.start = self.IA or (len(self.players) == self.n)
+        return self.start

@@ -17,6 +17,10 @@ def get_tournament_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
+    if (user.inTournament == 1):
+        return JsonResponse({'redirect': '/tournament/lobbyPage/'})
+    elif (user.inTournament == 2):
+        return JsonResponse({'redirect': '/tournament/lobbyPage/'})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = tournament.langs.get_langs(language)
     content_html = render_to_string('tournament/tournament.html', context)
@@ -72,6 +76,20 @@ def get_lobby_page(request):
     }
     return JsonResponse(data)
 
+def get_bracket_page(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    context = tournament.langs.get_langs(language)
+    content_html = render_to_string('tournament/tournament_table.html', context)
+    data = {
+        'title': 'Tournament bracket',
+        'content': content_html,
+        'additionalInfo': 'Some additional information here',
+    }
+    return JsonResponse(data)
+
 @csrf_exempt 
 def createTournament(request):
     user, redirect = Authentification.get_auth_user(request)
@@ -82,9 +100,10 @@ def createTournament(request):
             #falta parsing del name
             data = json.loads(request.body)
             print('name:',data['ia'])
-            tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user.name)
+            tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user, data['ia'])
+            print('tournament_code:',tournament_code)
             return JsonResponse({'code': tournament_code,
-                'redirect': '/tournament/lobbyPage/'})
+                                    'redirect': '/tournament/lobbyPage/'})
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
@@ -103,7 +122,7 @@ def joinPlayer(request):
             # user_id = Authentification.decode_jwt_token(jwt_token)
             # user = Usermine.objects.get(id=user_id)
 
-            TournamentManager.add_player(data['id'], user.name)
+            TournamentManager.add_player(data['id'], user)
             
             return JsonResponse({'code': '200'})
         except json.JSONDecodeError as e:
@@ -178,6 +197,26 @@ def getTournaments(request):
             status = TournamentManager.get_all(data['user'])
             
             return JsonResponse({'code': status})
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def startTournament(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
+    if request.method == 'POST':
+        try:
+            #falta parsing del name
+            data = json.loads(request.body)
+            start = TournamentManager.startTournament(data['id'])
+            if start:
+                return JsonResponse({'redirect': '/tournament/bracketPage/'})
+            else:
+                return JsonResponse({'redirect': 'false'})
+            
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
