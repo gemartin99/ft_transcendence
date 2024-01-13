@@ -138,6 +138,7 @@ def show_online(request):
         # print(f"User: {user.name}, Online: {user.online}, valid2fa: {user.validated2FA}, google: {user.google2FA}, mail: {user.mail2FA}, id: {user.id}")
         print(f"User: {user.name}, Playing: {user.playing}, id: {user.id}")
         user.playing = False
+        user.inTournament = 0
         user.save()
         # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})

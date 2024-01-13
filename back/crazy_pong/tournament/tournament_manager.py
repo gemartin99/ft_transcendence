@@ -8,9 +8,9 @@ class TournamentManager:
 
     tournaments = {}
     @classmethod
-    def add_tournament(cls, tournament_name, n, user):
+    def add_tournament(cls, tournament_name, n, user, IA):
         id = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        cls.tournaments[id] = Tournament(tournament_name, n, id)
+        cls.tournaments[id] = Tournament(tournament_name, n, id, IA)
         cls.tournaments[id].addPlayer(user)
         return id
 
@@ -34,3 +34,9 @@ class TournamentManager:
             if cls.tournaments[t].hasPlayer(user):
                 ret[id] = cls.tournaments[t].name()
         return ret
+    
+    @classmethod
+    def startTournament(cls, id):
+        if (cls.tournaments[id].canStart()):
+            return True
+        return False

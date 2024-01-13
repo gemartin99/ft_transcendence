@@ -13,6 +13,7 @@
     
     <div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 40px; border-radius: 10px; padding: 30px;">
         <h2 class="text-center mb-4">{{text4}}</h2>
+
         <form onsubmit="return createTournament(event)">
             <div class="row mb-3 align-items-center"> <!-- Añadiendo la clase align-items-center aquí -->
                 <label for="points" class="col-sm-4 col-form-label pum">{{text5}}:</label>
@@ -62,9 +63,7 @@
                 </div>
             </div>
             <div class="text-center">
-                    <a class="navlink" href="/tournament/lobbyPage">
-                        <button class="btn btn-warning" type="submit">{{text9}}</button>
-                    </a>
+                    <button class="btn btn-warning" type="submit">{{text9}}</button>
             </div>
         </form>
     </div>
