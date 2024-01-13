@@ -154,7 +154,7 @@ STATIC_URL = 'static/'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
-    "https://10.11.3.3",
+    "http://10.11.3.3",
 ]
     # "http://10.11.14.3",
 
@@ -181,7 +181,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
     "https://localhost:8080",
-    "https://10.11.3.3",
+    "http://10.11.3.3",
 ]
     # "http://10.11.14.3",
 
