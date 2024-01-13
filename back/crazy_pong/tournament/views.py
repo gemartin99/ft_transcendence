@@ -168,6 +168,7 @@ def updateTournament(request):
                 context = {
                     'ret': ret,
                 }
+                print(context)
                 content_html = render_to_string('tournament/tournament_table.html', context)
                 data = {
                     'title': 'Tournament lobby',

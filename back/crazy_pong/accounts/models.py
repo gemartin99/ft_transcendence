@@ -39,13 +39,18 @@ class Usermine(models.Model):
                 player2_name = Usermine.objects.get(id=match.player2).name
             else:
                 player2_name = 'IA'
+            if match.match_winner == match.player1:
+                match_winner = player1_name
+            else:
+                match_winner = player2_name
+            print(match_winner)
             matches_with_names.append({
                 'match_id': match.match_id,
                 'player1': player1_name,
                 'player2': player2_name,
                 'player1_score': match.player1_score,
                 'player2_score': match.player2_score,
-                'match_winner': match.match_winner,
+                'match_winner': match_winner,
                 'timestamp': match.timestamp,
             })
 
