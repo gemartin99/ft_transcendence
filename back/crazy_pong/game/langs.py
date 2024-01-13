@@ -29,6 +29,9 @@ def get_lang_en():
         'text14': 'Lobby code:',
         'text15': 'Enter Lobby code',
         'text16': 'Ready',
+        #play.html
+        'text17': 'waiting players',
+        'text18': "Let's Fight",
 
     }
     return context
@@ -55,6 +58,9 @@ def get_lang_es():
         'text14': 'Código de sala:',
         'text15': 'Introduce el código de sala',
         'text16': 'Listo',
+        #play.html
+        'text17': 'esperando jugadores',
+        'text18': "A luchar",
     }
     return context
 
@@ -80,6 +86,9 @@ def get_lang_pt():
         'text14': 'Código do lobby:',
         'text15': 'Introduzir o código do Lobby',
         'text16': 'Pronto',
+        #play.html
+        'text17': 'à espera de jogadores',
+        'text18': "Combate",
+
     }
     return context
-
