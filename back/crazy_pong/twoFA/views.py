@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect
+# from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 # Create your views here.
 from django.core.mail import send_mail
 from accounts.models import Usermine
-from django.contrib import messages
-import pyotp
+# import pyotp
 from authentification.authentification import Authentification
 from django.views.decorators.csrf import csrf_exempt
 from .twoFA import TwoFA
@@ -188,56 +187,14 @@ def disableTwoFactor(request):
 
 
 #2FA con google funcional:::
-def generate_totp_secret():
-    return pyotp.random_base32()
+# def generate_totp_secret():
+#     return pyotp.random_base32()
 
 @csrf_exempt 
 def enable_totp(request):
-    if request.method == 'POST':
-        totp_secret = generate_totp_secret()
-        
+    return TwoFA.enable_totp(request)
 
-        jwt_token = request.COOKIES.get('jwttoken', None)
-        user_id = Authentification.decode_jwt_token(jwt_token)
-        totp_code = str(request.POST.get('totp_code'))
-        userid = user_id
-        
-        # username = ''
-        # tendremos que coger el username a traves del JWT
-        user = Usermine.objects.get(id=userid)
-        user.totp = totp_secret;
-        user.save()
-
-        # Generate the provisioning URL to be used by the Google Authenticator app
-        totp = pyotp.TOTP(totp_secret)
-        provisioning_url = totp.provisioning_uri(name=user.name.encode('utf-8'), issuer_name='crazy-pong')
-
-        print('hola')
-        return JsonResponse({'provisioning_url': provisioning_url})
 
 @csrf_exempt 
 def verify_totp(request):
-    jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = Authentification.decode_jwt_token(jwt_token)
-    user = Usermine.objects.get(id=user_id)
-    # user, redirect = Authentification.get_auth_user(request)
-    if not user:
-        return JsonResponse({'redirect': '/users/login/'})
-    if request.method != 'POST':
-        return JsonResponse({'message': 'bad method!'})
-    totp_code = str(request.POST.get('totp_code'))
-    totp_secret = user.totp
-    totp = pyotp.TOTP(totp_secret)
-    if user.google2FA == True:
-        if totp.verify(totp_code):
-            user.validated2FA = True
-            user.save()
-            return JsonResponse({'message': '2fa activated ok'})
-    if totp.verify(totp_code):
-        user.mail2FA = False
-        user.google2FA = True
-        user.validated2FA = True
-        user.save()
-        return JsonResponse({'message': 'ok'})
-    else:
-        return JsonResponse({'error': 'Wrong one hehe'})
+    return TwoFA.verify_totp(request)
