@@ -32,7 +32,7 @@ def getMailVerificationPage(request):
     if not user.is_mail2fa_code_valid():
         user.generate_mail2fa_code()
         user.save()    
-        TwoFA.send_mailUser(user.email, user.mail2FACode)
+        TwoFA.send_mailUser(user.user, user.email, user.mail2FACode)
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -95,7 +95,7 @@ def activateMail2FA(request):
         user.generate_mail2fa_code()
         user.save()
         print("numbers:", user.mail2FACode)
-        if (TwoFA.send_mailUser(user.email, user.mail2FACode)):
+        if (TwoFA.send_mailUser(user.name, user.email, user.mail2FACode)):
             return JsonResponse({'message': 'ok'})
         else:
             return JsonResponse({'message': 'bad one'})
@@ -123,7 +123,7 @@ def verifyMailCode(request):
     else:
         user.generate_mail2fa_code()
         user.save()    
-        TwoFA.send_mailUser(user.email, user.mail2FACode)
+        TwoFA.send_mailUser(user.name, user.email, user.mail2FACode)
     return JsonResponse({'message': 'notok new one sent'})
 
 # @csrf_exempt

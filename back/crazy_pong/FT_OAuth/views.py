@@ -1,10 +1,10 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 import requests
-from django.conf import settings
-from django.http import HttpResponse
+# from django.conf import settings
+# from django.http import HttpResponse
 from accounts.models import Usermine
 from authentification.authentification import Authentification
 # Create your views here.
