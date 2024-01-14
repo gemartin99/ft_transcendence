@@ -1,26 +1,26 @@
-from django.http import JsonResponse
-from django.template.loader import render_to_string
+# from django.http import JsonResponse
+# from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.shortcuts import render
+# from django.shortcuts import render
 from .models import Usermine
-import base64
+# import base64
 from django.db import IntegrityError
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
-import bcrypt
+# from django.contrib.auth.password_validation import validate_password
+# from django.core.exceptions import ValidationError
+# import bcrypt
 from security.security import Security
 from authentification.authentification import Authentification
-import re
+# import re
 
 class Accounts:
-    @staticmethod
-    def email_is_in_use(email):
-        # Check if the email is already in use
-        if Usermine.objects.filter(email=email).exists():
-            return True, 'Email is already in use'
-        # Both are allowed to be used
-        return False, None
+    # @staticmethod
+    # def email_is_in_use(email):
+    #     # Check if the email is already in use
+    #     if Usermine.objects.filter(email=email).exists():
+    #         return True, 'Email is already in use'
+    #     # Both are allowed to be used
+    #     return False, None
 
     @staticmethod
     def username_is_in_use(username):
@@ -100,13 +100,13 @@ class Accounts:
             res, errMsg = Accounts.username_is_in_use(username)
             if errMsg:
                 return False, errMsg
-            res, errMsg = Accounts.email_is_in_use(email)
-            if errMsg:
-                return False, errMsg
-            # Encrypt and prepare the password
+            # res, errMsg = Accounts.email_is_in_use(email)
+            # if errMsg:
+            #     return False, errMsg
+            if password != confirm_password:
+                return False, 'Password missmatch.'
             encrypted_pwd = Security.hash_password(password)
             pwd_str = encrypted_pwd.decode('utf-8')
-            # Store the data
             user = Usermine(name=username.lower(), password=pwd_str, email=email.lower())
             user.save()
             return True, 'User saved successfully'

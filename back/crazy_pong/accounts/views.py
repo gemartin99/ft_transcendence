@@ -2,28 +2,20 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 ##Jareste limpiar
 from django.views.decorators.csrf import csrf_exempt
-import json
+# import json
 from django.shortcuts import render
 from .models import Usermine
-import base64
-from django.db import IntegrityError
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
-import bcrypt
+# import base64
+# from django.db import IntegrityError
+# from django.contrib.auth.password_validation import validate_password
+# from django.core.exceptions import ValidationError
+# import bcrypt
 # from security.security import Security
 from .accounts import Accounts
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from authentification.authentification import Authentification
-from twoFA.twoFA import TwoFA
+# from twoFA.twoFA import TwoFA
 import accounts.langs
-
-def get_home_page(request):
-    data = {
-        'title': 'Login Page',
-        'content': '<strong>Hello,holadsfa World!</strong>',
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
 
 def get_login_page(request):
     language = request.META.get('HTTP_LANGUAGE', 'default_language')

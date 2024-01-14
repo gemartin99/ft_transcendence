@@ -79,10 +79,10 @@ class TwoFA:
     #     return False
 
     @staticmethod
-    def send_mailUser(mail, code):
+    def send_mailUser(user, mail, code):
         try:
             subject = "Your Authentication Code"
-            message = f"Your authentication code is: {code}. Use this code to verify your account."
+            message = f"Dear {user}, \n\nyour authentication code is: {code}. Use this code to verify your account."
 
             send_mail(
                 subject,
