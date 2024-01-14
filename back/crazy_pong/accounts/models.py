@@ -10,6 +10,7 @@ class Usermine(models.Model):
     email = models.EmailField(max_length=255, unique=True)
     playing = models.BooleanField(default=False)
     inTournament = models.IntegerField(default=0)
+    tournament_id = models.CharField(max_length=128, default='')
     online = models.BooleanField(default=False)
     id42 = models.IntegerField(default=42)
     wins = models.IntegerField(default=0)

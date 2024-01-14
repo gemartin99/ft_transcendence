@@ -58,13 +58,9 @@ class Tournament:
         else:
             self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu2(user.name)
         self.players.append(user)
-        if len(self.players) == self.n:
-            self.start = True
-            for user in self.players:
-                user.inTournament = 2
-                user.save()
 
         user.inTournament = 1
+        user.tournament_id = self.id
         user.save()
             
 
@@ -105,7 +101,7 @@ class Tournament:
 
     def createBracket(self):
         for i in range(int(self.n/2) -1):
-            self.bracket.append(Match("IA", "IA", 0, 0))
+            self.bracket.append(Match("undefined", "undefined", 0, 0))
         for i in range(self.n):
             if (i %2 == 0):
                 self.bracket.append(Match("IA", "IA", 0, 0))        

@@ -30,7 +30,7 @@ def get_lang_en():
         'text16': 'Waiting Players',
         'text17': 'READY',
         'text18': 'REFRESH',
-
+        'text19': 'PLAY',
 
     }
     return context
@@ -59,6 +59,7 @@ def get_lang_es():
         'text16': 'Esperando jugadores',
         'text17': 'LISTO',
         'text18': 'RECARGAR',
+        'text19': 'JUGAR',
     }
     return context
 
@@ -86,5 +87,6 @@ def get_lang_pt():
         'text16': 'À espera de jogadores',
         'text17': 'PRONTO',
         'text18': 'RECARREGAR',
+        'text19': 'JOGAR',
     }
     return context

@@ -67,6 +67,7 @@ h1 {
   border-radius: 5px;
   background-color: red;
   margin-bottom: 10px;
+  min-width: 100px;
 }
 
 .team.winner {
