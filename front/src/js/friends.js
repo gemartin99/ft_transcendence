@@ -9,6 +9,7 @@ function searchFriend(event) {
     // Get the input value
     var searchInput = document.getElementById('searchInput');
     var searchTerm = searchInput.value;
+    const friendsForm = document.getElementById("message");
 
     // Now you can use the searchTerm in your JavaScript logic
     console.log('Search Term:', searchTerm);
@@ -27,7 +28,9 @@ function searchFriend(event) {
 			handleRedirect(data.redirect)
 		}
         console.log('Response:', data);
-        handleRedirect('/friends/');
+        // handleRedirect('/friends/');
+        message.textContent = "holabobby";
+
     })
     .catch(error => {
         console.error('Error:', error);
@@ -40,3 +43,45 @@ function searchFriend(event) {
     // Clear the input field if needed
     searchInput.value = '';
 }
+
+
+// async function searchFriend(event) {
+//     event.preventDefault(); // Prevent the default form submission behavior
+
+//     // Get the input value
+//     var searchInput = document.getElementById('searchInput');
+//     var searchTerm = searchInput.value;
+//     const message = document.getElementById("message");
+
+//     // Now you can use the searchTerm in your JavaScript logic
+//     console.log('Search Term:', searchTerm);
+
+//     try {
+//         const response = await fetch(baseurl + ':8000/friends/addFriend/', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             credentials: 'include',
+//             body: JSON.stringify(searchTerm),
+//         });
+
+//         const data = await response.json();
+
+//         if (data.redirect) {
+//             console.log('Redirect:', data.redirect);
+//             await handleRedirect(data.redirect);
+//             message.textContent = data.message;
+//         }
+
+//         console.log('Response:', data);
+
+//         // await handleRedirect('/friends/');
+//     } catch (error) {
+//         console.error('Error:', error);
+//         setFormMessage(loginForm, "error", "Invalid username/password combination");
+//     }
+
+//     // Add your logic here to process the searchTerm
+
+//     // Clear the input field if needed
+//     searchInput.value = '';
+// }

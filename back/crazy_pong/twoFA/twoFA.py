@@ -1,12 +1,9 @@
 import pyotp
 from accounts.models import Usermine
 from authentification.authentification import Authentification
-# from django.contrib import messages
-# Create your views here.
 from django.core.mail import send_mail
 from django.http import JsonResponse
 
-# from django.shortcuts import redirect, render
 
 
 class TwoFA:

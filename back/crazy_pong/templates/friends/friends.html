@@ -68,7 +68,8 @@
     <div class="container-header" style="padding: 20px;">
 		<div class="header bg-dark" style="box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);">
 			<h1 class="text-warning">{{text1}}</h1>
-			<form onsubmit="return searchFriend(event)">
+			<div id="message" ></div>
+            <form onsubmit="return searchFriend(event)">
 				<input type="text" id="searchInput" placeholder="{{text2}}">
                 <br>
                 <button class="btn btn-warning" type="submit" >{{text3}}</button>

@@ -39,8 +39,6 @@ def addFriend(request):
     print(searchValue)
     try:
         user.friends.add(Usermine.objects.get(name=searchValue))
-        print('anadioooooo')
+        return JsonResponse({'message': 'Friend added succesfully.', 'redirect': '/friends/'})
     except Usermine.DoesNotExist:
-        print('eresboboboooooo')    
-
-    return (JsonResponse({'hola': 'meow'}))
+        return JsonResponse({'message': 'No user matches the username.'})
