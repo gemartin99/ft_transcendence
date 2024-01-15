@@ -87,6 +87,9 @@ def change_view(request):
 
 @csrf_exempt 
 def create_account(request): 
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True) or (loggued == False and redirect != '/users/login/'):
+        return JsonResponse({'redirect': redirect})
     res, msg = Accounts.process_new_account_request(request)
     if res == True:
         return JsonResponse({'message': msg}, status=200)
@@ -95,6 +98,9 @@ def create_account(request):
 
 @csrf_exempt
 def do_login(request):
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True) or (loggued == False and redirect != '/users/login/'):
+        return JsonResponse({'redirect': redirect})
     data, msg = Accounts.process_new_login_request(request)
     if data:
         return JsonResponse(data, status=200)
