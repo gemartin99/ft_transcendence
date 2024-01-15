@@ -52,10 +52,30 @@ class Authentification:
         user_id = Authentification.decode_jwt_token(jwt_token)
         try:
             user = Usermine.objects.get(id=user_id)
-            print(f"User: {user.name}, Online: {user.online}")
-            if ((user.mail2FA or user.google2FA) and user.validated2FA == False):
-                print("soy false")
-                return False, '/twoFA/MailVerification/' #aqui hay que redirigir al verificar 2fa
+            if (user.mail2FA and user.validated2FA == False):
+                return False, '/twoFA/MailVerification/'
+            if (user.google2FA and user.validated2FA == False):
+                return False, '/twoFA/GoogleVerification/'
             return user, None
         except Usermine.DoesNotExist:
             return False, '/users/login/'
+
+    @staticmethod
+    def user_loggued_ok(request):
+        jwt_token = request.COOKIES.get('jwttoken', None)
+        if not jwt_token:
+            return False, '/users/login/'
+        user_id = Authentification.decode_jwt_token(jwt_token)
+        try:
+            user = Usermine.objects.get(id=user_id)
+            if (user.mail2FA and user.validated2FA == False):
+                return False, '/twoFA/MailVerification/'
+            if (user.google2FA and user.validated2FA == False):
+                return False, '/twoFA/GoogleVerification/'
+            return True, '/'
+        except Usermine.DoesNotExist:
+            return False, '/users/login/'
+
+
+
+

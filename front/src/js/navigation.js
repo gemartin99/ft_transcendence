@@ -131,6 +131,7 @@ function handleNavLinkClick(event) {
 }
 
 function handleNavRefresh() {
+    checkURLCode();
     event.preventDefault(); // Prevents the default behavior (e.g., navigating to a new page)
     console.log("Refresh required!");
     var hrefValue = window.location.href;
