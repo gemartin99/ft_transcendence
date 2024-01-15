@@ -1,8 +1,10 @@
 #from .models import Usermine
 from datetime import datetime, timedelta
-from django.conf import settings
-from accounts.models import Usermine
+
 import jwt
+from accounts.models import Usermine
+from django.conf import settings
+
 
 class Authentification:
     @staticmethod

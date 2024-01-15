@@ -1,15 +1,18 @@
 # from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-# Create your views here.
-from django.core.mail import send_mail
+from datetime import datetime, timezone
+
+import twoFA.langs
 from accounts.models import Usermine
 # import pyotp
 from authentification.authentification import Authentification
+# Create your views here.
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
+
 from .twoFA import TwoFA
-from datetime import datetime, timezone
-import twoFA.langs
+
 
 def activateGoogle2FA(request):
     user, redirect = Authentification.get_auth_user(request)

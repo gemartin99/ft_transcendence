@@ -1,5 +1,7 @@
-from .models import Usermine
 from channels.generic.websocket import WebsocketConsumer
+
+from .models import Usermine
+
 
 class loginConnection(WebsocketConsumer):
     

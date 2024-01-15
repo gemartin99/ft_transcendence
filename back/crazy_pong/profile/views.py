@@ -1,8 +1,18 @@
+import json
+import os
+import profile.langs
+
+from accounts.accounts import Accounts
+# from security.security import Security
+from authentification.authentification import Authentification
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 ##Jareste limpiar
 from django.views.decorators.csrf import csrf_exempt
-import json
+from security.security import Security
+
 # from django.shortcuts import render
 # from accounts.models import Usermine
 # import base64
@@ -10,16 +20,8 @@ import json
 # from django.contrib.auth.password_validation import validate_password
 # from django.core.exceptions import ValidationError
 
-# from security.security import Security
-from authentification.authentification import Authentification
-from accounts.accounts import Accounts
-from security.security import Security
 
-import profile.langs
 
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-import os
 
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)

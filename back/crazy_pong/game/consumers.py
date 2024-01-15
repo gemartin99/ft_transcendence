@@ -1,29 +1,19 @@
-import json
-import random
-import string
-import time
-
-from .match import PlayerManager, GameManager
-from .match_manager import MatchManager
-
-import random
-import string
-import time
-import os
-
-from .match import PlayerManager, GameManager
-from .match_manager import MatchManager
-
 import asyncio
-from channels.generic.websocket import AsyncWebsocketConsumer
+import json
+import os
+import random
+import string
+import time
 
-from authentification.authentification import Authentification
 from accounts.models import Usermine
+from asgiref.sync import async_to_sync, sync_to_async
+from authentification.authentification import Authentification
 from channels.db import database_sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from asgiref.sync import sync_to_async
 
+from .match import GameManager, PlayerManager
+from .match_manager import MatchManager
 
 
 @sync_to_async

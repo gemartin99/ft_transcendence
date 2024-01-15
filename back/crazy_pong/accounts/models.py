@@ -1,7 +1,9 @@
-from django.db import models
 import random
+
+from django.db import models
 from django.utils import timezone
 from game.models import Match
+
 
 class Usermine(models.Model):
     id = models.AutoField(primary_key=True)

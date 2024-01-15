@@ -1,7 +1,8 @@
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render
 import crazy_pong.langs
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.template.loader import render_to_string
+
 
 # Front pages that are not from a specific app 
 def get_aboutus_page(request):

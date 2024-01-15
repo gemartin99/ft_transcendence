@@ -1,16 +1,17 @@
 # Create your views here.
 # views.py
 
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render
-from .tournament_manager import TournamentManager
-from django.views.decorators.csrf import csrf_exempt
 import json
-import tournament.langs
-from authentification.authentification import Authentification
-from accounts.models import Usermine
 
+import tournament.langs
+from accounts.models import Usermine
+from authentification.authentification import Authentification
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+
+from .tournament_manager import TournamentManager
 
 
 def get_tournament_page(request):

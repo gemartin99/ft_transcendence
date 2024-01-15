@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import createTournament, joinPlayer, getTournament, getTournaments, updateTournament, get_tournament_page, get_create_tournament_page, get_lobby_page, get_join_tournament_page, startTournament, get_bracket_page
+
+from .views import (createTournament, get_bracket_page,
+                    get_create_tournament_page, get_join_tournament_page,
+                    get_lobby_page, get_tournament_page, getTournament,
+                    getTournaments, joinPlayer, startTournament,
+                    updateTournament)
 
 urlpatterns = [
     path('create/', createTournament, name='createTournament'),

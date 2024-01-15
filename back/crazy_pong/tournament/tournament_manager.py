@@ -1,8 +1,10 @@
-import threading
 import asyncio
-from .tournament import Tournament
 import random
 import string
+import threading
+
+from .tournament import Tournament
+
 
 class TournamentManager:
 

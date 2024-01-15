@@ -1,6 +1,9 @@
 from django.urls import path
-# from django.contrib.auth import views as auth_views
-from .views import get_login_page, get_login_form_page, get_login42_form_page, change_view, get_register_new_account_page, create_account, do_login, show_online, logout, is_playing
+
+from .views import (change_view, create_account, do_login,
+                    get_login42_form_page, get_login_form_page, get_login_page,
+                    get_register_new_account_page, is_playing, logout,
+                    show_online)
 
 urlpatterns = [
      path('', change_view, name='change_view'),

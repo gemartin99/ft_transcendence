@@ -1,8 +1,9 @@
+import json
 import random
 import string
-import json
 
 from game.models import Match as MatchModel
+
 
 class Match():
 

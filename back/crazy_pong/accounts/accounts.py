@@ -1,16 +1,19 @@
 # from django.http import JsonResponse
 # from django.template.loader import render_to_string
-from django.views.decorators.csrf import csrf_exempt
 import json
-# from django.shortcuts import render
-from .models import Usermine
+
+from authentification.authentification import Authentification
 # import base64
 from django.db import IntegrityError
+from django.views.decorators.csrf import csrf_exempt
 # from django.contrib.auth.password_validation import validate_password
 # from django.core.exceptions import ValidationError
 # import bcrypt
 from security.security import Security
-from authentification.authentification import Authentification
+
+# from django.shortcuts import render
+from .models import Usermine
+
 # import re
 
 class Accounts:

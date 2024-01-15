@@ -1,5 +1,7 @@
-from django.urls import path, include
-from .views import get_game_page, get_play_page, get_view_page, get_join_game_page, get_create_game_page, get_private_game_page
+from django.urls import include, path
+
+from .views import (get_create_game_page, get_game_page, get_join_game_page,
+                    get_play_page, get_private_game_page, get_view_page)
 
 urlpatterns = [
     path('', get_game_page, name='get_game_page'),

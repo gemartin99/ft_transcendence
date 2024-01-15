@@ -1,11 +1,13 @@
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render
-from authentification.authentification import Authentification
-from django.views.decorators.csrf import csrf_exempt
 import json
+
 import friends.langs
 from accounts.models import Usermine
+from authentification.authentification import Authentification
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 def get_friends_page(request):

@@ -1,7 +1,8 @@
-from django.urls import path, include
-from django.conf.urls.static import static
 from django.conf import settings
-from .views import get_aboutus_page, get_information_page, get_home_page
+from django.conf.urls.static import static
+from django.urls import include, path
+
+from .views import get_aboutus_page, get_home_page, get_information_page
 
 urlpatterns = [
     path('users/', include('accounts.urls')),

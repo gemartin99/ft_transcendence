@@ -1,8 +1,9 @@
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render
-from authentification.authentification import Authentification
 import game.langs
+from authentification.authentification import Authentification
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.template.loader import render_to_string
+
 # Create your views here.
 
 def get_game_page(request):
