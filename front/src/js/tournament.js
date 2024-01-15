@@ -91,10 +91,20 @@ function updateTournament() {
     .then(data => {
         //var code = document.getElementById("lobbyCode");
         //code.textContent = "Lobby code: " + data.code;
-        var bracketContent = document.getElementById("bracket-content");
-        bracketContent.innerHTML = data.bracket;
-        var tournament_id = document.getElementById("lobbyCode");
-        tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament;
+        var m = document.getElementById("s1_1");
+        m.textContent = data[1].u1 + " - " + data[1].p1;
+        var m = document.getElementById("s1_2");
+        m.textContent = data[1].u2 + " - " + data[1].p2;
+        var m = document.getElementById("s2_1");
+        m.textContent = data[2].u1 + " - " + data[2].p1;
+        var m = document.getElementById("s2_2");
+        m.textContent = data[2].u2 + " - " + data[2].p2;
+        
+        var m = document.getElementById("f_1");
+        m.textContent = data[0].u1 + " - " + data[0].p1;
+        var m = document.getElementById("f_2");
+        m.textContent = data[0].u2 + " - " + data[0].p2;
+
         console.log('id:', data.id);
         console.log('Response:', data);
     })
@@ -154,8 +164,42 @@ function startTournament(){
     .then(response => response.json())
     .then(data => {
         console.log('Response:', data.code);
-        if (data.redirect != "false")
+        if (data.redirect == "/tournament/bracketPage/")
+            getTournament();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function getTournament(){
+    console.log("get torneig");
+    const message = {id: in_tournament};
+    // updateUrl(redirect_url);
+    var lang = getLang()
+    fetch(baseUrl + ':8000/tournament/bracketPage/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'language': lang,
+        },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data.code);
+        if (data.content) {
+            content.innerHTML = data.content;
+        }
+        else if (data.redirect) {
             handleRedirect(data.redirect);
+            return ;
+            console.log('Invalid response from backend 1', data.redirect);
+        } else {
+            console.log('Invalid response from backend 1', data);
+        }
+        // handleNavLinks()
     })
     .catch((error) => {
         console.error('Error:', error);
