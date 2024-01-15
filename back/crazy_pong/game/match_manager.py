@@ -1,7 +1,7 @@
 import asyncio
 import threading
 
-from .match import GameManager
+# from .match import GameManager
 
 
 class MatchManager:

@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import path
 
 from .views import (get_create_game_page, get_game_page, get_join_game_page,
                     get_play_page, get_private_game_page, get_view_page)

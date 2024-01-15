@@ -23,10 +23,9 @@ class Authentification:
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
         return token
 
-    # @login_required
     def generate_jwt_view(request):
         user_id = request.user.id
-        jwt_token = generate_jwt_token(user_id)
+        jwt_token = Authentification.generate_jwt_token(user_id)
         return jwt_token
 
     @staticmethod

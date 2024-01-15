@@ -1,7 +1,6 @@
 import game.langs
 from authentification.authentification import Authentification
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.template.loader import render_to_string
 
 # Create your views here.

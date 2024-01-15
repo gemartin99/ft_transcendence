@@ -6,11 +6,11 @@ import string
 import time
 
 from accounts.models import Usermine
-from asgiref.sync import async_to_sync, sync_to_async
+from asgiref.sync import sync_to_async
 from authentification.authentification import Authentification
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.layers import get_channel_layer
+# from channels.layers import get_channel_layer
 
 from .match import GameManager, PlayerManager
 from .match_manager import MatchManager
@@ -147,7 +147,7 @@ class gameConnection(AsyncWebsocketConsumer):
         return Usermine.objects.get(id=user_id)
 
     async def stream_state(self, event):
-        time2 =  time.time()
+        # time2 =  time.time()
         state = event["state"]
         
         await self.send(text_data=json.dumps(state))

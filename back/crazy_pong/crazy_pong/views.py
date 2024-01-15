@@ -1,6 +1,5 @@
 import crazy_pong.langs
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.template.loader import render_to_string
 
 
