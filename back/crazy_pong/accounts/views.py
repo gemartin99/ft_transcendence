@@ -18,6 +18,9 @@ from authentification.authentification import Authentification
 import accounts.langs
 
 def get_login_page(request):
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True) or (loggued == False and redirect != '/users/login/'):
+        return JsonResponse({'redirect': redirect})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = accounts.langs.get_langs(language)
     content_html = render_to_string('login/select_login.html', context)
@@ -30,6 +33,9 @@ def get_login_page(request):
 
 def get_login_form_page(request):
     #añadir las traducciones y añadir lo del new ese
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True) or (loggued == False and redirect != '/users/login/'):
+        return JsonResponse({'redirect': redirect})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = accounts.langs.get_langs(language)
     context['new'] = request.GET.get('s', False)
@@ -42,6 +48,9 @@ def get_login_form_page(request):
     return JsonResponse(data)
 
 def get_login42_form_page(request):
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True) or (loggued == False and redirect != '/users/login/'):
+        return JsonResponse({'redirect': redirect})
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
@@ -55,6 +64,9 @@ def get_login42_form_page(request):
     return JsonResponse(data)
 
 def get_register_new_account_page(request):
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True) or (loggued == False and redirect != '/users/login/'):
+        return JsonResponse({'redirect': redirect})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = accounts.langs.get_langs(language)
     content_html = render_to_string('login/register_account.html', context)
@@ -90,9 +102,12 @@ def do_login(request):
 def logout(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
-    user = Usermine.objects.get(id=user_id)
-    user.online = False
-    user.save()
+    try:
+        user = Usermine.objects.get(id=user_id)
+        user.online = False
+        user.save()
+    except Usermine.DoesNotExist as e:
+        print("does not exist")
     response = JsonResponse({'redirect': '/'})
     response.delete_cookie('jwttoken')
     return response

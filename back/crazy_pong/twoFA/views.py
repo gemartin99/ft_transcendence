@@ -27,8 +27,12 @@ def verifyGoogle2FA(request):
 
 def getMailVerificationPage(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
+    if (jwt_token == None):
+        return JsonResponse({'redirect': '/users/login/'})
     user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
+    if not user.mail2FA:
+        return JsonResponse({'redirect': '/users/login/'})
     if not user.is_mail2fa_code_valid():
         user.generate_mail2fa_code()
         user.save()    
@@ -48,6 +52,10 @@ def getMailVerificationPage(request):
     return JsonResponse(data)
 
 def getGoogleVerificationPage(request):
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = Authentification.decode_jwt_token(jwt_token)
+    user = Usermine.objects.get(id=user_id)
+    
     context = {
         'variable1': 'template variable 1',
         'variable2': 'template variable 2',
