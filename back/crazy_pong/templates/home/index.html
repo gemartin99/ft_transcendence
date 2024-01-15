@@ -26,17 +26,19 @@
                     Crazy Pong
                     <i class="fa-solid fa-table-tennis-paddle-ball" style="color: #f5c344;"></i>
                   </div>
-                  <p class="text-below" style="font-size: 25px;padding: 20px;">{{text1}}</p>
-                  <br>
                   {% if not loggued %}
+                  <p class="text-below" style="font-size: 25px;padding: 20px;">{{text1}}</p>
                       <div class="options">
                         <a href="/users/register" class="navlink" >{{text2}}</a>
                         <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0&redirect_uri=http%3A%2F%2Flocalhost&response_type=code" class="">Login 42</a>
                         <a href="/users/login/identify" class="navlink" >{{text3}}</a>
                       </div>
                   {% else %}
-                      <a >holaaaa</a>
+                  <p class="text-below" style="font-size: 25px;padding: 20px;">{{text14}}</p>
+                  <div class="options">
+                    <a href="/game" class="navlink" >{{text15}}</a>
                   {% endif %}
+                  <br>
                 </div>
               </div>
         </section>
