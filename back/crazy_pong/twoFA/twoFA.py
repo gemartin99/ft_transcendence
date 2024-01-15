@@ -13,10 +13,7 @@ class TwoFA:
 
     @staticmethod
     def disable_two_factor(user):
-        print("hola")
         try:
-            # user = Usermine.objects.userid
-            print(user.name)
             user.mail2FA = False
             user.google2FA = False
             user.validated2FA = False
