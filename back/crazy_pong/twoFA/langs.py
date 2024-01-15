@@ -27,6 +27,13 @@ def get_lang_en():
         'text15': 'Two Factor set Succesful',
         'text16': 'Sucesfuly seted up the two factor mail authentificator. Click button to return to profile.',
         'text17': 'Return to Profile',
+        #check-email2factor.html
+        'text18': 'Steep 2: Enter the code you have received by email',
+        'text19': 'Submit',
+        #check-google2factor.html
+        'text20': 'Confirm the code',
+        'text21': 'Insert the verification totp code.',
+        'text22': 'Submit',
     
     }
     return context
@@ -52,6 +59,13 @@ def get_lang_es():
         'text15': 'Correo de dos factores completado con éxito',
         'text16': 'Se ha configurado correctamente el autentificador de correo de dos factores. Haga clic en el botón para volver al perfil.',
         'text17': 'Volver al perfil',
+        #check-email2factor.html
+        'text18': 'Paso 2: Introduzca el código que ha recibido por correo electrónico',
+        'text19': 'Enviar',
+        #check-google2factor.html
+        'text20': 'Confirmar el código',
+        'text21': 'Introduzca el código totp de verificación.',
+        'text22': 'Enviar',
         
     }
     return context
@@ -77,6 +91,13 @@ def get_lang_pt():
         'text15': 'Conjunto de dois fatores do Correio bem-sucedido',
         'text16': 'Configurou com êxito o autenticador de correio eletrónico de dois factores. Clique no botão para regressar ao perfil.',
         'text17': 'Voltar ao perfil',
+        #check-email2factor.html
+        'text18': 'Etapa 2: Introduzir o código que recebeu por correio eletrónico',
+        'text19': 'Enviar',
+        #check-google2factor.html
+        'text20': 'Confirmar o código',
+        'text21': 'Introduzir o código totp de verificação.',
+        'text22': 'Enviar',
        
     }
     return context
