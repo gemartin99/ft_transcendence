@@ -11,7 +11,7 @@ urlpatterns = [
      path('register/', get_register_new_account_page, name='get_register_new_account_page'),
      path('register/new/', create_account, name='create_account'),
      path('logout/', logout, name='logout'),
-     path('showonline/', show_online, name='show_online'),
+     path('showonline/', show_online, name='show_online'),#debug
      path('playing/', is_playing, name='is_playing'),
 
 ]
