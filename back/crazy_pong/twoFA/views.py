@@ -6,7 +6,7 @@ from accounts.models import Usermine
 # import pyotp
 from authentification.authentification import Authentification
 # Create your views here.
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
@@ -55,16 +55,19 @@ def getMailVerificationPage(request):
 def getGoogleVerificationPage(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
-    user = Usermine.objects.get(id=user_id)
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = twoFA.langs.get_langs(language)
-    content_html = render_to_string('twofactor/check-google2factor.html', context)
-    data = {
-        'title': 'Select Logging Mode',
-        'content': content_html,
-        'additionalInfo': 'Some additional information here',
-    }
-    return JsonResponse(data)
+    try:
+        user = Usermine.objects.get(id=user_id)
+        language = request.META.get('HTTP_LANGUAGE', 'default_language')
+        context = twoFA.langs.get_langs(language)
+        content_html = render_to_string('twofactor/check-google2factor.html', context)
+        data = {
+            'title': 'Select Logging Mode',
+            'content': content_html,
+            'additionalInfo': 'Some additional information here',
+        }
+        return JsonResponse(data)
+    except Usermine.DoesNotExist as e:
+        return JsonResponse({'redirect': '/users/login/'})
 
 
 def get_set_mail2FA_page(request):

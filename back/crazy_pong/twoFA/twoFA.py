@@ -1,11 +1,12 @@
 import pyotp
 from accounts.models import Usermine
 from authentification.authentification import Authentification
-from django.contrib import messages
+# from django.contrib import messages
 # Create your views here.
 from django.core.mail import send_mail
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+
+# from django.shortcuts import redirect, render
 
 
 class TwoFA:
@@ -42,8 +43,6 @@ class TwoFA:
             user.save()
             totp = pyotp.TOTP(totp_secret)
             provisioning_url = totp.provisioning_uri(name=user.name.encode('utf-8'), issuer_name='crazy-pong')
-
-            print('hola')
             return JsonResponse({'provisioning_url': provisioning_url})
 
     @staticmethod

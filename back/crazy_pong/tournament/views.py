@@ -4,10 +4,10 @@
 import json
 
 import tournament.langs
-from accounts.models import Usermine
+# from accounts.models import Usermine
 from authentification.authentification import Authentification
 from django.http import JsonResponse
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
