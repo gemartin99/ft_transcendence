@@ -31,6 +31,7 @@ def get_lang_en():
         'text17': 'READY',
         'text18': 'REFRESH',
         'text19': 'PLAY',
+        'text20': 'QUIT',
 
     }
     return context
@@ -60,6 +61,7 @@ def get_lang_es():
         'text17': 'LISTO',
         'text18': 'RECARGAR',
         'text19': 'JUGAR',
+        'text20': 'SALIR',
     }
     return context
 
@@ -88,5 +90,6 @@ def get_lang_pt():
         'text17': 'PRONTO',
         'text18': 'RECARREGAR',
         'text19': 'JOGAR',
+        'text20': 'SAIR',
     }
     return context

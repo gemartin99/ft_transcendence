@@ -3,6 +3,8 @@ var baseUrl = window.location.origin;
 
 in_tournament = 0;
 
+
+
 function createTournament(e) {
     console.log("creant torneig");
     e.preventDefault();
@@ -205,3 +207,85 @@ function getTournament(){
         console.error('Error:', error);
     });
 }
+
+
+function playTournament(){
+        
+    const message = { id: in_tournament,
+    };
+    fetch(baseUrl + ':8000/tournament/update/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(message),
+        })
+    .then(response => response.json())
+    .then(data => {
+        //var code = document.getElementById("lobbyCode");
+        //code.textContent = "Lobby code: " + data.code;
+        for (key in data){
+            if (key != "info"){
+                if (data[key].u1 == data["info"].user){
+                    console.log(data);
+                    handleRedirect("/game/play/");
+                    if (data[key].u2.substring(0, 4) == "Bot " || data[key].u2 == "IA")
+                        gameTournamentIA(data[key].match_id, data['info'].points);
+                    else
+                        gameTournament(data[key].match_id, data['info'].points);
+                }
+                
+                if (data[key].u2 == data["info"].user){
+                    handleRedirect("/game/play/");
+                    if (data[key].u1.substring(0, 4) == "Bot "|| data[key].u1 == "IA")
+                        gameTournamentIA(data[key].match_id, data['info'].points);
+                    else
+                        gameTournament(data[key].match_id, data['info'].points);   
+                }
+                    
+            }
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function quitTournament() {
+    console.log("unintse torneig");
+
+    const message = {id: 1,
+                            };
+    fetch(baseUrl + ':8000/tournament/quit/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data.code);
+        in_tournament = 0;
+        if (data.redirect)
+            handleRedirect(data.redirect);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function myFunction() {
+    // Get the text field
+    var copyText = document.getElementById("lobbyCode");
+
+    console.log(copyText.textContent);
+     // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText.textContent.substring(12, copyText.textContent.length));
+  
+    // Alert the copied text
+  }

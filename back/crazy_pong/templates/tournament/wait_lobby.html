@@ -37,7 +37,7 @@
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4" style="padding: 50px;">
-          <button class="btn btn-warning tac" style="width: 400px;" id="lobbyCode">{{text15}}: x6Yk9</button>
+          <button class="btn btn-warning tac" style="width: 400px;" id="lobbyCode" onclick="myFunction()">{{text15}}: x6Yk9</button>
         </div>
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
@@ -69,5 +69,21 @@
     setInterval(updateScript, 1000);
   </script>
 
+  <script>
+    function myFunction() {
+      // Get the text field
+      var copyText = document.getElementById("lobbyCode");
+    
+      // Select the text field
+      copyText.select();
+      copyText.setSelectionRange(13, 99999); // For mobile devices
+    
+       // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+    
+      // Alert the copied text
+      alert("Copied the text: " + copyText.value);
+    }
+  </script>
 
 
