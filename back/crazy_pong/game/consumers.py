@@ -74,7 +74,7 @@ class gameConnection(AsyncWebsocketConsumer):
             return 
 
 
-        if self.mode == 'sala':
+        if self.mode == 'sala' or self.mode == 'salaIA':
                 self.game = self.scope['query_string'].decode('UTF-8').split('&')[3].split('=')[1]
         else:
             self.game = None
@@ -98,7 +98,7 @@ class gameConnection(AsyncWebsocketConsumer):
             self.paddle_controller = PlayerManager("player1", "paddle1", MatchManager.matches[self.game])
             self.thread["paddle_one"] = True
 
-            if (self.mode == 'IA'):
+            if (self.mode == 'IA' or self.mode == 'salaIA'):
                 self.game_ctrl.setIA()
                 self.thread['active'] = True
                 self.thread['paddle_two'] = True
