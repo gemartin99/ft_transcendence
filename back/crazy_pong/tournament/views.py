@@ -85,7 +85,7 @@ def get_bracket_page(request):
         return JsonResponse({'redirect': redirect})
     print(request)
     print("acaba")
-    ret = TournamentManager.update(user.tournament_id)
+    ret = TournamentManager.update(user.tournament_id, user.name)
     # content_html = render_to_string('tournament/tournament_table.html', context)
     # data = {
     #     'title': 'Tournament lobby',
@@ -118,7 +118,7 @@ def createTournament(request):
             #falta parsing del name
             data = json.loads(request.body)
             print('name:',data['ia'])
-            tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user, data['ia'])
+            tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user, data['ia'], data['points'])
             print('tournament_code:',tournament_code)
             return JsonResponse({'code': tournament_code,
                                     'redirect': '/tournament/lobbyPage/'})
@@ -160,7 +160,7 @@ def getTournament(request): #ESTO DA ERROR QUE LO FLIIIIPAS
         try:
             data = json.loads(request.body)
             
-            status = TournamentManager.get(data['id'])
+            status = TournamentManager.get(user.tournament_id, user.name)
             
             return JsonResponse({'code': status})
         except json.JSONDecodeError as e:
@@ -177,7 +177,7 @@ def updateTournament(request):
         try:
             data = json.loads(request.body)
             print('data',data)
-            ret = TournamentManager.update(data['id'])        
+            ret = TournamentManager.update(user.tournament_id, user.name)
             return JsonResponse(ret)
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
@@ -209,13 +209,32 @@ def startTournament(request):
         try:
             #falta parsing del name
             data = json.loads(request.body)
-            start = TournamentManager.startTournament(data['id'])
+            start = TournamentManager.startTournament(user.tournament_id)
             if start:
                 user.inTournament = 2
                 user.save()
                 return JsonResponse({'redirect': '/tournament/bracketPage/'})
             else:
                 return JsonResponse({'redirect': 'false'})
+            
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+@csrf_exempt
+def quitTournament(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
+    if request.method == 'POST':
+        try:
+            #falta parsing del name
+            data = json.loads(request.body)
+            TournamentManager.quitTournament(user.tournament_id, user.name)
+            user.inTournament = 0
+            user.save()
+            return JsonResponse({'redirect': '/tournament/'})
             
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)

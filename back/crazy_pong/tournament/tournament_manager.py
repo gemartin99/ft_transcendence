@@ -12,9 +12,9 @@ class TournamentManager:
 
     tournaments = {}
     @classmethod
-    def add_tournament(cls, tournament_name, n, user, IA):
+    def add_tournament(cls, tournament_name, n, user, IA, points):
         id = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        cls.tournaments[id] = Tournament(tournament_name, n, id, IA)
+        cls.tournaments[id] = Tournament(tournament_name, n, id, IA, points)
         cls.tournaments[id].addPlayer(user)
         return id
 
@@ -24,12 +24,12 @@ class TournamentManager:
 
         return 
     @classmethod
-    def get(cls, id):
-        return cls.tournaments[id].get()
+    def get(cls, id, player):
+        return cls.tournaments[id].get(player)
     
     @classmethod
-    def update(cls, id):
-        return cls.tournaments[id].get()
+    def update(cls, id, player):
+        return cls.tournaments[id].get(player)
 
     @classmethod
     def getTournaments(cls, user):
@@ -44,3 +44,8 @@ class TournamentManager:
         if (cls.tournaments[id].canStart()):
             return True
         return False
+    
+    @classmethod
+    def quitTournament(cls, id, user):
+        cls.tournaments[id].quit(user)
+        return
