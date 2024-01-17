@@ -158,7 +158,6 @@ def getTournament(request): #ESTO DA ERROR QUE LO FLIIIIPAS
     print(user) 
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
             
             status = TournamentManager.get(user.tournament_id, user.name)
             
@@ -208,7 +207,6 @@ def startTournament(request):
     if request.method == 'POST':
         try:
             #falta parsing del name
-            data = json.loads(request.body)
             start = TournamentManager.startTournament(user.tournament_id)
             if start:
                 user.inTournament = 2
@@ -230,7 +228,6 @@ def quitTournament(request):
     if request.method == 'POST':
         try:
             #falta parsing del name
-            data = json.loads(request.body)
             TournamentManager.quitTournament(user.tournament_id, user.name)
             user.inTournament = 0
             user.save()
