@@ -206,7 +206,6 @@ def startTournament(request):
         return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
-            #falta parsing del name
             start = TournamentManager.startTournament(user.tournament_id)
             if start:
                 user.inTournament = 2
