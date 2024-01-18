@@ -89,11 +89,14 @@ def UpdateUser(username, user, response_messages):
 def UpdateEmail(email, user, response_messages):
     flag = False
     if email is not None:
-        if email != user.email:
-            res, msg = Accounts.email_is_in_use(email)
-            if res:
-                response_messages.append(msg)
-                flag = True
+        # if email != user.email:
+        #     res, msg = Accounts.email_is_in_use(email)
+        #     print('jaime el currante', res, msg)
+        #     if res:
+        #         response_messages.append(msg)
+        #         flag = True
+
+        print('aqui no peto', email)
         if not Security.is_valid_email(email):
             response_messages.append('Introduce a valid email.')
             flag = True
@@ -128,6 +131,7 @@ def UpdateInfo(request):
         avatar = request.FILES.get('avatar')
         response_messages = []
         response_messages = UpdateUser(username, user, response_messages)
+        print(response_messages)
         response_messages = UpdateEmail(email, user, response_messages)
         response_messages = UpdatePwd(password, confirm_password, user, response_messages)
         if (avatar):

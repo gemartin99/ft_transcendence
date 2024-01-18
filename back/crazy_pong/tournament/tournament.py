@@ -4,7 +4,7 @@ import string
 
 from game.models import Match as MatchModel
 
-bot_names = ["Baltes", "Marza", "Jareste", "Jaime", "Gemartin", "Trunscendence", "Pingu", "Okto"]
+bot_names = ["Baltes", "Marza", "Jareste", "Jaime", "Gemartin", "Trunscendence", "Pingu", "Okto", "ChatGPT"]
 
 class Match():
 
