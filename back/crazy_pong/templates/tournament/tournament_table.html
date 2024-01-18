@@ -4,58 +4,66 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     
-    <link rel="stylesheet" href="tournament-table.css">
+    <link rel="stylesheet" href="/css/tournament_table.css">
   
     <div class="container-chetao d-flex justify-content-center" style="padding: 20px;">
     <div class="tournament" style="margin-bottom: 50px;">
         <h1>Tournament table</h1>
         
         <div class="bracket">
+          {% if ret.info.players == 8 %}
           <div class="round quarter-finals">
             <h2>Quarterfinals</h2>
             <div class="match">
-              <div class="team winner">{{ret.0.u1}}</div>
+              <div class="team winner" id="q1_1">{{ret.3.u1}} - {{ret.3.p1}}</div>
               <div class="line"></div>
-              <div class="team">{{ret.0.u2}}</div>
+              <div class="team" id="q1_2">{{ret.3.u2}} - {{ret.3.p2}}</div>
             </div>
             <div class="match">
-              <div class="team winner">{{ret.1.u1}}</div>
+              <div class="team winner" id="q2_1">{{ret.4.u1}} - {{ret.4.p1}}</div>
               <div class="line"></div>
-              <div class="team">{{ret.1.u2}}</div>
+              <div class="team" id="q2_2">{{ret.4.u2}} - {{ret.4.p2}}</div>
             </div>
             <div class="match">
-              <div class="team winner">{{ret.2.u1}}</div>
+              <div class="team winner" id="q3_1">{{ret.5.u1}} - {{ret.5.p1}}</div>
               <div class="line"></div>
-              <div class="team">{{ret.2.u2}}</div>
+              <div class="team" id="q3_2">{{ret.5.u2}} - {{ret.5.p2}}</div>
             </div>
             <div class="match">
-              <div class="team winner">{{ret.3.u1}}</div>
+              <div class="team winner" id="q4_1">{{ret.6.u1}} - {{ret.6.p1}}</div>
               <div class="line"></div>
-              <div class="team">{{ret.3.u2}}</div>
+              <div class="team" id="q4_2">{{ret.6.u2}} - {{ret.6.p2}}</div>
             </div>
           </div>
+          {% endif %}
       
           <div class="round semi-finals">
             <h2>Semifinals</h2>
             <div class="match">
-              <div class="team winner">{{ret.4.u1}}</div>
+              <div class="team winner" id="s1_1">{{ret.1.u1}} - {{ret.1.p1}}</div>
               <div class="line"></div>
-              <div class="team">{{ret.4.u2}}</div>
+              <div class="team" id="s1_2">{{ret.1.u2}} - {{ret.1.p2}}</div>
             </div>
             <div class="match">
-              <div class="team winner">{{ret.5.u1}}</div>
+              <div class="team winner" id="s2_1">{{ret.2.u1}} - {{ret.2.p1}}</div>
               <div class="line"></div>
-              <div class="team">{{ret.5.u2}}</div>
+              <div class="team" id="s2_2">{{ret.2.u2}} - {{ret.2.p2}}</div>
             </div>
           </div>
       
           <div class="round final">
             <h2>Final</h2>
             <div class="match">
-              <div class="team winner">{{ret.6.u1}}</div>
-              <div class="team">{{ret.6.u2}}</div>
+              <div class="team winner" id="f_1">{{ret.0.u1}} - {{ret.0.p1}}</div>
+              <div class="team" id="f_2">{{ret.0.u2}} - {{ret.0.p2}}</div>
             </div>
           </div>
+          <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
+            <div class="text-center mt-md-4">
+              <button class="btn btn-warning tac" style="width: 200px;" onclick="playTournament()">{{text19}}</button>
+              <button class="btn btn-warning tac" style="width: 200px;"onclick="updateTournament()">{{text18}}</button>
+              <button class="btn btn-warning tac" style="width: 200px;"onclick="quitTournament()">{{text20}}</button>
+            </div>
         </div>
       
       </div>

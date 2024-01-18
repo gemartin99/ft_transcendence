@@ -1,8 +1,10 @@
+# import json
 import random
 import string
-import json
 
 from game.models import Match as MatchModel
+
+bot_names = ["Baltes", "Marza", "Jareste", "Jaime", "Gemartin", "Trunscendence", "Pingu", "Okto"]
 
 class Match():
 
@@ -19,6 +21,15 @@ class Match():
     def get(self):
         return self.res
     
+    def getId(self):
+        return self.res['match_id']
+    
+    def getu1(self):
+        return self.res['u1']
+    
+    def getu2(self):
+        return self.res['u2']
+    
     def setu1(self, u1):
         self.res['u1'] = u1
     
@@ -33,13 +44,16 @@ class Match():
 
 class Tournament:
     
-    def __init__(self, name, n, id):
+    def __init__(self, name, n, id, IA, points):
         self.name = name
         self.id = id
         self.players = []
         self.bracket = []
         self.n = int(n)
         self.start = False
+        self.end = False
+        self.IA = IA
+        self.points = points
         self.createBracket()
 
     def getName(self):
@@ -47,19 +61,22 @@ class Tournament:
     
     def addPlayer(self, user):
         if (len(self.players) % 2 == 0):
-            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu1(user)
+            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu1(user.name)
         else:
-            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu2(user)
+            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu2(user.name)
         self.players.append(user)
-        if len(self.players) == self.n:
-            self.start = True
+
+        user.inTournament = 1
+        user.tournament_id = self.id
+        user.save()
             
 
-    def get(self):
-        self.autoUpdate()
+    def get(self, player):
+        if not self.end:
+            self.autoUpdate()
         ret = {}
         i = 0
-        ret['info'] = {'idTournament': self.id, 'tournamentName': self.name, 'started': self.start}
+        ret['info'] = {'idTournament': self.id, 'tournamentName': self.name, 'started': self.start, "user": player, "points": self.points, "players": self.n}
         for match in self.bracket:
             ret[str(i)] = match.get()
             i += 1
@@ -70,22 +87,42 @@ class Tournament:
         if (self.start):
             for i in range(len(self.bracket)):
                 match = self.bracket[i].get()
-                if match['played']  == False and MatchModel.objects.filter(match_id=match['match_id']).exists():
-                    m = Match.objects.get(match_id=match['match_id'])
+                if MatchModel.objects.filter(match_id=match['match_id']).exists():
+                    if i == 0:
+                        self.end = True
+                    m = MatchModel.objects.get(match_id=match['match_id'])
+                    match['played'] = True
                     self.bracket[i].setp1(m.player1_score)
                     self.bracket[i].setp2(m.player2_score)
                     if (m.player1_score > m.player2_score):
                         if (i % 2 == 1):
-                            self.bracket[(i-1) / 2 ].setu1(m.player1)
+                            self.bracket[int((i-1) / 2) ].setu1(match['u1'])
                         else:
-                            self.bracket[(i-1) / 2 ].setu2(m.player1)
-                    
-                    if (p1 > p2):
+                            self.bracket[int((i-2) / 2) ].setu2(match['u1'])
+                    else:
                         if (i % 2 == 1):
-                            self.bracket[(i-1) / 2 ].setu1(m.player2)
+                            self.bracket[int((i-1) / 2) ].setu1(match['u2'])
                         else:
-                            self.bracket[(i-1) / 2 ].setu2(m.player2)
-                
+                            self.bracket[int((i-2) / 2) ].setu2(match['u2'])
+                if (match['u1'][0:4] == "Bot " and match['u2'][0:4] == "Bot " and not match['played']):
+                    match['played'] = True
+                    if (random.randint(0,1) == 0):
+                        match['p1'] = int(self.points)
+                        match['p2'] = random.randint(0,int(self.points)-1)
+                    else:
+                        match['p1'] = random.randint(0,int(self.points)-1)
+                        match['p2'] = int(self.points)
+                    if (match['p1'] > match['p2']):
+                        if (i % 2 == 1): 
+                            self.bracket[int((i-1) / 2) ].setu1(match['u1'])
+                        else:
+                            self.bracket[int((i-2) / 2) ].setu2(match['u1'])
+                    else:
+                        if (i % 2 == 1):
+                            self.bracket[int((i-1) / 2) ].setu1(match['u2'])
+                        else:
+                            self.bracket[int((i-2) / 2) ].setu2(match['u2'])
+
     def hasPlayer(self, user):
         if user in self.players:
             return True
@@ -96,4 +133,17 @@ class Tournament:
             self.bracket.append(Match("undefined", "undefined", 0, 0))
         for i in range(self.n):
             if (i %2 == 0):
-                self.bracket.append(Match("undefined", "undefined", 0, 0))        
+                self.bracket.append(Match("Bot " + bot_names[i], "Bot " + bot_names[i + 1], 0, 0))        
+
+    def canStart(self):
+        self.start = self.IA or (len(self.players) == self.n)
+        return self.start
+    
+    def quit(self, name):
+        for i in range(len(self.bracket)):
+            match = self.bracket[i].get()
+            if not match['played'] and (match['u1'] == name):
+                self.bracket[i].setu1("IA")
+            if not match['played'] and (match['u2'] == name):
+                self.bracket[i].setu2("IA")
+                

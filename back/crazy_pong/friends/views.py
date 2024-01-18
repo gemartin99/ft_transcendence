@@ -1,11 +1,12 @@
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render
-from authentification.authentification import Authentification
-from django.views.decorators.csrf import csrf_exempt
 import json
+
 import friends.langs
 from accounts.models import Usermine
+from authentification.authentification import Authentification
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 def get_friends_page(request):
@@ -38,8 +39,6 @@ def addFriend(request):
     print(searchValue)
     try:
         user.friends.add(Usermine.objects.get(name=searchValue))
-        print('anadioooooo')
+        return JsonResponse({'message': 'Friend added succesfully.', 'redirect': '/friends/'})
     except Usermine.DoesNotExist:
-        print('eresboboboooooo')    
-
-    return (JsonResponse({'hola': 'meow'}))
+        return JsonResponse({'message': 'No user matches the username.'})

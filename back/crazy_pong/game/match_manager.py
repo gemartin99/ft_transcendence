@@ -1,6 +1,8 @@
-import threading
-from .match import GameManager
 import asyncio
+import threading
+
+# from .match import GameManager
+
 
 class MatchManager:
 
@@ -78,6 +80,17 @@ class MatchManager:
                 cls.matches[game]["player2"]["id"] = uid
                 cls.matches[game]["player2"]["name"] = name
             return game
+    
+    @classmethod
+    def reconnect(cls, uid, name):
+        for match in cls.threads:
+            if cls.matches[match]['player1']["id"] == uid:
+                if cls.threads[match]["active"] == True:
+                    return match, 1
+            if cls.matches[match]['player2']["id"] == uid:
+                if cls.threads[match]["active"] == True:
+                    return match, 2
+        return False, 0
     
     @classmethod
     def before_thread(cls, consumer_instance, game_name):
