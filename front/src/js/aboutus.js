@@ -1,6 +1,6 @@
-<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-document.addEventListener("DOMContentLoaded", function() {
-    var randomSlideIndex = Math.floor(Math.random() * 5);
+function aboutUs() {
+  console.log("aboutUs.js loaded");
+   var randomSlideIndex = Math.floor(Math.random() * 5);
    var swiper = new Swiper(".mySwiper", {
      effect: "coverflow",
      grabCursor: true,
@@ -18,4 +18,4 @@ document.addEventListener("DOMContentLoaded", function() {
    });
 
    swiper.slideTo(2, 0, false); // Centra el carrusel en el div del medio
- });
+ };
