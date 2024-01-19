@@ -1,12 +1,7 @@
-import json
-import random
-import string
-import time
+from channels.generic.websocket import WebsocketConsumer
+
 from .models import Usermine
 
-import asyncio
-from asgiref.sync import sync_to_async
-from channels.generic.websocket import WebsocketConsumer
 
 class loginConnection(WebsocketConsumer):
     

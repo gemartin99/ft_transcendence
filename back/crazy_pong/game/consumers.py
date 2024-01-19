@@ -1,28 +1,30 @@
-import json
-import random
-import string
-import time
-
-from .match import PlayerManager, GameManager
-from .match_manager import MatchManager
-
-import random
-import string
-import time
-import os
-
-from .match import PlayerManager, GameManager
-from .match_manager import MatchManager
-
 import asyncio
+import json
+import os
+import random
+import string
+import time
+
+from accounts.models import Usermine
+from asgiref.sync import sync_to_async
+from authentification.authentification import Authentification
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from authentification.authentification import Authentification
-from accounts.models import Usermine
-from channels.db import database_sync_to_async
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from asgiref.sync import sync_to_async
+from .match import GameManager, PlayerManager
+from .match_manager import MatchManager
+
+# from channels.layers import get_channel_layer
+
+
+
+# from authentification.authentification import Authentification
+# from accounts.models import Usermine
+# from channels.db import database_sync_to_async
+# from channels.layers import get_channel_layer
+# from asgiref.sync import async_to_sync
+# from asgiref.sync import sync_to_async
+
 
 
 
@@ -157,7 +159,7 @@ class gameConnection(AsyncWebsocketConsumer):
         return Usermine.objects.get(id=user_id)
 
     async def stream_state(self, event):
-        time2 =  time.time()
+        # time2 =  time.time()
         state = event["state"]
         
         await self.send(text_data=json.dumps(state))

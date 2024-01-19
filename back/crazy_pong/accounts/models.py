@@ -1,13 +1,15 @@
-from django.db import models
 import random
+
+from django.db import models
 from django.utils import timezone
 from game.models import Match
+
 
 class Usermine(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128, unique=True, default='username')
     password = models.CharField(max_length=128, verbose_name='password', blank=True, null=True)
-    email = models.EmailField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255)
     playing = models.BooleanField(default=False)
     inTournament = models.IntegerField(default=0)
     tournament_id = models.CharField(max_length=128, default='')
@@ -40,13 +42,18 @@ class Usermine(models.Model):
                 player2_name = Usermine.objects.get(id=match.player2).name
             else:
                 player2_name = 'IA'
+            if match.match_winner == match.player1:
+                match_winner = player1_name
+            else:
+                match_winner = player2_name
+            print(match_winner)
             matches_with_names.append({
                 'match_id': match.match_id,
                 'player1': player1_name,
                 'player2': player2_name,
                 'player1_score': match.player1_score,
                 'player2_score': match.player2_score,
-                'match_winner': match.match_winner,
+                'match_winner': match_winner,
                 'timestamp': match.timestamp,
             })
 

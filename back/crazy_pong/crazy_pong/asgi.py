@@ -16,10 +16,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crazy_pong.settings')
 application = get_asgi_application()
 
 
+import accounts.routing
+import game.routing
 ##added
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import game.routing, accounts.routing
 
 application = ProtocolTypeRouter({
      'http': get_asgi_application(), 

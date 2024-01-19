@@ -1,16 +1,17 @@
 # Create your views here.
 # views.py
 
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render
-from .tournament_manager import TournamentManager
-from django.views.decorators.csrf import csrf_exempt
 import json
-import tournament.langs
-from authentification.authentification import Authentification
-from accounts.models import Usermine
 
+import tournament.langs
+# from accounts.models import Usermine
+from authentification.authentification import Authentification
+from django.http import JsonResponse
+# from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+
+from .tournament_manager import TournamentManager
 
 
 def get_tournament_page(request):
@@ -85,16 +86,7 @@ def get_bracket_page(request):
     print(request)
     print("acaba")
     ret = TournamentManager.update(user.tournament_id, user.name)
-    # content_html = render_to_string('tournament/tournament_table.html', context)
-    # data = {
-    #     'title': 'Tournament lobby',
-    #     'content': content_html,
-    #     'additionalInfo': 'Some additional information here',
-    # }
     print('data:')
-    # print(data['content'])
-    # return JsonResponse(data)
-
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = tournament.langs.get_langs(language)
     context['ret'] =ret
@@ -116,7 +108,8 @@ def createTournament(request):
         try:
             #falta parsing del name
             data = json.loads(request.body)
-            print('name:',data['ia'])
+            print('name:', data['name'])
+            print('IA:',data['ia'])
             tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user, data['ia'], data['points'])
             print('tournament_code:',tournament_code)
             return JsonResponse({'code': tournament_code,
@@ -157,7 +150,6 @@ def getTournament(request): #ESTO DA ERROR QUE LO FLIIIIPAS
     print(user) 
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
             
             status = TournamentManager.get(user.tournament_id, user.name)
             
@@ -177,9 +169,6 @@ def updateTournament(request):
             data = json.loads(request.body)
             print('data',data)
             ret = TournamentManager.update(user.tournament_id, user.name)
-            
-            
-
             return JsonResponse(ret)
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
@@ -209,8 +198,6 @@ def startTournament(request):
         return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
-            #falta parsing del name
-            data = json.loads(request.body)
             start = TournamentManager.startTournament(user.tournament_id)
             if start:
                 user.inTournament = 2
@@ -232,7 +219,6 @@ def quitTournament(request):
     if request.method == 'POST':
         try:
             #falta parsing del name
-            data = json.loads(request.body)
             TournamentManager.quitTournament(user.tournament_id, user.name)
             user.inTournament = 0
             user.save()
