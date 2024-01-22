@@ -253,11 +253,8 @@ async function reconnect() {
         };
         socket.onmessage = (event) => {
             
-            if (window.location.href == "http://localhost/game/play/") {
-                if (in_match == false) {
                     document.getElementById('gameContainer').style.display = 'block';
                     document.getElementById('waiting').style.display = 'none';
-                }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
                 if (jsonData['cmd'] == 'update') {
@@ -277,7 +274,6 @@ async function reconnect() {
                     printWinner(jsonData);
                 }
                 //console.log('WebSocket message received:', event.data);
-            }
 
         };
         socket.onerror = (error) => {
