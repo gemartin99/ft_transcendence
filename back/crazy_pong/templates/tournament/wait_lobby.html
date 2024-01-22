@@ -33,33 +33,64 @@
   <div class="container-fluid">
     <div class="row align-items-start">
       <div class="text-center" style="text-align: center;padding: 20px;">
-          <h1 style="font-size: 60px;">Tournament</h1>
+          <h1 style="font-size: 60px;">{{text14}}: {{ret.info.tournamentName}}</h1>
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4" style="padding: 50px;">
-          <button class="btn btn-warning tac" style="width: 400px;" id="lobbyCode">LOBBY CODE: x6Yk9</button>
+          <button class="btn btn-warning tac" style="width: 400px;" id="lobbyCode" onclick="myFunction()">{{text15}}: {{ret.info.idTournament}}</button>
         </div>
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
-          <div id="bracket-content" >
-            
-          </div>
+            <h2 style="font-size: 30px" id="p1"></h2>
+            <h2 style="font-size: 30px" id="p2"></h2>
+            <h2 style="font-size: 30px" id="p3"></h2>
+            <h2 style="font-size: 30px" id="p4"></h2>
+            <h2 style="font-size: 30px" id="p5"></h2>
+            <h2 style="font-size: 30px" id="p6"></h2>
+            <h2 style="font-size: 30px" id="p7"></h2>
+            <h2 style="font-size: 30px" id="p8"></h2>
       </div>
-      <div class="text-center" style="text-align: center;padding: 20px; display: flex; align-items: center; justify-content: center;margin-top: 300px;">
+      <div class="text-center" style="text-align: center;padding: 20px; display: flex; align-items: center; justify-content: center;margin-top: 40px;">
         <div class="loader-container">
             <div class="loader"></div>
         </div>
-        <h1 style="font-size: 50px">1/8 Waiting Players</h1>
+        <h1 style="font-size: 50px">{{text16}}</h1>
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4">
-          <button class="btn btn-warning tac" style="width: 200px;">READY</button>
-          <button class="btn btn-warning tac" style="width: 200px;"onclick="updateTournament()">REFRESH</button>
+          <button class="btn btn-warning tac" style="width: 200px;" onclick="startTournament()">{{text17}}</button>
+          <button class="btn btn-warning tac" style="width: 200px;"onclick="updateLobby()">{{text18}}</button>
 
         </div>
       </div>
     </div>
   </div>
 
+  <script>
+    function updateScript() {
+        console.log("This function is called every second");
+        updateLobby();
+    }
+
+    // Cridar la funció cada segon (1000 mil·lisegons)
+    setInterval(updateScript, 1000);
+  </script>
+
+  <script>
+    function myFunction() {
+      // Get the text field
+      var copyText = document.getElementById("lobbyCode");
+    
+      // Select the text field
+      copyText.select();
+      copyText.setSelectionRange(13, 99999); // For mobile devices
+    
+       // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+    
+      // Alert the copied text
+      alert("Copied the text: " + copyText.value);
+    }
+  </script>
 
 

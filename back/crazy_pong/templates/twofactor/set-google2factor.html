@@ -114,7 +114,7 @@
           <canvas id="QRimg"></canvas>
           <div id="error-message"></div>
           <div class="input-row">
-              <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)">
+              <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus onpaste="autoFill(this)" oninput="moveToNextInput(this)">
               <input name="digit2"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
               <input name="digit3"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
               <input name="digit4"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">

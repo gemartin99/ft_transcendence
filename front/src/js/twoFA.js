@@ -220,3 +220,20 @@ function moveToNextInput(currentInput) {
         }
     }
 }
+
+function autoFill(firstInput) {
+    // Get the pasted value
+    const pastedValue = (event.clipboardData || window.clipboardData).getData('text');
+
+    // Split the pasted value into individual digits
+    const digits = pastedValue.split('');
+
+    // Set the values for each input element
+    for (let i = 0; i < digits.length && i < 6; i++) {
+        const input = document.querySelector(`[name="digit${i + 1}"]`);
+        if (input) {
+            input.value = digits[i];
+        }
+    }
+    event.preventDefault();
+}

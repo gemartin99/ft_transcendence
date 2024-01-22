@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -157,7 +158,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://localhost",
     "https://crazy-pong.com",
     "http://crazy-pong.com",
-    "https://10.11.3.3",
+    "http://10.11.3.3",
 ]
     # "http://10.11.14.3",
 
@@ -186,7 +187,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://crazy-pong.com",
     "https://crazy-pong.com",
     "https://localhost:8080",
-    "https://10.11.3.3",
+    "http://10.11.3.3",
 ]
     # "http://10.11.14.3",
 
