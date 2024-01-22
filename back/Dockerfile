@@ -22,8 +22,8 @@ RUN pip install gunicorn
 RUN pip install psycopg2-binary
 
 # Copy SSL/TLS certificate and key
-COPY ./fullchain.pem /etc/ssl/certs/cert.crt
-COPY ./privkey.pem /etc/ssl/private/cert.key
+COPY ./crazy-pong.com_ssl_certificate.cer /etc/ssl/certs/cert.crt
+COPY ./crazy-pong.com_private_key.key /etc/ssl/private/cert.key
 
 # Install django-cors-headers
 RUN pip install django-cors-headers
