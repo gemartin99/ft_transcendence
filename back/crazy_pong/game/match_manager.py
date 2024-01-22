@@ -9,7 +9,7 @@ class MatchManager:
     threads = {}
     matches = {}
     @classmethod
-    def add_game(cls, game_name, consumer_instance, userid, username, points):
+    def add_game(cls, game_name, consumer_instance, userid, username, points, mode):
         cls.matches[game_name] = {
             "cmd": "update",
             "idMatch": 0,
@@ -52,6 +52,7 @@ class MatchManager:
             "isGameOver": False,
             "winner": 0,
             "points": points,
+            "mode": mode,
         }
         cls.threads[game_name] = {
             "thread": threading.Thread(target=MatchManager.before_thread, args=(consumer_instance, game_name,)),
@@ -59,6 +60,7 @@ class MatchManager:
             "paddle_two": False,
             "player_one": None,
             "player_two": None,
+            "mode": mode,
             "active": False,
         }
         cls.matches[game_name]["idMatch"] = game_name
@@ -89,6 +91,8 @@ class MatchManager:
     @classmethod
     def reconnect(cls, uid, name):
         for match in cls.threads:
+            if (cls.matches[match]['player1']["id"] == uid and cls.threads[match]['mode'] == '1vs1'):
+                return match, 3
             if cls.matches[match]['player1']["id"] == uid:
                 if cls.threads[match]["active"] == True:
                     return match, 1

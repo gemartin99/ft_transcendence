@@ -10,7 +10,7 @@ in_1vs1 = false
 
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function(event) {
-        if (in_match == true) {
+        if (in_match == true && !in_1vs1) {
             if (event.key === 'ArrowUp') {
                 const message = { cmd: 'update',
                                     id: current_match,
@@ -68,11 +68,18 @@ document.addEventListener('DOMContentLoaded', function () {
     
     document.addEventListener('keyup', function(event) {
         if (in_match == true){
-        const message = { cmd: 'update',
-                            id: current_match,
-                            pl: player,
-                            key: "rest" };
-        socket.send(JSON.stringify(message));}
+        if (event.key == 'ArrowUp' || event.key == 'ArrowDown'){
+            const message = { cmd: 'update',
+                                id: current_match,
+                                pl: "p2",
+                                key: "rest" };
+            socket.send(JSON.stringify(message));}
+        else if (event.key == 'w' || event.key == 's'){
+            const message = { cmd: 'update',
+                                id: current_match,
+                                pl: "p1",
+                                key: "rest" };
+            socket.send(JSON.stringify(message));}}
     });
 });
 
@@ -258,6 +265,9 @@ async function reconnect() {
                     //console.log(jsonData);
                     //var idMatch = document.getElementById("idMatch");
                     //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
+                    if (jsonData['mode'] == '1vs1') {
+                        in_1vs1 = true
+                    }
                     printMap(jsonData);
                 }
                 if (jsonData['cmd'] == 'finish') {
@@ -311,14 +321,16 @@ function obs_match() {
     };          
 }
 
-asyinc function one_vs_one_without_shirt() {
+async function one_vs_one_without_shirt(e) {
+        e.preventDefault();
+
         var p1 = document.getElementById("p1").value;
         var p2 = document.getElementById("p2").value;
         var points = document.getElementById("points").value;
         handleRedirect('/game/play/');
         await new Promise(r => setTimeout(r, 300));
 
-        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=1vs1&points=' + points);
+        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=1vs1&points=' + points + '&p1=' + p1 + '&p2=' + p2);
 
         socket.onopen = (event) => {
             console.log('WebSocket connection opened:', event);
@@ -327,15 +339,16 @@ asyinc function one_vs_one_without_shirt() {
             
         };
         socket.onmessage = (event) => {
-            if (in_1vs1 == false) {
-                document.getElementById('gameContainer').style.display = 'block';
-                document.getElementById('waiting').style.display = 'none';
-            }
+            //if (in_1vs1 == false) {
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('waiting').style.display = 'none';
+            //}
             in_1vs1 = true
             in_match = true
             const jsonData = JSON.parse(event.data.toString());
             if (jsonData['cmd'] == 'update') {
                 in_match = true
+                //console.log(jsonData);
                 printMap(jsonData);
             }
             if (jsonData['cmd'] == 'finish') {
@@ -350,6 +363,7 @@ asyinc function one_vs_one_without_shirt() {
         socket.onclose = (event) => {
             console.log('WebSocket connection closed:', event);
             in_match = false
+            in_1vs1 = false
         }; 
     }
 

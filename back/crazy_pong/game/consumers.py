@@ -74,8 +74,42 @@ class gameConnection(AsyncWebsocketConsumer):
             await self.channel_layer.group_add(self.game, self.channel_name)
             if paddle == 1:
                 self.paddle_controller = PlayerManager("player1", "paddle1", MatchManager.matches[self.game])
-            else:
+            elif paddle == 2:
                 self.paddle_controller = PlayerManager("player2", "paddle2", MatchManager.matches[self.game])
+            else:
+                self.mode = '1vs1'
+                self.p1 = PlayerManager("player1", "paddle1", MatchManager.matches[self.game])
+                self.p2 = PlayerManager("player2", "paddle2", MatchManager.matches[self.game])
+            await self.accept()
+            return
+        
+        elif (self.mode == 'reconnect') and not MatchManager.reconnect(self.user_id, self.user_name):
+            await setnoplaying(self.user)
+            await self.close()
+            return
+        
+        if (self.mode == '1vs1'):
+
+            p1 = self.scope['query_string'].decode('UTF-8').split('&')[3].split('=')[1]
+            p2 = self.scope['query_string'].decode('UTF-8').split('&')[4].split('=')[1]
+            self.points = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
+
+
+            self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
+            self.game = MatchManager.looking_for_match(self.user_id, p1, self.game)
+            MatchManager.add_game(self.game, self, self.user_id, p1, self.points, self.mode)
+            self.game = MatchManager.looking_for_match(self.user_id, p2, self.game)
+            self.game_ctrl = GameManager(MatchManager.matches[self.game])
+            self.thread =MatchManager.threads[self.game]
+
+            await self.channel_layer.group_add(self.game, self.channel_name)
+
+            self.p1 = PlayerManager("player1", "paddle1", MatchManager.matches[self.game])
+            self.p2 = PlayerManager("player2", "paddle2", MatchManager.matches[self.game])
+
+            self.thread['active'] = True
+            self.thread['paddle_two'] = True
+            self.thread['paddle_one'] = True
             await self.accept()
             return 
 
@@ -92,7 +126,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
         if self.game not in MatchManager.threads:
             self.points = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
-            MatchManager.add_game(self.game, self, self.user_id, self.user_name, self.points)
+            MatchManager.add_game(self.game, self, self.user_id, self.user_name, self.points, self.mode)
             self.game_ctrl = GameManager(MatchManager.matches[self.game])
 
         self.thread =MatchManager.threads[self.game]
@@ -128,8 +162,13 @@ class gameConnection(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         print(data)
-                
-        if data['cmd'] == "update":
+        
+        if data['cmd'] == "update" and self.mode == '1vs1':
+            if data['pl'] == "p1":
+                self.p1.move(data['key'])
+            else:
+                self.p2.move(data['key'])
+        elif data['cmd'] == "update":
             if self.paddle_controller:
                 self.paddle_controller.move(data['key'])
         elif data['cmd'] == "quit":
@@ -146,7 +185,10 @@ class gameConnection(AsyncWebsocketConsumer):
                 if self.thread["active"]:
                     self.game_ctrl.updateGame()
                     if self.game_ctrl.ended():
-                        await self.game_ctrl.saveMatch()
+                        if (self.mode != '1vs1'):
+                            await self.game_ctrl.saveMatch()
+                        else:
+                            await setnoplaying(self.user) 
                         await self.endConnection(state)
                         self.thread["active"] = False
                         return
@@ -155,7 +197,10 @@ class gameConnection(AsyncWebsocketConsumer):
                         {"type": "stream_state", "state": state},
                     )
                 elif self.thread["active"] == "disconnect":
-                    await self.game_ctrl.saveMatch()    
+                    if (self.mode != '1vs1'):
+                        await self.game_ctrl.saveMatch()
+                    else:
+                        await setnoplaying(self.user) 
                     await self.endConnection(state)
             # print("Time: " + str(time.time() - time_act))
             await asyncio.sleep(1/self.fr - (time.time() - time_act))
