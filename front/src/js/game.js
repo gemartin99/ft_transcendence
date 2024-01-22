@@ -91,7 +91,7 @@ function handleGame(){
 }
 
 function join_match() {
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=5');
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=5');
 
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -127,7 +127,7 @@ function join_match() {
 function create_match() {
     handleRedirect('/game/play/');
     code = generateRandomString(4)
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
     //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
     console.log(code)
     socket.onopen = (event) => {
@@ -168,7 +168,7 @@ function create_match() {
 
 function join_match_sala() {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
     
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -207,7 +207,7 @@ function join_match_sala() {
 }
 
 function join_IA() {
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=11');
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=11');
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
         document.getElementById('gameContainer').style.display = 'none';
@@ -246,7 +246,7 @@ async function reconnect() {
     console.log("ei aixo1: " + window.location.href + " sck: " + socket);
     if (socket == null && window.location.href == "http://localhost/game/play/"){
         console.log("ei aixo: " + window.location.href);
-        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
+        socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
         socket.onopen = (event) => {
             console.log('WebSocket connection opened:', event);
             
@@ -288,7 +288,7 @@ async function reconnect() {
 
 function obs_match() {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
 
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -326,7 +326,7 @@ async function one_vs_one_without_shirt(e) {
         handleRedirect('/game/play/');
         await new Promise(r => setTimeout(r, 300));
 
-        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=1vs1&points=' + points + '&p1=' + p1 + '&p2=' + p2);
+        socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=1vs1&points=' + points + '&p1=' + p1 + '&p2=' + p2);
 
         socket.onopen = (event) => {
             console.log('WebSocket connection opened:', event);
@@ -452,7 +452,7 @@ function generateRandomString(length) {
 //TOURNAMENT FUNCTIONS
 function gameTournament(id, points) {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=' + points + '&sala=' + id);
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=' + points + '&sala=' + id);
     
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
@@ -484,7 +484,7 @@ function gameTournament(id, points) {
 
 function gameTournamentIA(id, points) {
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=salaIA&points=' + points + '&sala=' + id);
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=salaIA&points=' + points + '&sala=' + id);
     
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
