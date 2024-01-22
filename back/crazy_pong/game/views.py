@@ -2,15 +2,16 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from authentification.authentification import Authentification
-import game.langs
-# Create your views here.
 
+# Create your views here.
 def get_game_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = game.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('game/game.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -39,8 +40,10 @@ def get_view_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = game.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('game/view_game.html', context)
     data = {
         'title': 'View Game',
@@ -69,8 +72,10 @@ def get_join_game_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = game.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('game/join_game.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -83,8 +88,10 @@ def get_private_game_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = game.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('game/private_game.html', context)
     data = {
         'title': 'Select Logging Mode',

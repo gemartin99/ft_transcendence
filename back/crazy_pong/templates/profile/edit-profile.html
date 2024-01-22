@@ -11,7 +11,7 @@
 <section class="section">
   <div class="container">
     <div style="text-align:center">
-      <h1>{{text13}}</h1>
+      <h1>Edit Profile Information</h1>
     </div>
     <div class="card">
       <div class="card-body bg-dark">
@@ -24,32 +24,32 @@
             <div class="form__message form__message--error"></div>
         {% endif %}
         <div class="form-group">
-            <label for="username" class="label">{{text14}}:</label>
-            <input type="text" id="username" name="name" placeholder="{{text15}}" class="form-control" value="{{ user.name }}" required>
+            <label for="username" class="label">Username:</label>
+            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>
         </div>
 
         <div class="form-group">
-            <label for="email" class="label">{{text16}}:</label>
-            <input type="text" id="email" name="email" placeholder="{{text17}}" class="form-control" value="{{ user.email }}" required>
+            <label for="email" class="label">Email:</label>
+            <input type="text" id="email" name="email" placeholder="Enter your email" class="form-control" value="{{ user.email }}" required>
         </div>
 
         <div class="form-group">
-            <label for="password" class="label">{{text18}}:</label>
-            <input type="password" id="password" name="password" placeholder="{{text19}}" class="form-control">
+            <label for="password" class="label">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="confirm_password" class="label">{{text20}}:</label>
-            <input type="password" id="confirm_password" name="confirm_password" placeholder="{{text21}}" class="form-control">
+            <label for="confirm_password" class="label">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="avatar" class="label">{{text22}}:</label>
+            <label for="avatar" class="label">Avatar (optional):</label>
             <input type="file" id="avatar" name="avatar" class="form-control-file">
         </div>
 
         <div class="card-footer">
-            <button class="btn btn-warning" type="submit" >{{text23}}</button>
+            <button class="btn btn-warning" type="submit" >Save Changes</button>
         </div>
 
         {% csrf_token %}

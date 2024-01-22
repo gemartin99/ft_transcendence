@@ -4,7 +4,6 @@ from django.shortcuts import render
 from authentification.authentification import Authentification
 from django.views.decorators.csrf import csrf_exempt
 import json
-import friends.langs
 from accounts.models import Usermine
 
 # Create your views here.
@@ -12,12 +11,10 @@ def get_friends_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = {
         'friends': user.friends.all(),
+        'variable2': 'template variable 2',
     }
-    context.update(friends.langs.get_langs(language))
-    print(context)
     content_html = render_to_string('friends/friends.html', context)
     data = {
         'title': 'Friends Page',

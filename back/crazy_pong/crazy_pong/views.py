@@ -18,8 +18,10 @@ def get_aboutus_page(request):
     return JsonResponse(data)
 
 def get_information_page(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = crazy_pong.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('information/information.html', context)
     data = {
         'title': 'Information',

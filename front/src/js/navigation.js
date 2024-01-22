@@ -135,12 +135,11 @@ function handleNavRefresh() {
     console.log("Refresh required!");
     var hrefValue = window.location.href;
     hrefValue = hrefValue.substring(baseUrl.length, hrefValue.lenght);
-    if (hrefValue && hrefValue.slice(-1) !== '/'){
+    if (hrefValue != "/"){
         hrefValue = hrefValue + "/"
     }
-    // else
-    //     hrefValue = ""
-    console.log('href:', hrefValue);
+    else
+        hrefValue = ""
     //updateUrl(hrefValue);
     var lang = getLang();
     fetch(baseUrl + ':8000' + hrefValue, {

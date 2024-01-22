@@ -22,7 +22,7 @@ class Usermine(models.Model):
     validated2FA = models.BooleanField(default=False)
     matches_played = models.ManyToManyField(Match, blank=True)
     friends = models.ManyToManyField('self', blank=True, symmetrical=False)
-    avatar = models.CharField(max_length=128, default='media/avatars/Pingu_default.png')
+    avatar = models.CharField(max_length=128, unique=True, default='default.png')
 
 
     def get_last_5_matches(self):

@@ -111,7 +111,6 @@ class Accounts:
             user.save()
             return True, 'User saved successfully'
         except IntegrityError as e:
-            print(e)
             # Username or email in use execption
             return False, 'Invalid data'
 

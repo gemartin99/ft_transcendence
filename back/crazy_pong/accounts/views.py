@@ -15,7 +15,6 @@ from .accounts import Accounts
 from django.contrib.auth.decorators import login_required
 from authentification.authentification import Authentification
 from twoFA.twoFA import TwoFA
-import accounts.langs
 
 def get_home_page(request):
     data = {
@@ -26,8 +25,10 @@ def get_home_page(request):
     return JsonResponse(data)
 
 def get_login_page(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = accounts.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('login/select_login.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -37,10 +38,11 @@ def get_login_page(request):
     return JsonResponse(data)
 
 def get_login_form_page(request):
-    #añadir las traducciones y añadir lo del new ese
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = accounts.langs.get_langs(language)
-    context['new'] = request.GET.get('s', False)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+        'new': request.GET.get('s', False)
+    }
     content_html = render_to_string('login/normal_login.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -63,8 +65,10 @@ def get_login42_form_page(request):
     return JsonResponse(data)
 
 def get_register_new_account_page(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = accounts.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('login/register_account.html', context)
     data = {
         'title': 'Select Logging Mode',

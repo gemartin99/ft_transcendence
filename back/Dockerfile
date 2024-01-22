@@ -21,6 +21,10 @@ RUN pip install gunicorn
 # Install psycopg2 (PostgreSQL adapter for Python)
 RUN pip install psycopg2-binary
 
+# Copy SSL/TLS certificate and key
+COPY ./fullchain.pem /etc/ssl/certs/cert.crt
+COPY ./privkey.pem /etc/ssl/private/cert.key
+
 # Install django-cors-headers
 RUN pip install django-cors-headers
 
@@ -35,5 +39,5 @@ ENV DATABASE_URL=postgres://username:password@db_host:5432/db_name
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-CMD ["python", "/app/crazy_pong/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "/app/crazy_pong/manage.py", "runsslserver", "--certificate", "/etc/ssl/certs/cert.crt", "--key", "/etc/ssl/private/cert.key", "0.0.0.0:8000"]
 

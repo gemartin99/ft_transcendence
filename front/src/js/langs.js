@@ -83,10 +83,10 @@ function set_spanish_lang()
             button.textContent = 'Nueva Cuenta';
         }
 	    if (button.getAttribute('href') === '/users/login') {
-            button.textContent = 'Iniciar sesión';
+            button.textContent = 'Loguear';
         }
 	    if (button.getAttribute('href') === '/users/logout') {
-            button.textContent = 'Cerrar sesión';
+            button.textContent = 'Desloguear';
         }
 	});
 	document.getElementById('copyright').textContent = '© 2023 CrazyPong. Todos los derechos reservados.';
@@ -103,44 +103,44 @@ function set_portuguese_lang()
 	var links = document.querySelectorAll('li.nav-item > a.navlink.nav-link');
 	links.forEach(function (link) {
 	    if (link.getAttribute('href') === '/') {
-            link.textContent = 'Início';
+            link.textContent = 'porto1';
         }
 	    if (link.getAttribute('href') === '/game') {
-            link.textContent = 'Jogo';
+            link.textContent = 'porto2';
         }
 	    if (link.getAttribute('href') === '/tournament') {
-            link.textContent = 'Torneio';
+            link.textContent = 'porto3';
         }
 	    if (link.getAttribute('href') === '/friends') {
-            link.textContent = 'Amigos';
+            link.textContent = 'porto4';
         }
 	    if (link.getAttribute('href') === '/information') {
-            link.textContent = 'Informação';
+            link.textContent = 'porto5';
         }
 	    if (link.getAttribute('href') === '/about-us') {
-            link.textContent = 'Sobre nós';
+            link.textContent = 'porto6';
         }
 	});
 	var buttons = document.querySelectorAll('a.navlink.btn');
 	buttons.forEach(function (button) {
 	    if (button.getAttribute('href') === '/profile') {
-            button.textContent = 'Perfil';
+            button.textContent = 'porto7';
         }
 	    if (button.getAttribute('href') === '/users/register') {
-            button.textContent = 'Nova Conta';
+            button.textContent = 'porto8';
         }
 	    if (button.getAttribute('href') === '/users/login') {
-            button.textContent = 'Iniciar sessão';
+            button.textContent = 'porto9';
         }
 	    if (button.getAttribute('href') === '/users/logout') {
-            button.textContent = 'Terminar a sessão';
+            button.textContent = 'porto10';
         }
 	});
-	document.getElementById('copyright').textContent = '© 2023 CrazyPong. Todos os direitos reservados.';
-	document.getElementById('lang-selector').textContent = 'Línguas';
-	document.getElementById('lang-en').textContent = 'Inglês';
-	document.getElementById('lang-es').textContent = 'Espanhol';
-	document.getElementById('lang-pt').textContent = 'Português';
+	document.getElementById('copyright').textContent = 'porto11';
+	document.getElementById('lang-selector').textContent = 'porto12';
+	document.getElementById('lang-en').textContent = 'porto13';
+	document.getElementById('lang-es').textContent = 'porto14';
+	document.getElementById('lang-pt').textContent = 'porto15';
 	document.getElementById('lang_selected').value = 'pt';
 	handleNavRefresh()
 }

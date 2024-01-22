@@ -7,7 +7,7 @@ from django.shortcuts import render
 from .tournament_manager import TournamentManager
 from django.views.decorators.csrf import csrf_exempt
 import json
-import tournament.langs
+
 from authentification.authentification import Authentification
 from accounts.models import Usermine
 
@@ -17,8 +17,10 @@ def get_tournament_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = tournament.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('tournament/tournament.html', context)
     data = {
         'title': 'Home',
@@ -33,8 +35,10 @@ def get_create_tournament_page(request):
     if not user:
         print(redirect)
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = tournament.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('tournament/create_tournament.html', context)
     data = {
         'title': 'Create Tournament',
@@ -48,8 +52,10 @@ def get_join_tournament_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = tournament.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('tournament/join_tournament.html', context)
     data = {
         'title': 'Join Tournament',
@@ -62,8 +68,10 @@ def get_lobby_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = tournament.langs.get_langs(language)
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+    }
     content_html = render_to_string('tournament/wait_lobby.html', context)
     data = {
         'title': 'Tournament lobby',

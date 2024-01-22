@@ -16,13 +16,9 @@ from authentification.authentification import Authentification
 from accounts.accounts import Accounts
 from security.security import Security
 from game.models import Match
-
-import profile.langs
-
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os
-
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
@@ -34,11 +30,13 @@ def get_profile_page(request):
  #end test
 
     print(last_5_matches)
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = profile.langs.get_langs(language)
-    context['user'] = user
-    context['total_played_games'] =  user.wins + user.losses
-    context['last_5_matches'] = last_5_matches
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+        'user': user,
+        'total_played_games': user.wins + user.losses,
+        'last_5_matches': last_5_matches,
+    }
     content_html = render_to_string('profile/profile.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -51,9 +49,11 @@ def get_edit_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = profile.langs.get_langs(language)
-    context['user'] = user
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+        'user': user,
+    }
     content_html = render_to_string('profile/edit-profile.html', context)
     data = {
         'title': 'Select Logging Mode',
@@ -66,9 +66,11 @@ def get_twofactor_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
-    context = profile.langs.get_langs(language)
-    context['user'] = user
+    context = {
+        'variable1': 'template variable 1',
+        'variable2': 'template variable 2',
+        'user': user,
+    }
     content_html = render_to_string('profile/edit-twofactor.html', context)
     data = {
         'title': 'Select Logging Mode',
