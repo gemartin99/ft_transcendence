@@ -70,6 +70,8 @@ def get_lobby_page(request):
         return JsonResponse({'redirect': redirect})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = tournament.langs.get_langs(language)
+    ret = TournamentManager.update(user.tournament_id, user.name)
+    context['ret'] = ret
     content_html = render_to_string('tournament/wait_lobby.html', context)
     data = {
         'title': 'Tournament lobby',

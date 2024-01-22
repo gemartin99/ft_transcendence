@@ -80,6 +80,11 @@ class MatchManager:
                 cls.matches[game]["player2"]["id"] = uid
                 cls.matches[game]["player2"]["name"] = name
             return game
+        
+    @classmethod
+    def quitGame(cls, game, user):
+        cls.matches.pop(game)
+        cls.threads.pop(game)
     
     @classmethod
     def reconnect(cls, uid, name):

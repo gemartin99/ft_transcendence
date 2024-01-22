@@ -33,21 +33,28 @@
   <div class="container-fluid">
     <div class="row align-items-start">
       <div class="text-center" style="text-align: center;padding: 20px;">
-          <h1 style="font-size: 60px;">{{text14}}</h1>
+          <h1 style="font-size: 60px;">{{text14}}: {{ret.info.tournamentName}}</h1>
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4" style="padding: 50px;">
-          <button class="btn btn-warning tac" style="width: 400px;" id="lobbyCode" onclick="myFunction()">{{text15}}: x6Yk9</button>
+          <button class="btn btn-warning tac" style="width: 400px;" id="lobbyCode" onclick="myFunction()">{{text15}}: {{ret.info.idTournament}}</button>
         </div>
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
-            <h2 style="font-size: 20px" id="joined"></h1>
+            <h2 style="font-size: 30px" id="p1"></h2>
+            <h2 style="font-size: 30px" id="p2"></h2>
+            <h2 style="font-size: 30px" id="p3"></h2>
+            <h2 style="font-size: 30px" id="p4"></h2>
+            <h2 style="font-size: 30px" id="p5"></h2>
+            <h2 style="font-size: 30px" id="p6"></h2>
+            <h2 style="font-size: 30px" id="p7"></h2>
+            <h2 style="font-size: 30px" id="p8"></h2>
       </div>
-      <div class="text-center" style="text-align: center;padding: 20px; display: flex; align-items: center; justify-content: center;margin-top: 300px;">
+      <div class="text-center" style="text-align: center;padding: 20px; display: flex; align-items: center; justify-content: center;margin-top: 40px;">
         <div class="loader-container">
             <div class="loader"></div>
         </div>
-        <h1 style="font-size: 50px">1/8 {{text16}}</h1>
+        <h1 style="font-size: 50px">{{text16}}</h1>
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4">

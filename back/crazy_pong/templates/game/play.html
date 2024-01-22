@@ -24,15 +24,16 @@
 
 <div id="app">
   <section>
-      <div class="container">
-        <div style="text-align: center;" id="idMatch"><h1> {{text18}}</h1></div>
-        <div class="text-center" style="text-align: center;padding: 20px; display: flex; align-items: center; justify-content: center;">  
+      <div class="container" style="padding: 80px; align-items: center;">
+        <!--<div style="text-align: center;" id="idMatch"><h1> {{text18}}</h1></div>-->
+        <div id="waiting" class="text-center" style="text-align: center; padding: 25%; align-items: center; justify-content: center;">  
          <div class="loader-container">
               <div class="loader"></div>
           </div>
           <h1 style="font-size: 50px">1/2 {{text17}}</h1>
+          <button class="btn btn-warning more-size" style="width: 300px;" onclick="quitQueue()">Quit</button>
         </div>
-        <div class="card" id="gameContainer" class="aspect-ratio-1200-750">
+        <div class="card" id="gameContainer" class="aspect-ratio-1200-750" style = "position: absolute;top: 20%; display: none;">
           <canvas id="gameCanvas" width="1200" height="750", style="background-color: darkgray;", ali></canvas>
         </div>
       </div>

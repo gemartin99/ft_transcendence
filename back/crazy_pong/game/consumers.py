@@ -33,6 +33,12 @@ def setplaying(user):
     user.playing = True
     user.save()
 
+@sync_to_async
+def setnoplaying(user):
+    user.playing = False
+    user.save()
+    print("holaaaaa")
+
 class gameConnection(AsyncWebsocketConsumer):
     
     def __init__(self, *args, **kwargs):
@@ -53,9 +59,7 @@ class gameConnection(AsyncWebsocketConsumer):
         self.user_id = Authentification.decode_jwt_token(self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1])
         self.user = await self.get_user(self.user_id)
         await setplaying(self.user)
-        # self.user.playing = True
-        # self.user.save()
-        
+
         self.user_name = self.user.name
 
 
@@ -128,6 +132,9 @@ class gameConnection(AsyncWebsocketConsumer):
         if data['cmd'] == "update":
             if self.paddle_controller:
                 self.paddle_controller.move(data['key'])
+        elif data['cmd'] == "quit":
+            MatchManager.quitGame(self.game, self.user)
+            await setnoplaying(self.user)
         else:
             await self.send("Unknown command")
 

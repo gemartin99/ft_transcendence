@@ -52,18 +52,28 @@ function updateLobby() {
     .then(data => {
         //var code = document.getElementById("lobbyCode");
         //code.textContent = "Lobby code: " + data.code;
-        var joined = document.getElementById("joined");
+
         
-        var players = "";
+        var players = [];
+        i = 0;
         for (key in data){
             if (key != "info"){
-                if (data[key].u1 != "IA")
-                    players += data[key].u1 + "\n";
-                if (data[key].u2 != "IA")
-                    players += data[key].u2 + "\n";
+                if (data[key].u1 != "IA" && data[key].u1.substring(0, 4) != "Bot "  && data[key].u1 != "undefined")
+                    players[i++] = data[key].u1;
+                    if (data[key].u2 != "IA" && data[key].u2.substring(0, 4) != "Bot "  && data[key].u2 != "undefined")
+                    players[i++] = data[key].u2;
             }
         }
-        joined.textContent = players;
+
+        document.getElementById("p1").textContent = players[0];
+        document.getElementById("p2").textContent = players[1];
+        document.getElementById("p3").textContent = players[2];
+        document.getElementById("p4").textContent = players[3];
+        document.getElementById("p5").textContent = players[4];
+        document.getElementById("p6").textContent = players[5];
+        document.getElementById("p7").textContent = players[6];
+        document.getElementById("p8").textContent = players[7];
+
         
         var tournament_id = document.getElementById("lobbyCode");
         tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament;
