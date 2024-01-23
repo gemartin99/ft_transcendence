@@ -230,7 +230,7 @@
 			  showonline.addEventListener('click', function() {
 			    console.log('Trying to print online users.');
 
-			    fetch("http://localhost:8000/users/showonline/", {
+			    fetch("https://crazy-pong.com:8000/users/showonline/", {
 			    	credentials: 'include',
 			    })
 			      .then(response => response.json())
