@@ -65,7 +65,7 @@ function send_login_form(e)  {
             setFormMessage(loginForm, "success", "Congratulations you have nice memory");
             history.pushState(null, null, '/');
             handleNavLinkAction('/');
-            const socket = new WebSocket('wss://'+ url +':8443/ws/login/?user=' + data.user);
+            const socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
             set_logged_out_view();

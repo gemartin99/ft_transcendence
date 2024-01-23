@@ -12,3 +12,5 @@ requests_oauthlib
 requests
 python-dotenv
 django-sslserver
+daphne
+pyopenssl
