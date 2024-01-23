@@ -31,6 +31,7 @@ RUN pip install django-cors-headers
 # Download and copy the wait-for-it.sh script into the image
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /app/wait-for-it.sh
 RUN chmod +x /app/wait-for-it.sh
+RUN chmod +x /app/cd.sh
 
 # Set up Django and PostgreSQL environment variables
 ENV DJANGO_SETTINGS_MODULE=crazy_pong.settings
