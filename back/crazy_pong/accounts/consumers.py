@@ -14,7 +14,7 @@ class loginConnection(WebsocketConsumer):
 
     def disconnect(self, code):
 
-        userBD = Usermine.objects.get(name= self.user);
+        userBD = Usermine.objects.get(id=self.user);
 
         userBD.online = False
         userBD.save()

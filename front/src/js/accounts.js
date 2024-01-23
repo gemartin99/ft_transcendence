@@ -59,7 +59,7 @@ function send_login_form(e)  {
             document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
         console.log('jwttoken:', data.jwtToken);
 
-
+        console.log('data', data);
         if (getCookie('jwttoken')) {
             set_logged_in_view();
             setFormMessage(loginForm, "success", "Congratulations you have nice memory");
