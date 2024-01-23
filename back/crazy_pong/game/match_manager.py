@@ -108,3 +108,19 @@ class MatchManager:
 
         loop.run_until_complete(consumer_instance.propagate_state(cls.matches[game_name]))
         loop.close()
+
+    @classmethod
+    def canJoin(cls, user, id):
+        if (not id in cls.threads):
+            return False
+        if (cls.threads[id]["paddle_one"] == True and cls.threads[id]["paddle_two"] == True):
+            return False
+        return True
+    
+    @classmethod
+    def canView(cls, user, id):
+        if (not id in cls.threads):
+            return False
+        if (cls.threads[id]["paddle_one"] == False or cls.threads[id]["paddle_two"] == False):
+            return False
+        return True

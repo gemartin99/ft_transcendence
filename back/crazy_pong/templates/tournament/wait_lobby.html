@@ -58,7 +58,9 @@
       </div>
       <div class="bg-gray d-flex flex-column align-items-center justify-content-center">
         <div class="text-center mt-md-4">
+          {% if ret.info.user == ret.info.creator%}
           <button class="btn btn-warning tac" style="width: 200px;" onclick="startTournament()">{{text17}}</button>
+          {% endif %}
           <button class="btn btn-warning tac" style="width: 200px;"onclick="updateLobby()">{{text18}}</button>
 
         </div>

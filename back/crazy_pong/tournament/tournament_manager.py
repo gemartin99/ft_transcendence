@@ -14,13 +14,15 @@ class TournamentManager:
     @classmethod
     def add_tournament(cls, tournament_name, n, user, IA, points):
         id = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        cls.tournaments[id] = Tournament(tournament_name, n, id, IA, points)
+        cls.tournaments[id] = Tournament(tournament_name, n, id, IA, points, user.name)
         cls.tournaments[id].addPlayer(user)
         return id
 
     @classmethod
     def add_player(cls, id, user):
-        cls.tournaments[id].addPlayer(user)
+        if not id in cls.tournaments.keys():
+            return False
+        return cls.tournaments[id].addPlayer(user)
 
         return 
     @classmethod
