@@ -94,7 +94,7 @@ TEMPLATES = [
     },
 ]
 
-//WSGI_APPLICATION = 'crazy_pong.wsgi.application'
+#WSGI_APPLICATION = 'crazy_pong.wsgi.application'
 
 
 # Database
