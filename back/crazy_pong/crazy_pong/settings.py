@@ -209,3 +209,4 @@ SSL_CERTIFICATE = "/certificates/crazy-pong.com_ssl_certificate.cer"
 SSL_KEY = "/certificates/crazy-pong.com_private_key.key"
 # SSL_CA = "/certificates/intermediate-ca.pem"
 
+SECURE_SSL_REDIRECT = True
