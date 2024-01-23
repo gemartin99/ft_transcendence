@@ -44,7 +44,7 @@ class Match():
 
 class Tournament:
     
-    def __init__(self, name, n, id, IA, points):
+    def __init__(self, name, n, id, IA, points, creator):
         self.name = name
         self.id = id
         self.players = []
@@ -54,12 +54,15 @@ class Tournament:
         self.end = False
         self.IA = IA
         self.points = points
+        self.creator = creator
         self.createBracket()
 
     def getName(self):
         return self.name
     
     def addPlayer(self, user):
+        if (self.start or len(self.players) == self.n):
+            return False
         if (len(self.players) % 2 == 0):
             self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu1(user.name)
         else:
@@ -69,6 +72,7 @@ class Tournament:
         user.inTournament = 1
         user.tournament_id = self.id
         user.save()
+        return True
             
 
     def get(self, player):
@@ -76,7 +80,10 @@ class Tournament:
             self.autoUpdate()
         ret = {}
         i = 0
-        ret['info'] = {'idTournament': self.id, 'tournamentName': self.name, 'started': self.start, "user": player, "points": self.points, "players": self.n}
+        ret['info'] = {'idTournament': self.id, 'tournamentName': self.name, 'started': self.start, "user": player.name, "points": self.points, "players": self.n, "creator": self.creator}
+        if (self.start):
+            player.inTournament = 2
+            player.save()
         for match in self.bracket:
             ret[str(i)] = match.get()
             i += 1

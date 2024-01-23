@@ -70,7 +70,7 @@ def get_lobby_page(request):
         return JsonResponse({'redirect': redirect})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = tournament.langs.get_langs(language)
-    ret = TournamentManager.update(user.tournament_id, user.name)
+    ret = TournamentManager.update(user.tournament_id, user)
     context['ret'] = ret
     content_html = render_to_string('tournament/wait_lobby.html', context)
     data = {
@@ -87,7 +87,7 @@ def get_bracket_page(request):
         return JsonResponse({'redirect': redirect})
     print(request)
     print("acaba")
-    ret = TournamentManager.update(user.tournament_id, user.name)
+    ret = TournamentManager.update(user.tournament_id, user)
     print('data:')
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = tournament.langs.get_langs(language)
@@ -134,9 +134,10 @@ def joinPlayer(request):
             # user_id = Authentification.decode_jwt_token(jwt_token)
             # user = Usermine.objects.get(id=user_id)
 
-            TournamentManager.add_player(data['id'], user)
-            
-            return JsonResponse({'code': '200'})
+            if TournamentManager.add_player(data['id'], user):
+                return JsonResponse({'code': '200'})
+            else:
+                return JsonResponse({'code': '400'})
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
@@ -153,7 +154,7 @@ def getTournament(request): #ESTO DA ERROR QUE LO FLIIIIPAS
     if request.method == 'POST':
         try:
             
-            status = TournamentManager.get(user.tournament_id, user.name)
+            status = TournamentManager.get(user.tournament_id, user)
             
             return JsonResponse({'code': status})
         except json.JSONDecodeError as e:
@@ -170,7 +171,7 @@ def updateTournament(request):
         try:
             data = json.loads(request.body)
             print('data',data)
-            ret = TournamentManager.update(user.tournament_id, user.name)
+            ret = TournamentManager.update(user.tournament_id, user)
             return JsonResponse(ret)
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
