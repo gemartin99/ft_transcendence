@@ -8,31 +8,35 @@ in_tournament = 0;
 function createTournament(e) {
     console.log("creant torneig");
     e.preventDefault();
-    const message = { name: document.getElementById("nameTournament").value,
-                                n: document.getElementById("players").value,
-                                points: document.getElementById("points").value,
-                                ia: document.getElementById('fillAI').checked
-                            };
-    console.log(message);
-    fetch(baseUrl + ':8000/tournament/create/', {
-        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(message),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('EIEIEISIUSPLAU:', data.code);
-        in_tournament = data.code;
-        if (data.redirect)
-            handleRedirect(data.redirect);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    if (document.getElementById("nameTournament").value != ""){
+        const message = { name: document.getElementById("nameTournament").value,
+                                    n: document.getElementById("players").value,
+                                    points: document.getElementById("points").value,
+                                    ia: document.getElementById('fillAI').checked
+                                };
+        console.log(message);
+        fetch(baseUrl + ':8000/tournament/create/', {
+            // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(message),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('EIEIEISIUSPLAU:', data.code);
+            in_tournament = data.code;
+            if (data.redirect)
+                handleRedirect(data.redirect);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });}
+    else{
+        alert("You must enter a name");
+    }
 }
 
 function updateLobby() {
@@ -52,33 +56,36 @@ function updateLobby() {
     .then(data => {
         //var code = document.getElementById("lobbyCode");
         //code.textContent = "Lobby code: " + data.code;
-
-        
-        var players = [];
-        i = 0;
-        for (key in data){
-            if (key != "info"){
-                if (data[key].u1 != "IA" && data[key].u1.substring(0, 4) != "Bot "  && data[key].u1 != "undefined")
-                    players[i++] = data[key].u1;
-                    if (data[key].u2 != "IA" && data[key].u2.substring(0, 4) != "Bot "  && data[key].u2 != "undefined")
-                    players[i++] = data[key].u2;
-            }
+        if (data.info.started == true){
+            handleRedirect("/tournament/bracketPage/");
         }
+        else{
+            var players = [];
+            i = 0;
+            for (key in data){
+                if (key != "info"){
+                    if (data[key].u1 != "IA" && data[key].u1.substring(0, 4) != "Bot "  && data[key].u1 != "undefined")
+                        players[i++] = data[key].u1;
+                        if (data[key].u2 != "IA" && data[key].u2.substring(0, 4) != "Bot "  && data[key].u2 != "undefined")
+                        players[i++] = data[key].u2;
+                }
+            }
 
-        document.getElementById("p1").textContent = players[0];
-        document.getElementById("p2").textContent = players[1];
-        document.getElementById("p3").textContent = players[2];
-        document.getElementById("p4").textContent = players[3];
-        document.getElementById("p5").textContent = players[4];
-        document.getElementById("p6").textContent = players[5];
-        document.getElementById("p7").textContent = players[6];
-        document.getElementById("p8").textContent = players[7];
+            document.getElementById("p1").textContent = players[0];
+            document.getElementById("p2").textContent = players[1];
+            document.getElementById("p3").textContent = players[2];
+            document.getElementById("p4").textContent = players[3];
+            document.getElementById("p5").textContent = players[4];
+            document.getElementById("p6").textContent = players[5];
+            document.getElementById("p7").textContent = players[6];
+            document.getElementById("p8").textContent = players[7];
 
-        
-        var tournament_id = document.getElementById("lobbyCode");
-        tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament;
-        console.log('id:', data.id);
-        console.log('Response:', data);
+            
+            var tournament_id = document.getElementById("lobbyCode");
+            tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament;
+            console.log('id:', data.id);
+            console.log('Response:', data);
+        }
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -126,9 +133,9 @@ function updateTournament() {
 
 }
 
-function joinTournament() {
+function joinTournament(e) {
     console.log("unintse torneig");
-
+    e.preventDefault();
     const message = {id: document.getElementById("lobbyCode").value,
                             };
     fetch(baseUrl + ':8000/tournament/join/', {
@@ -143,7 +150,12 @@ function joinTournament() {
     .then(response => response.json())
     .then(data => {
         console.log('Response:', data.code);
-        in_tournament = document.getElementById("lobbyCode").value;
+        if (data.code == 200){
+            in_tournament = document.getElementById("lobbyCode").value;
+            handleRedirect("/tournament/lobbyPage/");
+        }
+        else
+            alert("Invalid lobby code or tournament already started");
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -295,7 +307,7 @@ function myFunction() {
 
     console.log(copyText.textContent);
      // Copy the text inside the text field
-    navigator.clipboard.writeText(copyText.textContent.substring(12, copyText.textContent.length));
+    navigator.clipboard.writeText(copyText.textContent.substring(12, copyText.textContent.length -3));
   
     // Alert the copied text
   }

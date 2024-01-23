@@ -31,8 +31,12 @@
               <div class="loader"></div>
           </div>
           <h1 style="font-size: 50px">1/2 {{text17}}</h1>
+          {%if idMatch %}
+          <h1 style="font-size: 50px">Match id:{{idMatch}}</h1>
+          {%endif%}
           <button class="btn btn-warning more-size" style="width: 300px;" onclick="quitQueue()">Quit</button>
         </div>
+
         <div class="card" id="gameContainer" class="aspect-ratio-1200-750" style = "position: absolute;top: 20%; display: none;">
           <canvas id="gameCanvas" width="1200" height="750", style="background-color: darkgray;", ali></canvas>
         </div>
