@@ -52,6 +52,7 @@ class GameManager():
         self.IA = False
         self.IAcount = self.fr
         self.saved = False
+        self.colision = 375
         self.reset_ball()
 
         self.time = time.time()
