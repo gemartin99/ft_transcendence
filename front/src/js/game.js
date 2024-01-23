@@ -125,7 +125,7 @@ function join_match() {
 function create_match() {
     handleRedirect('/game/play/');
     code = generateRandomString(5)
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
     //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
     console.log(code)
     socket.onopen = (event) => {
