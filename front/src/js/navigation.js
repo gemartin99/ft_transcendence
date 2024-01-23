@@ -159,6 +159,7 @@ function handleNavRefresh() {
         }
         else if (data.redirect) {
             handleRedirect(data.redirect)
+            
             console.log('Response is a redirect');
         } else {
             console.log('Invalid response from backend 1');
@@ -203,4 +204,10 @@ const initialPath = window.location.pathname;
 fetchContent(initialPath);
 handleNavLinks()
 var initialpath = window.location.pathname;
+if (initialpath == "/game/play/"){
+    reconnect();
+}
+else if (initialpath == "/about-us/"){
+    aboutUs();
+}
 console.log('URL Parameters:', initialpath);

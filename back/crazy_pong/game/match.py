@@ -131,8 +131,8 @@ class GameManager():
     def reset_ball(self):
         self.ball['x'] = 600
         self.ball['y'] = 375
-        self.ball["vx"] = 10
-        self.ball["vy"] = random.uniform(-4, 4)
+        self.ball["vx"] =  random.choice([-10, 10])
+        self.ball["vy"] = random.uniform(-5, 5)
         self.paddle_one['y'] = 300
         self.paddle_two['y'] = 300
         self.IAcount = int(os.getenv("FRAMERATE"))

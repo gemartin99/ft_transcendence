@@ -179,6 +179,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
     async def propagate_state(self, state):
         time_act = time.time()
+        first = True
         while True:
             time_act = time.time()
             if self.thread:
