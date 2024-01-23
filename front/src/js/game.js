@@ -97,10 +97,8 @@ function join_match() {
         console.log('WebSocket connection opened:', event);
     };
     socket.onmessage = (event) => {
-        if (in_match == false) {
-            document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-        }
+        document.getElementById('gameContainer').style.display = 'block';
+        document.getElementById('waiting').style.display = 'none';
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
         //console.log(jsonData)
@@ -134,10 +132,8 @@ function create_match() {
         console.log('WebSocket connection opened:', event);
     };
     socket.onmessage = (event) => {
-        if (in_match == false) {
-            document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-        }
+        document.getElementById('gameContainer').style.display = 'block';
+        document.getElementById('waiting').style.display = 'none';
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'update') {
@@ -193,10 +189,8 @@ function join_match_sala(e) {
                 
             };
             socket.onmessage = (event) => {
-                if (in_match == false) {
                     document.getElementById('gameContainer').style.display = 'block';
                     document.getElementById('waiting').style.display = 'none';
-                }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
                 if (jsonData['cmd'] == 'update') {
@@ -313,9 +307,26 @@ async function reconnect() {
     }
 }
 
-function obs_match() {
-
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
+function obs_match(e) {
+    console.log("joining match")
+    e.preventDefault();
+    const message = {idMatch: document.getElementById("lobbYCode").value,
+            };
+    fetch(baseUrl + ':8000/game/canView/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("eieieieiei" + data.code);
+        if (data.code == 200){
+            handleRedirect('/game/play/');
+            socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
 
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);
