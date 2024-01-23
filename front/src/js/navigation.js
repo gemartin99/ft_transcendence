@@ -15,8 +15,8 @@ function fetchContent(path) {
     if (path && path.slice(-1) !== '/') {
         path += '/';
     }
-    console.log(baseUrl + ':443' + path);
-    fetch(baseUrl + ':443' + path, {
+    console.log(baseUrl + ':8443' + path);
+    fetch(baseUrl + ':8443' + path, {
         credentials: 'include',
          headers: {
             'language': lang,
@@ -62,7 +62,7 @@ function handleRedirect(redirect_url) {
     console.log('handleRedirect');
     updateUrl(redirect_url);
     var lang = getLang()
-    fetch(baseUrl + ':443' + redirect_url, {
+    fetch(baseUrl + ':8443' + redirect_url, {
         credentials: 'include',
            headers: {
             'language': lang,
@@ -101,9 +101,9 @@ function handleNavLinkClick(event) {
     else
         hrefValue = ""
     updateUrl(hrefValue);
-    console.log(baseUrl + ':443' + hrefValue);
+    console.log(baseUrl + ':8443' + hrefValue);
     var lang = getLang()
-    fetch(baseUrl + ':443' + hrefValue, {
+    fetch(baseUrl + ':8443' + hrefValue, {
         credentials: 'include',
            headers: {
             'language': lang,
@@ -144,7 +144,7 @@ function handleNavRefresh() {
     console.log('href:', hrefValue);
     //updateUrl(hrefValue);
     var lang = getLang();
-    fetch(baseUrl + ':443' + hrefValue, {
+    fetch(baseUrl + ':8443' + hrefValue, {
         credentials: 'include',
         headers: {
             'language': lang,
@@ -177,7 +177,7 @@ function handleNavLinkAction(hrefValue) {
     console.log('handleNavLinkAction');
     updateUrl(hrefValue);
     var lang = getLang()
-    fetch(baseUrl + ':443' + hrefValue, {
+    fetch(baseUrl + ':8443' + hrefValue, {
         credentials: 'include',
             headers: {
             'language': lang,
