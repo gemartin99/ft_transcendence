@@ -23,7 +23,7 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 
 application = ProtocolTypeRouter({
-     'http': get_asgi_application(), 
+     'https': get_asgi_application(), 
      'websocket': AuthMiddlewareStack(
         URLRouter(
             game.routing.websocket_urlpatterns +
