@@ -25,7 +25,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 django.setup()
 
 application = ProtocolTypeRouter({
-     'https': get_asgi_application(), 
+     'http': get_asgi_application(), 
      'websocket': AuthMiddlewareStack(
         URLRouter(
             game.routing.websocket_urlpatterns +
