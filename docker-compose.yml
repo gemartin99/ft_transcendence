@@ -76,14 +76,14 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./back
+      device: /home/transcendance/test/back
       o: bind
 
   front_workdir:
     driver: local
     driver_opts:
       type: none
-      device: ./front/src
+      device: /home/transcendance/test/front/src
       o: bind
 
 
