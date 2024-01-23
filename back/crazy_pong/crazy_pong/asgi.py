@@ -10,17 +10,14 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 import os
 import django
 from django.core.asgi import get_asgi_application
+import accounts.routing
+import game.routing
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crazy_pong.settings')
 
 application = get_asgi_application()
-
-
-import accounts.routing
-import game.routing
-##added
-from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
 
 django.setup()
 
