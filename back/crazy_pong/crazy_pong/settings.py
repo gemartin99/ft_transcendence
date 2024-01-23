@@ -71,8 +71,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
-
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
 
@@ -150,16 +148,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost",
-    "https://localhost",
-    "https://crazy-pong.com",
-    "http://crazy-pong.com",
-    "https://10.11.3.3",
-]
-    # "http://10.11.14.3",
 
 CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
