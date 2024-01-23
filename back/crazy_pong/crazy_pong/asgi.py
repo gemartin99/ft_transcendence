@@ -12,6 +12,8 @@ import django
 from django.core.asgi import get_asgi_application
 import accounts.routing
 import game.routing
+application = get_asgi_application()
+
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 
@@ -19,7 +21,6 @@ django.setup()
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crazy_pong.settings')
 
-application = get_asgi_application()
 
 
 
