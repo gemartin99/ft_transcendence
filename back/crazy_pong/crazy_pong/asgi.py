@@ -15,11 +15,13 @@ import game.routing
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 
+django.setup()
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crazy_pong.settings')
 
 application = get_asgi_application()
 
-django.setup()
+
 
 application = ProtocolTypeRouter({
      'https': get_asgi_application(), 
