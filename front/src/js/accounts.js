@@ -42,7 +42,7 @@ function send_login_form(e)  {
         formDataObject[key] = value;
     });
     console.log('FormDataObject:', formDataObject);
-    fetch(baseurl +':8443/users/login/action/', {
+    fetch(baseurl +':8000/users/login/action/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         credentials: 'include',
@@ -65,7 +65,7 @@ function send_login_form(e)  {
             setFormMessage(loginForm, "success", "Congratulations you have nice memory");
             history.pushState(null, null, '/');
             handleNavLinkAction('/');
-            const socket = new WebSocket('wss://'+ url +':8443/ws/login/?user=' + data.user);
+            const socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
             set_logged_out_view();
@@ -104,7 +104,7 @@ function send_form_new_account(e) {
     }
 
     console.log('FormDataObject:', formDataObject);
-    fetch(baseurl + ':8443/users/register/new/', {
+    fetch(baseurl + ':8000/users/register/new/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         credentials: 'include',
