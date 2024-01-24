@@ -31,9 +31,33 @@ function logoutTest(){
     document.cookie = "jwttoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
 
-// function do_logout(){
-//  socket.close();
-// }
+function do_logout(){
+    var lang = getLang()
+    fetch(baseUrl + ':8000/users/logout/', {
+        credentials: 'include',
+           headers: {
+            'language': lang,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response from backend:', data);
+        socket.close();
+        else if (data.redirect) {
+            handleRedirect(data.redirect);
+            return ;
+            console.log('Invalid response from backend 1', data.redirect);
+        } else {
+            console.log('Invalid response from backend 1', data);
+        }
+        
+        handleNavLinks()
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+}
 
 // function handle_ws(){}
 

@@ -96,19 +96,30 @@ def do_login(request):
     if data:
         return JsonResponse(data, status=200)
 
+@csrf_exempt
 def logout(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
     try:
         user = Usermine.objects.get(id=user_id)
-        # user.online = False
-        
         user.save()
         response = JsonResponse({'redirect': '/'})
     except Usermine.DoesNotExist as e:
         response = JsonResponse({'redirect': '/'})
     response.delete_cookie('jwttoken')
     return response
+
+@csrf_exempt
+def is_online(request):
+    jwt_token = request.COOKIES.get('jwttoken', None)
+    user_id = Authentification.decode_jwt_token(jwt_token)
+    try:
+        user = Usermine.objects.get(id=user_id)
+        return JsonResponse({'Session': 'True'})
+    except Usermine.DoesNotExist as e:
+        response = JsonResponse({'Session': 'False'})
+        response.delete_cookie('jwttoken')
+        return return response
 
 
 @csrf_exempt

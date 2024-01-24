@@ -2,9 +2,18 @@
 // It will respond true or false, dependly if we have valid ot not valid session.
 function have_valid_session()
 {
-	if (getCookie('jwttoken'))
-		return true;
-	return false
+    fetch(baseUrl + ':8000/users/checkSession//', {
+        credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(data => {
+    	if (data.Session == 'True')
+    		return true;
+    	return false;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 function set_logged_in_view()
@@ -36,8 +45,10 @@ function set_logged_out_view()
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-   if (have_valid_session() == true)
+   if (have_valid_session() == true){
    	set_logged_in_view()
-   else
+   }
+   else{
    	set_logged_out_view()
+   }
 });
