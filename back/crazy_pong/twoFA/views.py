@@ -39,7 +39,7 @@ def getMailVerificationPage(request):
     if not user.is_mail2fa_code_valid():
         user.generate_mail2fa_code()
         user.save()    
-        TwoFA.send_mailUser(user.user, user.email, user.mail2FACode)
+        TwoFA.send_mailUser(user.name, user.email, user.mail2FACode)
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/check-email2factor.html', context)
