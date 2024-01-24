@@ -102,6 +102,12 @@ function join_match() {
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
         //console.log(jsonData)
+        if (jsonData['cmd'] == 'start') {
+            if (window.location.href != baseUrl + "/game/play/"){
+                handleRedirect('/game/play/');
+            }
+            printMap(jsonData);
+        }
         if (jsonData['cmd'] == 'update') {
             printMap(jsonData);
         }
@@ -189,7 +195,7 @@ function join_match_sala(e) {
         if (data.code == 200){
             handleRedirect('/game/play/');
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
     
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);
@@ -347,7 +353,7 @@ function obs_match(e) {
         console.log("eieieieiei" + data.code);
         if (data.code == 200){
             handleRedirect('/game/play/');
-            socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
+            socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
 
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);
