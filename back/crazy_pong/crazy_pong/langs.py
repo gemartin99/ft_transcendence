@@ -24,7 +24,7 @@ def get_lang_en():
         'text10': 'When a player fails to return the ball and it passes his paddle, the opponent scores a point. The first player to reach 11 points wins the game.',
         'text11': 'Controls',
         'text12': 'To raise the paddles',
-        'text13': 'To lower the blades',
+        'text13': 'To lower the paddles',
     }
     return context
 

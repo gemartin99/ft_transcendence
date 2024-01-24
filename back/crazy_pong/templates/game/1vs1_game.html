@@ -12,23 +12,23 @@
     
     
     <div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 40px; border-radius: 10px; padding: 30px;">
-        <h2 class="text-center mb-4">1 vs 1 local</h2>
+        <h2 class="text-center mb-4">{{text19}}</h2>
 
         <form onsubmit="return one_vs_one_without_shirt(event)">
             <div class="row mb-3 align-items-center"> <!-- Añadiendo la clase align-items-center aquí -->
-                <label for="points" class="col-sm-4 col-form-label pum">P1 name</label>
+                <label for="points" class="col-sm-4 col-form-label pum">{{text20}}</label>
                 <div class="col-sm-8">
                     <input type="text" id="p1" name="p1" class="full-width-input">
                 </div>
             </div>
             <div class="row mb-3 align-items-center"> <!-- Añadiendo la clase align-items-center aquí -->
-                <label for="points" class="col-sm-4 col-form-label pum">P2 name</label>
+                <label for="points" class="col-sm-4 col-form-label pum">{{text21}}</label>
                 <div class="col-sm-8">
                     <input type="text" id="p2" name="p2" class="full-width-input">
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="points" class="col-sm-4 col-form-label pum">Points:</label>
+                <label for="points" class="col-sm-4 col-form-label pum">{{text22}}:</label>
                 <div class="col-sm-8">
                     <select class="form-select" id="points" name="points">
                         <option value="3">3</option>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="text-center">
-                    <button class="btn btn-warning" type="submit">{{text8}}</button>
+                    <button class="btn btn-warning" type="submit">{{text16}}</button>
             </div>
         </form>
     </div>

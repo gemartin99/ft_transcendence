@@ -15,6 +15,7 @@ def get_lang_en():
         'text3': 'PRIVATE GAME',
         'text4': 'VIEW GAME',
         'text5': 'PLAY VS IA',
+        'text19': 'LOCAL GAME',
         #private_game.html
         'text6': 'PRIVATE GAME',
         'text7': 'CREATE',
@@ -32,6 +33,12 @@ def get_lang_en():
         #play.html
         'text17': 'waiting players',
         'text18': "Let's Fight",
+        'text23': "Quit",
+        #1vs1_game.html
+        'text20': 'Player 1 name',
+        'text21': 'Player 2 name',
+        'text22': 'Points',
+
 
     }
     return context
@@ -44,6 +51,7 @@ def get_lang_es():
         'text3': 'PARTIDA PRIVADA',
         'text4': 'VER PARTIDA',
         'text5': 'JUGAR VS IA',
+        'text19': 'PARTIDA LOCAL',
         #private_game.html
         'text6': 'PARTIDA PRIVADA',
         'text7': 'CREAR',
@@ -61,6 +69,11 @@ def get_lang_es():
         #play.html
         'text17': 'esperando jugadores',
         'text18': "A luchar",
+        'text23': "Abandonar",
+        #1vs1_game.html
+        'text20': 'Nombre jugador 1',
+        'text21': 'Nombre juagdor 2',
+        'text22': 'Puntos',
     }
     return context
 
@@ -72,6 +85,7 @@ def get_lang_pt():
         'text3': 'JOGO PRIVADO',
         'text4': 'VER JOGO',
         'text5': 'JOGAR VS IA',
+        'text19': 'JOGO LOCAL',
         #private_game.html
         'text6': 'JOGO PRIVADO',
         'text7': 'CRIAR',
@@ -89,6 +103,11 @@ def get_lang_pt():
         #play.html
         'text17': 'à espera de jogadores',
         'text18': "Combate",
+        'text23': "Desistir",
+        #1vs1_game.html
+        'text20': 'Nome do jogador 1',
+        'text21': 'Nome do jogador 2',
+        'text22': 'Pontos',
 
     }
     return context
