@@ -91,7 +91,7 @@ function updateLobby() {
 
             
             var tournament_id = document.getElementById("lobbyCode");
-            tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament;
+            tournament_id.textContent = tournament_id.value.substring(0, 12) + data.info.idTournament + ' 📋';
             console.log('id:', data.id);
             console.log('Response:', data);
         }
