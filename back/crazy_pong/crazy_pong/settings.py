@@ -191,8 +191,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'crazypongreal@hotmail.com'
-EMAIL_HOST_PASSWORD = '125@conBonus'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 SSL_CERTIFICATE = "/certificates/crazy-pong.com_ssl_certificate.cer"
 SSL_KEY = "/certificates/crazy-pong.com_private_key.key"

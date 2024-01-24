@@ -1,15 +1,10 @@
-# from django.shortcuts import render
 import json
 
 import requests
-# from django.conf import settings
-# from django.http import HttpResponse
 from accounts.models import Usermine
 from authentification.authentification import Authentification
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
-# Create your views here.
 
 @csrf_exempt
 def check_42(request):
@@ -26,7 +21,7 @@ def check_42(request):
 	}
 	try:
 		response = requests.post(token_url, data=token_params)
-		response.raise_for_status()  # Check for HTTP errors
+		response.raise_for_status()
 		token_data = response.json()
 		user_info_url = 'https://api.intra.42.fr/v2/me'
 		headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
