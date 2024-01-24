@@ -1,5 +1,7 @@
 // This function have to check for the cookie, and ask to the backend if session is valid one
 // It will respond true or false, dependly if we have valid ot not valid session.
+var url = window.location.hostname;
+
 function have_valid_session()
 {
     fetch(baseUrl + ':8000/users/checkSession//', {
@@ -7,8 +9,10 @@ function have_valid_session()
     })
     .then(response => response.json())
     .then(data => {
-    	if (data.Session == 'True')
+    	if (data.Session == 'True'){
+         socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
     		return true;
+    	}
     	return false;
     })
     .catch(error => {

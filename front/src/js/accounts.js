@@ -56,7 +56,6 @@ function do_logout(){
     .catch(error => {
         console.error('Error:', error);
     });
-
 }
 
 // function handle_ws(){}

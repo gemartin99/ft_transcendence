@@ -115,7 +115,7 @@ def is_online(request):
     user_id = Authentification.decode_jwt_token(jwt_token)
     try:
         user = Usermine.objects.get(id=user_id)
-        return JsonResponse({'Session': 'True'})
+        return JsonResponse({'Session': 'True', 'user': user.id})
     except Usermine.DoesNotExist as e:
         response = JsonResponse({'Session': 'False'})
         response.delete_cookie('jwttoken')
