@@ -52,9 +52,11 @@ function set_logged_out_view()
 
 document.addEventListener('DOMContentLoaded', function () {
    if (have_valid_session() == true){
+   	console.log('es valid');
    	set_logged_in_view()
    }
    else{
+   	console.log('es INVAAAAAAAAAAAAvalid');
    	set_logged_out_view()
    }
 });
