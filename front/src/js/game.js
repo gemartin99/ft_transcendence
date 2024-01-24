@@ -243,7 +243,16 @@ function join_match_sala(e) {
             };         
         }
         else {
-            alert("Codi erroni");
+            lang = getLang();
+            if (lang == 'en') {
+                alert("Wrong code");
+            }
+            else if (lang == 'es') {
+                alert("Código incorrecto");
+            }
+            else if (lang == 'pt') {
+                alert("Código errado");
+            }
         }
     })
     .catch((error) => {
@@ -403,7 +412,16 @@ function obs_match(e) {
             };
         }   
         else {
-            alert("Codi erroni");
+            lang = getLang();
+            if (lang == 'en') {
+                alert("Wrong code");
+            }
+            else if (lang == 'es') {
+                alert("Código incorrecto");
+            }
+            else if (lang == 'pt') {
+                alert("Código errado");
+            }
         }
     })
     .catch((error) => {
