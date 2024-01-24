@@ -52,7 +52,7 @@ def check_42(request):
 			user.save()
 			print(user.name)
 			jwtToken = Authentification.generate_jwt_token(user.id)
-			response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken}
+			response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken, 'user': user.id}
 			return JsonResponse(response_data)
 	except requests.exceptions.RequestException as e:
 		print(f"Error making token request: {e}")
