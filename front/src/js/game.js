@@ -97,11 +97,14 @@ function join_match() {
         console.log('WebSocket connection opened:', event);
     };
     socket.onmessage = (event) => {
-        document.getElementById('gameContainer').style.display = 'block';
-        document.getElementById('waiting').style.display = 'none';
+        try{
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
+        }
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
-        //console.log(jsonData)
+        //console.log(jsonData)g
         if (jsonData['cmd'] == 'start') {
             console.log("ei aixo: " + jsonData)
             if (window.location.href != baseUrl + "/game/play/"){
@@ -140,8 +143,11 @@ function create_match() {
         handleRedirect('/game/play/');
     };
     socket.onmessage = (event) => {
-        document.getElementById('gameContainer').style.display = 'block';
-        document.getElementById('waiting').style.display = 'none';
+        try{
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
+        }
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'start') {
@@ -203,8 +209,11 @@ function join_match_sala(e) {
                 
             };
             socket.onmessage = (event) => {
+                try{
                     document.getElementById('gameContainer').style.display = 'block';
                     document.getElementById('waiting').style.display = 'none';
+                } catch (error) {
+                }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
                 if (jsonData['cmd'] == 'start') {
@@ -254,8 +263,11 @@ function join_IA() {
         
     };
     socket.onmessage = (event) => {
-        document.getElementById('gameContainer').style.display = 'block';
-        document.getElementById('waiting').style.display = 'none';
+        try{
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
+        }
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'start') {
@@ -295,9 +307,11 @@ async function reconnect() {
             
         };
         socket.onmessage = (event) => {
-            
+                try{
                     document.getElementById('gameContainer').style.display = 'block';
                     document.getElementById('waiting').style.display = 'none';
+                } catch (error) {
+                }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
                 if (jsonData['cmd'] == 'start') {
@@ -410,15 +424,19 @@ async function one_vs_one_without_shirt(e) {
 
         socket.onopen = (event) => {
             console.log('WebSocket connection opened:', event);
-            document.getElementById('gameContainer').style.display = 'none';
-            document.getElementById('waiting').style.display = 'block';
+            try{
+                document.getElementById('gameContainer').style.display = 'block';
+                document.getElementById('waiting').style.display = 'none';
+            } catch (error) {
+            }
             
         };
         socket.onmessage = (event) => {
-            //if (in_1vs1 == false) {
-            document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-            //}
+            try{
+                document.getElementById('gameContainer').style.display = 'block';
+                document.getElementById('waiting').style.display = 'none';
+            } catch (error) {
+            }
             in_1vs1 = true
             in_match = true
             const jsonData = JSON.parse(event.data.toString());
@@ -584,8 +602,11 @@ function gameTournamentIA(id, points) {
         
     };
     socket.onmessage = (event) => {
-        document.getElementById('gameContainer').style.display = 'block';
-        document.getElementById('waiting').style.display = 'none';
+        try{
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
+        }
         in_match = true;
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'start') {
