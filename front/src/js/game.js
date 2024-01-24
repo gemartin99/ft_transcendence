@@ -103,6 +103,7 @@ function join_match() {
         const jsonData = JSON.parse(event.data.toString());
         //console.log(jsonData)
         if (jsonData['cmd'] == 'start') {
+            console.log("ei aixo: " + jsonData)
             if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
