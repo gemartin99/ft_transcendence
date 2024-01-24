@@ -8,12 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 from dotenv import load_dotenv
 
-
 @csrf_exempt
 def check_42(request):
 	data = json.loads(request.body.decode('utf-8'))
 	code = data.get('code')
-	print(code)
 	token_url = "https://api.intra.42.fr/oauth/token"
 	token_params = {
 		'grant_type': 'authorization_code',
@@ -30,7 +28,6 @@ def check_42(request):
 		headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
 		user_info_response = requests.get(user_info_url, headers=headers)
 		user_info = user_info_response.json()
-		print(user_info)
 		user_id = user_info.get('id')
 		user_login = user_info.get('login')
 		if user_id:
@@ -48,10 +45,8 @@ def check_42(request):
 			user.online = True
 			user.validated2FA = False
 			user.save()
-			print(user.name)
 			jwtToken = Authentification.generate_jwt_token(user.id)
 			response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken, 'user': user.id}
 			return JsonResponse(response_data)
 	except requests.exceptions.RequestException as e:
-		print(f"Error making token request: {e}")
 		return JsonResponse({'error': 'Token request error'})
