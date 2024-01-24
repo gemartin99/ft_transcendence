@@ -126,11 +126,11 @@ function create_match() {
     
     code = generateRandomString(5)
     socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
-    handleRedirect('/game/play/');
     //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
     console.log(code)
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
+        handleRedirect('/game/play/');
     };
     socket.onmessage = (event) => {
         document.getElementById('gameContainer').style.display = 'block';
