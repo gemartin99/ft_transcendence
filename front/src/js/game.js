@@ -123,9 +123,10 @@ function join_match() {
 }
 
 function create_match() {
-    handleRedirect('/game/play/');
+    
     code = generateRandomString(5)
     socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
+    handleRedirect('/game/play/');
     //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
     console.log(code)
     socket.onopen = (event) => {
@@ -136,6 +137,12 @@ function create_match() {
         document.getElementById('waiting').style.display = 'none';
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
+        if (jsonData['cmd'] == 'start') {
+            if (window.location.href != baseUrl + "/game/play/"){
+                handleRedirect('/game/play/');
+            }
+            printMap(jsonData);
+        }
         if (jsonData['cmd'] == 'update') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             //console.log(jsonData);
@@ -193,11 +200,13 @@ function join_match_sala(e) {
                     document.getElementById('waiting').style.display = 'none';
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
+                if (jsonData['cmd'] == 'start') {
+                    if (window.location.href != baseUrl + "/game/play/"){
+                        handleRedirect('/game/play/');
+                    }
+                    printMap(jsonData);
+                }
                 if (jsonData['cmd'] == 'update') {
-                    //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                    //console.log(jsonData);
-                    //var idMatch = document.getElementById("idMatch");
-                    //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
                     printMap(jsonData);
                 }
                 if (jsonData['cmd'] == 'finish') {
@@ -242,6 +251,12 @@ function join_IA() {
         document.getElementById('waiting').style.display = 'none';
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
+        if (jsonData['cmd'] == 'start') {
+            if (window.location.href != baseUrl + "/game/play/"){
+                handleRedirect('/game/play/');
+            }
+            printMap(jsonData);
+        }
         if (jsonData['cmd'] == 'update') {
             
             in_match = true
@@ -278,6 +293,12 @@ async function reconnect() {
                     document.getElementById('waiting').style.display = 'none';
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
+                if (jsonData['cmd'] == 'start') {
+                    if (window.location.href != baseUrl + "/game/play/"){
+                        handleRedirect('/game/play/');
+                    }
+                    printMap(jsonData);
+                }
                 if (jsonData['cmd'] == 'update') {
                     //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
                     //console.log(jsonData);
@@ -338,7 +359,13 @@ function obs_match(e) {
                 }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
-                console.log(jsonData)
+                console.log(jsonData);
+                if (jsonData['cmd'] == 'start') {
+                    if (window.location.href != baseUrl + "/game/play/"){
+                        handleRedirect('/game/play/');
+                    }
+                    printMap(jsonData);
+                }
                 if (jsonData['cmd'] == 'update') {
                     //#endregio//heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
                     printMap(jsonData);
@@ -388,6 +415,12 @@ async function one_vs_one_without_shirt(e) {
             in_1vs1 = true
             in_match = true
             const jsonData = JSON.parse(event.data.toString());
+            if (jsonData['cmd'] == 'start') {
+                if (window.location.href != baseUrl + "/game/play/"){
+                    handleRedirect('/game/play/');
+                }
+                printMap(jsonData);
+            }
             if (jsonData['cmd'] == 'update') {
                 in_match = true
                 //console.log(jsonData);
@@ -513,9 +546,7 @@ function gameTournament(id, points) {
         in_match = true;
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'start') {
-            console.log("HOLA ESTIC AQUI" + window.location.href)
-            if (window.location.href != "http://localhost/game/play/"){
-                console.log("LISDBVJKSBFJKVBJLFBNJ<DFBVJKBF")
+            if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
             printMap(jsonData);
@@ -551,9 +582,10 @@ function gameTournamentIA(id, points) {
         in_match = true;
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'start') {
-            if (window.location.href != "http://localhost/game/play/"){
+            if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
+            printMap(jsonData);
         }
         if (jsonData['cmd'] == 'update') {
             printMap(jsonData);
