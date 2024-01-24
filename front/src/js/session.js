@@ -12,9 +12,11 @@ function have_valid_session()
     	console.log('data.session:',data);
     	if (data.Session == 'True'){
          socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
+         set_logged_in_view();
     		return true;
     	}
     	else if (data.Session == 'False'){
+    		set_logged_out_view();
 	    	return false;
     	}
     })
@@ -52,12 +54,5 @@ function set_logged_out_view()
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-   if (have_valid_session() == true){
-   	console.log('es valid');
-   	set_logged_in_view()
-   }
-   else{
-   	console.log('es INVAAAAAAAAAAAAvalid');
-   	set_logged_out_view()
-   }
+   have_valid_session();
 });
