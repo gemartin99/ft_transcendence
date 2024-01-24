@@ -54,5 +54,8 @@ function set_logged_out_view()
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-   have_valid_session();
+	var codeValue = getParameterByName('code');
+
+	if (codeValue == null)
+	   have_valid_session();
 });
