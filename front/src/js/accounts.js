@@ -2,6 +2,7 @@
 
 // url = "crazy-pong.com"
 var url = window.location.hostname;
+var socket;
 
 //baseurl = "http://crazy-pong.com"
 // baseurl = "http://localhost";
@@ -29,6 +30,12 @@ function logoutTest(){
     console.log('he entrado');
     document.cookie = "jwttoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
+
+// function do_logout(){
+//  socket.close();
+// }
+
+// function handle_ws(){}
 
 function send_login_form(e)  {
     e.preventDefault();
@@ -59,13 +66,14 @@ function send_login_form(e)  {
             document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
         console.log('jwttoken:', data.jwtToken);
 
-
+        console.log('data', data);
         if (getCookie('jwttoken')) {
             set_logged_in_view();
             setFormMessage(loginForm, "success", "Congratulations you have nice memory");
             history.pushState(null, null, '/');
             handleNavLinkAction('/');
-            const socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
+            console.log("my user id:" + data.user)
+            socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
             set_logged_out_view();

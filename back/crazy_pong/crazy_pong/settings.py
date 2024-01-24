@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
 from pathlib import Path
-
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -155,7 +154,7 @@ STATIC_URL = 'static/'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
-    "http://10.11.3.3",
+    "https://10.11.3.3",
 ]
     # "http://10.11.14.3",
 
@@ -182,7 +181,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://crazy-pong.com",
     "https://localhost:8080",
-    "http://10.11.3.3",
+    "https://10.11.3.3",
 ]
     # "http://10.11.14.3",
 
@@ -223,4 +222,3 @@ EMAIL_HOST_PASSWORD = '125@conBonus'
 #     'social_core.backends.oauth.OAuthAuth',
 # )
 # NO VA
-

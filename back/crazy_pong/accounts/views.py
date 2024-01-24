@@ -101,7 +101,8 @@ def logout(request):
     user_id = Authentification.decode_jwt_token(jwt_token)
     try:
         user = Usermine.objects.get(id=user_id)
-        user.online = False
+        # user.online = False
+        
         user.save()
         response = JsonResponse({'redirect': '/'})
     except Usermine.DoesNotExist as e:

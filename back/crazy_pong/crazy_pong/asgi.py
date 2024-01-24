@@ -8,22 +8,24 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
 import os
-
+import django
 from django.core.asgi import get_asgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crazy_pong.settings')
-
 application = get_asgi_application()
-
 
 import accounts.routing
 import game.routing
-##added
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 
+django.setup()
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crazy_pong.settings')
+
+
+
+
 application = ProtocolTypeRouter({
-     'http': get_asgi_application(), 
+     'https': get_asgi_application(), 
      'websocket': AuthMiddlewareStack(
         URLRouter(
             game.routing.websocket_urlpatterns +
@@ -31,3 +33,4 @@ application = ProtocolTypeRouter({
         )
      )
  })
+

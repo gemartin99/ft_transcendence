@@ -138,7 +138,7 @@ class Accounts:
                 user.online = True
                 user.save()
                 jwtToken = Authentification.generate_jwt_token(user.id)
-                response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken}
+                response_data = {'message': 'logued', 'google2FA': user.google2FA, 'mail2FA': user.mail2FA, 'jwtToken': jwtToken, "user": user.id}
                 return response_data, None
             else:
                 user.save()

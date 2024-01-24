@@ -200,7 +200,7 @@
 				  <br>
 				  <div class="options">
                     <a href="/users/register" class="navlink" >Register</a>
-                    <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0&redirect_uri=http%3A%2F%2Flocalhost&response_type=code" class="navlink">Login 42</a>
+                    <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0&redirect_uri=https%3A%2F%2Fcrazy-pong.com&response_type=code" class="navlink">Login 42</a>
                     <a href="/users/login" class="navlink" >Login</a>
                   </div>
 			  </div>
@@ -230,7 +230,7 @@
 			  showonline.addEventListener('click', function() {
 			    console.log('Trying to print online users.');
 
-			    fetch("http://localhost:8000/users/showonline/", {
+			    fetch("https://crazy-pong.com:8000/users/showonline/", {
 			    	credentials: 'include',
 			    })
 			      .then(response => response.json())

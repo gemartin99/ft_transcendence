@@ -35,7 +35,16 @@ function createTournament(e) {
             console.error('Error:', error);
         });}
     else{
-        alert("You must enter a name");
+            lang = getLang();
+            if (lang == 'en') {
+                alert("You must enter a name for the tournament");
+            }
+            else if (lang == 'es') {
+                alert("Debes introducir un nombre para el torneo");
+            }
+            else if (lang == 'pt') {
+                alert("Você deve inserir um nome para o torneio");
+            }
     }
 }
 
@@ -82,7 +91,7 @@ function updateLobby() {
 
             
             var tournament_id = document.getElementById("lobbyCode");
-            tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament;
+            tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament + ' 📋';
             console.log('id:', data.id);
             console.log('Response:', data);
         }
@@ -155,7 +164,16 @@ function joinTournament(e) {
             handleRedirect("/tournament/lobbyPage/");
         }
         else
-            alert("Invalid lobby code or tournament already started");
+            lang = getLang();
+            if (lang == 'en') {
+                alert("Invalid lobby code or tournament already started");
+            }
+            else if (lang == 'es') {
+                alert("Codigo incorrecto o torneo empezado");
+            }
+            else if (lang == 'pt') {
+                alert("Código de lobby inválido ou torneio já iniciado");
+            }
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -308,6 +326,4 @@ function myFunction() {
     console.log(copyText.textContent);
      // Copy the text inside the text field
     navigator.clipboard.writeText(copyText.textContent.substring(12, copyText.textContent.length -3));
-  
-    // Alert the copied text
-  }
+}

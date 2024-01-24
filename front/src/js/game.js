@@ -97,13 +97,21 @@ function join_match() {
         console.log('WebSocket connection opened:', event);
     };
     socket.onmessage = (event) => {
-        if (in_match == false) {
+        try{
             document.getElementById('gameContainer').style.display = 'block';
             document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
         }
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
-        //console.log(jsonData)
+        //console.log(jsonData)g
+        if (jsonData['cmd'] == 'start') {
+            console.log("ei aixo: " + jsonData)
+            if (window.location.href != baseUrl + "/game/play/"){
+                handleRedirect('/game/play/');
+            }
+            printMap(jsonData);
+        }
         if (jsonData['cmd'] == 'update') {
             printMap(jsonData);
         }
@@ -125,21 +133,29 @@ function join_match() {
 }
 
 function create_match() {
-    handleRedirect('/game/play/');
+    
     code = generateRandomString(5)
     socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
     //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
     console.log(code)
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
+        handleRedirect('/game/play/');
     };
     socket.onmessage = (event) => {
-        if (in_match == false) {
+        try{
             document.getElementById('gameContainer').style.display = 'block';
             document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
         }
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
+        if (jsonData['cmd'] == 'start') {
+            if (window.location.href != baseUrl + "/game/play/"){
+                handleRedirect('/game/play/');
+            }
+            printMap(jsonData);
+        }
         if (jsonData['cmd'] == 'update') {
             //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
             //console.log(jsonData);
@@ -186,24 +202,27 @@ function join_match_sala(e) {
         if (data.code == 200){
             handleRedirect('/game/play/');
 
-            socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
+    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
     
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);
                 
             };
             socket.onmessage = (event) => {
-                if (in_match == false) {
+                try{
                     document.getElementById('gameContainer').style.display = 'block';
                     document.getElementById('waiting').style.display = 'none';
+                } catch (error) {
                 }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
+                if (jsonData['cmd'] == 'start') {
+                    if (window.location.href != baseUrl + "/game/play/"){
+                        handleRedirect('/game/play/');
+                    }
+                    printMap(jsonData);
+                }
                 if (jsonData['cmd'] == 'update') {
-                    //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                    //console.log(jsonData);
-                    //var idMatch = document.getElementById("idMatch");
-                    //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
                     printMap(jsonData);
                 }
                 if (jsonData['cmd'] == 'finish') {
@@ -224,7 +243,16 @@ function join_match_sala(e) {
             };         
         }
         else {
-            alert("Codi erroni");
+            lang = getLang();
+            if (lang == 'en') {
+                alert("Wrong code");
+            }
+            else if (lang == 'es') {
+                alert("Código incorrecto");
+            }
+            else if (lang == 'pt') {
+                alert("Código errado");
+            }
         }
     })
     .catch((error) => {
@@ -244,10 +272,19 @@ function join_IA() {
         
     };
     socket.onmessage = (event) => {
-        document.getElementById('gameContainer').style.display = 'block';
-        document.getElementById('waiting').style.display = 'none';
+        try{
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
+        }
         in_match = true
         const jsonData = JSON.parse(event.data.toString());
+        if (jsonData['cmd'] == 'start') {
+            if (window.location.href != baseUrl + "/game/play/"){
+                handleRedirect('/game/play/');
+            }
+            printMap(jsonData);
+        }
         if (jsonData['cmd'] == 'update') {
             
             in_match = true
@@ -271,7 +308,7 @@ function join_IA() {
 async function reconnect() {
     await new Promise(r => setTimeout(r, 300));
     console.log("ei aixo1: " + window.location.href + " sck: " + socket);
-    if (socket == null && window.location.href == "http://localhost/game/play/"){
+    if (socket == null && window.location.href == "http://crazy-pong.com/game/play/"){
         console.log("ei aixo: " + window.location.href);
         socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
         socket.onopen = (event) => {
@@ -279,11 +316,19 @@ async function reconnect() {
             
         };
         socket.onmessage = (event) => {
-            
+                try{
                     document.getElementById('gameContainer').style.display = 'block';
                     document.getElementById('waiting').style.display = 'none';
+                } catch (error) {
+                }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
+                if (jsonData['cmd'] == 'start') {
+                    if (window.location.href != baseUrl + "/game/play/"){
+                        handleRedirect('/game/play/');
+                    }
+                    printMap(jsonData);
+                }
                 if (jsonData['cmd'] == 'update') {
                     //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
                     //console.log(jsonData);
@@ -344,7 +389,13 @@ function obs_match(e) {
                 }
                 in_match = true
                 const jsonData = JSON.parse(event.data.toString());
-                console.log(jsonData)
+                console.log(jsonData);
+                if (jsonData['cmd'] == 'start') {
+                    if (window.location.href != baseUrl + "/game/play/"){
+                        handleRedirect('/game/play/');
+                    }
+                    printMap(jsonData);
+                }
                 if (jsonData['cmd'] == 'update') {
                     //#endregio//heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
                     printMap(jsonData);
@@ -361,7 +412,16 @@ function obs_match(e) {
             };
         }   
         else {
-            alert("Codi erroni");
+            lang = getLang();
+            if (lang == 'en') {
+                alert("Wrong code");
+            }
+            else if (lang == 'es') {
+                alert("Código incorrecto");
+            }
+            else if (lang == 'pt') {
+                alert("Código errado");
+            }
         }
     })
     .catch((error) => {
@@ -382,18 +442,28 @@ async function one_vs_one_without_shirt(e) {
 
         socket.onopen = (event) => {
             console.log('WebSocket connection opened:', event);
-            document.getElementById('gameContainer').style.display = 'none';
-            document.getElementById('waiting').style.display = 'block';
+            try{
+                document.getElementById('gameContainer').style.display = 'block';
+                document.getElementById('waiting').style.display = 'none';
+            } catch (error) {
+            }
             
         };
         socket.onmessage = (event) => {
-            //if (in_1vs1 == false) {
-            document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-            //}
+            try{
+                document.getElementById('gameContainer').style.display = 'block';
+                document.getElementById('waiting').style.display = 'none';
+            } catch (error) {
+            }
             in_1vs1 = true
             in_match = true
             const jsonData = JSON.parse(event.data.toString());
+            if (jsonData['cmd'] == 'start') {
+                if (window.location.href != baseUrl + "/game/play/"){
+                    handleRedirect('/game/play/');
+                }
+                printMap(jsonData);
+            }
             if (jsonData['cmd'] == 'update') {
                 in_match = true
                 //console.log(jsonData);
@@ -519,9 +589,7 @@ function gameTournament(id, points) {
         in_match = true;
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'start') {
-            console.log("HOLA ESTIC AQUI" + window.location.href)
-            if (window.location.href != "http://localhost/game/play/"){
-                console.log("LISDBVJKSBFJKVBJLFBNJ<DFBVJKBF")
+            if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
             printMap(jsonData);
@@ -552,14 +620,18 @@ function gameTournamentIA(id, points) {
         
     };
     socket.onmessage = (event) => {
-        document.getElementById('gameContainer').style.display = 'block';
-        document.getElementById('waiting').style.display = 'none';
+        try{
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
+        }
         in_match = true;
         const jsonData = JSON.parse(event.data.toString());
         if (jsonData['cmd'] == 'start') {
-            if (window.location.href != "http://localhost/game/play/"){
+            if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
+            printMap(jsonData);
         }
         if (jsonData['cmd'] == 'update') {
             printMap(jsonData);

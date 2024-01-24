@@ -193,7 +193,15 @@ class gameConnection(AsyncWebsocketConsumer):
                     if first:
                         first = False
                         await self.startConnection(state)
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(0.2)
+                        await self.startConnection(state)
+                        await asyncio.sleep(0.2)
+                        await self.startConnection(state)
+                        await asyncio.sleep(0.2)
+                        await self.startConnection(state)
+                        await asyncio.sleep(0.2)
+                        await self.startConnection(state)
+                        await asyncio.sleep(0.2)
                     self.game_ctrl.updateGame()
                     if self.game_ctrl.ended():
                         if (self.mode != '1vs1'):
