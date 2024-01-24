@@ -56,6 +56,8 @@ function set_logged_out_view()
 document.addEventListener('DOMContentLoaded', function () {
 	var codeValue = getParameterByName('code');
 
-	if (codeValue == null)
-	   have_valid_session();
+	console.log('codeValue sessions:', codeValue);
+	if (codeValue !== null)
+		return;
+   have_valid_session();
 });
