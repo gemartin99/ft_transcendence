@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	var codeValue = getParameterByName('code');
 
 	console.log('codeValue sessions:', codeValue);
-	if (codeValue !== null)
-		return;
-   have_valid_session();
+	if (codeValue == null)
+	   have_valid_session();
 });
