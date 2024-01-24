@@ -119,7 +119,7 @@ def is_online(request):
     except Usermine.DoesNotExist as e:
         response = JsonResponse({'Session': 'False'})
         response.delete_cookie('jwttoken')
-        return return response
+        return response
 
 
 @csrf_exempt
