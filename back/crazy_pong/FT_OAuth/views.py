@@ -22,7 +22,7 @@ def check_42(request):
 		'code': code,
 		'client_id': 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0',
 		'client_secret': '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',
-		'redirect_uri': 'http://localhost',
+		'redirect_uri': 'https://crazy-pong.com',
 	}
 	try:
 		response = requests.post(token_url, data=token_params)
