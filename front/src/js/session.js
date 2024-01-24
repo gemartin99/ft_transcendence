@@ -9,6 +9,7 @@ function have_valid_session()
     })
     .then(response => response.json())
     .then(data => {
+    	console.log('data.session:',data);
     	if (data.Session == 'True'){
          socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
     		return true;
