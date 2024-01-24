@@ -65,6 +65,7 @@ function send_login_form(e)  {
             setFormMessage(loginForm, "success", "Congratulations you have nice memory");
             history.pushState(null, null, '/');
             handleNavLinkAction('/');
+            console.log("my user id:" + data.user)
             const socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
