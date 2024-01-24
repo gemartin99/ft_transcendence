@@ -43,7 +43,7 @@ function do_logout(){
     .then(data => {
         console.log('Response from backend:', data);
         socket.close();
-        else if (data.redirect) {
+        if (data.redirect) {
             handleRedirect(data.redirect);
             return ;
             console.log('Invalid response from backend 1', data.redirect);
