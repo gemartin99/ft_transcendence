@@ -2,7 +2,7 @@
 
 // url = "crazy-pong.com"
 var url = window.location.hostname;
-var socket;
+var sessionSocket;
 
 //baseurl = "http://crazy-pong.com"
 // baseurl = "http://localhost";
@@ -42,7 +42,7 @@ function do_logout(){
     .then(response => response.json())
     .then(data => {
         console.log('Response from backend:', data);
-        socket.close();
+        sessionSocket.close();
         if (data.redirect) {
             handleRedirect(data.redirect);
             return ;
@@ -96,7 +96,7 @@ function send_login_form(e)  {
             history.pushState(null, null, '/');
             handleNavLinkAction('/');
             console.log("my user id:" + data.user)
-            socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
+            sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
             set_logged_out_view();

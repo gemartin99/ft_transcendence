@@ -11,7 +11,7 @@ function have_valid_session()
     .then(data => {
     	console.log('data.session:',data);
     	if (data.Session == 'True'){
-         socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
+         sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
          set_logged_in_view();
     		return true;
     	}
