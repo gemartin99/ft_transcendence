@@ -13,7 +13,9 @@ function have_valid_session()
          socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
     		return true;
     	}
-    	return false;
+    	else if (data.Session == 'False'){
+	    	return false;
+    	}
     })
     .catch(error => {
         console.error('Error:', error);
