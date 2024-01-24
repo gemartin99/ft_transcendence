@@ -59,6 +59,7 @@ function	checkURLCode(){
 	            const socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
 	        }
 	        else {
+	        	console.log('pelada historica');
 	            set_logged_out_view();
 	        }
 
