@@ -73,7 +73,7 @@ function send_login_form(e)  {
             history.pushState(null, null, '/');
             handleNavLinkAction('/');
             console.log("my user id:" + data.user)
-            socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
+            socket = new WebSocket('ws://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
             set_logged_out_view();

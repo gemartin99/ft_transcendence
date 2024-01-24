@@ -33,22 +33,20 @@ MEDIA_URL = '/media/'
 SECRET_KEY = 'django-insecure--=!#=6-=b1$xrc=$@7o1s#orkkuskzn+fsx(z&t_4377sisfze'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '*.localhost*', 'crazy-pong.com', '*.crazy-pong.com', '82.223.64.71']
+ALLOWED_HOSTS = ['localhost', '*.localhost*', 'crazy-pong.com', '*.crazy-pong.com', '10.11.3.3', '*10.11.3.3']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sslserver',
     'game',
     'corsheaders',
     'crazy_pong',
@@ -58,7 +56,7 @@ INSTALLED_APPS = [
     'twoFA',
     'tournament',
     'authentification',
-    'profile'
+    'profile',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +69,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
@@ -150,6 +150,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://crazy-pong.com",
+    "https://10.11.3.3",
+]
+    # "http://10.11.14.3",
+
 CORS_ALLOW_CREDENTIALS = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -170,10 +178,8 @@ CHANNEL_LAYERS = {
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost",
     "http://localhost",
     "http://crazy-pong.com",
-    "https://crazy-pong.com",
     "https://localhost:8080",
     "https://10.11.3.3",
 ]
@@ -187,29 +193,32 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'crazypongreal@hotmail.com'
+EMAIL_HOST_PASSWORD = '125@conBonus'
 
-SSL_CERTIFICATE = os.getenv('SSL_CERTIFICATE')
-SSL_KEY = os.getenv('SSL_KEY')
-# SSL_CA = "/certificates/intermediate-ca.pem"
+# NO VA
 
-SECURE_SSL_REDIRECT = True
+# OAUTH2_CLIENT_ID = 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0'
+# OAUTH2_CLIENT_SECRET = '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'
+# OAUTH2_REDIRECT_URI = 'http://localhost'
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'root': {
-#         'handlers': ['console'],
-#         'level': 'INFO',
-#     },
-# }
+
+# SOCIAL_AUTH_42_KEY = 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0'
+# SOCIAL_AUTH_42_SECRET = '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'
+# SOCIAL_AUTH_42_SCOPE = ['public', 'profile', 'email']
+# SOCIAL_AUTH_42_AUTH_EXTRA_ARGUMENTS = {'response_type': 'code'}
+
+# LOGIN_URL = 'login'
+# LOGOUT_URL = 'logout'
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/'
+
+
+# AUTHENTICATION_BACKENDS = (
+#     'social_core.backends.oauth.OAuthAuth',
+# )
+# NO VA
