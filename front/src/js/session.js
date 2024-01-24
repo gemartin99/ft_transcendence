@@ -4,7 +4,7 @@ var url = window.location.hostname;
 
 function have_valid_session()
 {
-    fetch(baseUrl + ':8000/users/checkSession//', {
+    fetch(baseUrl + ':8000/users/checkSession/', {
         credentials: 'include',
     })
     .then(response => response.json())
