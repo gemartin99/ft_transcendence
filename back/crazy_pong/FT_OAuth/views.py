@@ -15,15 +15,15 @@ def check_42(request):
 	token_params = {
 		'grant_type': 'authorization_code',
 		'code': code,
-		'client_id': 'u-s4t2ud-2c2ec0c7f84e7050052f58ecb3b512a3e2182827b1fa480faece0ffed304acc0',
-		'client_secret': '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',
-		'redirect_uri': 'https://crazy-pong.com',
+		'client_id': os.getenv('CLIENTID'),
+		'client_secret': os.getenv('CLIENTSECRET'),
+		'redirect_uri': os.getenv('REDIRECTURI'),
 	}
 	try:
 		response = requests.post(token_url, data=token_params)
 		response.raise_for_status()
 		token_data = response.json()
-		user_info_url = 'https://api.intra.42.fr/v2/me'
+		user_info_url = os.getenv('INFOURL')
 		headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
 		user_info_response = requests.get(user_info_url, headers=headers)
 		user_info = user_info_response.json()

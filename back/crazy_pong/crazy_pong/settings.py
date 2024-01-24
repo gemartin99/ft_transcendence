@@ -33,7 +33,7 @@ MEDIA_URL = '/media/'
 SECRET_KEY = 'django-insecure--=!#=6-=b1$xrc=$@7o1s#orkkuskzn+fsx(z&t_4377sisfze'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '*.localhost*', 'crazy-pong.com', '*.crazy-pong.com', '82.223.64.71']
 
@@ -187,29 +187,29 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-SSL_CERTIFICATE = "/certificates/crazy-pong.com_ssl_certificate.cer"
-SSL_KEY = "/certificates/crazy-pong.com_private_key.key"
+SSL_CERTIFICATE = os.getenv('SSL_CERTIFICATE')
+SSL_KEY = os.getenv('SSL_KEY')
 # SSL_CA = "/certificates/intermediate-ca.pem"
 
 SECURE_SSL_REDIRECT = True
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'INFO',
+#     },
+# }

@@ -68,13 +68,13 @@ def get_register_new_account_page(request):
     }
     return JsonResponse(data)
 
-def change_view(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-        # Add other variables as needed
-    }
-    return render(request, 'home/index.html', context)
+# def change_view(request):
+#     context = {
+#         'variable1': 'template variable 1',
+#         'variable2': 'template variable 2',
+#         # Add other variables as needed
+#     }
+#     return render(request, 'home/index.html', context)
 
 @csrf_exempt 
 def create_account(request): 
