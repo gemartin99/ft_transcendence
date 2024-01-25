@@ -31,6 +31,12 @@ class Match():
     def getu2(self):
         return self.res['u2']
     
+    def getp1(self):
+        return self.res['p1']
+    
+    def getp2(self):
+        return self.res['p2']
+    
     def setu1(self, u1):
         self.res['u1'] = u1
     
