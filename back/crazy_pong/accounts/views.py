@@ -144,6 +144,7 @@ def show_online(request):
     print('onlinejwt:',jwt_token)
     print('uid:', user_id)
     all_users = Usermine.objects.all()
+    print("SOY IMBECIL" + user.name)
     for user in all_users:
     #     last_5_matches = user.get_last_5_matches()
     #     for match in last_5_matches:
@@ -158,7 +159,7 @@ def show_online(request):
         print(f"User: {user.name}, Playing: {user.playing}, id: {user.id}")
         user.playing = False
         user.inTournament = 0
-        print("SOY IMBECIL" + user.name)
+        
         user.save()
         # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})
