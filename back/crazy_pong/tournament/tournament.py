@@ -127,7 +127,7 @@ class Tournament:
                         self.bracket[i].setp1(m.player2_score)
                         self.bracket[i].setp2(m.player1_score)
 
-                    if (m.player1_score > m.player2_score):
+                    if (self.bracket[i].getp1() > self.bracket[i].getp2()):
                         if (i % 2 == 1):
                             self.bracket[int((i-1) / 2) ].setu1(match['u1'])
                         else:
@@ -137,6 +137,8 @@ class Tournament:
                             self.bracket[int((i-1) / 2) ].setu1(match['u2'])
                         else:
                             self.bracket[int((i-2) / 2) ].setu2(match['u2'])
+
+
                 if (match['u1'][0:4] == "Bot " and match['u2'][0:4] == "Bot " and not match['played']):
                     match['played'] = True
                     if (random.randint(0,1) == 0):
