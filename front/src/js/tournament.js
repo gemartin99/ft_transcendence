@@ -166,9 +166,6 @@ function joinTournament(e) {
         if (data.code == 200){
             in_tournament = document.getElementById("lobbyCode").value;
             handleRedirect("/tournament/lobbyPage/");
-            console.log("PRE AUTOMATIC");
-            automaticLobby();
-            console.log("POST AUTOMATIC");
         }
         else{
             lang = getLang();
@@ -241,7 +238,6 @@ function getTournament(){
         console.log('Response:', data.code);
         if (data.content) {
             content.innerHTML = data.content;
-            automaticTournament();
         }
         else if (data.redirect) {
             handleRedirect(data.redirect);

@@ -124,6 +124,10 @@ function handleNavLinkClick(event) {
         }
         
         handleNavLinks()
+        if (event == "/tournament/lobbyPage")
+            automaticLobby();
+        else if (event == "tournament/bracketPage")
+            automaticBracket();
     })
     .catch(error => {
         console.error('Error:', error);
