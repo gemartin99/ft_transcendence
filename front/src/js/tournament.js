@@ -29,6 +29,7 @@ function createTournament(e) {
             console.log('EIEIEISIUSPLAU:', data.code);
             in_tournament = data.code;
             if (data.redirect)
+                updateLobby();
                 handleRedirect(data.redirect);
         })
         .catch((error) => {
