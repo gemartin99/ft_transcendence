@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (get_create_game_page, get_game_page, get_join_game_page,
-                    get_play_page, get_private_game_page, get_view_page, get_1vs1_game_page, canJoin, canView)
+                    get_play_page, get_private_game_page, get_view_page, get_1vs1_game_page, canJoin, canView, quitQueue)
 
 urlpatterns = [
     path('', get_game_page, name='get_game_page'),
@@ -13,5 +13,5 @@ urlpatterns = [
     path('1vs1_game/', get_1vs1_game_page, name='get_1vs1_game_page'),
     path('canJoin/', canJoin, name='canJoin'),
     path('canView/', canView, name='canView'),
-    path('quit/', quit, name='quit')
+    path('quitQueue/', quitQueue, name='quitQueue')
 ]

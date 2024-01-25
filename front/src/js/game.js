@@ -490,7 +490,7 @@ async function one_vs_one_without_shirt(e) {
 function quitQueue() {
     const message = {quit: "quitting",
             };
-    fetch(baseUrl + ':8000/game/quit/', {
+    fetch(baseUrl + ':8000/game/quitQueue/', {
         // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
         method: 'POST',
         headers: {
