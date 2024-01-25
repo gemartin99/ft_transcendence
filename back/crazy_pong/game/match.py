@@ -78,11 +78,11 @@ class GameManager():
             if (paddle1['y'] < 0):
                 paddle1['y'] += paddle1['vy']
             elif (paddle1['y'] + paddle1['height'] > 750):
-                paddle1['y'] = 750 - paddle1['height']
+                paddle1['y'] -= paddle1['vy']
             if (paddle2['y'] < 0):
-                paddle2['y'] = paddle2['vy']
+                paddle2['y'] += paddle1['vy']
             elif (paddle2['y'] + paddle2['height'] > 750):
-                paddle2['y'] = 750 - paddle2['height']
+                paddle2['y'] -= paddle2['vy']
             
                 
 
