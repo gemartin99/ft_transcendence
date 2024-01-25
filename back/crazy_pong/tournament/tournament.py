@@ -71,6 +71,8 @@ class Tournament:
 
         if (self.start or len(self.players) == self.n):
             return False
+        if (len(self.players) == 0):
+            self.creator = user.name
         inserted = False
         while not inserted:
             pos = random.randint(0, self.n -1)
@@ -191,4 +193,6 @@ class Tournament:
             if pl.name == name:
                 self.players.remove(pl)
                 return
-                
+        if (self.creator == name):
+            if (len(self.players) > 0):
+                self.creator = self.players[0].name
