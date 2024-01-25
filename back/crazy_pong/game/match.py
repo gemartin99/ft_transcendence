@@ -75,12 +75,12 @@ class GameManager():
                     paddle2['y'] += paddle2['vy'] * self.segfaultThink_v2(False)
                 self.IAcount += 1
             
-            if (paddle1['y'] < 10):
-                paddle1['y'] = 0
+            if (paddle1['y'] < 0):
+                paddle1['y'] += paddle1['vy']
             elif (paddle1['y'] + paddle1['height'] > 750):
                 paddle1['y'] = 750 - paddle1['height']
             if (paddle2['y'] < 0):
-                paddle2['y'] = 0
+                paddle2['y'] = paddle2['vy']
             elif (paddle2['y'] + paddle2['height'] > 750):
                 paddle2['y'] = 750 - paddle2['height']
             
