@@ -71,12 +71,12 @@ class Tournament:
                 current = self.bracket[int(self.n/2 -1) + pos].getu1()
                 if current != "IA" and current.substring(0,4) != "Bot ":
                     inserted = True
-                    self.bracket[int(self.n/2 -1) + pos].setu1(user.name)
+                    self.bracket[int(self.n/2 -1) + pos/2].setu1(user.name)
             else:
                 current = self.bracket[int(self.n/2 -1) + pos].getu2()
                 if current != "IA" and current.substring(0,4) != "Bot ":
                     inserted = True
-                    self.bracket[int(self.n/2 -1) + pos].setu2(user.name)
+                    self.bracket[int(self.n/2 -1) + pos/2].setu2(user.name)
         
         self.players.append(user)
         user.inTournament = 1
