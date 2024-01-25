@@ -82,12 +82,10 @@ function handleRedirect(redirect_url) {
         } else {
             console.log('Invalid response from backend 1', data);
         }
-        console.log('debug 1')
         handleNavLinks()
-        console.log('debug 2')
         if (redirect_url == "/tournament/lobbyPage/")
             automaticLobby();
-        else if (redirect_url == "tournament/bracketPage/")
+        else if (redirect_url == "/tournament/bracketPage/")
             automaticBracket();
     })
     .catch(error => {
