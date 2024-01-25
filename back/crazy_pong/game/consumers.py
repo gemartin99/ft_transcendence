@@ -73,6 +73,7 @@ class gameConnection(AsyncWebsocketConsumer):
         
         if (self.mode == 'reconnect'):
             self.game, paddle = MatchManager.reconnect(self.user_id, self.user_name)
+            print("debug: " + str(self.game + " " + str(paddle))) 
             if (self.game == True):
                 print("hola adeu " + str(self.game))
                 await self.channel_layer.group_add(self.game, self.channel_name)
