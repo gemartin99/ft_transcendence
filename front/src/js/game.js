@@ -488,7 +488,7 @@ async function one_vs_one_without_shirt(e) {
 
 
 function quitQueue() {
-    const message = {idMatch: document.getElementById("lobbYCode").value,
+    const message = {quit: "quitting",
             };
     fetch(baseUrl + ':8000/game/quit/', {
         // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
