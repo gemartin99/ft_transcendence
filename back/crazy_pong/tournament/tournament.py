@@ -64,12 +64,21 @@ class Tournament:
 
         if (self.start or len(self.players) == self.n):
             return False
-        if (len(self.players) % 2 == 0):
-            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu1(user.name)
-        else:
-            self.bracket[int(self.n/2 -1) + int(len(self.players)/2)].setu2(user.name)
+        inserted = False
+        while not inserted:
+            pos = random.randint(0, len(self.n))
+            if (pos % 2 == 0):
+                current = self.bracket[int(self.n/2 -1) + pos].getu1()
+                if current != "IA" and current.substring(0,4) != "Bot ":
+                    inserted = True
+                    self.bracket[int(self.n/2 -1) + pos].setu1(user.name)
+            else:
+                current = self.bracket[int(self.n/2 -1) + pos].getu2()
+                if current != "IA" and current.substring(0,4) != "Bot ":
+                    inserted = True
+                    self.bracket[int(self.n/2 -1) + pos].setu2(user.name)
+        
         self.players.append(user)
-
         user.inTournament = 1
         user.tournament_id = self.id
         user.save()
@@ -78,7 +87,6 @@ class Tournament:
             
 
     def get(self, player):
-        
         for m in self.bracket:
             print(m.get())
 
