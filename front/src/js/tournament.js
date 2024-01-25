@@ -89,14 +89,15 @@ function updateLobby() {
             document.getElementById("p6").textContent = players[5];
             document.getElementById("p7").textContent = players[6];
             document.getElementById("p8").textContent = players[7];
-            }catch(err){
-            }
+            
 
             
             var tournament_id = document.getElementById("lobbyCode");
             tournament_id.textContent = "LOBBY CODE: " + data.info.idTournament + ' 📋';
             console.log('id:', data.id);
             console.log('Response:', data);
+            }catch(err){
+            }
         }
     })
     .catch((error) => {
