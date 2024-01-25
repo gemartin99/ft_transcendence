@@ -492,10 +492,11 @@ function quitQueue() {
         const message = { cmd: 'quit',
                     };
         socket.send(JSON.stringify(message));
+        socket.close();
     }
     handleRedirect('/game/');
-    socket.close();
-    scoket = null;
+    
+    socket = null;
 }
 function drawBall(ball) {
     const canvas = document.getElementById('gameCanvas');
