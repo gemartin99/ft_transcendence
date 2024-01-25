@@ -80,7 +80,7 @@ function updateLobby() {
                         players[i++] = data[key].u2;
                 }
             }
-
+            try{
             document.getElementById("p1").textContent = players[0];
             document.getElementById("p2").textContent = players[1];
             document.getElementById("p3").textContent = players[2];
@@ -89,6 +89,8 @@ function updateLobby() {
             document.getElementById("p6").textContent = players[5];
             document.getElementById("p7").textContent = players[6];
             document.getElementById("p8").textContent = players[7];
+            }catch(err){
+            }
 
             
             var tournament_id = document.getElementById("lobbyCode");
