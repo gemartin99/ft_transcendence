@@ -72,7 +72,7 @@ class MatchManager:
     def looking_for_match(cls, uid, name, game):
         if (game == None):
             for match in cls.threads:
-                if cls.threads[match]['paddle_two'] == False:
+                if cls.threads[match]['paddle_two'] == False and cls.threads[match]['mode'] == 'search':
                     cls.matches[match]["player2"]["id"] = uid
                     cls.matches[match]["player2"]["name"] = name
                     return match
