@@ -192,7 +192,6 @@ class Tournament:
         for pl in self.players:
             if pl.name == name:
                 self.players.remove(pl)
-                return
         if (self.creator == name):
             if (len(self.players) > 0):
                 self.creator = self.players[0].name
