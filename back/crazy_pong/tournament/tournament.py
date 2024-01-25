@@ -67,17 +67,15 @@ class Tournament:
         inserted = False
         while not inserted:
             pos = random.randint(0, self.n -1)
-            print(pos)
             if (pos % 2 == 0):
                 current = self.bracket[int(self.n/2 -1) + int(pos/2)].getu1()
-                print(':' + current[0:4] + ':')
-                if current != "IA" and current[0:4] != "Bot":
+
+                if current == "IA" or current[0:4] == "Bot":
                     inserted = True
                     self.bracket[int(self.n/2 -1) + int(pos/2)].setu1(user.name)
             else:
                 current = self.bracket[int(self.n/2 -1) + int(pos/2)].getu2()
-                print(current[0:4])
-                if current != "IA" and current[0:4] != "Bot":
+                if current == "IA" or current[0:4] == "Bot":
                     inserted = True
                     self.bracket[int(self.n/2 -1) + int(pos/2)].setu2(user.name)
         
