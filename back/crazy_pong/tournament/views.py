@@ -224,6 +224,7 @@ def quitTournament(request):
             #falta parsing del name
             TournamentManager.quitTournament(user.tournament_id, user.name)
             user.inTournament = 0
+            user.tournament_id = ""
             user.save()
             return JsonResponse({'redirect': '/tournament/'})
             

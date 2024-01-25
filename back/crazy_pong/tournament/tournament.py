@@ -153,4 +153,8 @@ class Tournament:
                 self.bracket[i].setu1("IA")
             if not match['played'] and (match['u2'] == name):
                 self.bracket[i].setu2("IA")
+        for pl in self.players:
+            if pl.name == name:
+                self.players.remove(pl)
+                return
                 
