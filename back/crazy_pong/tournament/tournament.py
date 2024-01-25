@@ -66,7 +66,7 @@ class Tournament:
             return False
         inserted = False
         while not inserted:
-            pos = random.randint(0, len(self.n))
+            pos = random.randint(0, self.n)
             if (pos % 2 == 0):
                 current = self.bracket[int(self.n/2 -1) + pos].getu1()
                 if current != "IA" and current.substring(0,4) != "Bot ":
