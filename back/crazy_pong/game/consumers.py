@@ -66,7 +66,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
 
         if (self.mode == 'obs'):
-             self.game = MatchManager.reconnect(self.user_id, self.user_name)
+             self.game = self.scope['query_string'].decode('UTF-8').split('&')[2].split('=')[1]
              await self.channel_layer.group_add(self.game, self.channel_name)
              await self.accept()
              return 
