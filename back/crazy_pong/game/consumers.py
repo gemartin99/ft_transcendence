@@ -37,6 +37,7 @@ def setplaying(user, game):
 @sync_to_async
 def setnoplaying(user):
     user.playing = False
+    user.gameId = ""
     user.save()
     print("holaaaaa")
 
