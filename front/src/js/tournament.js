@@ -163,7 +163,7 @@ function joinTournament(e) {
             in_tournament = document.getElementById("lobbyCode").value;
             handleRedirect("/tournament/lobbyPage/");
         }
-        else
+        else{
             lang = getLang();
             if (lang == 'en') {
                 alert("Invalid lobby code or tournament already started");
@@ -174,6 +174,7 @@ function joinTournament(e) {
             else if (lang == 'pt') {
                 alert("Código de lobby inválido ou torneio já iniciado");
             }
+        }
     })
     .catch((error) => {
         console.error('Error:', error);
