@@ -94,10 +94,8 @@ class MatchManager:
             if (cls.matches[match]['player1']["id"] == uid and cls.threads[match]['mode'] == '1vs1'):
                 return match, 3
             if cls.matches[match]['player1']["id"] == uid:
-                if cls.threads[match]["active"] == True:
                     return match, 1
             if cls.matches[match]['player2']["id"] == uid:
-                if cls.threads[match]["active"] == True:
                     return match, 2
         return False, 0
     
@@ -124,3 +122,8 @@ class MatchManager:
         if (cls.threads[id]["paddle_one"] == False or cls.threads[id]["paddle_two"] == False):
             return False
         return True
+    
+    @classmethod
+    def popMatch(cls, id):
+        cls.matches.pop(id)
+        cls.threads.pop(id)

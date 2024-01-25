@@ -73,7 +73,7 @@ class gameConnection(AsyncWebsocketConsumer):
         
         if (self.mode == 'reconnect'):
             self.game, paddle = MatchManager.reconnect(self.user_id, self.user_name)
-            print("debug: " + str(self.game + " " + str(paddle))) 
+            print("debug: " + str(self.game) + " " + str(paddle)) 
             if (self.game == True):
                 print("hola adeu " + str(self.game))
                 await self.channel_layer.group_add(self.game, self.channel_name)
@@ -237,6 +237,7 @@ class gameConnection(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(state))
 
     async def endConnection(self, state):
+        MatchManager.popMatch(self.game)
         state['cmd'] = 'finish'
         await self.channel_layer.group_send(
             self.game,
