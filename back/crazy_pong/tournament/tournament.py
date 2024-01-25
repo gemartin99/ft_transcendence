@@ -115,7 +115,7 @@ class Tournament:
                     m = MatchModel.objects.get(match_id=match['match_id'])
                     match['played'] = True
 
-                    if (pl1 > 0):
+                    if (m.player1 > 0):
                         pl1 = Usermine.objects.get(id=m.player1).name
                     else:
                         pl1 = 'IA'
