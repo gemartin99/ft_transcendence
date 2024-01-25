@@ -91,11 +91,22 @@ function send_login_form(e)  {
 
         console.log('data', data);
         if (getCookie('jwttoken')) {
-            set_logged_in_view();
-            setFormMessage(loginForm, "success", "Congratulations you have nice memory");
-            history.pushState(null, null, '/');
-            handleNavLinkAction('/');
-            console.log("my user id:" + data.user)
+            if (data.mail2FA == true)
+            {
+                handleRedirect('/twoFA/MailVerification/');
+            }
+            else if (data.google2FA == true)
+            {
+                handleRedirect('/twoFA/GoogleVerification/');
+            }
+            else
+            {
+                set_logged_in_view();
+                history.pushState(null, null, '/');
+                setFormMessage(loginForm, "success", "Congratulations you have nice memory");
+                handleNavLinkAction('/');
+                console.log("my user id:" + data.user)
+            }
             sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {

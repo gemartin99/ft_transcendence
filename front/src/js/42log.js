@@ -56,7 +56,7 @@ function	checkURLCode(){
 		            history.pushState(null, null, '/');
 		            handleNavLinkAction('/');
 	        	}
-	            const socket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
+	            sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
 	        }
 	        else {
 	        	console.log('pelada historica');
