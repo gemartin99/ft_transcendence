@@ -264,7 +264,7 @@ function join_match_sala(e) {
 }
 
 function join_IA() {
-    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=11');
+    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
         document.getElementById('gameContainer').style.display = 'none';
