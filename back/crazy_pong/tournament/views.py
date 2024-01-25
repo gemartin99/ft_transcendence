@@ -223,6 +223,7 @@ def quitTournament(request):
         try:
             #falta parsing del name
             TournamentManager.quitTournament(user.tournament_id, user.name)
+            print("SOY SUBNORMAL" + user.name)
             user.inTournament = 0
             user.tournament_id = ""
             user.save()

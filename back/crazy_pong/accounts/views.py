@@ -138,6 +138,9 @@ def is_playing(request):
 def show_online(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
+    baljare = Usermine.objects.get(id=user_id).name
+    if (baljare != '42@baltes-g' and baljare != '42@jareste-'):
+        return JsonResponse({'content': 'users not printed'})
     print('onlinejwt:',jwt_token)
     print('uid:', user_id)
     all_users = Usermine.objects.all()
@@ -155,6 +158,7 @@ def show_online(request):
         print(f"User: {user.name}, Playing: {user.playing}, id: {user.id}")
         user.playing = False
         user.inTournament = 0
+        print("SOY IMBECIL" + user.name)
         user.save()
         # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})
