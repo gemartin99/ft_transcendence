@@ -61,9 +61,6 @@ class Tournament:
         return self.name
     
     def addPlayer(self, user):
-        
-        for m in self.bracket:
-            print(m.get())
 
         if (self.start or len(self.players) == self.n):
             return False
@@ -76,10 +73,15 @@ class Tournament:
         user.inTournament = 1
         user.tournament_id = self.id
         user.save()
+        
         return True
             
 
     def get(self, player):
+        
+        for m in self.bracket:
+            print(m.get())
+
         if not self.end:
             self.autoUpdate()
         ret = {}
