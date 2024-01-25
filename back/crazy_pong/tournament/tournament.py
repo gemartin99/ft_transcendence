@@ -61,7 +61,10 @@ class Tournament:
         return self.name
     
     def addPlayer(self, user):
-        print(self.bracket)
+        
+        for m in self.bracket:
+            print(m.get())
+
         if (self.start or len(self.players) == self.n):
             return False
         if (len(self.players) % 2 == 0):
