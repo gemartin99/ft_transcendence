@@ -119,8 +119,8 @@ class MatchManager:
     def canView(cls, user, id):
         if (not id in cls.threads):
             return False
-        if (cls.threads[id]["paddle_one"] == False or cls.threads[id]["paddle_two"] == False):
-            return False
+        #if (cls.threads[id]["paddle_one"] == False or cls.threads[id]["paddle_two"] == False):
+            #return False
         return True
     
     @classmethod
