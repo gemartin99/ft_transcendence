@@ -86,7 +86,7 @@ function handleRedirect(redirect_url) {
         if (redirect_url == "/tournament/lobbyPage/")
             automaticLobby();
         else if (redirect_url == "/tournament/bracketPage/")
-            automaticBracket();
+            automaticTournament();
     })
     .catch(error => {
         console.error('Error:', error);
