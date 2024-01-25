@@ -12,5 +12,6 @@ urlpatterns = [
     path('private_game/', get_private_game_page, name='get_private_game_page'),
     path('1vs1_game/', get_1vs1_game_page, name='get_1vs1_game_page'),
     path('canJoin/', canJoin, name='canJoin'),
-    path('canView/', canView, name='canView')
+    path('canView/', canView, name='canView'),
+    path('quit/', quit, name='quit')
 ]

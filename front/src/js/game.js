@@ -488,15 +488,31 @@ async function one_vs_one_without_shirt(e) {
 
 
 function quitQueue() {
-    if (socket != null) {
-        const message = { cmd: 'quit',
-                    };
-        socket.send(JSON.stringify(message));
-        socket.close();
-    }
-    handleRedirect('/game/');
-    
-    socket = null;
+    const message = {idMatch: document.getElementById("lobbYCode").value,
+            };
+    fetch(baseUrl + ':8000/game/quit/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (socket != null) {
+            const message = { cmd: 'quit',
+                        };
+            socket.send(JSON.stringify(message));
+            socket.close();
+        }
+        handleRedirect('/game/');
+        socket = null;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }
 function drawBall(ball) {
     const canvas = document.getElementById('gameCanvas');

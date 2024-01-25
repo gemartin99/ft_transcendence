@@ -13,7 +13,6 @@ def get_game_page(request):
     if not user:
         return JsonResponse({'redirect': redirect})
     if user.playing:
-        print('hooooooadsdafsadfsdfa')
         return JsonResponse({'redirect': '/game/play/'})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = game.langs.get_langs(language)
@@ -146,6 +145,22 @@ def canView(request):
                 return JsonResponse({'code': '200'})
             else:
                 return JsonResponse({'code': '400'})
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+@csrf_exempt
+def quit(request):
+    user, redirect = Authentification.get_auth_user(request)
+    if not user:
+        return JsonResponse({'redirect': redirect})
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user.playing = False
+            user.save()
+            return JsonResponse({'code': '200'})
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
