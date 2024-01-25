@@ -68,12 +68,12 @@ class Tournament:
         while not inserted:
             pos = random.randint(0, self.n)
             if (pos % 2 == 0):
-                current = self.bracket[int(self.n/2 -1) + pos].getu1()
+                current = self.bracket[int(self.n/2 -1) + pos/2].getu1()
                 if current != "IA" and current.substring(0,4) != "Bot ":
                     inserted = True
                     self.bracket[int(self.n/2 -1) + pos/2].setu1(user.name)
             else:
-                current = self.bracket[int(self.n/2 -1) + pos].getu2()
+                current = self.bracket[int(self.n/2 -1) + pos/2].getu2()
                 if current != "IA" and current.substring(0,4) != "Bot ":
                     inserted = True
                     self.bracket[int(self.n/2 -1) + pos/2].setu2(user.name)
