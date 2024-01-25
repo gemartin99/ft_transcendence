@@ -349,6 +349,7 @@ async function reconnect() {
 
         };
         socket.onerror = (error) => {
+            handleRedirect('/game/');
             console.error('WebSocket error:', error);
         };
         socket.onclose = (event) => {
