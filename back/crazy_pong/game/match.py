@@ -18,13 +18,13 @@ class PlayerManager():
 
     def move(self, direction):
         if direction == "down":
-            if(self.paddle["y"] + self.paddle["height"] < 750):
+            if(self.paddle["y"]):
                 self.player["input"] = 1
             else:
                 self.player["input"] = 0
 
         elif direction == "up":
-            if(self.paddle["y"] > 0):
+            if(self.paddle["y"]):
                 self.player["input"] = -1
             else:
                 self.player["input"] = 0
@@ -63,6 +63,7 @@ class GameManager():
             paddle1 = self.paddle_one
             paddle2 = self.paddle_two
             
+
             paddle1['y'] += paddle1['vy'] * self.player_one['input']
             if (self.IA == False):
                 paddle2['y'] += paddle2['vy'] * self.player_two['input']
@@ -73,6 +74,16 @@ class GameManager():
                 else:
                     paddle2['y'] += paddle2['vy'] * self.segfaultThink_v2(False)
                 self.IAcount += 1
+            
+            if (paddle1['y'] < 0):
+                paddle1['y'] = 0
+            elif (paddle1['y'] + paddle1['height'] > 750):
+                paddle1['y'] = 750 - paddle1['height']
+            if (paddle2['y'] < 0):
+                paddle2['y'] = 0
+            elif (paddle2['y'] + paddle2['height'] > 750):
+                paddle2['y'] = 750 - paddle2['height']
+            
                 
 
             ball['x'] += ball['vx']
