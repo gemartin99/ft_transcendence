@@ -139,6 +139,27 @@ function updateTournament() {
 
         console.log('id:', data.id);
         console.log('Response:', data);
+
+
+        //HIDE BUTTON PLAY
+        var found = false;
+        for (key in data){
+            if (key != "info"){
+                if (data[key].u1 == data["info"].user && data[key].played == "False"){
+                    found = true
+                }
+                
+                if (data[key].u2 == data["info"].user && data[key].played == "False"){
+                    found = true 
+                }
+                    
+            }
+        }
+        if (found == false){
+            var button = document.getElementById("playT");
+            button.style.display = "none";
+        }
+
     })
     .catch((error) => {
         console.error('Error:', error);
