@@ -162,6 +162,7 @@ function joinTournament(e) {
         if (data.code == 200){
             in_tournament = document.getElementById("lobbyCode").value;
             handleRedirect("/tournament/lobbyPage/");
+            automaticLobby();
         }
         else{
             lang = getLang();
@@ -234,6 +235,7 @@ function getTournament(){
         console.log('Response:', data.code);
         if (data.content) {
             content.innerHTML = data.content;
+            automaticTournament();
         }
         else if (data.redirect) {
             handleRedirect(data.redirect);
@@ -327,4 +329,20 @@ function myFunction() {
     console.log(copyText.textContent);
      // Copy the text inside the text field
     navigator.clipboard.writeText(copyText.textContent.substring(12, copyText.textContent.length -3));
+}
+
+async function automaticLobby(){
+    while (window.location.pathname == "/tournament/lobbyPage/"){
+        console.log("updating lobby");
+        updateLobby();
+        await new Promise(r => setTimeout(r, 1000));
+    }
+}
+
+async function automaticTournament(){
+    while (window.location.pathname == "/tournament/bracketPage/"){
+        console.log("updating tournament");
+        updateTournament();
+        await new Promise(r => setTimeout(r, 1000));
+    }
 }
