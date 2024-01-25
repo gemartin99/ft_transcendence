@@ -124,7 +124,7 @@ def canJoin(request):
         try:
             data = json.loads(request.body)
 
-            if (MatchManager.canJoin(user, data['idMatch'])):
+            if (len(data['idMatch']) == 5 and MatchManager.canJoin(user, data['idMatch'])):
                 return JsonResponse({'code': '200'})
             else:
                 return JsonResponse({'code': '400'})

@@ -202,7 +202,7 @@ function join_match_sala(e) {
         if (data.code == 200){
             handleRedirect('/game/play/');
 
-    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
+            socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
     
             socket.onopen = (event) => {
                 console.log('WebSocket connection opened:', event);

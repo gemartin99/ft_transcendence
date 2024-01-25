@@ -103,7 +103,7 @@ class GameManager():
                 ball['vx'] < 0
                 ):
 
-                self.state['speed'] += 0.01
+                self.state['speed'] += 0.1
                 relativeIntersectY = (paddle1['y'] + paddle1['height'] / 2) - ball['y']
                 normalizedRelativeIntersectionY = relativeIntersectY / (paddle1['height'] / 2)
                 bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
