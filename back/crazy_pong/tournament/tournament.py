@@ -16,7 +16,7 @@ class Match():
             'p1': p1,
             'p2': p2,
             'match_id': ''.join(random.choices(string.ascii_letters + string.digits, k=10)),
-            'played': False
+            'played': "False"
         }
         
     def get(self):
@@ -121,7 +121,7 @@ class Tournament:
                     if i == 0:
                         self.end = True
                     m = MatchModel.objects.get(match_id=match['match_id'])
-                    match['played'] = True
+                    match['played'] = "True"
 
                     if (m.player1 > 0):
                         pl1 = Usermine.objects.get(id=m.player1).name
@@ -147,8 +147,8 @@ class Tournament:
                             self.bracket[int((i-2) / 2) ].setu2(match['u2'])
 
 
-                if (match['u1'][0:4] == "Bot " and match['u2'][0:4] == "Bot " and not match['played']):
-                    match['played'] = True
+                if (match['u1'][0:4] == "Bot " and match['u2'][0:4] == "Bot " and match['played'] == "False"):
+                    match['played'] = "True"
                     if (random.randint(0,1) == 0):
                         match['p1'] = int(self.points)
                         match['p2'] = random.randint(0,int(self.points)-1)
@@ -185,9 +185,9 @@ class Tournament:
     def quit(self, name):
         for i in range(len(self.bracket)):
             match = self.bracket[i].get()
-            if not match['played'] and (match['u1'] == name):
+            if match['played'] == "False" and (match['u1'] == name):
                 self.bracket[i].setu1("IA")
-            if not match['played'] and (match['u2'] == name):
+            if match['played']  == "False" and (match['u2'] == name):
                 self.bracket[i].setu2("IA")
         for pl in self.players:
             if pl.name == name:

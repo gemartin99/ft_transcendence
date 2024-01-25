@@ -269,7 +269,7 @@ function playTournament(){
         //code.textContent = "Lobby code: " + data.code;
         for (key in data){
             if (key != "info"){
-                if (data[key].u1 == data["info"].user){
+                if (data[key].u1 == data["info"].user && data[key].played == "False"){
                     console.log(data);
                     handleRedirect("/game/play/");
                     if (data[key].u2.substring(0, 4) == "Bot " || data[key].u2 == "IA")
@@ -278,7 +278,7 @@ function playTournament(){
                         gameTournament(data[key].match_id, data['info'].points);
                 }
                 
-                if (data[key].u2 == data["info"].user){
+                if (data[key].u2 == data["info"].user && data[key].played == "False"){
                     handleRedirect("/game/play/");
                     if (data[key].u1.substring(0, 4) == "Bot "|| data[key].u1 == "IA")
                         gameTournamentIA(data[key].match_id, data['info'].points);
