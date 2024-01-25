@@ -308,7 +308,7 @@ function join_IA() {
 async function reconnect() {
     await new Promise(r => setTimeout(r, 300));
     console.log("ei aixo1: " + window.location.href + " sck: " + socket);
-    if (socket == null && window.location.href == "http://crazy-pong.com/game/play/"){
+    if (socket == null && window.location.href == "https://crazy-pong.com/game/play/"){
         console.log("ei aixo: " + window.location.href);
         socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
         socket.onopen = (event) => {
