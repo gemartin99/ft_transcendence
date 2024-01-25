@@ -3,6 +3,7 @@ import random
 import string
 
 from game.models import Match as MatchModel
+from accounts.models import Usermine
 
 bot_names = ["Baltes", "Marza", "Jareste", "Jaime", "Gemartin", "Trunscendence", "Pingu", "Okto", "ChatGPT"]
 
@@ -113,8 +114,19 @@ class Tournament:
                         self.end = True
                     m = MatchModel.objects.get(match_id=match['match_id'])
                     match['played'] = True
-                    self.bracket[i].setp1(m.player1_score)
-                    self.bracket[i].setp2(m.player2_score)
+
+                    if (pl1 > 0):
+                        pl1 = Usermine.objects.get(id=m.player1).name
+                    else:
+                        pl1 = 'IA'
+
+                    if (pl1 == self.bracket[i].getu1()):
+                        self.bracket[i].setp1(m.player1_score)
+                        self.bracket[i].setp2(m.player2_score)
+                    else:
+                        self.bracket[i].setp1(m.player2_score)
+                        self.bracket[i].setp2(m.player1_score)
+
                     if (m.player1_score > m.player2_score):
                         if (i % 2 == 1):
                             self.bracket[int((i-1) / 2) ].setu1(match['u1'])
