@@ -82,8 +82,13 @@ function handleRedirect(redirect_url) {
         } else {
             console.log('Invalid response from backend 1', data);
         }
-        
+        console.log
         handleNavLinks()
+        console.log('debug 2')
+        if (redirect_url == "/tournament/lobbyPage")
+            automaticLobby();
+        else if (redirect_url == "tournament/bracketPage")
+            automaticBracket();
     })
     .catch(error => {
         console.error('Error:', error);
@@ -122,13 +127,8 @@ function handleNavLinkClick(event) {
         } else {
             console.log('Invalid response from backend 1 oooooo');
         }
-        console.log('debug 1')
         handleNavLinks()
-        console.log('debug 2')
-        if (event == "/tournament/lobbyPage")
-            automaticLobby();
-        else if (event == "tournament/bracketPage")
-            automaticBracket();
+        
     })
     .catch(error => {
         console.error('Error:', error);
