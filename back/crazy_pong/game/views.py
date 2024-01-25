@@ -159,6 +159,7 @@ def quitQueue(request):
         try:
             data = json.loads(request.body)
             user.playing = False
+            user.gameId = ""
             user.save()
             return JsonResponse({'code': '200'})
         except json.JSONDecodeError as e:
