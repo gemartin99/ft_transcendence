@@ -1,7 +1,7 @@
 all:
-	@docker-compose up -d --build
+	@docker compose up -d --build
 down:
-	@docker-compose down
+	@docker compose down
 clean:
 	@docker stop $$(docker ps -qa);
 	@docker rm $$(docker ps -qa);

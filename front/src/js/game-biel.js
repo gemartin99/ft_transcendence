@@ -273,7 +273,7 @@ function join_IA() {
     };
     socket.onmessage = (event) => {
         try{
-            //document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('gameContainer').style.display = 'block';
             document.getElementById('waiting').style.display = 'none';
         } catch (error) {
         }
@@ -283,17 +283,12 @@ function join_IA() {
             if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
-            document.getElementById('gameContainer').style.display = 'flex';
             printMap(jsonData);
-            redrawCanvas(jsonData);
-            window.addEventListener('resize', resizeCanvas);
         }
         if (jsonData['cmd'] == 'update') {
             
             in_match = true
-            //printMap(jsonData);
-            redrawCanvas(jsonData);
-            window.addEventListener('resize', resizeCanvas);
+            printMap(jsonData);
         }
         if (jsonData['cmd'] == 'finish') {
 
