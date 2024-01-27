@@ -29,7 +29,7 @@ function searchFriend(event) {
 		}
         console.log('Response:', data);
         // handleRedirect('/friends/');
-        message.textContent = "holabobby";
+        message.textContent = response.message;
 
     })
     .catch(error => {

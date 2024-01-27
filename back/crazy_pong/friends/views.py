@@ -29,6 +29,7 @@ def get_friends_page(request):
 
 @csrf_exempt 
 def addFriend(request):
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
@@ -39,6 +40,16 @@ def addFriend(request):
     print(searchValue)
     try:
         user.friends.add(Usermine.objects.get(name=searchValue))
-        return JsonResponse({'message': 'Friend added succesfully.', 'redirect': '/friends/'})
+        if language == 'en':
+            return JsonResponse({'message': 'Friend added succesfully.', 'redirect': '/friends/'})
+        elif language == 'es':
+            return JsonResponse({'message': 'Amigo agregado con éxito.', 'redirect': '/friends/'})
+        else:
+            return JsonResponse({'message': 'Amigo adicionado com sucesso.', 'redirect': '/friends/'})
     except Usermine.DoesNotExist:
-        return JsonResponse({'message': 'No user matches the username.'})
+        if language == 'en':
+            return JsonResponse({'message': 'No user matches the username.'})
+        elif language == 'es':
+            return JsonResponse({'message': 'Ningún usuario coincide con el nombre de usuario.'})
+        else:
+            return JsonResponse({'message': 'Nenhum usuário corresponde ao nome de usuário.'})
