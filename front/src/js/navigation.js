@@ -110,7 +110,6 @@ function handleNavLinkClick(event) {
 
 function handleNavRefresh() {
     checkURLCode();
-    event.preventDefault();
     var hrefValue = window.location.href;
     hrefValue = hrefValue.substring(baseUrl.length, hrefValue.lenght);
     if (hrefValue && hrefValue.slice(-1) !== '/'){
