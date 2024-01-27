@@ -75,6 +75,9 @@ function send_login_form(e)  {
         if (data.jwtToken)
             document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
 
+        if (data.lang)
+            setLang(data.lang);
+
         if (getCookie('jwttoken')) {
             if (data.mail2FA == true)
             {

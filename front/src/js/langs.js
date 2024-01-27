@@ -3,6 +3,19 @@ function getLang()
 	return 	document.getElementById('lang_selected').value;
 }
 
+function setLang(lang){
+	document.getElementById('lang_selected').value = lang;
+	if (lang === 'en'){
+		set_english_lang();
+	}
+	if (lang === 'es'){
+		set_spanish_lang();
+	}
+	if (lang === 'pt'){
+		set_portuguese_lang();
+	}
+}
+
 function set_english_lang()
 {
 	var links = document.querySelectorAll('li.nav-item > a.navlink.nav-link');
@@ -143,4 +156,14 @@ function set_portuguese_lang()
 	document.getElementById('lang-pt').textContent = 'Português';
 	document.getElementById('lang_selected').value = 'pt';
 	handleNavRefresh()
+}
+
+function setBackLang(){
+
+	fetch(baseUrl + ':8000/users/lang/', {
+		credentials: 'include',
+		headers: {
+			'language': getLang(),
+		},
+	})
 }

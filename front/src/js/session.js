@@ -18,6 +18,8 @@ function have_valid_session()
     		set_logged_out_view();
 	    	return false;
     	}
+		if (data.lang)
+			setLang(data.lang);
     })
     .catch(error => {
         console.error("Error:", error);

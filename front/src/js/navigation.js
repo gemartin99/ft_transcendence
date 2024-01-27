@@ -131,6 +131,9 @@ function handleNavRefresh() {
         else if (data.redirect) {
             handleRedirect(data.redirect)            
         }
+        if (data.lang){
+            setLang(data.lang);
+        }
         handleNavLinks()
     })
     .catch(error => {

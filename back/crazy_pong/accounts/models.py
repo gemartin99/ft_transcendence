@@ -28,7 +28,7 @@ class Usermine(models.Model):
     matches_played = models.ManyToManyField(Match, blank=True)
     friends = models.ManyToManyField('self', blank=True, symmetrical=False)
     avatar = models.CharField(max_length=128, default='media/avatars/Pingu_default.png')
-
+    language = models.CharField(max_length=128, default='en')
 
     def get_last_5_matches(self):
         # Get the last 5 matches sorted by timestamp in descending order
