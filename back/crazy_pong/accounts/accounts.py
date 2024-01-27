@@ -68,7 +68,7 @@ class Accounts:
         #parse pwd
         is_secure, error_messages = Security.check_pwd_security(password)
         if is_secure == False:
-            print(error_messages)
+            print(language)
             if language == 'en':
                 return False, 'Password not secure enough.'
             elif language == 'es':
