@@ -115,7 +115,7 @@ def is_online(request):
     user_id = Authentification.decode_jwt_token(jwt_token)
     try:
         user = Usermine.objects.get(id=user_id)
-        return JsonResponse({'Session': 'True', 'user': user.id, 'lang': user.language})
+        return JsonResponse({'Session': 'True', 'user': user.id})
     except Usermine.DoesNotExist as e:
         response = JsonResponse({'Session': 'False'})
         response.delete_cookie('jwttoken')
@@ -164,15 +164,4 @@ def show_online(request):
         # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})
 
-@csrf_exempt
-def setLang(request):
-    language = request.GET.get('lang', 'en')
-    user_id = Authentification.decode_jwt_token(request.COOKIES.get('jwttoken', None))
-    try:
-        user = Usermine.objects.get(id=user_id)
-        user.language = language
-        user.save()
-        return JsonResponse({'content': 'language set'})
-    except Usermine.DoesNotExist as e:
-        return JsonResponse({'content': 'user not found'})
-    
+

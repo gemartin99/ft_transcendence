@@ -3,20 +3,6 @@ function getLang()
 	return 	document.getElementById('lang_selected').value;
 }
 
-function setLang(lang){
-	document.getElementById('lang_selected').value = lang;
-	if (lang === 'en'){
-		set_english_lang();
-	}
-	if (lang === 'es'){
-		set_spanish_lang();
-	}
-	if (lang === 'pt'){
-		set_portuguese_lang();
-	}
-	setBackLang();
-}
-
 function set_english_lang()
 {
 	var links = document.querySelectorAll('li.nav-item > a.navlink.nav-link');
@@ -61,7 +47,6 @@ function set_english_lang()
 	document.getElementById('lang-es').textContent = 'Spanish';
 	document.getElementById('lang-pt').textContent = 'Portuguese';
 	document.getElementById('lang_selected').value = 'en';
-	setTimeout(set_english_lang, 2000);
 	handleNavRefresh()
 }
 
@@ -110,7 +95,6 @@ function set_spanish_lang()
 	document.getElementById('lang-es').textContent = 'Español';
 	document.getElementById('lang-pt').textContent = 'Portugues';
 	document.getElementById('lang_selected').value = 'es';
-	setTimeout(set_english_lang, 2000);
 	handleNavRefresh()
 }
 
@@ -158,16 +142,5 @@ function set_portuguese_lang()
 	document.getElementById('lang-es').textContent = 'Espanhol';
 	document.getElementById('lang-pt').textContent = 'Português';
 	document.getElementById('lang_selected').value = 'pt';
-	setTimeout(set_english_lang, 2000);
 	handleNavRefresh()
-}
-
-function setBackLang(){
-
-	fetch(baseUrl + ':8000/users/lang/', {
-		credentials: 'include',
-		headers: {
-			'language': getLang(),
-		},
-	})
 }
