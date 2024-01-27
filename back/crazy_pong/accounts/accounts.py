@@ -17,14 +17,6 @@ from .models import Usermine
 # import re
 
 class Accounts:
-    # @staticmethod
-    # def email_is_in_use(email):
-    #     # Check if the email is already in use
-    #     if Usermine.objects.filter(email=email).exists():
-    #         return True, 'Email is already in use'
-    #     # Both are allowed to be used
-    #     return False, None
-
     @staticmethod
     def username_is_in_use(username):
         # Check if the username is already in use
@@ -54,14 +46,14 @@ class Accounts:
         check_mail = Security.is_valid_email(email)
         if not check_mail:
             return False, 'Introduce a valid email.'
+        #check pwd match
+        if password != confirm_password:
+            return False, 'Password missmatch.'
         #parse pwd
         is_secure, error_messages = Security.check_pwd_security(password)
         if is_secure == False:
             print(error_messages)
             return False, error_messages
-        #check pwd match
-        if password != confirm_password:
-            return False, 'Password missmatch.'
         return True, None
 
 
@@ -75,12 +67,6 @@ class Accounts:
         password = data.get('password')
         if not username  or not password:
             return False, 'fill all the form inputs'
-        print('username: ', username)
-        print('password: ', password)
-        # is_secure, error_messages = Security.check_pwd_security(password)
-        print('holaaaaaaaaa')
-        # if is_secure == False:
-        #     return False, error_messages
         return True, None
 
     @staticmethod 
@@ -89,6 +75,7 @@ class Accounts:
         if request.method != 'POST':
             return False, 'Invalid request method'
         try:
+            language = request.META.get('HTTP_LANGUAGE', 'default_language')
             res, errMsg = Accounts.validate_inputdata_for_new_account_request(request)
             print('res:',res,'errMsg:', errMsg)
             if errMsg or res == False:
@@ -103,20 +90,32 @@ class Accounts:
             res, errMsg = Accounts.username_is_in_use(username)
             if errMsg:
                 return False, errMsg
-            # res, errMsg = Accounts.email_is_in_use(email)
-            # if errMsg:
-            #     return False, errMsg
             if password != confirm_password:
-                return False, 'Password missmatch.'
+                if language == 'en':
+                    return False, 'Password missmatch.'
+                elif language == 'es':
+                    return False, 'Las contraseñas no coinciden.'
+                else:
+                    return False, 'As palavras-passe não coincidem.'
             encrypted_pwd = Security.hash_password(password)
             pwd_str = encrypted_pwd.decode('utf-8')
             user = Usermine(name=username.lower(), password=pwd_str, email=email.lower())
             user.save()
-            return True, 'User saved successfully'
+            if language == 'en':
+                return True, 'User saved successfully'
+            elif language == 'es':
+                return True, 'Usuario guardado correctamente'
+            else: 
+                return True, 'Utilizador guardado com sucesso'
         except IntegrityError as e:
             print(e)
             # Username or email in use execption
-            return False, 'Invalid data'
+            if language == 'en':
+                return False, 'Username or email already in use'
+            elif language == 'es':
+                return False, 'Nombre de usuario o correo electrónico ya en uso'
+            else:
+                return False, 'Nome de usuário ou email já em uso'
 
 
     @staticmethod 
