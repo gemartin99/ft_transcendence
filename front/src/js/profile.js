@@ -45,6 +45,7 @@ function submitForm(e) {
         }
     })
     .catch(error => {
+        console.error("Error:", error);
         setFormMessage(loginForm, "error", "Invalid username/password combination");
     });
 }

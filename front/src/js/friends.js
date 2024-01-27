@@ -26,6 +26,7 @@ function searchFriend(event) {
     })
     .catch(error => {
         setFormMessage(loginForm, "error", "Invalid username/password combination");
+        console.error("Error:", error);
     });
 
 

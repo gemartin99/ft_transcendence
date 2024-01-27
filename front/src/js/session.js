@@ -20,6 +20,7 @@ function have_valid_session()
     	}
     })
     .catch(error => {
+        console.error("Error:", error);
     });
 }
 

@@ -29,6 +29,7 @@ function fetchContent(path) {
         }
     })
     .catch(error => {
+        console.error("Error:", error);
     });
 }
 
@@ -70,6 +71,7 @@ function handleRedirect(redirect_url) {
             automaticTournament();
     })
     .catch(error => {
+        console.error("Error:", error);
     });
 }
 
@@ -102,6 +104,7 @@ function handleNavLinkClick(event) {
         
     })
     .catch(error => {
+        console.error("Error:", error);
     });
 }
 
@@ -131,6 +134,7 @@ function handleNavRefresh() {
         handleNavLinks()
     })
     .catch(error => {
+        console.error("Error:", error);
     });
 }
 
@@ -153,6 +157,7 @@ function handleNavLinkAction(hrefValue) {
         handleNavLinks();
     })
     .catch(error => {
+        console.error("Error:", error);
     });
 }
 

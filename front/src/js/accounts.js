@@ -41,6 +41,7 @@ function do_logout(){
         handleNavLinks()
     })
     .catch(error => {
+        console.error("Error:", error);
     });
 }
 
@@ -166,5 +167,6 @@ function send_form_new_account(e) {
         }
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 }

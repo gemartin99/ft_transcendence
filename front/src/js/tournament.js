@@ -30,6 +30,7 @@ function createTournament(e) {
                 handleRedirect(data.redirect);
         })
         .catch((error) => {
+            console.error("Error:", error);
         });}
     else{
             lang = getLang();
@@ -92,6 +93,7 @@ function updateLobby() {
         }
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 
 }
@@ -149,6 +151,7 @@ function updateTournament() {
 
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 
 }
@@ -186,6 +189,7 @@ function joinTournament(e) {
         }
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 }
 
@@ -216,6 +220,7 @@ function startTournament(){
             getTournament();
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 }
 
@@ -245,6 +250,7 @@ function getTournament(){
         // handleNavLinks()
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 }
 
@@ -288,6 +294,7 @@ function playTournament(){
         }
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 }
 
@@ -311,6 +318,7 @@ function quitTournament() {
             handleRedirect(data.redirect);
     })
     .catch((error) => {
+        console.error("Error:", error);
     });
 }
 

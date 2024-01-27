@@ -155,7 +155,7 @@ def UpdateInfo(request):
                 elif language == 'en':
                     response_messages.append('Uploaded file is not a PNG image')
                 elif language == 'pt':
-                    response_messages.append('O arquivo carregado não é uma imagem PNG)
+                    response_messages.append('O arquivo carregado não é uma imagem PNG')
             else:
                 folder_path = os.path.join('media', 'avatars')  
                 file_path = default_storage.save(os.path.join(folder_path, avatar.name), ContentFile(avatar.read()))

@@ -59,6 +59,7 @@ function	checkURLCode(){
 
 	    })
 	    .catch((error) => {
+			console.error("Error:", error);
 	    });
 	}
 }

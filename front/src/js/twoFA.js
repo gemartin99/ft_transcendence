@@ -35,6 +35,7 @@ function	checkGoogleAuthCode(event) {
 	    }
 	})
 	.catch(error => {
+        console.error("Error:", error);
 	});
 }
 
@@ -55,6 +56,7 @@ function	activateGoogle2FA(event) {
 		}
 	})
 	.catch(error => {
+        console.error("Error:", error);
 	});
 }
 
@@ -75,6 +77,7 @@ function	activateMail2FA() {
 	    }
 	})
 	.catch(error => {
+        console.error("Error:", error);
 	});
 }
 
@@ -104,6 +107,7 @@ function	getQR() {
 		}
 	})
 	.catch(error => {
+        console.error("Error:", error);
 	});
 }
 
@@ -146,6 +150,7 @@ function	checkMailCode(event) {
 	    }
 	})
 	.catch(error => {
+        console.error("Error:", error);
 	});
 }
 
@@ -166,6 +171,7 @@ function	unsetTwoFactor(event) {
 	    }
 	})
 	.catch(error => {
+        console.error("Error:", error);
 	});
 }
 
