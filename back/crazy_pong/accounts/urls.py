@@ -16,6 +16,6 @@ urlpatterns = [
      path('logout/', logout, name='logout'),
      path('showonline/', show_online, name='show_online'),#debug
      path('playing/', is_playing, name='is_playing'),
-     path('checkSession/', is_online, name='is_online')
-     path('lang/', setLang, name='setLang')
+     path('checkSession/', is_online, name='is_online'),
+     path('lang/', setLang, name='setLang'),
 ]
