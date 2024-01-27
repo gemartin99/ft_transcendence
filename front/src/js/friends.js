@@ -5,7 +5,7 @@ var baseurl = window.location.origin;
 
 function searchFriend(event) {
     event.preventDefault(); // Prevent the default form submission behavior
-
+    var lang = getLang();
     // Get the input value
     var searchInput = document.getElementById('searchInput');
     var searchTerm = searchInput.value;
@@ -16,7 +16,8 @@ function searchFriend(event) {
 
     fetch(baseurl + ':8000/friends/addFriend/', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+        'language': lang,},
         credentials: 'include',
         body: JSON.stringify(searchTerm),
     })

@@ -46,7 +46,6 @@ function do_logout(){
         if (data.redirect) {
             handleRedirect(data.redirect);
             return ;
-            console.log('Invalid response from backend 1', data.redirect);
         } else {
             console.log('Invalid response from backend 1', data);
         }
@@ -62,6 +61,8 @@ function do_logout(){
 
 function send_login_form(e)  {
     e.preventDefault();
+    var lang = getLang()
+
     // Lógica para el inicio de sesión mediante AJAX/Fetch
     const loginForm = document.querySelector("#login");
     const formData = new FormData(e.target);
@@ -74,7 +75,8 @@ function send_login_form(e)  {
     console.log('FormDataObject:', formDataObject);
     fetch(baseurl +':8000/users/login/action/', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json',},
+        headers: {'Content-Type': 'application/json',
+        'language': lang,},
         credentials: 'include',
         body: JSON.stringify(formDataObject),
     })
@@ -122,6 +124,7 @@ function send_login_form(e)  {
 
 function send_form_new_account(e) {
     e.preventDefault();
+    var lang = getLang();
     const formData = new FormData(e.target);
     const createAccountForm = document.querySelector("#createAccount");
 
@@ -148,7 +151,8 @@ function send_form_new_account(e) {
     console.log('FormDataObject:', formDataObject);
     fetch(baseurl + ':8000/users/register/new/', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json',},
+        headers: {'Content-Type': 'application/json',
+        'language': lang,},
         credentials: 'include',
         body: JSON.stringify(formDataObject),
     })
