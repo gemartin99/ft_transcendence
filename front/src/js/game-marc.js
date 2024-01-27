@@ -68,7 +68,7 @@ function drawMatchResult(jsonData) {
     const fontScale = canvas.width / 1200;
 
     // Set text properties
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'black';
     ctx.font = `${50 * fontScale}px Arial`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
