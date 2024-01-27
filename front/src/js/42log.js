@@ -15,7 +15,6 @@ function	checkURLCode(){
 	var codeValue = getParameterByName('code');
 
 	if (codeValue !== null) {
-	    console.log('Code value:', codeValue);
 
 	    var formDataObject = {
 	        code: codeValue
@@ -31,15 +30,11 @@ function	checkURLCode(){
 	    })
 	    .then(response => response.json())
 	    .then(data => {
-	        console.log('Response:', data.message);
-	        console.log('jwttoken:', data.jwtToken)
 	        const expirationDate = new Date();
 	        expirationDate.setTime(expirationDate.getTime() + (23 * 60 * 60 * 1000));
 
 	        if (data.jwtToken)
 	            document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
-	        console.log('jwttoken:', data.jwtToken);
-	        console.log('datalog42:', data);
 
 	        if (getCookie('jwttoken')) {
 	        	if (data.mail2FA == true)
@@ -59,16 +54,12 @@ function	checkURLCode(){
 	            sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
 	        }
 	        else {
-	        	console.log('pelada historica');
 	            set_logged_out_view();
 	        }
 
 	    })
 	    .catch((error) => {
-	        console.error('Error:', error);
 	    });
-	} else {
-	    console.log('No code parameter found in the URL.');
 	}
 }
 

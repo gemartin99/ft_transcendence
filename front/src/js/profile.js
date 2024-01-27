@@ -24,18 +24,15 @@ function submitForm(e) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("jajajaja",data);
         if (data.redirect) {
             handleRedirect(data.redirect);
             return ;
         }
         else{
-        console.log('Response:', data.message);
         setFormMessage(loginForm, "error", data.message);
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         setFormMessage(loginForm, "error", "Invalid username/password combination");
     });
 }

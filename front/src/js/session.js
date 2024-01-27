@@ -9,7 +9,6 @@ function have_valid_session()
     })
     .then(response => response.json())
     .then(data => {
-    	console.log('data.session:',data);
     	if (data.Session == 'True'){
          sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
          set_logged_in_view();
@@ -21,7 +20,6 @@ function have_valid_session()
     	}
     })
     .catch(error => {
-        console.error('Error:', error);
     });
 }
 
@@ -56,7 +54,6 @@ function set_logged_out_view()
 document.addEventListener('DOMContentLoaded', function () {
 	var codeValue = getParameterByName('code');
 
-	console.log('codeValue sessions:', codeValue);
 	if (codeValue == null)
 	   have_valid_session();
 });

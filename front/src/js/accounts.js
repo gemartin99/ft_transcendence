@@ -1,11 +1,5 @@
-// index.js
-
-// url = "crazy-pong.com"
 var url = window.location.hostname;
 var sessionSocket;
-
-//baseurl = "http://crazy-pong.com"
-// baseurl = "http://localhost";
 var baseUrl = window.location.origin;
 
 function setFormMessage(formElement, type, message) {
@@ -25,9 +19,7 @@ function clearInputError(inputElement) {
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
 
-// logout cookie remove (works):
 function logoutTest(){
-    console.log('he entrado');
     document.cookie = "jwttoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
 
@@ -41,19 +33,14 @@ function do_logout(){
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Response from backend:', data);
         sessionSocket.close();
         if (data.redirect) {
             handleRedirect(data.redirect);
             return ;
-        } else {
-            console.log('Invalid response from backend 1', data);
         }
-        
         handleNavLinks()
     })
     .catch(error => {
-        console.error('Error:', error);
     });
 }
 
@@ -72,7 +59,6 @@ function send_login_form(e)  {
     formData.forEach((value, key) => {
         formDataObject[key] = value;
     });
-    console.log('FormDataObject:', formDataObject);
     fetch(baseurl +':8000/users/login/action/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
@@ -82,16 +68,12 @@ function send_login_form(e)  {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Response:', data.message);
-        console.log('jwttoken:', data.jwtToken)
         const expirationDate = new Date();
         expirationDate.setTime(expirationDate.getTime() + (23 * 60 * 60 * 1000));
 
         if (data.jwtToken)
             document.cookie = `jwttoken=${data.jwtToken}; Secure; expires=${expirationDate}; SameSite=None; path=/;`;
-        console.log('jwttoken:', data.jwtToken);
 
-        console.log('data', data);
         if (getCookie('jwttoken')) {
             if (data.mail2FA == true)
             {
@@ -105,20 +87,27 @@ function send_login_form(e)  {
             {
                 set_logged_in_view();
                 history.pushState(null, null, '/');
-                setFormMessage(loginForm, "success", "Congratulations you have nice memory");
                 handleNavLinkAction('/');
-                console.log("my user id:" + data.user)
             }
             sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
         }
         else {
             set_logged_out_view();
-            setFormMessage(loginForm, "error", "Invalid username/password combination");
+            if (lang == 'es')
+                setFormMessage(loginForm, "error", "Combinación de nombre de usuario/contraseña no válida");
+            else if (lang == 'en')
+                setFormMessage(loginForm, "error", "Invalid username/password combination");
+            else
+                setFormMessage(loginForm, "error", "Combinação de nome de utilizador/palavra-passe inválida");
         }
     })
     .catch((error) => {
-        console.error('Error:', error);
-        setFormMessage(loginForm, "error", "Invalid username/password combination");
+        if (lang == 'es')
+            setFormMessage(loginForm, "error", "Combinación de nombre de usuario/contraseña no válida");
+        else if (lang == 'en')
+            setFormMessage(loginForm, "error", "Invalid username/password combination");
+        else
+            setFormMessage(loginForm, "error", "Combinação de nome de utilizador/palavra-passe inválida");
     });
 }
 
@@ -137,18 +126,27 @@ function send_form_new_account(e) {
     const check_inputs = Object.values(formDataObject).every((value) => check_form_inputs(value));
 
     if (!check_inputs) {
-        setFormMessage(createAccountForm, "error", "Hay caracteres especiales en los campos.");
+        if (lang == 'es')
+            setFormMessage(crateAccountForm, "error", "Hay caracteres especiales en los campos.");
+        else if (lang == 'en')
+            setFormMessage(createAccountForm, "error", "There are special characters in the fields.");
+        else
+            setFormMessage(createAccountForm, "error", "Há caracteres especiais nos campos.");
         return;
     }
 
     const equalPasswords = comparePass(formDataObject['password'], formDataObject['confirm_password']);
 
     if (!equalPasswords) {
-        setFormMessage(createAccountForm, "error", "Las contraseñas no coinciden.");
+        if (lang == 'es')
+            setFormMessage(createAccountForm, "error", "Las contraseñas no coinciden.");
+        else if (lang == 'en') 
+            setFormMessage(createAccountForm, "error", "Passwords do not match.");
+        else
+            setFormMessage(createAccountForm, "error", "As palavras-passe não coincidem.");
         return;
     }
 
-    console.log('FormDataObject:', formDataObject);
     fetch(baseurl + ':8000/users/register/new/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json',
@@ -161,7 +159,6 @@ function send_form_new_account(e) {
         if (data.message) {
             setFormMessage(createAccountForm, "success", "Account created successfully");
             handleNavLinkAction('/users/login/identify/?s=new')
-            console.log('Response:', "ha funciunat");
         }
         else{
             error_message = data.error;
@@ -169,6 +166,5 @@ function send_form_new_account(e) {
         }
     })
     .catch((error) => {
-        console.error('Error:', error);
     });
 }

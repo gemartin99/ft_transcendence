@@ -1,6 +1,5 @@
 async function aboutUs() {
   await new Promise((resolve) => setTimeout(resolve, 100));
-  console.log("aboutUs.js loaded");
    var randomSlideIndex = Math.floor(Math.random() * 5);
    var swiper = new Swiper(".mySwiper", {
     direction: "horizontal",
