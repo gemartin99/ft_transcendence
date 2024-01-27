@@ -9,6 +9,9 @@ function have_valid_session()
     })
     .then(response => response.json())
     .then(data => {
+		console.log(data);
+		if (data.lang)
+			setLang(data.lang);
     	if (data.Session == 'True'){
          sessionSocket = new WebSocket('wss://'+ url +':8000/ws/login/?user=' + data.user);
          set_logged_in_view();
@@ -18,9 +21,6 @@ function have_valid_session()
     		set_logged_out_view();
 	    	return false;
     	}
-		console.log(data);
-		if (data.lang)
-			setLang(data.lang);
     })
     .catch(error => {
         console.error("Error:", error);
