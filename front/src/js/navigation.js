@@ -1,7 +1,6 @@
 
 //var baseUrl = "http://localhost";
 var baseUrl = window.location.origin;
-console.log('url:',baseUrl);
 window.addEventListener('popstate', handlePopState);
 
 function handlePopState(event) {

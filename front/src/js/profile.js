@@ -5,11 +5,23 @@ function submitForm(e) {
     e.preventDefault();
     const loginForm = document.querySelector("#updateUserForm");
     const formData = new FormData(loginForm);
+    var lang = getLang()
     const avatarInput = document.getElementById('avatar');
-    
+
     if (avatarInput.files.length > 0) {
         const avatarFile = avatarInput.files[0];
-        formData.append('avatar', avatarFile);
+        const fileType = avatarFile.type;
+
+        if (fileType === 'image/png') {
+            formData.append('avatar', avatarFile);
+        } else {
+            if (lang == 'en')
+                alert('Please upload a .png file');
+            else if (lang == 'es')
+                alert('Por favor sube un archivo .png');
+            else if (lang == 'pt')
+                alert('Por favor, envie um arquivo .png');
+        }
     }
 
 
