@@ -27,6 +27,7 @@ class Accounts:
     @staticmethod
     def validate_inputdata_for_new_account_request(request):
         # check for data
+        language = request.META.get('HTTP_LANGUAGE', 'default_language')
         data = json.loads(request.body.decode('utf-8'))
         if not data:
             return False, 'Invalid data send.'
@@ -41,19 +42,39 @@ class Accounts:
         # parse username
         valid_username = Security.is_valid_username(username)
         if valid_username == False:
-            return False, 'Invalid characters in username'
+            if language == 'en':
+                return False, 'Invalid characters in username'
+            elif language == 'es': 
+                return False, 'Caracteres inválidos en el nombre de usuario'
+            else:
+                return False, 'Caracteres inválidos no nome de usuário'
         #parse mail
         check_mail = Security.is_valid_email(email)
         if not check_mail:
-            return False, 'Introduce a valid email.'
+            if language == 'en':
+                return False, 'Invalid email.'
+            elif language == 'es': 
+                return False, 'Correo electrónico no válido.'
+            else:
+                return False, 'Email inválido.'
         #check pwd match
         if password != confirm_password:
-            return False, 'Password missmatch.'
+            if language == 'en':
+                return False, 'Password missmatch.'
+            elif language == 'es':
+                return False, 'Las contraseñas no coinciden.'
+            else:
+                return False, 'As palavras-passe não coincidem.'
         #parse pwd
         is_secure, error_messages = Security.check_pwd_security(password)
         if is_secure == False:
             print(error_messages)
-            return False, error_messages
+            if language == 'en':
+                return False, 'Password not secure enough.'
+            elif language == 'es':
+                return False, 'La contraseña no es lo suficientemente segura.'
+            else:
+                return False, 'A senha não é segura o suficiente.'
         return True, None
 
 
@@ -89,7 +110,12 @@ class Accounts:
             # Check username and email are not in use
             res, errMsg = Accounts.username_is_in_use(username)
             if errMsg:
-                return False, errMsg
+                if language == 'en':
+                    return False, 'Username already in use'
+                elif language == 'es':
+                    return False, 'Nombre de usuario ya en uso'
+                else:
+                    return False, 'Nome de usuário já em uso'
             if password != confirm_password:
                 if language == 'en':
                     return False, 'Password missmatch.'
