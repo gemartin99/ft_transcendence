@@ -264,12 +264,11 @@ function join_match_sala(e) {
 }
 
 function join_IA() {
+    var htmlloaded = 0;
     socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
-        document.getElementById('gameContainer').style.display = 'none';
         document.getElementById('waiting').style.display = 'block';
-        
     };
     socket.onmessage = (event) => {
         try{
@@ -283,13 +282,21 @@ function join_IA() {
             if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
-            document.getElementById('gameContainer').style.display = 'flex';
-            printMap(jsonData);
+            // if(htmlloaded == 0 && document.getElementById('gameContainer'))
+            // {
+            //     htmlloaded = 1:
+                document.getElementById('gameContainer').style.display = 'flex';
+            // }
+            //printMap(jsonData);
             redrawCanvas(jsonData);
             window.addEventListener('resize', resizeCanvas);
         }
         if (jsonData['cmd'] == 'update') {
-            
+            if (htmlloaded == 0 && document.getElementById('gameContainer')) {
+                console.log('Inside if: Condition met');
+                htmlloaded = 1;
+                document.getElementById('gameContainer').style.display = 'flex';
+            }
             in_match = true
             //printMap(jsonData);
             redrawCanvas(jsonData);
@@ -297,7 +304,8 @@ function join_IA() {
         }
         if (jsonData['cmd'] == 'finish') {
 
-            printWinner(jsonData);
+            drawMatchResult(jsonData);
+            //printWinner(jsonData);
         }
 
     };

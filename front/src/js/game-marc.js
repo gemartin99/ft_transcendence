@@ -4,21 +4,76 @@ var paddleWidth = 10;
 var paddleHeight = 50;
 var courtColor = 'black';
 
+function beauty_map()
+{
+  var canvas = document.getElementById("gameCanvas");
+  var ctx = canvas.getContext("2d");
 
-// function printMap(jsonData) {
-//     const canvas = document.getElementById('gameCanvas');
-//     const ctx = canvas.getContext('2d');
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     drawBall(jsonData.ball);
-//     drawPaddles(jsonData.paddle1, jsonData.paddle2);
-//     printResult(jsonData);
+  //dibujar el color de fondo + crear rectangulo
+  ctx.fillStyle = "#3498db";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-//     ctx.font = "60px monospace";
-//     ctx.fillStyle = "black";
-//     ctx.textAlign = "center";
-//     ctx.fillText(jsonData.player1.name, 250, 70);
-//     ctx.fillText(jsonData.player2.name, canvas.width - 250, 70);
-// }
+  // stilo del campo , grosor lineas y color de fondo
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 8;
+
+  // linea central
+  ctx.beginPath();
+  ctx.moveTo(canvas.width / 2, 0);
+  ctx.lineTo(canvas.width / 2, canvas.height);
+  ctx.stroke();
+
+  ctx.lineWidth = 2;
+  // linea lateral de arriba
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height / 6);
+  ctx.lineTo(canvas.width, canvas.height / 6);
+  ctx.stroke();
+
+  // linea lateral de abajo
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height - canvas.height / 6);
+  ctx.lineTo(canvas.width, canvas.height - canvas.height / 6);
+  ctx.stroke();
+
+  //linea vertical 1/4 de campo izq
+  ctx.beginPath();
+  ctx.moveTo(canvas.width / 4, canvas.height / 6);
+  ctx.lineTo(canvas.width / 4, canvas.height - canvas.height / 6);
+  ctx.stroke();
+
+  //linea vertical 1/4 de campo derecha
+  ctx.beginPath();
+  ctx.moveTo(canvas.width - canvas.width / 4, canvas.height / 6);
+  ctx.lineTo(canvas.width - canvas.width / 4, canvas.height - canvas.height / 6);
+  ctx.stroke();
+
+  //linea horizontal de 1/4 de campo al centro izq
+  ctx.beginPath();
+  ctx.moveTo(canvas.width / 4, canvas.height / 2);
+  ctx.lineTo(canvas.width / 2, canvas.height / 2);
+  ctx.stroke();
+
+  //linea horizontal de 1/4 de campo al centro izq
+  ctx.beginPath();
+  ctx.moveTo(canvas.width - canvas.width / 4, canvas.height / 2);
+  ctx.lineTo(canvas.width / 2, canvas.height / 2);
+  ctx.stroke();
+
+}
+
+function drawMatchResult(jsonData) {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const fontScale = canvas.width / 1200;
+
+    // Set text properties
+    ctx.fillStyle = 'white';
+    ctx.font = `${50 * fontScale}px Arial`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(jsonData.score1 + "-" + jsonData.score2, canvas.width/2, canvas.height/2);
+}
 
 function redrawCanvas(jsonData){
   const canvas = document.getElementById('gameCanvas');
@@ -35,8 +90,7 @@ function redrawCanvas(jsonData){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw something on the canvas
-  ctx.fillStyle = courtColor;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  beauty_map();
 
   // Draw ball
   ctx.beginPath();
@@ -54,36 +108,33 @@ function redrawCanvas(jsonData){
   ctx.fillRect(paddle2X, paddle2Y, paddleWidth, paddleHeight);
 
   // // Draw score and names
-  // ctx.fillStyle = 'white';
-  // ctx.font = `${20 * fontScale}px Arial`;
-  // ctx.fillText(`${gameState.player1.name}: ${gameState.score1}`, 50 * fontScale, 50 * fontScale);
-  // ctx.fillText(`${gameState.player2.name}: ${gameState.score2}`, canvas.width - 200 * fontScale, 50 * fontScale);
-
-  // if (gameState.isGameOver)
-  //   drawMatchResult(gameState);
+  ctx.fillStyle = 'white';
+  ctx.font = `${20 * fontScale}px Arial`;
+  ctx.fillText(`${jsonData.player1.name}: ${jsonData.score1}`, 50 * fontScale, 50 * fontScale);
+  ctx.fillText(`${jsonData.player2.name}: ${jsonData.score2}`, canvas.width - 200 * fontScale, 50 * fontScale);
 }
 
-function draw() {
-  const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
-  // Clear canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// function draw() {
+//   const canvas = document.getElementById('gameCanvas');
+//   const ctx = canvas.getContext('2d');
+//   // Clear canvas
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw something on the canvas
-  ctx.fillStyle = courtColor;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+//   // Draw something on the canvas
+//   ctx.fillStyle = courtColor;
+//   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Draw ball
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, ballSize, 0, Math.PI * 2);
-  ctx.fillStyle = 'white';
-  ctx.fill();
+//   // Draw ball
+//   ctx.beginPath();
+//   ctx.arc(canvas.width / 2, canvas.height / 2, ballSize, 0, Math.PI * 2);
+//   ctx.fillStyle = 'white';
+//   ctx.fill();
 
-  // Draw paddles
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, (canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight);
-  ctx.fillRect(canvas.width - paddleWidth, (canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight);
-}
+//   // Draw paddles
+//   ctx.fillStyle = 'white';
+//   ctx.fillRect(0, (canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight);
+//   ctx.fillRect(canvas.width - paddleWidth, (canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight);
+// }
 
 
 
@@ -117,7 +168,7 @@ function resizeCanvas() {
 
   // Redraw canvas (you should implement your own draw function)
   console.log("here i have to call the draw");
-  draw();
+  beauty_map();
 }
 
 
