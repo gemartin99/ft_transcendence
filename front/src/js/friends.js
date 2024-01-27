@@ -30,7 +30,7 @@ function searchFriend(event) {
 		}
         console.log('Response:', data);
         // handleRedirect('/friends/');
-        message.textContent = response.message;
+        message.textContent = data.message;
 
     })
     .catch(error => {

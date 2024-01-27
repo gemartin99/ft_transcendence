@@ -158,9 +158,8 @@ function send_form_new_account(e) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.message == "User saved successfully") {
+        if (data.message) {
             setFormMessage(createAccountForm, "success", "Account created successfully");
-            //history.pushState(null, null, '/users/login/identify')
             handleNavLinkAction('/users/login/identify/?s=new')
             console.log('Response:', "ha funciunat");
         }
