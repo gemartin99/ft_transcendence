@@ -18,6 +18,7 @@ function have_valid_session()
     		set_logged_out_view();
 	    	return false;
     	}
+		console.log(data);
 		if (data.lang)
 			setLang(data.lang);
     })
