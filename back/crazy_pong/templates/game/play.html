@@ -54,14 +54,16 @@
   var intervalId;
 
   upButton.addEventListener('touchstart', function() {
+    console.log("pressed up");
     buttonDown("up");
-});
+  });
 
-upButton.addEventListener('touchend', buttonUp);
+  upButton.addEventListener('touchend', buttonUp);
 
-downButton.addEventListener('touchstart', function() {
+  downButton.addEventListener('touchstart', function() {
+    console.log("pressed down");
     buttonDown("down");
-});
+  });
 
 downButton.addEventListener('touchend', buttonUp);
 </script>
