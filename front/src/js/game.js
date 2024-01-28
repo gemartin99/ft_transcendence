@@ -208,7 +208,7 @@ async function reconnect() {
     await new Promise(r => setTimeout(r, 300));
     console.log("ei aixo1: " + window.location.href + " sck: " + socket);
     if (socket == null && window.location.href == "https://crazy-pong.com/game/play/"){
-        fetch(baseUrl + ':8000/accounts/playing/', {
+        fetch(baseUrl + ':8000/users/playing/', {
             headers: {
                 'Content-Type': 'application/json',
                 },
