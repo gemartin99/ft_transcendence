@@ -174,6 +174,7 @@ function resizeCanvas() {
   if (finshed == "no")
     beauty_map();
   else
+    printWinner_finished();
 
 }
 
