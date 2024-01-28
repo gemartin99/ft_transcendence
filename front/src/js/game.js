@@ -101,6 +101,8 @@ function open_socket(target, mode)
     };
     socket.onmessage = (event) => {
         try{
+            if (mode == 'create')
+                handleRedirect('/game/play/');
             document.getElementById('waiting').style.display = 'none';
         } catch (error) {
         }
@@ -156,8 +158,7 @@ function join_match() {
 function create_match() {
     
     code = generateRandomString(5)
-    handleRedirect('/game/play/');
-    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code, "sala");
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code, "create");
 }
 
 
