@@ -4,6 +4,8 @@ var paddleWidth = 10;
 var paddleHeight = 50;
 var linesColor = '#343a40';
 var courtColor = "#226634";
+var finshed1 = "no";
+var finished2;
 
 function beauty_map()
 {
@@ -169,7 +171,10 @@ function resizeCanvas() {
 
   // Redraw canvas (you should implement your own draw function)
   console.log("here i have to call the draw");
-  beauty_map();
+  if (finshed == "no")
+    beauty_map();
+  else
+
 }
 
 
@@ -276,9 +281,40 @@ function resizeCanvas() {
 
     if (jsonData.score1 > jsonData.score2) {
         ctx.fillText(jsonData.player1.name + wins, canvas.width/2, canvas.height/2);
+        finished1 = jsonData.player1.name;
     }
     else {
         ctx.fillText(jsonData.player2.name + wins, canvas.width/2, canvas.height/2);
+        finished1 = jsonData.player1.name;
     }
     ctx.fillText(jsonData.score1 + "-" + jsonData.score2, canvas.width/2, canvas.height/2 + canvas.height/10);
+    finished2 = jsonData.score1 + "-" + jsonData.score2;
+}
+
+function printWinner_finished()
+{
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = courtColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    fontScale = canvas.width / 1200;
+    ctx.font = `${75 * fontScale}px Arial`;
+    ctx.fillStyle = linesColor;
+    ctx.textAlign = "center";
+
+    var wins;
+    lang = getLang();
+    if (lang == 'en') {
+        wins = " wins!";
+    }
+    else if (lang == 'es') {
+        wins = " gana!";
+    }
+    else if (lang == 'pt') {
+        wins = " ganha!";
+    }
+    ctx.fillText(finished1 + wins, canvas.width/2, canvas.height/2);
+    ctx.fillText(finished2, canvas.width/2, canvas.height/2 + canvas.height/10);
 }
