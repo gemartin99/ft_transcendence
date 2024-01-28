@@ -171,7 +171,7 @@ function resizeCanvas() {
 
   // Redraw canvas (you should implement your own draw function)
   console.log("here i have to call the draw");
-  if (finshed == "no")
+  if (finshed1 == "no")
     beauty_map();
   else
     printWinner_finished();
