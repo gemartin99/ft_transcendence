@@ -170,9 +170,10 @@ function resizeCanvas() {
   paddleHeight = newSize * 5;
 
   // Redraw canvas (you should implement your own draw function)
-  console.log("here i have to call the draw");
-  if (finshed1 == "no")
+  if (finshed1 == "no"){
+    console.log("here i have to call the draw");
     beauty_map();
+  }
   else
     printWinner_finished();
 
