@@ -208,54 +208,8 @@ async function reconnect() {
     await new Promise(r => setTimeout(r, 300));
     console.log("ei aixo1: " + window.location.href + " sck: " + socket);
     if (socket == null && window.location.href == "https://crazy-pong.com/game/play/"){
-        console.log("ei aixo: " + window.location.href);
-        socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
-        socket.onopen = (event) => {
-            console.log('WebSocket connection opened:', event);
-            
-        };
-        socket.onmessage = (event) => {
-                try{
-                    document.getElementById('gameContainer').style.display = 'block';
-                    document.getElementById('waiting').style.display = 'none';
-                } catch (error) {
-                }
-                in_match = true
-                const jsonData = JSON.parse(event.data.toString());
-                if (jsonData['cmd'] == 'start') {
-                    if (window.location.href != baseUrl + "/game/play/"){
-                        handleRedirect('/game/play/');
-                    }
-                    printMap(jsonData);
-                }
-                if (jsonData['cmd'] == 'update') {
-                    //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                    //console.log(jsonData);
-                    //var idMatch = document.getElementById("idMatch");
-                    //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
-                    if (jsonData['mode'] == '1vs1') {
-                        in_1vs1 = true
-                    }
-                    printMap(jsonData);
-                }
-                if (jsonData['cmd'] == 'finish') {
-                    //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                    //var idMatch = document.getElementById("idMatch");
-                    //idMatch.textContent = jsonData.idMatch;
-                    printWinner(jsonData);
-                }
-                //console.log('WebSocket message received:', event.data);
-
-        };
-        socket.onerror = (error) => {
-            handleRedirect('/game/');
-            console.error('WebSocket error:', error);
-        };
-        socket.onclose = (event) => {
-            console.log('WebSocket connection closed:', event);
-            in_match = false
-        };
-    }
+        open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
+    }          
 }
 
 function obs_match(e) {
@@ -337,71 +291,6 @@ function quitQueue() {
         console.error('Error:', error);
     });
 }
-function drawBall(ball) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#000';
-    ctx.fill();
-    ctx.closePath();
-}
-
-function drawPaddles(paddle1, paddle2) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#000';
-    ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
-    ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
-}
-
-function printResult(jsonData) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.font = "60px monospace";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.fillText(jsonData.score1 + "-" + jsonData.score2, canvas.width/2, canvas.height/2);
-
-}
-
-function printMap(jsonData) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBall(jsonData.ball);
-    drawPaddles(jsonData.paddle1, jsonData.paddle2);
-    printResult(jsonData);
-
-    ctx.font = "60px monospace";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.fillText(jsonData.player1.name, 250, 70);
-    ctx.fillText(jsonData.player2.name, canvas.width - 250, 70);
-}
-
-function printWinner(jsonData) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "60px monospace";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    if (jsonData.score1 > jsonData.score2) {
-        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
-    }
-    else {
-        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
-    }
-    ctx.fillText(jsonData.score1 + "-" + jsonData.score2, canvas.width/2, canvas.height/2 + 60);
-}
-
-
-
-// Function to be called from the HTML button onclick event
-function join_match_from_html() {
-    join_match();
-}
 
 function generateRandomString(length) {
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -413,80 +302,10 @@ function generateRandomString(length) {
   }
 
 //TOURNAMENT FUNCTIONS
-function gameTournament(id, points) {
-
-    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=' + points + '&sala=' + id);
-    
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        
-    };
-    socket.onmessage = (event) => {
-        try{
-            document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-        } catch (error) {
-        }
-        in_match = true;
-        const jsonData = JSON.parse(event.data.toString());
-        if (jsonData['cmd'] == 'start') {
-            if (window.location.href != baseUrl + "/game/play/"){
-                handleRedirect('/game/play/');
-            }
-            printMap(jsonData);
-        }
-        if (jsonData['cmd'] == 'update') {
-            printMap(jsonData);
-        }
-        if (jsonData['cmd'] == 'finish') {
-            printWinner(jsonData);
-        }
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };         
+function gameTournament(id, points) {    
+    open_socket*('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=' + points + '&sala=' + id);
 }
 
-function gameTournamentIA(id, points) {
-
-    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=salaIA&points=' + points + '&sala=' + id);
-    
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        
-    };
-    socket.onmessage = (event) => {
-        try{
-            document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-        } catch (error) {
-        }
-        in_match = true;
-        const jsonData = JSON.parse(event.data.toString());
-        if (jsonData['cmd'] == 'start') {
-            if (window.location.href != baseUrl + "/game/play/"){
-                handleRedirect('/game/play/');
-            }
-            printMap(jsonData);
-        }
-        if (jsonData['cmd'] == 'update') {
-            printMap(jsonData);
-        }
-        if (jsonData['cmd'] == 'finish') {
-            printWinner(jsonData);
-        }
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };         
+function gameTournamentIA(id, points) { 
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=salaIA&points=' + points + '&sala=' + id);
 }
