@@ -282,11 +282,11 @@ function join_IA() {
             if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
-            // if(htmlloaded == 0 && document.getElementById('gameContainer'))
-            // {
-            //     htmlloaded = 1:
+            if(htmlloaded == 0 && document.getElementById('gameContainer'))
+            {
+                htmlloaded = 1
                 document.getElementById('gameContainer').style.display = 'flex';
-            // }
+            }
             //printMap(jsonData);
             redrawCanvas(jsonData);
             window.addEventListener('resize', resizeCanvas);
