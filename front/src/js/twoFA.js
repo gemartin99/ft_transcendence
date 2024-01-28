@@ -8,6 +8,7 @@ function	checkGoogleAuthCode(event) {
     }
     const formData = new FormData();
 	formData.append('totp_code', concatenatedValue);
+    var lang = getLang()
 	fetch(baseUrl + ":8000/twoFA/verifyGoogleCode/", {
 	    method: 'POST',
 	    body: formData,
@@ -43,6 +44,7 @@ function	checkGoogleAuthCode(event) {
 }
 
 function	activateGoogle2FA(event) {
+    var lang = getLang()
 	fetch(baseUrl + ":8000/twoFA/google2FA/", {
 	    method: 'POST',
 	    // body: formData,
@@ -67,6 +69,7 @@ function	activateGoogle2FA(event) {
 }
 
 function	activateMail2FA() {
+    var lang = getLang()
 	fetch(baseUrl + ":8000/twoFA/mail2FA/", {
 	    method: 'POST',
 	    // body: formData,
@@ -94,6 +97,7 @@ function	getQR() {
 
 	const QRimg = document.getElementById('QRimg');
 
+    var lang = getLang()
     fetch(baseUrl + ":8000/twoFA/getQR/", {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
@@ -124,6 +128,7 @@ function	getQR() {
 }
 
 function	checkMailCode(event) {
+    var lang = getLang()
     var concatenatedValue = "";
     var inputs = document.getElementsByClassName('code-input');
     for (var i = 0; i < inputs.length; i++) {
@@ -141,7 +146,6 @@ function	checkMailCode(event) {
 	})
 	.then(response => response.json())
 	.then(data => {
-		console.log(data);
 		if (data.redirect)
 		{
 			handleRedirect(data.redirect)
@@ -171,6 +175,7 @@ function	checkMailCode(event) {
 }
 
 function	unsetTwoFactor(event) {
+    var lang = getLang()
 	fetch(baseUrl + ":8000/twoFA/disable/", {
 	    method: 'POST',
 	    credentials: 'include',
