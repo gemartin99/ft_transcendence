@@ -286,7 +286,7 @@ function resizeCanvas() {
     }
     else {
         ctx.fillText(jsonData.player2.name + wins, canvas.width/2, canvas.height/2);
-        finished1 = jsonData.player1.name;
+        finished1 = jsonData.player2.name;
     }
     ctx.fillText(jsonData.score1 + "-" + jsonData.score2, canvas.width/2, canvas.height/2 + canvas.height/10);
     finished2 = jsonData.score1 + "-" + jsonData.score2;
