@@ -4,7 +4,7 @@ var paddleWidth = 10;
 var paddleHeight = 50;
 var linesColor = '#343a40';
 var courtColor = "#226634";
-var finshed1 = "no";
+var finished1 = "no";
 var finished2;
 
 function beauty_map()
@@ -170,8 +170,7 @@ function resizeCanvas() {
   paddleHeight = newSize * 5;
 
   // Redraw canvas (you should implement your own draw function)
-  if (finshed1 == "no"){
-    console.log("here i have to call the draw");
+  if (finished1 == "no"){
     beauty_map();
   }
   else
