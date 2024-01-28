@@ -210,7 +210,7 @@ async function reconnect() {
     if (socket == null && window.location.href == "https://crazy-pong.com/game/play/"){
         const message = {id: "reconnect",
                 };
-        fetch(baseUrl + ':8000/account/playing/', {
+        fetch(baseUrl + ':8000/accounts/playing/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
