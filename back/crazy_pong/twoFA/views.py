@@ -26,7 +26,12 @@ def verifyGoogle2FA(request):
     if (TwoFA.verify_totp(request)):
         return JsonResponse({'message': 'ok'})
     else:
-        return JsonResponse({'message': 'bad one'})
+        if language == 'es':
+            return JsonResponse({'error': 'Código incorrecto'})
+        elif language == 'en':
+            return JsonResponse({'error': 'Wrong code'})
+        elif language == 'pt':
+            return JsonResponse({'error': 'Código errado'})
 
 def getMailVerificationPage(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
@@ -93,6 +98,7 @@ def get_set_google2FA_page(request):
 
 @csrf_exempt
 def activateMail2FA(request):
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
@@ -104,11 +110,17 @@ def activateMail2FA(request):
         if (TwoFA.send_mailUser(user.name, user.email, user.mail2FACode)):
             return JsonResponse({'message': 'ok'})
         else:
-            return JsonResponse({'message': 'bad one'})
+            if language == 'es':
+                return JsonResponse({'error': 'Error al enviar el correo'})
+            elif language == 'en':
+                return JsonResponse({'error': 'Error sending mail'})
+            elif language == 'pt':
+                return JsonResponse({'error': 'Erro ao enviar o email'})
     return JsonResponse({'message': 'ok'})
 
 @csrf_exempt
 def verifyMailCode(request):
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
@@ -126,7 +138,12 @@ def verifyMailCode(request):
         user.generate_mail2fa_code()
         user.save()    
         TwoFA.send_mailUser(user.name, user.email, user.mail2FACode)
-    return JsonResponse({'message': 'notok new one sent'})
+    if language == 'es':
+        return JsonResponse({'error': 'Código incorrecto'})
+    elif language == 'en':
+        return JsonResponse({'error': 'Wrong code'})
+    elif language == 'pt':
+        return JsonResponse({'error': 'Código errado'})
 
 @csrf_exempt
 def disableTwoFactor(request):
