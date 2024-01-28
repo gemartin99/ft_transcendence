@@ -90,38 +90,53 @@ function handleGame(){
     }
 }
 
-function join_match() {
-    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=5');
 
+function open_socket(target, mode)
+{
+    var htmlloaded = 0;
+    socket = new WebSocket(target);
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
+        document.getElementById('waiting').style.display = 'block';
     };
     socket.onmessage = (event) => {
         try{
-            document.getElementById('gameContainer').style.display = 'block';
             document.getElementById('waiting').style.display = 'none';
         } catch (error) {
         }
         in_match = true
+        if (mode == '1vs1') {
+            in_1vs1 = true
+        }
         const jsonData = JSON.parse(event.data.toString());
-        //console.log(jsonData)g
         if (jsonData['cmd'] == 'start') {
-            console.log("ei aixo: " + jsonData)
             if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
             }
-            printMap(jsonData);
+            if(htmlloaded == 0 && document.getElementById('gameContainer'))
+            {
+                htmlloaded = 1
+                document.getElementById('gameContainer').style.display = 'flex';
+                redrawCanvas(jsonData);
+            }
+            window.addEventListener('resize', resizeCanvas);
         }
         if (jsonData['cmd'] == 'update') {
-            printMap(jsonData);
+            if (htmlloaded == 0 && document.getElementById('gameContainer')) {
+                console.log('Inside if: Condition met');
+                htmlloaded = 1;
+                document.getElementById('gameContainer').style.display = 'flex';
+            }
+            in_match = true
+            if (htmlloaded == 1) {
+                redrawCanvas(jsonData);
+            }
+            window.addEventListener('resize', resizeCanvas);
         }
         if (jsonData['cmd'] == 'finish') {
-            printWinner(jsonData);
-            socket.close();
+
+            drawMatchResult(jsonData);
         }
-
-        //console.log('WebSocket message received:', event.data);
-
     };
     socket.onerror = (error) => {
         console.error('WebSocket error:', error);
@@ -129,61 +144,22 @@ function join_match() {
     socket.onclose = (event) => {
         console.log('WebSocket connection closed:', event);
         in_match = false
-    };        
+        in_1vs1 = false
+    }; 
+}
+
+function join_match() {
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=5', "search");        
 }
 
 function create_match() {
     
     code = generateRandomString(5)
-    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
-    //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
-    console.log(code)
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        handleRedirect('/game/play/');
-    };
-    socket.onmessage = (event) => {
-        try{
-            document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-        } catch (error) {
-        }
-        in_match = true
-        const jsonData = JSON.parse(event.data.toString());
-        if (jsonData['cmd'] == 'start') {
-            if (window.location.href != baseUrl + "/game/play/"){
-                handleRedirect('/game/play/');
-            }
-            printMap(jsonData);
-        }
-        if (jsonData['cmd'] == 'update') {
-            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            //console.log(jsonData);
-            //var idMatch = document.getElementById("idMatch");
-            //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
-            printMap(jsonData);
-        }
-        if (jsonData['cmd'] == 'finish') {
-            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            //var idMatch = document.getElementById("idMatch");
-            //idMatch.textContent = jsonData.idMatch;
-            printWinner(jsonData);
-        }
-        //console.log('WebSocket message received:', event.data);
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };         
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code, "sala");
 }
 
 
 function join_match_sala(e) {
-    console.log("joining match")
     e.preventDefault();
     const message = {idMatch: document.getElementById("lobbyCode").value,
             };
@@ -200,47 +176,8 @@ function join_match_sala(e) {
     .then(data => {
         console.log("eieieieiei" + data.code);
         if (data.code == 200){
-            handleRedirect('/game/play/');
-
-            socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
-    
-            socket.onopen = (event) => {
-                console.log('WebSocket connection opened:', event);
-                
-            };
-            socket.onmessage = (event) => {
-                try{
-                    document.getElementById('gameContainer').style.display = 'block';
-                    document.getElementById('waiting').style.display = 'none';
-                } catch (error) {
-                }
-                in_match = true
-                const jsonData = JSON.parse(event.data.toString());
-                if (jsonData['cmd'] == 'start') {
-                    if (window.location.href != baseUrl + "/game/play/"){
-                        handleRedirect('/game/play/');
-                    }
-                    printMap(jsonData);
-                }
-                if (jsonData['cmd'] == 'update') {
-                    printMap(jsonData);
-                }
-                if (jsonData['cmd'] == 'finish') {
-                    //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                    //var idMatch = document.getElementById("idMatch");
-                    //idMatch.textContent = jsonData.idMatch;
-                    printWinner(jsonData);
-                }
-                //console.log('WebSocket message received:', event.data);
-
-            };
-            socket.onerror = (error) => {
-                console.error('WebSocket error:', error);
-            };
-            socket.onclose = (event) => {
-                console.log('WebSocket connection closed:', event);
-                in_match = false
-            };         
+            handleRedirect('/game/play/');    
+            open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value, "sala");   
         }
         else {
             lang = getLang();
@@ -264,59 +201,7 @@ function join_match_sala(e) {
 }
 
 function join_IA() {
-    var htmlloaded = 0;
-    socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        document.getElementById('waiting').style.display = 'block';
-    };
-    socket.onmessage = (event) => {
-        try{
-            //document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('waiting').style.display = 'none';
-        } catch (error) {
-        }
-        in_match = true
-        const jsonData = JSON.parse(event.data.toString());
-        if (jsonData['cmd'] == 'start') {
-            if (window.location.href != baseUrl + "/game/play/"){
-                handleRedirect('/game/play/');
-            }
-            if(htmlloaded == 0 && document.getElementById('gameContainer'))
-            {
-                htmlloaded = 1
-                document.getElementById('gameContainer').style.display = 'flex';
-                redrawCanvas(jsonData);
-            }
-            window.addEventListener('resize', resizeCanvas);
-        }
-        if (jsonData['cmd'] == 'update') {
-            if (htmlloaded == 0 && document.getElementById('gameContainer')) {
-                console.log('Inside if: Condition met');
-                htmlloaded = 1;
-                document.getElementById('gameContainer').style.display = 'flex';
-            }
-            in_match = true
-            //printMap(jsonData);
-            if (htmlloaded == 1) {
-                redrawCanvas(jsonData);
-            }
-            window.addEventListener('resize', resizeCanvas);
-        }
-        if (jsonData['cmd'] == 'finish') {
-
-            drawMatchResult(jsonData);
-            //printWinner(jsonData);
-        }
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    }; 
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
 }
 
 async function reconnect() {
@@ -392,39 +277,7 @@ function obs_match(e) {
         console.log("eieieieiei" + data.code);
         if (data.code == 200){
             handleRedirect('/game/play/');
-            socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
-
-            socket.onopen = (event) => {
-                console.log('WebSocket connection opened:', event);
-            };
-            socket.onmessage = (event) => {
-                if (in_match == false) {
-                    document.getElementById('gameContainer').style.display = 'block';
-                    document.getElementById('waiting').style.display = 'none';
-                }
-                in_match = true
-                const jsonData = JSON.parse(event.data.toString());
-                console.log(jsonData);
-                if (jsonData['cmd'] == 'start') {
-                    if (window.location.href != baseUrl + "/game/play/"){
-                        handleRedirect('/game/play/');
-                    }
-                    printMap(jsonData);
-                }
-                if (jsonData['cmd'] == 'update') {
-                    //#endregio//heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                    printMap(jsonData);
-                }
-
-                //console.log('WebSocket message received:', event.data);
-
-            };
-            socket.onerror = (error) => {
-                console.error('WebSocket error:', error);
-            };
-            socket.onclose = (event) => {
-                console.log('WebSocket connection closed:', event);
-            };
+            open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value, "obs");
         }   
         else {
             lang = getLang();
@@ -453,51 +306,7 @@ async function one_vs_one_without_shirt(e) {
         handleRedirect('/game/play/');
         await new Promise(r => setTimeout(r, 300));
 
-        socket = new WebSocket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=1vs1&points=' + points + '&p1=' + p1 + '&p2=' + p2);
-
-        socket.onopen = (event) => {
-            console.log('WebSocket connection opened:', event);
-            try{
-                document.getElementById('gameContainer').style.display = 'block';
-                document.getElementById('waiting').style.display = 'none';
-            } catch (error) {
-            }
-            
-        };
-        socket.onmessage = (event) => {
-            try{
-                document.getElementById('gameContainer').style.display = 'block';
-                document.getElementById('waiting').style.display = 'none';
-            } catch (error) {
-            }
-            in_1vs1 = true
-            in_match = true
-            const jsonData = JSON.parse(event.data.toString());
-            if (jsonData['cmd'] == 'start') {
-                if (window.location.href != baseUrl + "/game/play/"){
-                    handleRedirect('/game/play/');
-                }
-                printMap(jsonData);
-            }
-            if (jsonData['cmd'] == 'update') {
-                in_match = true
-                //console.log(jsonData);
-                printMap(jsonData);
-            }
-            if (jsonData['cmd'] == 'finish') {
-    
-                printWinner(jsonData);
-            }
-    
-        };
-        socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-        socket.onclose = (event) => {
-            console.log('WebSocket connection closed:', event);
-            in_match = false
-            in_1vs1 = false
-        }; 
+        open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=1vs1&points=' + points + '&p1=' + p1 + '&p2=' + p2, "1vs1");
     }
 
 
