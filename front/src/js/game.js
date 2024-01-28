@@ -216,8 +216,8 @@ async function reconnect() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("eieieieiei" + data.code);
-            if (data.code == 200){
+            console.log("eieieieiei" + data.playing);
+            if (data.playing == 200){
                 open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
             }   
             else {
