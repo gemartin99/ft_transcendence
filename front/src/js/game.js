@@ -109,7 +109,6 @@ function open_socket(target, mode)
             in_1vs1 = true
         }
         const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData);
         if (jsonData['cmd'] == 'start') {
             if (window.location.href != baseUrl + "/game/play/"){
                 handleRedirect('/game/play/');
@@ -126,10 +125,10 @@ function open_socket(target, mode)
             if (htmlloaded == 0 && document.getElementById('gameContainer')) {
                 console.log('Inside if: Condition met');
                 htmlloaded = 1;
-                document.getElementById('gameContainer').style.display = 'flex';
             }
             in_match = true
             try{
+                document.getElementById('gameContainer').style.display = 'flex';
                 redrawCanvas(jsonData);
             } catch (error) {
             }
