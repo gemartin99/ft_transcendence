@@ -3,7 +3,7 @@ var ballSize = 10;
 var paddleWidth = 10;
 var paddleHeight = 50;
 var linesColor = '#343a40';
-var courtColor = '#009900';
+var courtColor = '#008566';
 
 function beauty_map()
 {
