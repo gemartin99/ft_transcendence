@@ -83,6 +83,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function buttonDown(direction) {
+    intervalId = setInterval(function() {
+        const message = { 
+            cmd: 'update',
+            id: current_match,
+            pl: in_1vs1 ? "p1" : player,
+            key: direction 
+        };
+        socket.send(JSON.stringify(message));
+        console.log(JSON.stringify(message));
+    }, 100); // Execute every 100ms
+}
+
+function buttonUp() {
+    clearInterval(intervalId);
+    const message = { 
+        cmd: 'update',
+        id: current_match,
+        pl: in_1vs1 ? "p1" : player,
+        key: "rest" 
+    };
+    socket.send(JSON.stringify(message));
+    console.log(JSON.stringify(message));
+}
+
 function handleGame(){
     console.log('handleGame');
     if (in_match == true) {

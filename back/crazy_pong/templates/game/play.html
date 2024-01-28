@@ -39,7 +39,30 @@
         <div class="card" id="gameContainer" class="aspect-ratio-1200-750" style="display: none">
           <canvas id="gameCanvas" width="1200" height="750", style="background-color: darkgray; outline: solid 5px #343a40;", ali></canvas>
         </div>
+        <div class="text-center mt-md-4" style="padding: 50px;">
+          <button id="upButton" class="btn btn-warning more-size" style="width: 300px;">⬆️</button>
+          <button id="downButton" class="btn btn-warning more-size" style="width: 300px;">⬇️</button>
+      </div>
       </div>
   </section>
 </div>
+
+<script>
+  var upButton = document.getElementById('upButton');
+  var downButton = document.getElementById('downButton');
+
+  var intervalId;
+
+  upButton.addEventListener('touchstart', function() {
+    buttonDown("up");
+});
+
+upButton.addEventListener('touchend', buttonUp);
+
+downButton.addEventListener('touchstart', function() {
+    buttonDown("down");
+});
+
+downButton.addEventListener('touchend', buttonUp);
+</script>
     
