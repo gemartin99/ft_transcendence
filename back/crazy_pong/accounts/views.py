@@ -128,9 +128,9 @@ def is_playing(request):
     user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
     if user.playing:
-        return JsonResponse({'playing': True})
+        return JsonResponse({'playing': '200'})
     else:
-        return JsonResponse({'playing': False})
+        return JsonResponse({'playing': '400'})
 
 
 ##debug functions

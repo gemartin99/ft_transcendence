@@ -97,7 +97,7 @@ function open_socket(target, mode)
     socket = new WebSocket(target);
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
-        document.getElementById('waiting').style.display = 'block';
+        //document.getElementById('waiting').style.display = 'block';
     };
     socket.onmessage = (event) => {
         try{
@@ -208,7 +208,29 @@ async function reconnect() {
     await new Promise(r => setTimeout(r, 300));
     console.log("ei aixo1: " + window.location.href + " sck: " + socket);
     if (socket == null && window.location.href == "https://crazy-pong.com/game/play/"){
-        open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
+        const message = {id: "reconnect",
+                };
+        fetch(baseUrl + ':8000/game/playing/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            credentials: 'include',
+            body: JSON.stringify(message),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("eieieieiei" + data.code);
+            if (data.code == 200){
+                open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
+            }   
+            else {
+                handleRedirect('/game/');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }          
 }
 
