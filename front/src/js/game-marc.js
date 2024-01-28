@@ -255,7 +255,7 @@ function resizeCanvas() {
     const ctx = canvas.getContext('2d');
 
     ctx.fillStyle = courtColor;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     fontScale = canvas.width / 1200;
     ctx.font = `${75 * fontScale}px Arial`;
