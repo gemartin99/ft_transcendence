@@ -136,7 +136,7 @@ function open_socket(target, mode)
         }
         if (jsonData['cmd'] == 'finish') {
 
-            drawMatchResult(jsonData);
+            printWinner(jsonData);
         }
     };
     socket.onerror = (error) => {

@@ -248,3 +248,24 @@ function resizeCanvas() {
     this.context.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
 
   }*/
+
+
+  function printWinner(jsonData) {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = courtColor;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    fontScale = canvas.width / 1200;
+    ctx.font = `${50 * fontScale}px Arial`;
+    ctx.fillStyle = linesColor;
+    ctx.textAlign = "center";
+    if (jsonData.score1 > jsonData.score2) {
+        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
+    }
+    else {
+        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
+    }
+    ctx.fillText(jsonData.score1 + "-" + jsonData.score2, canvas.width/2, canvas.height/2 + canvas.height/10);
+}
