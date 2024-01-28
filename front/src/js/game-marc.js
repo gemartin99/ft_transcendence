@@ -261,11 +261,24 @@ function resizeCanvas() {
     ctx.font = `${75 * fontScale}px Arial`;
     ctx.fillStyle = linesColor;
     ctx.textAlign = "center";
+
+    var wins;
+    lang = getLang();
+    if (lang == 'en') {
+        wins = " wins!";
+    }
+    else if (lang == 'es') {
+        wins = " gana!";
+    }
+    else if (lang == 'pt') {
+        wins = " ganha!";
+    }
+
     if (jsonData.score1 > jsonData.score2) {
-        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
+        ctx.fillText(jsonData.player1.name + wins, canvas.width/2, canvas.height/2);
     }
     else {
-        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
+        ctx.fillText(jsonData.player2.name + wins, canvas.width/2, canvas.height/2);
     }
     ctx.fillText(jsonData.score1 + "-" + jsonData.score2, canvas.width/2, canvas.height/2 + canvas.height/10);
 }
