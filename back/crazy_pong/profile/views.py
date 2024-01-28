@@ -28,7 +28,7 @@ def get_profile_page(request):
     if not user:
         return JsonResponse({'redirect': redirect})
     last_5_matches = user.get_last_5_matches()
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = profile.langs.get_langs(language)
     context['user'] = user
     context['total_played_games'] =  user.wins + user.losses
@@ -45,7 +45,7 @@ def get_edit_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = profile.langs.get_langs(language)
     context['user'] = user
     content_html = render_to_string('profile/edit-profile.html', context)
@@ -60,7 +60,7 @@ def get_twofactor_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = profile.langs.get_langs(language)
     context['user'] = user
     content_html = render_to_string('profile/edit-twofactor.html', context)
@@ -96,7 +96,7 @@ def UpdateUser(username, user, response_messages, language):
             user.name = username
     return response_messages
 
-def UpdateEmail(email, user, response_messages):
+def UpdateEmail(email, user, response_messages, language):
     flag = False
     if email is not None:
         if not Security.is_valid_email(email):
@@ -132,20 +132,21 @@ def UpdatePwd(password, confirm_password, user, response_messages, language):
 
 @csrf_exempt
 def UpdateInfo(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
     try:
+        language = user.language
         username = request.POST.get('name').lower()
         email = request.POST.get('email').lower()
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
         avatar = request.FILES.get('avatar')
         response_messages = []
-        response_messages = UpdateUser(username, user, response_messages)
-        response_messages = UpdateEmail(email, user, response_messages)
-        response_messages = UpdatePwd(password, confirm_password, user, response_messages)
+        response_messages = UpdateUser(username, user, response_messages, language)
+        response_messages = UpdateEmail(email, user, response_messages, language)
+        response_messages = UpdatePwd(password, confirm_password, user, response_messages, language)
         if avatar:
             # Check if the file is a PNG image
             file_type = imghdr.what(avatar)

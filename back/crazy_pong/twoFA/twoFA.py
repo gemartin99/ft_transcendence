@@ -41,9 +41,9 @@ class TwoFA:
     @staticmethod
     def verify_totp(request):
         jwt_token = request.COOKIES.get('jwttoken', None)
-        language = request.META.get('HTTP_LANGUAGE', 'default_language')
         user_id = Authentification.decode_jwt_token(jwt_token)
         user = Usermine.objects.get(id=user_id)
+        language = user.language
         if not user:
             return JsonResponse({'redirect': '/users/login/'})
         if request.method != 'POST':

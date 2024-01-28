@@ -131,6 +131,21 @@ def is_playing(request):
         return JsonResponse({'playing': '200'})
     else:
         return JsonResponse({'playing': '400'})
+    
+
+@csrf_exempt
+def changeLang(request):
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True):
+        jwt_token = request.COOKIES.get('jwttoken', None)
+        user_id = Authentification.decode_jwt_token(jwt_token)
+        user = Usermine.objects.get(id=user_id)
+        user.language = request.POST.get('language')
+        user.save()
+        return JsonResponse({'code': '200'})
+    else:
+        return JsonResponse({'code': '200'})
+
 
 
 ##debug functions

@@ -14,7 +14,7 @@ def get_game_page(request):
         return JsonResponse({'redirect': redirect})
     if user.playing:
         return JsonResponse({'redirect': '/game/play/'})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = game.langs.get_langs(language)
     #if user.playing:
     content_html = render_to_string('game/game.html', context)
@@ -29,7 +29,7 @@ def get_play_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = game.langs.get_langs(language)
     print(user.gameId + " holaaaaa " + str(len(user.gameId)))
     if (len(user.gameId) == 5):
@@ -46,7 +46,7 @@ def get_view_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = game.langs.get_langs(language)
     content_html = render_to_string('game/view_game.html', context)
     data = {
@@ -76,7 +76,7 @@ def get_join_game_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = game.langs.get_langs(language)
     content_html = render_to_string('game/join_game.html', context)
     data = {
@@ -90,7 +90,7 @@ def get_private_game_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = game.langs.get_langs(language)
     content_html = render_to_string('game/private_game.html', context)
     data = {
@@ -104,7 +104,7 @@ def get_1vs1_game_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = game.langs.get_langs(language)
     content_html = render_to_string('game/1vs1_game.html', context)
     data = {

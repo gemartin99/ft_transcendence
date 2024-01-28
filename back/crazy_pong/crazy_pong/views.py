@@ -1,7 +1,9 @@
 import crazy_pong.langs
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from authentification.authentification import Authentification
 
+from accounts.models import Usermine
 
 # Front pages that are not from a specific app 
 def get_aboutus_page(request):
@@ -18,7 +20,16 @@ def get_aboutus_page(request):
     return JsonResponse(data)
 
 def get_information_page(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True):
+        jwt_token = request.COOKIES.get('jwttoken', None)
+        user_id = Authentification.decode_jwt_token(jwt_token)
+        user = Usermine.objects.get(id=user_id)
+        languaje = user.language
+    else:
+        language = request.META.get('HTTP_LANGUAGE', 'default_language')
+
     context = crazy_pong.langs.get_langs(language)
     content_html = render_to_string('information/information.html', context)
     data = {
@@ -30,7 +41,17 @@ def get_information_page(request):
 
 
 def get_home_page(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    loggued, redirect = Authentification.user_loggued_ok(request)
+    if (loggued == True):
+        jwt_token = request.COOKIES.get('jwttoken', None)
+        user_id = Authentification.decode_jwt_token(jwt_token)
+        user = Usermine.objects.get(id=user_id)
+        languaje = user.language
+    else:
+        language = request.META.get('HTTP_LANGUAGE', 'default_language')
+
+
+
     context = crazy_pong.langs.get_langs(language)
     jwtToken = request.COOKIES.get('jwttoken', None)
     if jwtToken:

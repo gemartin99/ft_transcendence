@@ -13,7 +13,7 @@ def get_friends_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = {
         'friends': user.friends.all(),
     }
@@ -29,10 +29,11 @@ def get_friends_page(request):
 
 @csrf_exempt 
 def addFriend(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
+    language = user.language
     json_data = json.loads(request.body.decode('utf-8'))
     print('holaaaaaaaa')
     print(json_data)

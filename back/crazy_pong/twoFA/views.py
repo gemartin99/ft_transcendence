@@ -45,7 +45,7 @@ def getMailVerificationPage(request):
         user.generate_mail2fa_code()
         user.save()    
         TwoFA.send_mailUser(user.name, user.email, user.mail2FACode)
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    language = user.language
     context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/check-email2factor.html', context)
     data = {
@@ -60,7 +60,7 @@ def getGoogleVerificationPage(request):
     user_id = Authentification.decode_jwt_token(jwt_token)
     try:
         user = Usermine.objects.get(id=user_id)
-        language = request.META.get('HTTP_LANGUAGE', 'default_language')
+        language = user.language
         context = twoFA.langs.get_langs(language)
         content_html = render_to_string('twofactor/check-google2factor.html', context)
         data = {
@@ -74,7 +74,8 @@ def getGoogleVerificationPage(request):
 
 
 def get_set_mail2FA_page(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    user, redirect = Authentification.get_auth_user(request)
+    language = user.language
     context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/set-email2factor.html', context)
     data = {
@@ -86,7 +87,8 @@ def get_set_mail2FA_page(request):
 
 
 def get_set_google2FA_page(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    user, redirect = Authentification.get_auth_user(request)
+    language = user.language
     context = twoFA.langs.get_langs(language)
     content_html = render_to_string('twofactor/set-google2factor.html', context)
     data = {
@@ -98,8 +100,8 @@ def get_set_google2FA_page(request):
 
 @csrf_exempt
 def activateMail2FA(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     user, redirect = Authentification.get_auth_user(request)
+    language = user.language
     if not user:
         return JsonResponse({'redirect': redirect})
     if request.method != 'POST':
@@ -120,10 +122,11 @@ def activateMail2FA(request):
 
 @csrf_exempt
 def verifyMailCode(request):
-    language = request.META.get('HTTP_LANGUAGE', 'default_language')
+    
     jwt_token = request.COOKIES.get('jwttoken', None)
     user_id = Authentification.decode_jwt_token(jwt_token)
     user = Usermine.objects.get(id=user_id)
+    language = user.language
     if not user:
         return JsonResponse({'redirect': '/users/login/'})
     if user.is_mail2fa_code_valid():
