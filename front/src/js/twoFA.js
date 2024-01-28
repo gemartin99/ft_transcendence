@@ -12,6 +12,9 @@ function	checkGoogleAuthCode(event) {
 	    method: 'POST',
 	    body: formData,
 	    credentials: 'include',
+		headers: {
+            'language': lang,
+        },
 	})
 	.then(response => response.json())
 	.then(data => {
@@ -44,6 +47,9 @@ function	activateGoogle2FA(event) {
 	    method: 'POST',
 	    // body: formData,
 	    credentials: 'include',
+		headers: {
+            'language': lang,
+        },
 	})
 	.then(response => response.json())
 	.then(data => {
@@ -65,6 +71,9 @@ function	activateMail2FA() {
 	    method: 'POST',
 	    // body: formData,
 	    credentials: 'include',
+		headers: {
+            'language': lang,
+        },
 	})
 	.then(response => response.json())
 	.then(data => {
@@ -89,6 +98,9 @@ function	getQR() {
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         credentials: 'include',
+		headers: {
+            'language': lang,
+        },
     })
 	.then(response => response.json())
 	.then(data => {
@@ -123,6 +135,9 @@ function	checkMailCode(event) {
 	    method: 'POST',
 	    body: formData,
 	    credentials: 'include',
+		headers: {
+            'language': lang,
+        },
 	})
 	.then(response => response.json())
 	.then(data => {
@@ -159,6 +174,9 @@ function	unsetTwoFactor(event) {
 	fetch(baseUrl + ":8000/twoFA/disable/", {
 	    method: 'POST',
 	    credentials: 'include',
+		headers: {
+            'language': lang,
+        },
 	})
 	.then(response => response.json())
 	.then(data => {
