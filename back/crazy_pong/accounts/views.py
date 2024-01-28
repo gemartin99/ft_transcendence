@@ -137,14 +137,7 @@ def is_playing(request):
 @csrf_exempt
 def show_online(request):
     jwt_token = request.COOKIES.get('jwttoken', None)
-    user_id = Authentification.decode_jwt_token(jwt_token)
-    baljare = Usermine.objects.get(id=user_id).name
-    if (baljare != '42@baltes-g' and baljare != '42@jareste-'):
-        return JsonResponse({'content': 'users not printed'})
-    print('onlinejwt:',jwt_token)
-    print('uid:', user_id)
     all_users = Usermine.objects.all()
-    print("SOY IMBECIL" + baljare)
     for user in all_users:
     #     last_5_matches = user.get_last_5_matches()
     #     for match in last_5_matches:
@@ -161,7 +154,6 @@ def show_online(request):
         user.inTournament = 0
         
         user.save()
-        # print(user.get_last_5_matches())
     return JsonResponse({'content': 'users printed'})
 
 
