@@ -114,7 +114,7 @@ class GameManager():
                 ball['vx'] < 0
                 ):
 
-                self.state['speed'] += 2
+                self.state['speed'] += 1.2
                 relativeIntersectY = (paddle1['y'] + paddle1['height'] / 2) - ball['y']
                 normalizedRelativeIntersectionY = relativeIntersectY / (paddle1['height'] / 2)
                 bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
@@ -130,7 +130,7 @@ class GameManager():
                 ball['vx'] > 0
                 ):
 
-                self.state['speed'] += 2
+                self.state['speed'] += 1.2
                 relativeIntersectY = (paddle2['y'] + paddle2['height'] / 2) - ball['y']
                 normalizedRelativeIntersectionY = relativeIntersectY / (paddle2['height'] / 2)
                 bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
@@ -148,6 +148,7 @@ class GameManager():
         self.paddle_one['y'] = 300
         self.paddle_two['y'] = 300
         self.IAcount = int(os.getenv("FRAMERATE"))
+        self.state['speed'] = 15
 
     def setIA(self):
         self.IA = True
