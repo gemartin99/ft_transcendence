@@ -258,7 +258,7 @@ function resizeCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     fontScale = canvas.width / 1200;
-    ctx.font = `${50 * fontScale}px Arial`;
+    ctx.font = `${75 * fontScale}px Arial`;
     ctx.fillStyle = linesColor;
     ctx.textAlign = "center";
     if (jsonData.score1 > jsonData.score2) {
