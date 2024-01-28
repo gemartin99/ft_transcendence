@@ -41,6 +41,7 @@ class TwoFA:
     @staticmethod
     def verify_totp(request):
         jwt_token = request.COOKIES.get('jwttoken', None)
+        language = request.META.get('HTTP_LANGUAGE', 'default_language')
         user_id = Authentification.decode_jwt_token(jwt_token)
         user = Usermine.objects.get(id=user_id)
         if not user:
@@ -62,7 +63,13 @@ class TwoFA:
             user.save()
             return JsonResponse({'message': 'ok'})
         else:
-            return JsonResponse({'error': 'Wrong one hehe'})
+            print(language)
+            if language == 'es':
+                return JsonResponse({'error': 'Código incorrecto o expirado.'})
+            elif language == 'en':
+                return JsonResponse({'error': 'Wrong or expired code'})
+            elif language == 'pt':
+                return JsonResponse({'error': 'Código errado ou expirado'})
 
     # @staticmethod #este creo que no es valido
     # def verify_mail(userid, request):
