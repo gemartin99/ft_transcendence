@@ -146,7 +146,6 @@ function	checkMailCode(event) {
 	})
 	.then(response => response.json())
 	.then(data => {
-		console.log(data);
 		if (data.redirect)
 		{
 			handleRedirect(data.redirect)
