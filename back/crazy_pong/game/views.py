@@ -1,9 +1,12 @@
 import json
-import game.langs
-from authentification.authentification import Authentification
+
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
+
+import game.langs
+from authentification.authentification import Authentification
+
 from .match_manager import MatchManager
 
 # Create your views here.

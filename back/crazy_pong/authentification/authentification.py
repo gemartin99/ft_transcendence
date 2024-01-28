@@ -2,8 +2,9 @@
 from datetime import datetime, timedelta
 
 import jwt
-from accounts.models import Usermine
 from django.conf import settings
+
+from accounts.models import Usermine
 
 
 class Authentification:

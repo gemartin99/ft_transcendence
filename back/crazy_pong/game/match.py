@@ -3,8 +3,9 @@ import os
 import random
 import time
 
-from accounts.models import Usermine
 from asgiref.sync import sync_to_async
+
+from accounts.models import Usermine
 
 from .models import Match
 

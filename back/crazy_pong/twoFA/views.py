@@ -1,15 +1,16 @@
 # from django.shortcuts import render, redirect
 from datetime import datetime, timezone
 
-import twoFA.langs
-from accounts.models import Usermine
-# import pyotp
-from authentification.authentification import Authentification
 # Create your views here.
 # from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
+
+import twoFA.langs
+from accounts.models import Usermine
+# import pyotp
+from authentification.authentification import Authentification
 
 from .twoFA import TwoFA
 
@@ -23,6 +24,7 @@ def activateGoogle2FA(request):
     return get_verification_page() 
 
 def verifyGoogle2FA(request):
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     if (TwoFA.verify_totp(request)):
         return JsonResponse({'message': 'ok'})
     else:

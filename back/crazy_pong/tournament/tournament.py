@@ -2,8 +2,8 @@
 import random
 import string
 
-from game.models import Match as MatchModel
 from accounts.models import Usermine
+from game.models import Match as MatchModel
 
 bot_names = ["Baltes", "Marza", "Jareste", "Jaime", "Gemartin", "Trunscendence", "Pingu", "Okto", "ChatGPT"]
 

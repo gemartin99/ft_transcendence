@@ -1,16 +1,18 @@
+import imghdr
 import json
 import os
 import profile.langs
-import imghdr
-from accounts.accounts import Accounts
-# from security.security import Security
-from authentification.authentification import Authentification
+
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 ##Jareste limpiar
 from django.views.decorators.csrf import csrf_exempt
+
+from accounts.accounts import Accounts
+# from security.security import Security
+from authentification.authentification import Authentification
 from security.security import Security
 
 # from django.shortcuts import render
@@ -96,7 +98,7 @@ def UpdateUser(username, user, response_messages, language):
             user.name = username
     return response_messages
 
-def UpdateEmail(email, user, response_messages):
+def UpdateEmail(email, user, response_messages, language):
     flag = False
     if email is not None:
         if not Security.is_valid_email(email):
@@ -143,9 +145,9 @@ def UpdateInfo(request):
         confirm_password = request.POST.get('confirm_password')
         avatar = request.FILES.get('avatar')
         response_messages = []
-        response_messages = UpdateUser(username, user, response_messages)
-        response_messages = UpdateEmail(email, user, response_messages)
-        response_messages = UpdatePwd(password, confirm_password, user, response_messages)
+        response_messages = UpdateUser(username, user, response_messages, language)
+        response_messages = UpdateEmail(email, user, response_messages, language)
+        response_messages = UpdatePwd(password, confirm_password, user, response_messages, language)
         if avatar:
             # Check if the file is a PNG image
             file_type = imghdr.what(avatar)

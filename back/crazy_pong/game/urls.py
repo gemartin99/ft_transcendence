@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .views import (get_create_game_page, get_game_page, get_join_game_page,
-                    get_play_page, get_private_game_page, get_view_page, get_1vs1_game_page, canJoin, canView, quitQueue)
+from .views import (canJoin, canView, get_1vs1_game_page, get_create_game_page,
+                    get_game_page, get_join_game_page, get_play_page,
+                    get_private_game_page, get_view_page, quitQueue)
 
 urlpatterns = [
     path('', get_game_page, name='get_game_page'),

@@ -1,9 +1,10 @@
-import accounts.langs
-from authentification.authentification import Authentification
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
+
+import accounts.langs
+from authentification.authentification import Authentification
 
 from .accounts import Accounts
 from .models import Usermine
