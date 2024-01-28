@@ -2,7 +2,8 @@
 var ballSize = 10;
 var paddleWidth = 10;
 var paddleHeight = 50;
-var courtColor = 'black';
+var linesColor = '#343a40';
+var courtColor = '#009900';
 
 function beauty_map()
 {
@@ -10,11 +11,11 @@ function beauty_map()
   var ctx = canvas.getContext("2d");
 
   //dibujar el color de fondo + crear rectangulo
-  ctx.fillStyle = "#3498db";
+  ctx.fillStyle = courtColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // stilo del campo , grosor lineas y color de fondo
-  ctx.strokeStyle = "#ffffff";
+  ctx.strokeStyle = linesColor;
   ctx.lineWidth = 8;
 
   // linea central
@@ -95,7 +96,7 @@ function redrawCanvas(jsonData){
   // Draw ball
   ctx.beginPath();
   ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = linesColor;
   ctx.fill();
 
   // Draw paddles
@@ -103,12 +104,12 @@ function redrawCanvas(jsonData){
   const paddleHeight = (jsonData.paddle1.height / 750) * canvas.height;
   const paddle1X = (jsonData.paddle1.x / 1200) * canvas.width;
   const paddle2X = (jsonData.paddle2.x / 1200) * canvas.width;
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = linesColor;
   ctx.fillRect(paddle1X, paddle1Y, paddleWidth, paddleHeight);
   ctx.fillRect(paddle2X, paddle2Y, paddleWidth, paddleHeight);
 
   // // Draw score and names
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = linesColor;
   ctx.font = `${20 * fontScale}px Arial`;
   ctx.fillText(`${jsonData.player1.name}: ${jsonData.score1}`, 50 * fontScale, 50 * fontScale);
   ctx.fillText(`${jsonData.player2.name}: ${jsonData.score2}`, canvas.width - 200 * fontScale, 50 * fontScale);

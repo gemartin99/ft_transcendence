@@ -286,9 +286,8 @@ function join_IA() {
             {
                 htmlloaded = 1
                 document.getElementById('gameContainer').style.display = 'flex';
+                redrawCanvas(jsonData);
             }
-            //printMap(jsonData);
-            redrawCanvas(jsonData);
             window.addEventListener('resize', resizeCanvas);
         }
         if (jsonData['cmd'] == 'update') {
@@ -299,7 +298,9 @@ function join_IA() {
             }
             in_match = true
             //printMap(jsonData);
-            redrawCanvas(jsonData);
+            if (htmlloaded == 1) {
+                redrawCanvas(jsonData);
+            }
             window.addEventListener('resize', resizeCanvas);
         }
         if (jsonData['cmd'] == 'finish') {
