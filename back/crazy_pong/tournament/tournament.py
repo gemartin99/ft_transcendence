@@ -147,7 +147,7 @@ class Tournament:
                             self.bracket[int((i-2) / 2) ].setu2(match['u2'])
 
 
-                if (match['u1'][0:4] == "Bot " and match['u2'][0:4] == "Bot " and match['played'] == "False"):
+                if ((match['u1'] == "IA" or match['u1'][0:4] == "Bot ") and (match['u2'] == "IA" or match['u2'][0:4] == "Bot ") and match['played'] == "False"):
                     match['played'] = "True"
                     if (random.randint(0,1) == 0):
                         match['p1'] = int(self.points)
