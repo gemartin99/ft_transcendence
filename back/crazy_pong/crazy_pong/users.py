@@ -18,7 +18,7 @@ def get_pict(n):
     if (n == 1):
         return "/imgs/marza-ga.jpg"
     if (n == 2):
-        return "/imgs/gemartin-.png"
+        return "/imgs/gemartin.jpg"
     if (n == 3):
         return "/imgs/jareste-.png"
     if (n == 4):
