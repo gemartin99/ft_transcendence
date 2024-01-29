@@ -18,7 +18,7 @@ def get_pict(n):
     if (n == 1):
         return "/imgs/marza-ga.jpg"
     if (n == 2):
-        return "/imgs/gemartin-.jpg"
+        return "/imgs/gemartin-.png"
     if (n == 3):
         return "/imgs/jareste-.png"
     if (n == 4):
@@ -38,13 +38,13 @@ def get_color(n):
 
 def get_name(n):
     if (n == 0):
-        return "Javier Ferrer"
+        return "Jaime Ferrer"
     if (n == 1):
         return "Marc Arza"
     if (n == 2):
-        return "Guillem Martín"
+        return "Gerard Martinez"
     if (n == 3):
-        return "Jordi Areste"
+        return "Joan Areste"
     if (n == 4):
         return "Biel Altes"
     
