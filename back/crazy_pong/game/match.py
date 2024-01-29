@@ -167,7 +167,7 @@ class GameManager():
         
 
         if (self.ball['vx'] < 0):
-
+            self.colision = 375
             if (375 > self.paddle_two['y'] + self.paddle_two['height'] /4 and 375 < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
                 return 0
             if (375 > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
@@ -179,7 +179,7 @@ class GameManager():
                 xToCollision = (1200-self.ball['x'])
                 slope = self.ball['vy']/self.ball['vx']
 
-                self.colision = (self.ball['y'] + slope * xToCollision) % (2 * 750)
+                self.colision = (abs(self.ball['y'] + slope * xToCollision)) % (2 * 750)
                 if (self.colision > 750):
                     self.colision = 2 * 750 - self.colision
 
