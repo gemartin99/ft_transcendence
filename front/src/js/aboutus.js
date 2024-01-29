@@ -1,4 +1,4 @@
-async function aboutUs() {
+function aboutUs() {
    var randomSlideIndex = Math.floor(Math.random() * 5);
    var swiper = new Swiper(".mySwiper", {
     direction: "horizontal",
