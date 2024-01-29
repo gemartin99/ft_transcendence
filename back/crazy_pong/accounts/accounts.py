@@ -2,10 +2,11 @@
 # from django.template.loader import render_to_string
 import json
 
-from authentification.authentification import Authentification
 # import base64
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
+
+from authentification.authentification import Authentification
 # from django.contrib.auth.password_validation import validate_password
 # from django.core.exceptions import ValidationError
 # import bcrypt

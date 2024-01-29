@@ -3,8 +3,9 @@ import os
 import random
 import time
 
-from accounts.models import Usermine
 from asgiref.sync import sync_to_async
+
+from accounts.models import Usermine
 
 from .models import Match
 
@@ -114,7 +115,7 @@ class GameManager():
                 ball['vx'] < 0
                 ):
 
-                self.state['speed'] += 1
+                self.state['speed'] += 0.2
                 relativeIntersectY = (paddle1['y'] + paddle1['height'] / 2) - ball['y']
                 normalizedRelativeIntersectionY = relativeIntersectY / (paddle1['height'] / 2)
                 bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
@@ -130,7 +131,7 @@ class GameManager():
                 ball['vx'] > 0
                 ):
 
-                self.state['speed'] += 1
+                self.state['speed'] += 0.2
                 relativeIntersectY = (paddle2['y'] + paddle2['height'] / 2) - ball['y']
                 normalizedRelativeIntersectionY = relativeIntersectY / (paddle2['height'] / 2)
                 bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
@@ -162,9 +163,11 @@ class GameManager():
         return -1
     
     def segfaultThink_v2(self, update):
-        
-        if (self.ball['vx'] < 0):
 
+        
+
+        if (self.ball['vx'] < 0):
+            self.colision = 375
             if (375 > self.paddle_two['y'] + self.paddle_two['height'] /4 and 375 < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
                 return 0
             if (375 > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
@@ -173,15 +176,12 @@ class GameManager():
 
         else:
             if (update):
-                timeToCollision  = (1200-self.ball['x']) /self.ball['vx']
-                self.colision  = (self.ball['y'] + self.ball['vy'] * timeToCollision)
+                xToCollision = (1200-self.ball['x'])
+                slope = self.ball['vy']/self.ball['vx']
 
-                if (self.colision > 0 and self.colision < 750):
-                    self.colision = self.colision
-                elif ((self.colision % 750)%2 == 0):
-                    self.colision %= 750
-                else:
-                    self.colision = 750 - (self.colision % 750)
+                self.colision = (abs(self.ball['y'] + slope * xToCollision)) % (2 * 750)
+                if (self.colision > 750):
+                    self.colision = 2 * 750 - self.colision
 
             if (self.colision > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.colision < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
                 return 0

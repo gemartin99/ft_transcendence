@@ -1,11 +1,12 @@
 import json
 
-import friends.langs
-from accounts.models import Usermine
-from authentification.authentification import Authentification
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
+
+import friends.langs
+from accounts.models import Usermine
+from authentification.authentification import Authentification
 
 
 # Create your views here.

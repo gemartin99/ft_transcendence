@@ -5,11 +5,12 @@ import random
 import string
 import time
 
-from accounts.models import Usermine
 from asgiref.sync import sync_to_async
-from authentification.authentification import Authentification
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from accounts.models import Usermine
+from authentification.authentification import Authentification
 
 from .match import GameManager, PlayerManager
 from .match_manager import MatchManager

@@ -1,12 +1,13 @@
 import json
+import os
 
 import requests
-from accounts.models import Usermine
-from authentification.authentification import Authentification
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import os
-from dotenv import load_dotenv
+
+from accounts.models import Usermine
+from authentification.authentification import Authentification
+
 
 @csrf_exempt
 def check_42(request):

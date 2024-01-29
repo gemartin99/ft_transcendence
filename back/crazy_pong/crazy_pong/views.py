@@ -1,6 +1,7 @@
-import crazy_pong.langs
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+
+import crazy_pong.langs
 
 
 # Front pages that are not from a specific app 

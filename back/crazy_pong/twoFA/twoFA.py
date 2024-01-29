@@ -1,8 +1,9 @@
 import pyotp
-from accounts.models import Usermine
-from authentification.authentification import Authentification
 from django.core.mail import send_mail
 from django.http import JsonResponse
+
+from accounts.models import Usermine
+from authentification.authentification import Authentification
 
 
 class TwoFA:
