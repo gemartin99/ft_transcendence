@@ -117,54 +117,55 @@ class Tournament:
         if (self.start):
             for i in range(len(self.bracket)):
                 match = self.bracket[i].get()
-                if MatchModel.objects.filter(match_id=match['match_id']).exists():
-                    if i == 0:
-                        self.end = True
-                    m = MatchModel.objects.get(match_id=match['match_id'])
-                    match['played'] = "True"
+                if match["played"] == "False":
+                    if MatchModel.objects.filter(match_id=match['match_id']).exists():
+                        if i == 0:
+                            self.end = True
+                        m = MatchModel.objects.get(match_id=match['match_id'])
+                        match['played'] = "True"
 
-                    if (m.player1 > 0):
-                        pl1 = Usermine.objects.get(id=m.player1).name
-                    else:
-                        pl1 = 'IA'
-
-                    if (pl1 == self.bracket[i].getu1()):
-                        self.bracket[i].setp1(m.player1_score)
-                        self.bracket[i].setp2(m.player2_score)
-                    else:
-                        self.bracket[i].setp1(m.player2_score)
-                        self.bracket[i].setp2(m.player1_score)
-
-                    if (self.bracket[i].getp1() > self.bracket[i].getp2()):
-                        if (i % 2 == 1):
-                            self.bracket[int((i-1) / 2) ].setu1(match['u1'])
+                        if (m.player1 > 0):
+                            pl1 = Usermine.objects.get(id=m.player1).name
                         else:
-                            self.bracket[int((i-2) / 2) ].setu2(match['u1'])
-                    else:
-                        if (i % 2 == 1):
-                            self.bracket[int((i-1) / 2) ].setu1(match['u2'])
+                            pl1 = 'IA'
+
+                        if (pl1 == self.bracket[i].getu1()):
+                            self.bracket[i].setp1(m.player1_score)
+                            self.bracket[i].setp2(m.player2_score)
                         else:
-                            self.bracket[int((i-2) / 2) ].setu2(match['u2'])
+                            self.bracket[i].setp1(m.player2_score)
+                            self.bracket[i].setp2(m.player1_score)
+
+                        if (self.bracket[i].getp1() > self.bracket[i].getp2()):
+                            if (i % 2 == 1):
+                                self.bracket[int((i-1) / 2) ].setu1(match['u1'])
+                            else:
+                                self.bracket[int((i-2) / 2) ].setu2(match['u1'])
+                        else:
+                            if (i % 2 == 1):
+                                self.bracket[int((i-1) / 2) ].setu1(match['u2'])
+                            else:
+                                self.bracket[int((i-2) / 2) ].setu2(match['u2'])
 
 
-                if ((match['u1'] == "IA" or match['u1'][0:4] == "Bot ") and (match['u2'] == "IA" or match['u2'][0:4] == "Bot ") and match['played'] == "False"):
-                    match['played'] = "True"
-                    if (random.randint(0,1) == 0):
-                        match['p1'] = int(self.points)
-                        match['p2'] = random.randint(0,int(self.points)-1)
-                    else:
-                        match['p1'] = random.randint(0,int(self.points)-1)
-                        match['p2'] = int(self.points)
-                    if (match['p1'] > match['p2']):
-                        if (i % 2 == 1): 
-                            self.bracket[int((i-1) / 2) ].setu1(match['u1'])
+                    if ((match['u1'] == "IA" or match['u1'][0:4] == "Bot ") and (match['u2'] == "IA" or match['u2'][0:4] == "Bot ") and match['played'] == "False"):
+                        match['played'] = "True"
+                        if (random.randint(0,1) == 0):
+                            match['p1'] = int(self.points)
+                            match['p2'] = random.randint(0,int(self.points)-1)
                         else:
-                            self.bracket[int((i-2) / 2) ].setu2(match['u1'])
-                    else:
-                        if (i % 2 == 1):
-                            self.bracket[int((i-1) / 2) ].setu1(match['u2'])
+                            match['p1'] = random.randint(0,int(self.points)-1)
+                            match['p2'] = int(self.points)
+                        if (match['p1'] > match['p2']):
+                            if (i % 2 == 1): 
+                                self.bracket[int((i-1) / 2) ].setu1(match['u1'])
+                            else:
+                                self.bracket[int((i-2) / 2) ].setu2(match['u1'])
                         else:
-                            self.bracket[int((i-2) / 2) ].setu2(match['u2'])
+                            if (i % 2 == 1):
+                                self.bracket[int((i-1) / 2) ].setu1(match['u2'])
+                            else:
+                                self.bracket[int((i-2) / 2) ].setu2(match['u2'])
 
     def hasPlayer(self, user):
         if user in self.players:
