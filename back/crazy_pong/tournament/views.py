@@ -19,7 +19,6 @@ def get_tournament_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    print(f'inTOURNAMENT: {user.inTournament}')
     if (user.inTournament == 1):
         return JsonResponse({'redirect': '/tournament/lobbyPage/'})
     elif (user.inTournament == 2):
@@ -35,10 +34,8 @@ def get_tournament_page(request):
     return JsonResponse(data)
 
 def get_create_tournament_page(request):
-    print(request)
     user, redirect = Authentification.get_auth_user(request)
     if not user:
-        print(redirect)
         return JsonResponse({'redirect': redirect})
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = tournament.langs.get_langs(language)
@@ -51,7 +48,6 @@ def get_create_tournament_page(request):
     return JsonResponse(data)
 
 def get_join_tournament_page(request):
-    print('boooo')
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
@@ -86,10 +82,7 @@ def get_bracket_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-    print(request)
-    print("acaba")
     ret = TournamentManager.update(user.tournament_id, user)
-    print('data:')
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = tournament.langs.get_langs(language)
     context['ret'] =ret
@@ -111,10 +104,7 @@ def createTournament(request):
         try:
             #falta parsing del name
             data = json.loads(request.body)
-            print('name:', data['name'])
-            print('IA:',data['ia'])
             tournament_code = TournamentManager.add_tournament(data['name'], data['n'], user, data['ia'], data['points'])
-            print('tournament_code:',tournament_code)
             return JsonResponse({'code': tournament_code,
                                     'redirect': '/tournament/lobbyPage/'})
         except json.JSONDecodeError as e:
@@ -149,9 +139,7 @@ def joinPlayer(request):
 def getTournament(request): #ESTO DA ERROR QUE LO FLIIIIPAS
     user, redirect = Authentification.get_auth_user(request)
     if not user:
-        print('redirect')
         return JsonResponse({'redirect': redirect})
-    print(user) 
     if request.method == 'POST':
         try:
             
@@ -171,7 +159,6 @@ def updateTournament(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            print('data',data)
             ret = TournamentManager.update(user.tournament_id, user)
             return JsonResponse(ret)
         except json.JSONDecodeError as e:
@@ -222,9 +209,7 @@ def quitTournament(request):
         return JsonResponse({'redirect': redirect})
     if request.method == 'POST':
         try:
-            #falta parsing del name
             TournamentManager.quitTournament(user.tournament_id, user.name)
-            print("SOY SUBNORMAL" + user.name)
             user.inTournament = 0
             user.tournament_id = ""
             user.save()

@@ -10,17 +10,11 @@ from accounts.models import Usermine
 class Authentification:
     @staticmethod
     def generate_jwt_token(user_id):
-        # Set the expiration time for the token
         expiration_time = datetime.utcnow() + timedelta(days=1)
-
-        print('generate_jwt_token userid:', user_id)
-        # Create the payload with user information
         payload = {
             'user_id': user_id,
             'exp': expiration_time,
         }
-
-        # Generate the JWT token
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
         return token
 
@@ -32,20 +26,12 @@ class Authentification:
     @staticmethod
     def decode_jwt_token(token):
         try:
-            # Decode the JWT token
             decoded_payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            
-            # Retrieve the user_id from the payload
             user_id = decoded_payload['user_id']
-            
             return user_id
         except jwt.ExpiredSignatureError:
-            # Handle token expiration
-            print("Token has expired.")
             return None
         except jwt.InvalidTokenError:
-            # Handle invalid token
-            print("Invalid token.")
             return None
 
     @staticmethod

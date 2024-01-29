@@ -206,72 +206,10 @@
 			  </div>
 		</section>
 	</div>
-	<!-- END CONTENT -->
-	<!-- FOOTER -->
-	<!--
-	<footer class="footer fixed-bottom bg-dark text-white text-center">
-        <div class="container text-warning">
-            <p>&copy; 2023 CrazyPong. All rights reserved.</p>
-        </div>
-    </footer>
-
--->
-
     <footer class="footer fixed-bottom bg-dark text-white text-center">
 		<div class="container">
-
-			<!-- DEBUGING SHOW ONLINE
-
-            <button  id="showonline">ShowOnlineUsers</button>
-
-			<script>
-			  const showonline = document.getElementById('showonline');
-
-			  showonline.addEventListener('click', function() {
-			    console.log('Trying to print online users.');
-
-			    fetch("https://crazy-pong.com:8000/users/showonline/", {
-			    	credentials: 'include',
-			    })
-			      .then(response => response.json())
-			      .then(data => {
-			        console.log('Response from backend:', data);
-			        const username = document.cookie.split('; ').find(row => row.startsWith('jwttoken=')).split('=')[1];
-					console.log(username);
-
-			        if (data.content) {
-			          console.log(data.content);
-			        } else {
-			          console.log('Invalid response from backend');
-			        }
-			      })
-			      .catch(error => {
-			        console.error('Error:', error);
-			      });
-			  });
-			</script>
-		-->
-			<!-- END DEBUGING SHOW ONLINE -->
-
 			<p id="copyright">&copy; 2023 CrazyPong. All rights reserved.</p>
 		</div>
- 	
-	 	<!-- 2FA GOOGLE QR -->
-<!-- 	  <h2>Enable Two-Factor Authentication</h2>
-	    <button id="getQR"  onclick="getQR()">getQR</button>
-	    <p>Scan the QR code below using the Google Authenticator app:</p>
-	    <canvas id="QRimg"></canvas>
-	    <img id ="QRimg" alt="QR Code">
-	    <p>Or enter the following key manually: {{ request.user.totp_secret }}</p>
-		<form id="textForm" onsubmit="checkAuthCode(event)">
-		    <label for="textInput">Enter Text:</label>
-		    <input type="text" id="textInput" name="text" required>
-		    <button type="submit">check code</button>
-		</form>
-		<div>
-	        <p id="responseMessage"></p>
-	    </div> -->
-	 	<!-- 2FA GOOGLE QR -->
 	    
  	</footer>
 

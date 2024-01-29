@@ -64,19 +64,12 @@ class TwoFA:
             user.save()
             return JsonResponse({'message': 'ok'})
         else:
-            print(language)
             if language == 'es':
                 return JsonResponse({'error': 'Código incorrecto o expirado.'})
             elif language == 'en':
                 return JsonResponse({'error': 'Wrong or expired code'})
             elif language == 'pt':
                 return JsonResponse({'error': 'Código errado ou expirado'})
-
-    # @staticmethod #este creo que no es valido
-    # def verify_mail(userid, request):
-    #     if (request == userid.mail2FACode):
-    #         return True
-    #     return False
 
     @staticmethod
     def send_mailUser(user, mail, code):
@@ -91,8 +84,6 @@ class TwoFA:
                 [mail],
                 fail_silently=False,
             )
-            print('mail sent', code, mail)
             return JsonResponse({'message': 'messageSent'})
         except Exception as e:
-            print('mail not sent', e)
             return JsonResponse({'message': f'Error: {str(e)}'})

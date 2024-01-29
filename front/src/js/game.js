@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     pl: player,
                                     key: "up" };
                 socket.send(JSON.stringify(message));
-                console.log(JSON.stringify(message));
             } else if (event.key === 'ArrowDown') {
                 if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
                     const message = { cmd: 'update',
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                         pl: player,
                                         key: "down" };
                     socket.send(JSON.stringify(message));
-                    console.log(JSON.stringify(message));
                 }
             }
         }
@@ -36,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     pl: "p1",
                                     key: "up" };
                 socket.send(JSON.stringify(message));
-                console.log(JSON.stringify(message));
             } else if (event.key === 's') {
                 if (event.key === 'w' || event.key == 's') {
                     const message = { cmd: 'update',
@@ -44,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                         pl: "p1",
                                         key: "down" };
                     socket.send(JSON.stringify(message));
-                    console.log(JSON.stringify(message));
                 }
             } else if (event.key === 'ArrowUp') {
                 const message = { cmd: 'update',
@@ -52,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     pl: "p2",
                                     key: "up" };
                 socket.send(JSON.stringify(message));
-                console.log(JSON.stringify(message));
             } else if (event.key === 'ArrowDown') {
                 if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
                     const message = { cmd: 'update',
@@ -60,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                         pl: "p2",
                                         key: "down" };
                     socket.send(JSON.stringify(message));
-                    console.log(JSON.stringify(message));
                 }
             }
         }
@@ -84,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function handleGame(){
-    console.log('handleGame');
     if (in_match == true) {
         handleRedirect('/game/play/');
     }
@@ -96,7 +89,6 @@ function open_socket(target, mode)
     var htmlloaded = 0;
     socket = new WebSocket(target);
     socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
         if (mode == 'create')
             handleRedirect('/game/play/');
         //document.getElementById('waiting').style.display = 'block';
@@ -125,7 +117,6 @@ function open_socket(target, mode)
         }
         if (jsonData['cmd'] == 'update') {
             if (htmlloaded == 0 && document.getElementById('gameContainer')) {
-                console.log('Inside if: Condition met');
                 htmlloaded = 1;
             }
             in_match = true
@@ -145,7 +136,6 @@ function open_socket(target, mode)
         console.error('WebSocket error:', error);
     };
     socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
         in_match = false
         in_1vs1 = false
     }; 
@@ -177,7 +167,6 @@ function join_match_sala(e) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("eieieieiei" + data.code);
         if (data.code == 200){
             handleRedirect('/game/play/');    
             open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value, "sala");   
@@ -209,7 +198,6 @@ function join_IA() {
 
 async function reconnect() {
     await new Promise(r => setTimeout(r, 300));
-    console.log("ei aixo1: " + window.location.href + " sck: " + socket);
     if (socket == null && window.location.href == "https://crazy-pong.com/game/play/"){
         fetch(baseUrl + ':8000/users/playing/', {
             headers: {
@@ -219,7 +207,6 @@ async function reconnect() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("eieieieiei" + data.playing);
             if (data.playing == 200){
                 open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
             }   
@@ -234,7 +221,6 @@ async function reconnect() {
 }
 
 function obs_match(e) {
-    console.log("joining match")
     e.preventDefault();
     const message = {idMatch: document.getElementById("lobbYCode").value,
             };
@@ -249,7 +235,6 @@ function obs_match(e) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("eieieieiei" + data.code);
         if (data.code == 200){
             handleRedirect('/game/play/');
             open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value, "obs");

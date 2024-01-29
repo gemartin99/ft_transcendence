@@ -96,8 +96,8 @@ class Tournament:
             
 
     def get(self, player):
-        for m in self.bracket:
-            print(m.get())
+        # for m in self.bracket:
+        #     print(m.get())
 
         if not self.end:
             self.autoUpdate()

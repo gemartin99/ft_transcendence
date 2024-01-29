@@ -46,8 +46,6 @@ class GameManager():
         self.paddle_two = self.state["paddle2"]
         self.player_one = self.state["player1"]
         self.player_two = self.state["player2"]
-        print("player_one", self.player_one)
-        print("player_two", self.player_two)
         self.fr = int(os.getenv("FRAMERATE"))
 
         self.IA = False
@@ -104,7 +102,6 @@ class GameManager():
                 self.reset_ball()
         
             elif (ball['x'] + ball['radius'] > 1200):
-                print("Colision final: " + str(ball['y']))
                 self.state['score1'] += 1
                 self.reset_ball()
                 
@@ -155,7 +152,6 @@ class GameManager():
         self.IA = True
 
     def segfaultThink_v1(self):
-        print("Updating movement")
         if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /4 and self.ball['y'] < self.paddle_two['y'] + 3*self.paddle_two['height'] /4 ):
             return 0
         if (self.ball['y'] > self.paddle_two['y'] + self.paddle_two['height'] /2 ):
@@ -200,7 +196,6 @@ class GameManager():
         if (not self.saved):
             self.saved = True
             player1 = self.player_one['id']
-            print(self.player_one['id'])
             if (self.IA):
                 player2 = -42
             else:
@@ -243,6 +238,6 @@ class GameManager():
                 user2.save()
             
             #debug
-            all_matches = Match.objects.all()
-            for m in all_matches:
-                print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - Winner: {m.match_winner} - MatchID: {m.match_id}")
+            # all_matches = Match.objects.all()
+            # for m in all_matches:
+            #     print(f"Player1: {m.player1} - Player2: {m.player2} - Score1: {m.player1_score} - Score2: {m.player2_score} - Winner: {m.match_winner} - MatchID: {m.match_id}")

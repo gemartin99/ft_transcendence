@@ -19,7 +19,6 @@ def get_friends_page(request):
         'friends': user.friends.all(),
     }
     context.update(friends.langs.get_langs(language))
-    print(context)
     content_html = render_to_string('friends/friends.html', context)
     data = {
         'title': 'Friends Page',
@@ -35,10 +34,7 @@ def addFriend(request):
     if not user:
         return JsonResponse({'redirect': redirect})
     json_data = json.loads(request.body.decode('utf-8'))
-    print('holaaaaaaaa')
-    print(json_data)
     searchValue = json_data.lower()
-    print(searchValue)
     try:
         user.friends.add(Usermine.objects.get(name=searchValue))
         if language == 'en':

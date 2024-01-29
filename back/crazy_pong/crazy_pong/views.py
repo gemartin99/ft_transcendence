@@ -35,9 +35,6 @@ def get_home_page(request):
     jwtToken = request.COOKIES.get('jwttoken', None)
     if jwtToken:
         context.update({'loggued': True})
-    # else:
-    #     context.update({'loggued': False})
-    print(jwtToken)
     content_html = render_to_string('home/index.html', context)
     data = {
         'title': 'Home2',

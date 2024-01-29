@@ -140,7 +140,6 @@ def verifyMailCode(request):
         user.generate_mail2fa_code()
         user.save()    
         TwoFA.send_mailUser(user.name, user.email, user.mail2FACode)
-    print(language)
     if language == 'es':
         return JsonResponse({'error': 'Código incorrecto'})
     elif language == 'en':

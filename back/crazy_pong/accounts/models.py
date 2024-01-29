@@ -48,7 +48,6 @@ class Usermine(models.Model):
                 match_winner = player1_name
             else:
                 match_winner = player2_name
-            print(match_winner)
             matches_with_names.append({
                 'match_id': match.match_id,
                 'player1': player1_name,

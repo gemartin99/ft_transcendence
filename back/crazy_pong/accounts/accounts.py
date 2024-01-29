@@ -69,7 +69,6 @@ class Accounts:
         #parse pwd
         is_secure, error_messages = Security.check_pwd_security(password)
         if is_secure == False:
-            print(language)
             if language == 'en':
                 return False, 'Password not secure enough.'
             elif language == 'es':
@@ -99,7 +98,6 @@ class Accounts:
         try:
             language = request.META.get('HTTP_LANGUAGE', 'default_language')
             res, errMsg = Accounts.validate_inputdata_for_new_account_request(request)
-            print('res:',res,'errMsg:', errMsg)
             if errMsg or res == False:
                 return False, errMsg
             # Get the vars
@@ -135,8 +133,6 @@ class Accounts:
             else: 
                 return True, 'Utilizador guardado com sucesso'
         except IntegrityError as e:
-            print(e)
-            # Username or email in use execption
             if language == 'en':
                 return False, 'Username or email already in use'
             elif language == 'es':
@@ -157,7 +153,6 @@ class Accounts:
                 return False, errMsg
             data = json.loads(request.body.decode('utf-8'))
             username = data.get('Username')
-            print('userlogin:', username.lower())
             password = data.get('password')
             user = Usermine.objects.get(name=username.lower()) 
             if Security.verify_password(password, user.password):

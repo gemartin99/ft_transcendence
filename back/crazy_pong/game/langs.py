@@ -1,5 +1,4 @@
 def get_langs(lang):
-    print(lang)
     if lang == "en":
         return get_lang_en()
     if lang == "es":

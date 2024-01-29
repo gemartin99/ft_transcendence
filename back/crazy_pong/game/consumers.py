@@ -40,7 +40,6 @@ def setnoplaying(user):
     user.playing = False
     user.gameId = ""
     user.save()
-    print("holaaaaa")
 
 class gameConnection(AsyncWebsocketConsumer):
     
@@ -53,7 +52,6 @@ class gameConnection(AsyncWebsocketConsumer):
         self.fr = int(os.getenv("FRAMERATE"))
 
     async def connect(self):
-        print(self.scope['query_string'])
 
         # self.user = self.scope['query_string'].decode('UTF-8').split('&')[0].split('=')[1]
         self.mode = self.scope['query_string'].decode('UTF-8').split('&')[1].split('=')[1]
@@ -75,9 +73,7 @@ class gameConnection(AsyncWebsocketConsumer):
         
         if (self.mode == 'reconnect'):
             self.game, paddle = MatchManager.reconnect(self.user_id, self.user_name)
-            print("debug: " + str(self.game) + " " + str(paddle)) 
             if (self.game != False):
-                print("hola adeu " + str(self.game))
                 await self.channel_layer.group_add(self.game, self.channel_name)
                 if paddle == 1:
                     self.paddle_controller = PlayerManager("player1", "paddle1", MatchManager.matches[self.game])
@@ -126,7 +122,6 @@ class gameConnection(AsyncWebsocketConsumer):
             self.game = None
 
         self.game = MatchManager.looking_for_match(self.user_id, self.user_name, self.game)
-        print(self.game)
         if (self.game == False):
                 self.game = ''.join(random.choices(string.ascii_letters + string.digits, k=7))
 
@@ -163,14 +158,9 @@ class gameConnection(AsyncWebsocketConsumer):
 
 
     async def disconnect(self, code):
-        #self.thread["paddle_one"] = False
-        #self.thread["active"] = False
-            
-        print("user disconnected") 
     
     async def receive(self, text_data):
         data = json.loads(text_data)
-        print(data)
         
         if data['cmd'] == "update" and self.mode == '1vs1':
             if data['pl'] == "p1":
@@ -224,7 +214,6 @@ class gameConnection(AsyncWebsocketConsumer):
                     else:
                         await setnoplaying(self.user) 
                     await self.endConnection(state)
-            # print("Time: " + str(time.time() - time_act))
             await asyncio.sleep(1/self.fr - (time.time() - time_act))
 
     #jareste
