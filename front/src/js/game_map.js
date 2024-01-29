@@ -142,40 +142,42 @@ function redrawCanvas(jsonData){
 
 
 function resizeCanvas() {
-  const canvasContainer = document.getElementById('gameContainer');
-  const canvas = document.getElementById('gameCanvas');
+  try{
+    const canvasContainer = document.getElementById('gameContainer');
+    const canvas = document.getElementById('gameCanvas');
 
-  const containerWidth = canvasContainer.offsetWidth;
-  const containerHeight = canvasContainer.offsetHeight;
-  const ratio = 1200 / 750;
+    const containerWidth = canvasContainer.offsetWidth;
+    const containerHeight = canvasContainer.offsetHeight;
+    const ratio = 1200 / 750;
 
-  // Calculate canvas dimensions
-  let canvasWidth = containerWidth;
-  let canvasHeight = containerHeight;
+    // Calculate canvas dimensions
+    let canvasWidth = containerWidth;
+    let canvasHeight = containerHeight;
 
-  if (containerWidth / ratio > containerHeight) {
-    canvasWidth = containerHeight * ratio;
-  } else {
-    canvasHeight = containerWidth / ratio;
+    if (containerWidth / ratio > containerHeight) {
+      canvasWidth = containerHeight * ratio;
+    } else {
+      canvasHeight = containerWidth / ratio;
+    }
+
+    // Adjust canvas size
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    // Calculate new ball and paddle sizes
+    const newSize = Math.min(canvasWidth, canvasHeight) * 0.04;
+    ballSize = newSize;
+    paddleWidth = newSize;
+    paddleHeight = newSize * 5;
+
+    // Redraw canvas (you should implement your own draw function)
+    if (finished1 == "no"){
+      beauty_map();
+    }
+    else
+      printWinner_finished();
+  }catch(err){
   }
-
-  // Adjust canvas size
-  canvas.width = canvasWidth;
-  canvas.height = canvasHeight;
-
-  // Calculate new ball and paddle sizes
-  const newSize = Math.min(canvasWidth, canvasHeight) * 0.04;
-  ballSize = newSize;
-  paddleWidth = newSize;
-  paddleHeight = newSize * 5;
-
-  // Redraw canvas (you should implement your own draw function)
-  if (finished1 == "no"){
-    beauty_map();
-  }
-  else
-    printWinner_finished();
-
 }
 
 

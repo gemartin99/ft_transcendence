@@ -69,6 +69,8 @@ function handleRedirect(redirect_url) {
             automaticLobby();
         else if (redirect_url == "/tournament/bracketPage/")
             automaticTournament();
+        else if (redirect_url == "/about-us/")
+            aboutUs();
     })
     .catch(error => {
         console.error("Error:", error);
@@ -169,7 +171,4 @@ handleNavLinks()
 var initialpath = window.location.pathname;
 if (initialpath == "/game/play/"){
     reconnect();
-}
-else if (initialpath == "/about-us/"){
-    aboutUs();
 }
