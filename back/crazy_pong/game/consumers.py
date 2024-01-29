@@ -158,7 +158,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
 
     async def disconnect(self, code):
-        print('user disconnect')
+        print('user disconnect') #if we remove it it stops working
     
     async def receive(self, text_data):
         data = json.loads(text_data)
