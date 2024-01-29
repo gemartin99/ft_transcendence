@@ -38,7 +38,7 @@ def get_color(n):
 
 def get_name(n):
     if (n == 0):
-        return "Jaime Ferrer"
+        return "Padalustro Ferrer"
     if (n == 1):
         return "Marc Arza"
     if (n == 2):
