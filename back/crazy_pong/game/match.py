@@ -115,7 +115,7 @@ class GameManager():
                 ball['vx'] < 0
                 ):
 
-                self.state['speed'] += 1
+                self.state['speed'] += 0.2
                 relativeIntersectY = (paddle1['y'] + paddle1['height'] / 2) - ball['y']
                 normalizedRelativeIntersectionY = relativeIntersectY / (paddle1['height'] / 2)
                 bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
@@ -131,7 +131,7 @@ class GameManager():
                 ball['vx'] > 0
                 ):
 
-                self.state['speed'] += 1
+                self.state['speed'] += 0.2
                 relativeIntersectY = (paddle2['y'] + paddle2['height'] / 2) - ball['y']
                 normalizedRelativeIntersectionY = relativeIntersectY / (paddle2['height'] / 2)
                 bounceAngle = normalizedRelativeIntersectionY * math.pi / 4
@@ -179,7 +179,7 @@ class GameManager():
                 xToCollision = (1200-self.ball['x'])
                 slope = self.ball['vy']/self.ball['vx']
 
-                self.colision = abs(self.ball['y'] + slope * xToCollision) % (2 * 750)
+                self.colision = (self.ball['y'] + slope * xToCollision) % (2 * 750)
                 if (self.colision > 750):
                     self.colision = 2 * 750 - self.colision
 
