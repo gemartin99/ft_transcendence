@@ -104,6 +104,8 @@ function handleNavLinkClick(event) {
         else if (data.redirect) {
             handleRedirect(data.redirect)
         }
+        if (redirect_url == "/about-us/")
+            aboutUs();
         handleNavLinks()
         
     })
@@ -137,6 +139,8 @@ function handleNavRefresh() {
         if (data.lang){
             setLang(data.lang);
         }
+        if (redirect_url == "/about-us/")
+            aboutUs();
         handleNavLinks()
     })
     .catch(error => {
@@ -159,7 +163,8 @@ function handleNavLinkAction(hrefValue) {
         if (data.content) {
             content.innerHTML = data.content;
         }
-
+        if (redirect_url == "/about-us/")
+            aboutUs();
         handleNavLinks();
     })
     .catch(error => {
