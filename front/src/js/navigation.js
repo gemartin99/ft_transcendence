@@ -27,6 +27,8 @@ function fetchContent(path) {
         if (data.redirect){
             handleRedirect(data.redirect);
         }
+        if (path == "/about-us/")
+            aboutUs();
     })
     .catch(error => {
         console.error("Error:", error);
