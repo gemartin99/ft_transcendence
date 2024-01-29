@@ -14,15 +14,27 @@ def get_coal(n):
 
 def get_pict(n):
     if (n == 0):
-        return "/imgs/jferrer-.png"
+        return "/imgs/jferrer-.jpg"
     if (n == 1):
-        return "/imgs/marza-ga.png"
+        return "/imgs/marza-ga.jpg"
     if (n == 2):
-        return "/imgs/gemartin-.png"
+        return "/imgs/gemartin-.jpg"
     if (n == 3):
         return "/imgs/jareste-.png"
     if (n == 4):
-        return "/imgs/baltes-g.png"
+        return "/imgs/baltes-g.jpg"
+
+def get_color(n):
+    if (n == 0):
+        return "#87c55b"
+    if (n == 1):
+        return "#f2b65a"
+    if (n == 2):
+        return "#6b6cf5"
+    if (n == 3):
+        return "#87c55b"
+    if (n == 4):
+        return "#6b6cf5"
 
 def get_name(n):
     if (n == 0):
@@ -105,6 +117,11 @@ def get_context_aboutus(list):
         'intra3': get_intra(list[2]),
         'intra4': get_intra(list[3]),
         'intra5': get_intra(list[4]),
-        
+        'color1': get_color(list[0]),
+        'color2': get_color(list[1]),
+        'color3': get_color(list[2]),
+        'color4': get_color(list[3]),
+        'color5': get_color(list[4]),
+
     }
     return context
