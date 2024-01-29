@@ -158,6 +158,7 @@ class gameConnection(AsyncWebsocketConsumer):
 
 
     async def disconnect(self, code):
+        #print(e)
     
     async def receive(self, text_data):
         data = json.loads(text_data)
