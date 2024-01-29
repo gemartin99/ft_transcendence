@@ -324,7 +324,7 @@ function generateRandomString(length) {
 
 //TOURNAMENT FUNCTIONS
 function gameTournament(id, points) {    
-    open_socket*('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=' + points + '&sala=' + id);
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=' + points + '&sala=' + id);
 }
 
 function gameTournamentIA(id, points) { 
