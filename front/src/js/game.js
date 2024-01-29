@@ -97,12 +97,12 @@ function open_socket(target, mode)
     socket = new WebSocket(target);
     socket.onopen = (event) => {
         console.log('WebSocket connection opened:', event);
+        if (mode == 'create')
+            handleRedirect('/game/play/');
         //document.getElementById('waiting').style.display = 'block';
     };
     socket.onmessage = (event) => {
         try{
-            if (mode == 'create')
-                handleRedirect('/game/play/');
             document.getElementById('waiting').style.display = 'none';
         } catch (error) {
         }
