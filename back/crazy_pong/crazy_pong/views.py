@@ -1,14 +1,14 @@
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.shortcuts import render
-import crazy_pong.langs
 
+import crazy_pong.langs
+import random
+import crazy_pong.users
 # Front pages that are not from a specific app 
 def get_aboutus_page(request):
-    context = {
-        'variable1': 'template variable 1',
-        'variable2': 'template variable 2',
-    }
+    numbers = list(range(5))
+    random.shuffle(numbers)
+    context = crazy_pong.users.get_context_aboutus(numbers)
     content_html = render_to_string('aboutus/aboutus.html', context)
     data = {
         'title': 'About us',
@@ -30,9 +30,11 @@ def get_information_page(request):
 
 
 def get_home_page(request):
-    print("aqui")
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = crazy_pong.langs.get_langs(language)
+    jwtToken = request.COOKIES.get('jwttoken', None)
+    if jwtToken:
+        context.update({'loggued': True})
     content_html = render_to_string('home/index.html', context)
     data = {
         'title': 'Home2',

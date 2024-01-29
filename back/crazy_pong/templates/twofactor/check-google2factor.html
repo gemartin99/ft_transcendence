@@ -92,17 +92,23 @@
     }
 }
 
+    #content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Adjust this value as needed */
+    }
   </style>
 
   <div class="auth-container bg-dark">
-      <h1 style="color: #f5c344;">Confirm the code:</h1>
+      <h1 style="color: #f5c344;">{{text20}}:</h1>
       <div class="alert alert-warning" role="alert">
-              Insert the verification totp code.
+              {{text21}}
       </div>
       <canvas id="QRimg"></canvas>
       <div id="error-message"></div>
     <div class="input-row">
-        <input name="digit1" class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)">
+        <input name="digit1" class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)" onpaste="autoFill(this)">
         <input name="digit2" class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
         <input name="digit3" class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
         <input name="digit4" class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
@@ -110,6 +116,6 @@
         <input name="digit6" class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
     </div>
     <div class="button-center">
-        <button class="btn-warning toc sizeee" onclick="checkGoogleAuthCode()">Submit</button>
+        <button class="btn-warning toc sizeee" onclick="checkGoogleAuthCode()">{{text22}}</button>
     </div>
 </div>

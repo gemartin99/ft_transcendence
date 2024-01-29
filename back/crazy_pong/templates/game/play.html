@@ -1,10 +1,43 @@
+<style>
+
+.loader-container {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+  .loader {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #f5c344;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+/* Animacion ruedita */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
 
 <div id="app">
   <section>
-      <div class="container">
-        <div style="text-align: center;" id="idMatch"><h1> Let's Fight</h1></div>
-        <div class="card" id="gameContainer" class="aspect-ratio-1200-750">
-          <canvas id="gameCanvas" width="1200" height="750", style="background-color: darkgray;", ali></canvas>
+      <div class="container" style="padding: 80px; align-items: center;">
+        <!--<div style="text-align: center;" id="idMatch"><h1> {{text18}}</h1></div>-->
+        <div id="waiting" class="text-center" style="text-align: center; padding: 25%; align-items: center; justify-content: center;">  
+         <div class="loader-container">
+              <div class="loader"></div>
+          </div>
+          <h1 style="font-size: 50px">1/2 {{text17}}</h1>
+          {%if idMatch %}
+          <h1 style="font-size: 50px">Match id: {{idMatch}}</h1>
+          {%endif%}
+          <button class="btn btn-warning more-size" style="width: 300px;" onclick="quitQueue()">{{text23}}</button>
+        </div>
+        <div class="card" id="gameContainer" class="aspect-ratio-1200-750" style="display: none">
+          <canvas id="gameCanvas" width="1200" height="750", style="background-color: darkgray; outline: solid 5px #343a40;", ali></canvas>
         </div>
       </div>
   </section>

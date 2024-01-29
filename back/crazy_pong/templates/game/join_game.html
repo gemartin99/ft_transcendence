@@ -7,7 +7,7 @@
 </div>
 <div class="container-fluid col-11 bg-dark text-warning py-4" style="margin-top: 100px;border-radius: 10px;padding: 30px;">
     <h2 class="text-center mb-4">{{text13}}</h2>
-    <form>
+    <form onsubmit="return join_match_sala(event)">
         <div class="row mb-3">
             <label for="lobbYCode" style="font-size: 20px;" class="col-sm-4 col-form-label">{{text14}}</label>
             <div class="col-sm-8">
@@ -15,9 +15,7 @@
             </div>
         </div>
         <div class="text-center">
-            <a class="navlink" href="/game/play">
-                <button type="submit" class="btn btn-warning" onclick="join_match_sala()">{{text16}}</button>
-            </a>
+            <button type="submit" class="btn btn-warning">{{text16}}</button>
         </div>
     </form>
 </div>

@@ -42,7 +42,7 @@
           margin-top: 3vw;
       }
 
-      .btn-warning {
+      .btn-warning2fa {
           padding: 2vw 4vw;
           font-size: 3vw;
           border: none;
@@ -52,7 +52,7 @@
           color: #fff;
       }
 
-      .btn-warning:hover {
+      .btn-warning2fa:hover {
           background-color: #e0a800;
       }
 
@@ -86,18 +86,23 @@
         font-size: 20px;
     }
 
-    .btn-warning {
+    .taacc{
         padding: 20px 20px;
         font-size: 35px; 
     }
 }
-
+    #content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Adjust this value as needed */
+    }
   </style>
   <div class="auth-container bg-dark">
-      <h1 style="color: #f5c344;">Steep 2: Enter the code you have received by email</h1>
+      <h1 style="color: #f5c344;">{{text18}}</h1>
       <div id="error-message"></div>
       <div class="input-row">
-          <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)">
+          <input name="digit1"class="code-input" type="text" maxlength="1" required autofocus oninput="moveToNextInput(this)" onpaste="autoFill(this)">
           <input name="digit2"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
           <input name="digit3"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
           <input name="digit4"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
@@ -105,6 +110,6 @@
           <input name="digit6"class="code-input" type="text" maxlength="1" required oninput="moveToNextInput(this)">
       </div>
       <div class="button-center">
-          <button class="btn-warning" onclick="checkMailCode()">Submit</button>
+          <button class="btn-warning2fa taacc" onclick="checkMailCode()">{{text19}}</button>
       </div>
   </div>

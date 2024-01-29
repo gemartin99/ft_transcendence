@@ -6,18 +6,17 @@ current_match = 0
 player = 0
 socket = null
 in_match = false
-
+in_1vs1 = false
 
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function(event) {
-        if (in_match == true) {
+        if (in_match == true && !in_1vs1) {
             if (event.key === 'ArrowUp') {
                 const message = { cmd: 'update',
                                     id: current_match,
                                     pl: player,
                                     key: "up" };
                 socket.send(JSON.stringify(message));
-                console.log(JSON.stringify(message));
             } else if (event.key === 'ArrowDown') {
                 if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
                     const message = { cmd: 'update',
@@ -25,7 +24,37 @@ document.addEventListener('DOMContentLoaded', function () {
                                         pl: player,
                                         key: "down" };
                     socket.send(JSON.stringify(message));
-                    console.log(JSON.stringify(message));
+                }
+            }
+        }
+        if (in_1vs1 == true) {
+            if (event.key === 'w') {
+                const message = { cmd: 'update',
+                                    id: current_match,
+                                    pl: "p1",
+                                    key: "up" };
+                socket.send(JSON.stringify(message));
+            } else if (event.key === 's') {
+                if (event.key === 'w' || event.key == 's') {
+                    const message = { cmd: 'update',
+                                        id: current_match,
+                                        pl: "p1",
+                                        key: "down" };
+                    socket.send(JSON.stringify(message));
+                }
+            } else if (event.key === 'ArrowUp') {
+                const message = { cmd: 'update',
+                                    id: current_match,
+                                    pl: "p2",
+                                    key: "up" };
+                socket.send(JSON.stringify(message));
+            } else if (event.key === 'ArrowDown') {
+                if (event.key === 'ArrowUp' || event.key == 'ArrowDown') {
+                    const message = { cmd: 'update',
+                                        id: current_match,
+                                        pl: "p2",
+                                        key: "down" };
+                    socket.send(JSON.stringify(message));
                 }
             }
         }
@@ -33,256 +62,240 @@ document.addEventListener('DOMContentLoaded', function () {
     
     document.addEventListener('keyup', function(event) {
         if (in_match == true){
-        const message = { cmd: 'update',
-                            id: current_match,
-                            pl: player,
-                            key: "rest" };
-        socket.send(JSON.stringify(message));}
+        if (event.key == 'ArrowUp' || event.key == 'ArrowDown'){
+            const message = { cmd: 'update',
+                                id: current_match,
+                                pl: "p2",
+                                key: "rest" };
+            socket.send(JSON.stringify(message));}
+        else if (event.key == 'w' || event.key == 's'){
+            const message = { cmd: 'update',
+                                id: current_match,
+                                pl: "p1",
+                                key: "rest" };
+            socket.send(JSON.stringify(message));}}
     });
 });
 
 function handleGame(){
-    console.log('handleGame');
     if (in_match == true) {
         handleRedirect('/game/play/');
     }
 }
 
-function join_match() {
 
-    if (in_match == false) {
-        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=4');
-
-        socket.onopen = (event) => {
-            console.log('WebSocket connection opened:', event);
-            
-        };
-        socket.onmessage = (event) => {
+function open_socket(target, mode)
+{
+    var htmlloaded = 0;
+    socket = new WebSocket(target);
+    socket.onopen = (event) => {
+        if (mode == 'create')
+            handleRedirect('/game/play/');
+        //document.getElementById('waiting').style.display = 'block';
+    };
+    socket.onmessage = (event) => {
+        try{
+            document.getElementById('waiting').style.display = 'none';
+        } catch (error) {
+        }
+        in_match = true
+        if (mode == '1vs1') {
+            in_1vs1 = true
+        }
+        const jsonData = JSON.parse(event.data.toString());
+        if (jsonData['cmd'] == 'start') {
+            if (window.location.href != baseUrl + "/game/play/"){
+                handleRedirect('/game/play/');
+            }
+            if(htmlloaded == 0 && document.getElementById('gameContainer'))
+            {
+                htmlloaded = 1
+                document.getElementById('gameContainer').style.display = 'flex';
+                redrawCanvas(jsonData);
+            }
+            window.addEventListener('resize', resizeCanvas);
+        }
+        if (jsonData['cmd'] == 'update') {
+            if (htmlloaded == 0 && document.getElementById('gameContainer')) {
+                htmlloaded = 1;
+            }
             in_match = true
-            const jsonData = JSON.parse(event.data.toString());
-            //console.log(jsonData)
-            if (jsonData['cmd'] == 'update') {
-                
-                //console.log(jsonData);
-                var idMatch = document.getElementById("idMatch");
-                idMatch.textContent =  "Match ID: " + jsonData.idMatch;
-                printMap(jsonData);
+            try{
+                document.getElementById('gameContainer').style.display = 'flex';
+                redrawCanvas(jsonData);
+            } catch (error) {
             }
-            if (jsonData['cmd'] == 'finish') {
-                printWinner(jsonData);
-                socket.close();
-            }
+            window.addEventListener('resize', resizeCanvas);
+        }
+        if (jsonData['cmd'] == 'finish') {
 
-            //console.log('WebSocket message received:', event.data);
+            printWinner(jsonData);
+        }
+    };
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+    socket.onclose = (event) => {
+        in_match = false
+        in_1vs1 = false
+    }; 
+}
 
-        };
-        socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-        socket.onclose = (event) => {
-            console.log('WebSocket connection closed:', event);
-            in_match = false
-        };        
-    }
+function join_match() {
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=search&points=5', "search");        
 }
 
 function create_match() {
-
-    if (in_match == false) {
-        handleRedirect('/game/play/');
-        code = generateRandomString(4)
-        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code);
-        //AQUEST CODE S'HA DIMPRIR A LA PANTALLA
-        console.log(code)
-        socket.onopen = (event) => {
-            console.log('WebSocket connection opened:', event);
-        };
-        socket.onmessage = (event) => {
-            in_match = true
-            const jsonData = JSON.parse(event.data.toString());
-            if (jsonData['cmd'] == 'update') {
-                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                //console.log(jsonData);
-                //var idMatch = document.getElementById("idMatch");
-                //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
-                printMap(jsonData);
-            }
-            if (jsonData['cmd'] == 'finish') {
-                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                //var idMatch = document.getElementById("idMatch");
-                //idMatch.textContent = jsonData.idMatch;
-                printWinner(jsonData);
-            }
-            //console.log('WebSocket message received:', event.data);
-
-        };
-        socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-        socket.onclose = (event) => {
-            console.log('WebSocket connection closed:', event);
-            in_match = false
-        };         
-    }
+    
+    code = generateRandomString(5)
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code, "create");
 }
 
 
-function join_match_sala() {
+function join_match_sala(e) {
+    e.preventDefault();
+    const message = {idMatch: document.getElementById("lobbyCode").value,
+            };
+    fetch(baseUrl + ':8000/game/canJoin/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code == 200){
+            handleRedirect('/game/play/');    
+            open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value, "sala");   
+        }
+        else {
+            lang = getLang();
+            if (lang == 'en') {
+                alert("Wrong code");
+            }
+            else if (lang == 'es') {
+                alert("Código incorrecto");
+            }
+            else if (lang == 'pt') {
+                alert("Código errado");
+            }
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + document.getElementById("lobbyCode").value);
+
     
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-        
-    };
-    socket.onmessage = (event) => {
-        in_match = true
-        const jsonData = JSON.parse(event.data.toString());
-        if (jsonData['cmd'] == 'update') {
-            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            //console.log(jsonData);
-            //var idMatch = document.getElementById("idMatch");
-            //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
-            printMap(jsonData);
-        }
-        if (jsonData['cmd'] == 'finish') {
-            //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            //var idMatch = document.getElementById("idMatch");
-            //idMatch.textContent = jsonData.idMatch;
-            printWinner(jsonData);
-        }
-        //console.log('WebSocket message received:', event.data);
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-        in_match = false
-    };         
 }
 
 function join_IA() {
-    if (in_match == false) {
-        socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
-        socket.onopen = (event) => {
-            console.log('WebSocket connection opened:', event);
-            
-        };
-        socket.onmessage = (event) => {
-            in_match = true
-            const jsonData = JSON.parse(event.data.toString());
-            if (jsonData['cmd'] == 'update') {
-                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                //console.log(jsonData);
-                //var idMatch = document.getElementById("idMatch");
-                //idMatch.textContent =  "Match ID: " + jsonData.idMatch;
-                printMap(jsonData);
-            }
-            if (jsonData['cmd'] == 'finish') {
-                //heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-                //var idMatch = document.getElementById("idMatch");
-                //idMatch.textContent = jsonData.idMatch;
-                printWinner(jsonData);
-            }
-            //console.log('WebSocket message received:', event.data);
-
-        };
-        socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-        socket.onclose = (event) => {
-            console.log('WebSocket connection closed:', event);
-            in_match = false
-        };   
-    }    
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=IA&points=5');
 }
 
-function obs_match() {
+async function reconnect() {
+    await new Promise(r => setTimeout(r, 300));
+    if (socket == null && window.location.href == "https://crazy-pong.com/game/play/"){
+        fetch(baseUrl + ':8000/users/playing/', {
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            credentials: 'include',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.playing == 200){
+                open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=reconnect&points=5');
+            }   
+            else {
+                handleRedirect('/game/');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }          
+}
 
-    socket = new WebSocket('ws://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value);
-
-    socket.onopen = (event) => {
-        console.log('WebSocket connection opened:', event);
-    };
-    socket.onmessage = (event) => {
-        const jsonData = JSON.parse(event.data.toString());
-        console.log(jsonData)
-        if (jsonData['cmd'] == 'update') {
-            //#endregio//heading.textContent =  "Jugador 1: " + jsonData.score1 + "Jugador 2: " + jsonData.score2;
-            printMap(jsonData);
+function obs_match(e) {
+    e.preventDefault();
+    const message = {idMatch: document.getElementById("lobbYCode").value,
+            };
+    fetch(baseUrl + ':8000/game/canView/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code == 200){
+            handleRedirect('/game/play/');
+            open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=obs&sala=' + document.getElementById("lobbYCode").value, "obs");
+        }   
+        else {
+            lang = getLang();
+            if (lang == 'en') {
+                alert("Wrong code");
+            }
+            else if (lang == 'es') {
+                alert("Código incorrecto");
+            }
+            else if (lang == 'pt') {
+                alert("Código errado");
+            }
         }
-
-        //console.log('WebSocket message received:', event.data);
-
-    };
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-    };
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed:', event);
-    };          
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }
 
-function drawBall(ball) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#000';
-    ctx.fill();
-    ctx.closePath();
-}
+async function one_vs_one_without_shirt(e) {
+        e.preventDefault();
 
-function drawPaddles(paddle1, paddle2) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#000';
-    ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
-    ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
-}
+        var p1 = document.getElementById("p1").value;
+        var p2 = document.getElementById("p2").value;
+        var points = document.getElementById("points").value;
+        handleRedirect('/game/play/');
+        await new Promise(r => setTimeout(r, 300));
 
-function printResult(jsonData) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.font = "60px monospace";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.fillText(jsonData.score2 + "-" + jsonData.score1, canvas.width/2, canvas.height/2);
-
-}
-
-function printMap(jsonData) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBall(jsonData.ball);
-    drawPaddles(jsonData.paddle1, jsonData.paddle2);
-    printResult(jsonData);
-}
-
-function printWinner(jsonData) {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "60px monospace";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    if (jsonData.score1 > jsonData.score2) {
-        ctx.fillText(jsonData.player2.name + " wins!", canvas.width/2, canvas.height/2);
+        open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=1vs1&points=' + points + '&p1=' + p1 + '&p2=' + p2, "1vs1");
     }
-    else {
-        ctx.fillText(jsonData.player1.name + " wins!", canvas.width/2, canvas.height/2);
-    }
-    ctx.fillText(jsonData.score2 + "-" + jsonData.score1, canvas.width/2, canvas.height/2 + 60);
-}
 
 
-
-// Function to be called from the HTML button onclick event
-function join_match_from_html() {
-    join_match();
+function quitQueue() {
+    const message = {quit: "quitting",
+            };
+    fetch(baseUrl + ':8000/game/quitQueue/', {
+        // HAY QUE ESPECIFICAR QUE ES METODO POST PARA RECIBIR DATA
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            },
+        credentials: 'include',
+        body: JSON.stringify(message),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (socket != null) {
+            const message = { cmd: 'quit',
+                        };
+            socket.send(JSON.stringify(message));
+            socket.close();
+        }
+        handleRedirect('/game/');
+        socket = null;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }
 
 function generateRandomString(length) {
@@ -293,3 +306,12 @@ function generateRandomString(length) {
     }
     return result;
   }
+
+//TOURNAMENT FUNCTIONS
+function gameTournament(id, points) {    
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=' + points + '&sala=' + id);
+}
+
+function gameTournamentIA(id, points) { 
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=salaIA&points=' + points + '&sala=' + id);
+}

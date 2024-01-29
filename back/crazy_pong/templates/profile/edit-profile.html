@@ -17,88 +17,43 @@
       <div class="card-body bg-dark">
 
 
-    <form id="updateUserForm" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;" onsubmit="return submitForm(event)">
-        {% if new %}
-            <div class="form__message form__message--success">Account successfully created!</div>
-        {% else %}
-            <div class="form__message form__message--error"></div>
-        {% endif %}
-        <div class="form-group">
-            <label for="username" class="label">{{text14}}:</label>
-            <input type="text" id="username" name="name" placeholder="{{text15}}" class="form-control" value="{{ user.name }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="email" class="label">{{text16}}:</label>
-            <input type="text" id="email" name="email" placeholder="{{text17}}" class="form-control" value="{{ user.email }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="password" class="label">{{text18}}:</label>
-            <input type="password" id="password" name="password" placeholder="{{text19}}" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="confirm_password" class="label">{{text20}}:</label>
-            <input type="password" id="confirm_password" name="confirm_password" placeholder="{{text21}}" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="avatar" class="label">{{text22}}:</label>
-            <input type="file" id="avatar" name="avatar" class="form-control-file">
-        </div>
-
-        <div class="card-footer">
-            <button class="btn btn-warning" type="submit" >{{text23}}</button>
-        </div>
-
-        {% csrf_token %}
-    </form>
-
-
-
-
-
-
-<!--         <form method="post" action="% url 'update_user' %" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;">
+      <form id="updateUserForm" enctype="multipart/form-data" class="form" style="width: 100%; padding: 5px;" onsubmit="return submitForm(event)">
+          {% if new %}
+              <div class="form__message form__message--success">Account successfully created!</div>
+          {% else %}
+              <div class="form__message form__message--error"></div>
+          {% endif %}
           <div class="form-group">
-            <label for="username" class="label">Username:</label>
-            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.name }}" required>
+              <label for="username" class="label">{{text14}}:</label>
+              <input type="text" id="username" name="name" placeholder="{{text15}}" class="form-control" value="{{ user.name }}" required>
           </div>
+
           <div class="form-group">
-            <label for="username" class="label">Email:</label>
-            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="{{ user.email }}" required>
+              <label for="email" class="label">{{text16}}:</label>
+              <input type="text" id="email" name="email" placeholder="{{text17}}" class="form-control" value="{{ user.email }}" required>
           </div>
+
           <div class="form-group">
-            <label for="username" class="label">Password:</label>
-            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="">
+              <label for="password" class="label">{{text18}}:</label>
+              <input type="password" id="password" name="password" placeholder="{{text19}}" class="form-control">
           </div>
+
           <div class="form-group">
-            <label for="username" class="label">Confirm Password:</label>
-            <input type="text" id="username" name="name" placeholder="Enter your username" class="form-control" value="">
+              <label for="confirm_password" class="label">{{text20}}:</label>
+              <input type="password" id="confirm_password" name="confirm_password" placeholder="{{text21}}" class="form-control">
           </div>
+
           <div class="form-group">
-            <label for="avatar" class="label">Avatar (optional):</label>
-            <input type="file" id="avatar" name="avatar" class="form-control-file">
+              <label for="avatar" class="label">{{text22}}:</label>
+              <input type="file" id="avatar" name="avatar" class="form-control-file">
           </div>
 
           <div class="card-footer">
-            <button class="btn btn-warning" type="submit">Save Changes</button>
+              <button class="btn btn-warning" type="submit" >{{text23}}</button>
           </div>
 
           {% csrf_token %}
-
-        </form> -->
-
-<!--       </div>
-      {% if profileUpdated %}
-      <div class="card-body">
-          <div class="alert alert-success">
-            User Profile info updated correctly<br>
-            <a href="{% url 'profile' %}" class="btn btn-info">Return to Profile</a>
-          </div>
-      </div>
-      {% endif %} -->
+      </form>
     </div>
 
   </div>

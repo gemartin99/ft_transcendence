@@ -1,39 +1,35 @@
+import imghdr
+import json
+import os
+import profile.langs
+
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 ##Jareste limpiar
 from django.views.decorators.csrf import csrf_exempt
-import json
-from django.shortcuts import render
-from accounts.models import Usermine
-import base64
-from django.db import IntegrityError
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
-import bcrypt
-# from security.security import Security
-from django.contrib.auth.decorators import login_required
-from authentification.authentification import Authentification
+
 from accounts.accounts import Accounts
+# from security.security import Security
+from authentification.authentification import Authentification
 from security.security import Security
-from game.models import Match
 
-import profile.langs
+# from django.shortcuts import render
+# from accounts.models import Usermine
+# import base64
+# from django.db import IntegrityError
+# from django.contrib.auth.password_validation import validate_password
+# from django.core.exceptions import ValidationError
 
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-import os
+
+
 
 def get_profile_page(request):
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-
- #test
     last_5_matches = user.get_last_5_matches()
-
- #end test
-
-    print(last_5_matches)
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = profile.langs.get_langs(language)
     context['user'] = user
@@ -77,41 +73,49 @@ def get_twofactor_profile_page(request):
     }
     return JsonResponse(data)
 
-def UpdateUser(username, user, response_messages):
+def UpdateUser(username, user, response_messages, language):
     flag = False
     if username is not None:
         if username != user.name:
             res, msg = Accounts.username_is_in_use(username)
             if res:
-                response_messages.append(msg)
+                if language == 'es':
+                    response_messages.append('Nombre de usuario ya en uso.')
+                elif language == 'en':
+                    response_messages.append('Username already in use.')
+                elif language == 'pt':
+                    response_messages.append('Nome de usuário já em uso.')
                 flag = True
         if username != user.name and not Security.is_valid_username(username):
-            response_messages.append('Introduce a valid username.')
+            if language == 'es':
+                response_messages.append('Introduce un nombre de usuario válido.')
+            elif language == 'en':
+                response_messages.append('Introduce a valid username.')
+            elif language == 'pt':
+                response_messages.append('Introduza um nome de usuário válido.')
             flag = True
-        print('flag:', flag)
         if flag is False:
             user.name = username
-    # user.save()
     return response_messages
 
-def UpdateEmail(email, user, response_messages):
+def UpdateEmail(email, user, response_messages, language):
     flag = False
     if email is not None:
-        if email != user.email:
-            res, msg = Accounts.email_is_in_use(email)
-            if res:
-                response_messages.append(msg)
-                flag = True
         if not Security.is_valid_email(email):
-            response_messages.append('Introduce a valid email.')
+            if language == 'es':
+                response_messages.append('Introduce un email válido.')
+            elif language == 'en':
+                response_messages.append('Introduce a valid email.')
+            elif language == 'pt':
+                response_messages.append('Introduza um email válido.')
             flag = True
         if not flag:
             user.email = email
     return response_messages
 
 
-def UpdatePwd(password, confirm_password, user, response_messages):
-    if password is not None:
+def UpdatePwd(password, confirm_password, user, response_messages, language):
+    if password != "":
         if password == confirm_password:
             res, msg = Security.check_pwd_security(password)
             if res:
@@ -119,39 +123,51 @@ def UpdatePwd(password, confirm_password, user, response_messages):
             else:
                 response_messages.extend(msg)
         else:
-            response_messages.append('Paswords missmatch.')
+            if language == 'es':
+                response_messages.append('Las contraseñas no coinciden.')
+            elif language == 'en':
+                response_messages.append('Paswords missmatch.')
+            elif language == 'pt':
+                response_messages.append('As senhas não coincidem.')
     return response_messages
 
 
 @csrf_exempt
 def UpdateInfo(request):
-    print("Entereing!!!!")
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
-
     try:
         username = request.POST.get('name').lower()
         email = request.POST.get('email').lower()
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
-        avatar = request.FILES.get('avatar')  # Access the uploaded file
+        avatar = request.FILES.get('avatar')
         response_messages = []
-        response_messages = UpdateUser(username, user, response_messages)
-        response_messages = UpdateEmail(email, user, response_messages)
-        response_messages = UpdatePwd(password, confirm_password, user, response_messages)
-        if (avatar):
-            folder_path = os.path.join('media', 'avatars')  
-            file_path = default_storage.save(os.path.join(folder_path, avatar.name), ContentFile(avatar.read()))
-            user.avatar = file_path;
-            print(file_path)
-        else:
-            print("NOY  have avatar")
-        # ... rest of your code ...
+        response_messages = UpdateUser(username, user, response_messages, language)
+        response_messages = UpdateEmail(email, user, response_messages, language)
+        response_messages = UpdatePwd(password, confirm_password, user, response_messages, language)
+        if avatar:
+            # Check if the file is a PNG image
+            file_type = imghdr.what(avatar)
+            if file_type != 'png':
+                if language == 'es':
+                    response_messages.append('El archivo subido no es una imagen PNG')
+                elif language == 'en':
+                    response_messages.append('Uploaded file is not a PNG image')
+                elif language == 'pt':
+                    response_messages.append('O arquivo carregado não é uma imagem PNG')
+            else:
+                folder_path = os.path.join('media', 'avatars')  
+                file_path = default_storage.save(os.path.join(folder_path, avatar.name), ContentFile(avatar.read()))
+                user.avatar = file_path
         user.save()
-        return JsonResponse({'redirect': '/profile/'})
+        if response_messages:
+            return JsonResponse({'message': response_messages})
+        else:
+            return JsonResponse({'redirect': '/profile/'})
     except json.JSONDecodeError as e:
-        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+        return JsonResponse({'error': 'Invalid JSON format', 'JSONDecodeError': e}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-

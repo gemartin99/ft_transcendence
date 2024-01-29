@@ -1,11 +1,13 @@
+import json
+
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.shortcuts import render
-from authentification.authentification import Authentification
 from django.views.decorators.csrf import csrf_exempt
-import json
+
 import friends.langs
 from accounts.models import Usermine
+from authentification.authentification import Authentification
+
 
 # Create your views here.
 def get_friends_page(request):
@@ -17,7 +19,6 @@ def get_friends_page(request):
         'friends': user.friends.all(),
     }
     context.update(friends.langs.get_langs(language))
-    print(context)
     content_html = render_to_string('friends/friends.html', context)
     data = {
         'title': 'Friends Page',
@@ -28,18 +29,24 @@ def get_friends_page(request):
 
 @csrf_exempt 
 def addFriend(request):
+    language = request.META.get('HTTP_LANGUAGE', 'default_language')
     user, redirect = Authentification.get_auth_user(request)
     if not user:
         return JsonResponse({'redirect': redirect})
     json_data = json.loads(request.body.decode('utf-8'))
-    print('holaaaaaaaa')
-    print(json_data)
     searchValue = json_data.lower()
-    print(searchValue)
     try:
         user.friends.add(Usermine.objects.get(name=searchValue))
-        print('anadioooooo')
+        if language == 'en':
+            return JsonResponse({'message': 'Friend added succesfully.', 'redirect': '/friends/'})
+        elif language == 'es':
+            return JsonResponse({'message': 'Amigo agregado con éxito.', 'redirect': '/friends/'})
+        else:
+            return JsonResponse({'message': 'Amigo adicionado com sucesso.', 'redirect': '/friends/'})
     except Usermine.DoesNotExist:
-        print('eresboboboooooo')    
-
-    return (JsonResponse({'hola': 'meow'}))
+        if language == 'en':
+            return JsonResponse({'message': 'No user matches the username.'})
+        elif language == 'es':
+            return JsonResponse({'message': 'Ningún usuario coincide con el nombre de usuario.'})
+        else:
+            return JsonResponse({'message': 'Nenhum usuário corresponde ao nome de usuário.'})
