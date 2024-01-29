@@ -177,10 +177,8 @@ class GameManager():
                 timeToCollision  = (1200-self.ball['x']) /self.ball['vx']
                 self.colision  = (self.ball['y'] + self.ball['vy'] * timeToCollision)
 
-                if (self.colision > 0 and self.colision < 750):
-                    self.colision = self.colision
-                elif ((self.colision % 750)%2 == 0):
-                    self.colision %= 750
+                if ((self.colision/750)%2 == 0):
+                    self.colision = self.colision % 750
                 else:
                     self.colision = 750 - (self.colision % 750)
 
