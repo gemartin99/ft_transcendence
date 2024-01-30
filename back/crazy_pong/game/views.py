@@ -36,7 +36,7 @@ def get_play_page(request):
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = game.langs.get_langs(language)
     print('huru')
-    print(user.gameId)
+    print(user.name ,user.gameId)
     print(len(user.gameId))
     if (len(user.gameId) == 5):
         context['idMatch'] = user.gameId
@@ -166,6 +166,7 @@ def quitQueue(request):
             data = json.loads(request.body)
             user.playing = False
             user.gameId = ""
+            print('quitQueue')
             user.save()
             return JsonResponse({'code': '200'})
         except json.JSONDecodeError as e:
