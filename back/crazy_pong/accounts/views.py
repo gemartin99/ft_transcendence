@@ -143,6 +143,7 @@ def show_playing(request):
     #     last_5_matches = user.get_last_5_matches()
     #     for match in last_5_matches:
         user.playing = False
+        print('show_playing')
         user.gameId = ""
         user.save()
     return JsonResponse({'content': 'users printed'})

@@ -32,6 +32,7 @@ from .match_manager import MatchManager
 @sync_to_async
 def setplaying(user, game):
     user.playing = True
+    print('aqui????????')
     user.gameId = game
     user.save()
 
