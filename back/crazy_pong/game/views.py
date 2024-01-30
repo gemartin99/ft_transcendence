@@ -36,6 +36,8 @@ def get_play_page(request):
     language = request.META.get('HTTP_LANGUAGE', 'default_language')
     context = game.langs.get_langs(language)
     print('huru')
+    print(user.gameId)
+    print(len(user.gameId))
     if (len(user.gameId) == 5):
         context['idMatch'] = user.gameId
     content_html = render_to_string('game/play.html', context)
