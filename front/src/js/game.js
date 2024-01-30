@@ -148,7 +148,7 @@ function join_match() {
 function create_match() {
     
     code = generateRandomString(5)
-    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=5&sala=' + code, "create");
+    open_socket('wss://'+ domain +':8000/ws/game/?user='+ getCookie('jwttoken') +'&mode=sala&points=40&sala=' + code, "create");
 }
 
 
