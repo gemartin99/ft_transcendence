@@ -33,6 +33,7 @@ from .match_manager import MatchManager
 def setplaying(user, game):
     user.playing = True
     print('aqui????????')
+    print(f'game::::::::::{game}')
     user.gameId = game
     user.save()
 
